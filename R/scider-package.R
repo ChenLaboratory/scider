@@ -27,6 +27,7 @@ NULL
 #'
 NULL
 
+
 #' Description of the scider example datasets
 #'
 #' scider-package has 1 datasets: \itemize{

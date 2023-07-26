@@ -8,6 +8,7 @@
 #' selection using cross-validation using function spatstat.explore::bw.diggle.
 #' @param weights Optional weights to be attached to the points.
 #' @param kernel The smoothing kernel.Options are gaussian, epanechnikov, quartic or disc.
+#' @param den_scaler Numeric value, used for scaling density value, default is 1e4.
 #'
 #' @return A SpatialExperiment object.
 #' @export
@@ -20,10 +21,14 @@
 #' 
 compute_density <- function(spe, mode = c("points","pixels"), bandwidth = NULL, weights = NULL,
                             kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
-                            grid_size = 100, xlim = NULL, ylim = NULL){
+                            grid_size = 100, xlim = NULL, ylim = NULL, den_scaler = 1e4){
 
   if(length(kernel) == 4){
     kernel <- "gaussian"
+  }
+  
+  if(length(mode) == 2){
+    mode <- "pixels"
   }
 
   sc <- SpatialExperiment::spatialCoords(spe)
@@ -42,30 +47,39 @@ compute_density <- function(spe, mode = c("points","pixels"), bandwidth = NULL, 
     bandwidth <- spatstat.explore::bw.diggle(y)
   }
   
-  if(length(mode) == 2){
-    mode <- "pixels"
-  }
-
   density_est <- spatstat.explore::density.ppp(y, sigma = bandwidth,
                                                kernel = kernel, weights = weights,
                                                at = mode, dimyx = c(grid_size, grid_size))
 
   if(mode == "points"){
+    
     colData(spe)$density = density_est
-
+    
   } else if (mode == "pixels"){
+    
     grid_density <- density_est$v
+    
     rownames(grid_density) <- density_est$yrow
+    
     colnames(grid_density) <- density_est$xcol
+    
     grid_density <- grid_density |> 
       as.data.frame() |> 
-      rownames_to_column("y_grid") |> 
-      pivot_longer(-y_grid, names_to = "x_grid", values_to = "density") |> 
-      dplyr::select(c("x_grid","y_grid","density"))
+      tibble::rownames_to_column("y_grid") |> 
+      tidyr::pivot_longer(-y_grid, names_to = "x_grid", values_to = "density") |> 
+      dplyr::select(c("x_grid","y_grid","density")) |>
+      dplyr::mutate(density = density * den_scaler,
+                    x_grid = as.numeric(x_grid),
+                    y_grid = as.numeric(y_grid)) |>
+      as.data.frame()
+    
+    rownames(grid_density) <- paste0("grid_", seq(nrow(grid_density)))
 
     metadata(spe) <- list("grid_density" = grid_density)
+    
   }
 
   return(spe)
+  
 }
 

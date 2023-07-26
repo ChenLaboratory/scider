@@ -42,7 +42,11 @@ Imports:
     tidyr,
     Biobase,
     BiocGenerics,
-    stats
+    stats,
+    randomcoloR,
+    RColorBrewer,
+    plotly,
+    shiny
 LinkingTo:
     Rcpp
 Suggests:

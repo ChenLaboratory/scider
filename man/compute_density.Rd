@@ -12,7 +12,8 @@ compute_density(
   kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
   grid_size = 100,
   xlim = NULL,
-  ylim = NULL
+  ylim = NULL,
+  den_scaler = 10000
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 \item{kernel}{The smoothing kernel.Options are gaussian, epanechnikov, quartic or disc.}
 
 \item{grid_size}{Grid size to use when the mode is set to pixels.}
+
+\item{den_scaler}{Numeric value, used for scaling density value, default is 1e4.}
 }
 \value{
 A SpatialExperiment object.
