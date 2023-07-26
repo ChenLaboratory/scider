@@ -4,10 +4,14 @@
 \alias{select_region}
 \title{Select region of interest from plot}
 \usage{
-select_region(spe)
+select_region(data, x_col = "x", y_col = "y")
 }
 \arguments{
-\item{spe}{A SpatialExperiment object.}
+\item{data}{A data.frame object.}
+
+\item{xcol}{Column name of the x coordinates.}
+
+\item{ycol}{Column name of the y coordinates.}
 }
 \value{
 A matrix.
@@ -21,6 +25,8 @@ data("xenium_bc_spe")
 
 spe_b <- spe[,colData(spe)$cell_type == "B cells"]
 
-select_region(spe_b)
+dat <- as.data.frame(spatialCoords(spe_b))
+
+select_region(dat, x_col = "x_centroid", y_col = "y_centroid")
 
 }

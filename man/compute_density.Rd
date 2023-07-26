@@ -10,28 +10,39 @@ compute_density(
   bandwidth = NULL,
   weights = NULL,
   kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
-  grid_size = 100,
+  den_scaler = 10000,
+  ngrid_x = 100,
+  ngrid_y = 100,
+  grid_length_x = NULL,
+  grid_length_y = NULL,
   xlim = NULL,
-  ylim = NULL,
-  den_scaler = 10000
+  ylim = NULL
 )
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{mode}{Choose either points or pixels. Specifying whether to compute the
-density at a grid pixel location or at at point.}
-
-\item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
-selection using cross-validation using function spatstat.explore::bw.diggle.}
+\item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth}
 
 \item{weights}{Optional weights to be attached to the points.}
 
 \item{kernel}{The smoothing kernel.Options are gaussian, epanechnikov, quartic or disc.}
 
-\item{grid_size}{Grid size to use when the mode is set to pixels.}
-
 \item{den_scaler}{Numeric value, used for scaling density value, default is 1e4.}
+
+\item{ngrid_x}{Number of grids in the x-direction.}
+
+\item{ngrid_y}{Number of grids in the y-direction.}
+
+\item{grid_length_x}{Grid length in the x-direction.}
+
+\item{grid_length_y}{Grid length in the y-direction.}
+
+\item{xlim}{The range of the x-coordinates of the image.}
+
+\item{ylim}{The range of the y-coordinates of the image.
+
+selection using cross-validation using function spatstat.explore::bw.diggle.}
 }
 \value{
 A SpatialExperiment object.
