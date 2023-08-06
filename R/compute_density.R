@@ -95,8 +95,17 @@ compute_density <- function(spe, mode = c("points","pixels"), bandwidth = NULL, 
       as.data.frame()
     
     rownames(grid_density) <- paste0("grid_", seq(nrow(grid_density)))
+    
+    grid_info <- list(dims = density_est$dim, 
+                 xlim = xlim, 
+                 ylim = ylim, 
+                 xcol = density_est$xcol, 
+                 yrow = density_est$yrow, 
+                 xstep = density_est$xstep, 
+                 ystep = density_est$ystep)
 
-    metadata(spe) <- list("grid_density" = grid_density)
+    metadata(spe) <- list("grid_density" = grid_density,
+                          "grid_info" = grid_info)
     
   }
 

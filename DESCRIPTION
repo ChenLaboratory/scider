@@ -46,7 +46,8 @@ Imports:
     randomcoloR,
     RColorBrewer,
     plotly,
-    shiny
+    shiny,
+    igraph
 LinkingTo:
     Rcpp
 Suggests:
