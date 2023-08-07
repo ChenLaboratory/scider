@@ -1,6 +1,3 @@
-data("xenium_bc_spe")
-
-
 #' Plot cells based on spatial coordinates.
 #'
 #' @param spe A SpatialExperiment object.
@@ -15,9 +12,9 @@ data("xenium_bc_spe")
 #' 
 #' data("xenium_bc_spe")
 #'
-#' plot_spatial(spe, shape = ".", color = cell_type)
+#' plotSpatial(spe, shape = ".", color = cell_type)
 #' 
-plot_spatial <- function(spe, reverseY = FALSE, n = 30, ...){
+plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
   
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
   
