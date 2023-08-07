@@ -21,7 +21,7 @@
 #' 
 #' data("xenium_bc_spe")
 #' 
-#' gridDensity(spe)
+#' spe <- gridDensity(spe)
 #'
 
 gridDensity <- function(spe, 
@@ -37,7 +37,7 @@ gridDensity <- function(spe,
   if(! id %in% colnames(colData(spe))) 
     stop(paste(id, "is not a column of the colData."))
 
-  if(coi == "all") 
+  if(any(coi == "all"))
     coi <- names(table(colData(spe)[[id]]))
 
   if(any(! coi %in% names(table(colData(spe)[[id]]))))

@@ -15,7 +15,7 @@ Authors@R:
              comment = c(ORCID = "")),
       person(given = "Yunshun",
              family = "Chen",
-             role = c("aut", "cre"),
+             role = c("aut"),
              email = "yuchen@wehi.edu.au",
              comment = c(ORCID = "0000-0003-4911-5653")))
 Description: scider is an user-friendly R package providing functions to model 

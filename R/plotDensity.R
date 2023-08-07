@@ -36,7 +36,8 @@ plotDensity <- function(spe, coi, probs = 0.8){
     geom_raster(aes(fill = density_coi_average)) + 
     theme_classic() +
     scale_fill_gradientn(colours = rev(RColorBrewer::brewer.pal(11,"Spectral"))) + 
-    labs(x = "x", y = "y", fill = "Density")
-  
+    labs(x = "x", y = "y", fill = "Density") +
+    ggtitle(coi) 
+
   return(p)
 }
