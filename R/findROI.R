@@ -97,7 +97,7 @@ findROI <- function(spe, coi,
   component_list$ycoord <- spe@metadata$grid_info$yrow[as.numeric(component_list$y)]
   component_list$component <- as.factor(component_list$component)
   
-  spe@metadata$components <- component_list
+  spe@metadata$roi <- component_list
   spe@metadata$coi <- coi
   return(spe)
 }
