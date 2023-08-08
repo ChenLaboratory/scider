@@ -40,7 +40,7 @@ plotROI <- function(spe,
   
   posdat <- as.data.frame(spatialCoords(spe))
   
-  dat <- as.data.frame(colData(spe)) %>%
+  dat <- as.data.frame(colData(spe)) |>
     cbind(posdat)
   
   set.seed(100)

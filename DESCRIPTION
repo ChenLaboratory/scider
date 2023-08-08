@@ -47,7 +47,8 @@ Imports:
     RColorBrewer,
     plotly,
     shiny,
-    igraph
+    igraph,
+    janitor
 LinkingTo:
     Rcpp
 Suggests:
