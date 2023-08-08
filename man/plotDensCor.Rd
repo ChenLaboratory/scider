@@ -10,6 +10,7 @@ plotDensCor(
   celltype2 = NULL,
   by_roi = TRUE,
   threshold = 50,
+  fit = c("spline", "linear"),
   ...
 )
 }
@@ -23,6 +24,8 @@ plotDensCor(
 \item{by_roi}{Logical. Plot facet by ROIs or not.}
 
 \item{threshold}{Integer. Threshold used to filter ROIs.}
+
+\item{fit}{Character. Choose either cubic spline fit or linear fit.}
 
 \item{...}{aesthetic mappings to pass to \code{ggplot2::aes()}.}
 }

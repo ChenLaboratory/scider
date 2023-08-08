@@ -23,6 +23,7 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
     sidebarLayout(
       sidebarPanel(
         sliderInput("point_size", "Point Size:", min = 1, max = 10, value = 5),
+        selectInput("color_by", "Color Points by:", choices = names(data), selected = NULL),
         actionButton("export_region", "Export Selected Points")
       ),
       mainPanel(
@@ -37,11 +38,24 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
     x <- reactiveVal(NULL)
     
     output$scatterplot <- renderPlotly({
-      p <- plot_ly(data, x = ~get(x_col), y = ~get(y_col), type = "scatter", mode = "markers",
-                   marker = list(size = input$point_size))
-      p <- p |> layout(dragmode = "select", 
-                        xaxis = list(title = "X"), 
-                        yaxis = list(title = "Y"))
+      color_var <- input$color_by
+      
+      p <- plot_ly(data, x = ~get(x_col), y = ~get(y_col), type = "scatter", 
+                   mode = "markers", marker = list(size = input$point_size))
+      
+      if (!is.null(color_var)) {
+        if (is.numeric(data[[color_var]])) {
+          p <- add_markers(p, color = ~get(color_var))
+        } else {
+          color_palette <- scales::hue_pal()(nlevels(factor(data[[color_var]])))
+          p <- add_markers(p, color = ~factor(data[[color_var]]), colors = color_palette)
+        }
+      }
+      
+      p <- layout(p, dragmode = "select", 
+                       xaxis = list(title = "X"), 
+                       yaxis = list(title = "Y"),
+                       showlegend = FALSE)
     })
     
     observeEvent(event_data("plotly_selected"), {
@@ -66,4 +80,3 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
   
   shinyApp(ui, server)
 }
-

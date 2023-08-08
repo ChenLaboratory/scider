@@ -5,6 +5,7 @@
 #' @param celltype2 Cell type 2 to compare.
 #' @param by_roi Logical. Plot facet by ROIs or not.
 #' @param threshold Integer. Threshold used to filter ROIs.
+#' @param fit Character. Choose either cubic spline fit or linear fit.
 #' @param ... aesthetic mappings to pass to `ggplot2::aes()`.
 #'
 #' @return A ggplot object.
@@ -23,10 +24,20 @@
 #' plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 #' 
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                        by_roi = TRUE, threshold = 50, ...){
+                        by_roi = TRUE, threshold = 50, 
+                        fit = c("spline","linear"), ...){
   
-  rois <- metadata(spe)$components
+  if (!("grid_density" %in% names(metadata(spe)))){
+    stop("Please run gridDensity before using this function.")
+  }
+  
+  if (!("components" %in% names(metadata(spe)))){
+    stop("Please run findROI before using this function.")
+  }
+  
   dens_dat <- metadata(spe)$grid_density
+  rois <- metadata(spe)$components
+  
   
   # filter rois
   kp <- which(table(rois$component) > threshold)
@@ -56,6 +67,10 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     defaultmap <- list()
   }
   
+  if (length(fit) > 1){
+    fit = "spline"
+  }
+  
   # set some default plotting parameters
   if (is.null(defaultmap$shape)) {
     defaultmap$shape <- 21
@@ -73,11 +88,22 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     
     p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
       do.call(ggplot2::geom_point, defaultmap) +
-      geom_smooth(method='lm', formula = y ~ splines::ns(x, df = 3), 
-                  color = "red", se = FALSE) +
       facet_wrap(~component, scales = "free", 
                  labeller = labeller(component = function(label) paste0("ROI #", label))) +
       theme_classic()
+    
+    if (fit == "spline"){
+      p <- p + 
+        geom_smooth(method='lm', formula = y ~ splines::ns(x, df = 3), 
+                  color = "red", se = FALSE) 
+    } else if (fit == "linear"){
+      p <- p + 
+        geom_smooth(method='lm', formula = y ~ x, 
+                    color = "red", se = FALSE) 
+    } else {
+      stop("The fit parameter should either be spline or linear.")
+    }
+  
   } else {
     p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
       do.call(ggplot2::geom_point, defaultmap) +
