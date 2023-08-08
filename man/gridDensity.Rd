@@ -50,6 +50,6 @@ Perform kernel density estimation on SpatialExperiment for cell types of interes
 
 data("xenium_bc_spe")
 
-gridDensity(spe)
+spe <- gridDensity(spe)
 
 }
