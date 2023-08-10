@@ -14,7 +14,7 @@ selectRegion(data, x_col = "x", y_col = "y")
 \item{ycol}{Column name of the y coordinates.}
 }
 \value{
-A matrix.
+A data.frame object in the global environment.
 }
 \description{
 Select region of interest from plot

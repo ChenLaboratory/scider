@@ -3,6 +3,14 @@
 #' @import dplyr
 #' @importFrom tibble rownames_to_column
 #' @importFrom tibble column_to_rownames
+#' @import shiny
+#' @importFrom plotly plot_ly
+#' @importFrom plotly renderPlotly
+#' @importFrom plotly add_markers
+#' @importFrom plotly layout
+#' @importFrom plotly event_data
+#' @importFrom SummarizedExperiment colData
+#' @import SpatialExperiment
 
 NULL
 

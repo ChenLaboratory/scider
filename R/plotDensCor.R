@@ -31,12 +31,12 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     stop("Please run gridDensity before using this function.")
   }
   
-  if (!("components" %in% names(metadata(spe)))){
+  if (!("roi" %in% names(metadata(spe)))){
     stop("Please run findROI before using this function.")
   }
   
   dens_dat <- metadata(spe)$grid_density
-  rois <- metadata(spe)$components
+  rois <- metadata(spe)$roi
   
   
   # filter rois
@@ -47,7 +47,7 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   ct1 <- paste0("density_",janitor::make_clean_names(celltype1))
   ct2 <- paste0("density_",janitor::make_clean_names(celltype2))
   
-  plotdf <- left_join(rois_f, dens_dat, by = c("members"="node")) |>
+  plotdf <- dplyr::left_join(rois_f, dens_dat, by = c("members"="node")) |>
     dplyr::select(c("component", all_of(c(ct1, ct2))))
   
   x <- rlang::sym(ct1)
@@ -88,8 +88,8 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     
     p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
       do.call(ggplot2::geom_point, defaultmap) +
-      facet_wrap(~component, scales = "free", 
-                 labeller = labeller(component = function(label) paste0("ROI #", label))) +
+      ggplot2::facet_wrap(~component, scales = "free", 
+                 labeller = ggplot2::labeller(component = function(label) paste0("ROI #", label))) +
       theme_classic()
     
     if (fit == "spline"){

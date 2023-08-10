@@ -22,37 +22,35 @@ Description: scider is an user-friendly R package providing functions to model
     the global density of cells in a slide of spatial transcriptomics data. All functions 
     in the package are built based on the SpatialExperiment object, allowing integration 
     into various spatial transcriptomics-related packages from Bioconductor. After modelling
-    density, the package allows for serveral downstream analysis, including co-localization analysis,
+    density, the package allows for serveral downstream analysis, including colocalization analysis,
     boundary detection analysis and differential density analysis.
 biocViews: Spatial, Transcriptomics
-License: MIT + file LICENSE
-URL: todo
-BugReports: todo
+License: GPL-3 + file LICENSE
+URL: https://github.com/ChenLaboratory/scider
+BugReports: https://github.com/ChenLaboratory/scider/issues
 Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
     SpatialExperiment,
+    SummarizedExperiment,
     spatstat,
     sf,
     dplyr,
     tibble,
     ggplot2,
     tidyr,
-    Biobase,
-    BiocGenerics,
     stats,
     randomcoloR,
     RColorBrewer,
     plotly,
     shiny,
     igraph,
-    janitor
-LinkingTo:
-    Rcpp
+    janitor,
+    knitr,
+    methods
 Suggests:
-    tidyverse
 Config/testthat/edition: 3
 Depends: 
     R (>= 4.1)

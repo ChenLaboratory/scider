@@ -4,7 +4,7 @@
 #' @param xcol Column name of the x coordinates.
 #' @param ycol Column name of the y coordinates.
 #'
-#' @return A matrix.
+#' @return A data.frame object in the global environment.
 #' @export
 #'
 #' @examples 
@@ -71,8 +71,9 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
     observeEvent(input$export_region, {
       sel_points <- x()
       if (!is.null(sel_points)) {
-        sel_region <- as.matrix(sel_points)
-        assign("sel_region", sel_region, envir = .GlobalEnv)
+        sel_region <- as.data.frame(sel_points)
+        envir <- as.environment(sel_region)
+        assign("sel_region", sel_region, envir = envir)
         cat("Selected region exported as 'sel_region' in the global environment.\n")
       }
     })
