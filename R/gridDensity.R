@@ -13,7 +13,7 @@
 #' @param grid_length_x Grid length in the x-direction.
 #' @param grid_length_y Grid length in the y-direction.
 #'
-#' @return A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in metadata(spe)$grid_density. Grid information is stored in metadata(spe)$grid_info
+#' @return A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info
 #' 
 #' @export
 #'
@@ -51,10 +51,10 @@ gridDensity <- function(spe,
   xlim <- c(min(coord[, "x_centroid"]), max(coord[, "x_centroid"]))
   ylim <- c(min(coord[, "y_centroid"]), max(coord[, "y_centroid"]))
   
-  if(is.null(metadata(spe))) metadata(spe) <- list()
+  if(is.null(spe@metadata)) spe@metadata <- list()
 
   # Reset when the function is rerun again
-  metadata(spe)$grid_density <- metadata(spe)$grid_info <- NULL
+  spe@metadata$grid_density <- spe@metadata$grid_info <- NULL
 
   # compute density for each cell type and then, filter
   for(ii in 1:length(coi)){
@@ -74,19 +74,19 @@ gridDensity <- function(spe,
     ngrid_x <- out$density_est$dim[2]
     ngrid_y <- out$density_est$dim[1]
     
-    if(is.null(metadata(spe)$grid_density)){
-      metadata(spe) <- list("grid_density" = RES[, 1:2])
-      metadata(spe)$grid_density <- RES[, 1:2]
-      metadata(spe)$grid_density$node_x <- rep(1:ngrid_x, each = ngrid_y) # horizontal ind
-      metadata(spe)$grid_density$node_y <- rep(1:ngrid_y, ngrid_x) # vertical ind
-      metadata(spe)$grid_density$node <- paste(metadata(spe)$grid_density$node_x,
-                                               metadata(spe)$grid_density$node_y, sep = "-")
+    if(is.null(spe@metadata$grid_density)){
+      spe@metadata <- list("grid_density" = RES[, 1:2])
+      spe@metadata$grid_density <- RES[, 1:2]
+      spe@metadata$grid_density$node_x <- rep(1:ngrid_x, each = ngrid_y) # horizontal ind
+      spe@metadata$grid_density$node_y <- rep(1:ngrid_y, ngrid_x) # vertical ind
+      spe@metadata$grid_density$node <- paste(spe@metadata$grid_density$node_x,
+                                               spe@metadata$grid_density$node_y, sep = "-")
     }
-    metadata(spe)$grid_density <- cbind(metadata(spe)$grid_density, RES$density)
-    colnames(metadata(spe)$grid_density)[5 + ii] <- paste("density", coi_clean[ii], sep="_")
+    spe@metadata$grid_density <- cbind(spe@metadata$grid_density, RES$density)
+    colnames(spe@metadata$grid_density)[5 + ii] <- paste("density", coi_clean[ii], sep="_")
     
     # grid info
-    if(is.null(metadata(spe)$grid_info)){
+    if(is.null(spe@metadata$grid_info)){
       spe@metadata$grid_info <- list(dims = c(ngrid_x, ngrid_y), 
                                      xlim = xlim, 
                                      ylim = ylim, 

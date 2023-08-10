@@ -27,9 +27,9 @@ plotROI <- function(spe,
                     id = "cell_type", k = 30, 
                     ngrid = 1, showlegend = FALSE, ...){
 
-  rois <- metadata(spe)$roi
+  rois <- spe@metadata$roi
 
-  coi <- metadata(spe)$coi
+  coi <- spe@metadata$coi
   coi_clean <- janitor::make_clean_names(coi)
 
   dat <- as.data.frame(colData(spe))

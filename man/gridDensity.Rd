@@ -41,7 +41,7 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 \item{grid_length_y}{Grid length in the y-direction.}
 }
 \value{
-A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in metadata(spe)$grid_density. Grid information is stored in metadata(spe)$grid_info
+A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info
 }
 \description{
 Perform kernel density estimation on SpatialExperiment for cell types of interest

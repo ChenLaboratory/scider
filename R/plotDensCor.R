@@ -27,16 +27,16 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
                         by_roi = TRUE, threshold = 50, 
                         fit = c("spline","linear"), ...){
   
-  if (!("grid_density" %in% names(metadata(spe)))){
+  if (!("grid_density" %in% names(spe@metadata))){
     stop("Please run gridDensity before using this function.")
   }
   
-  if (!("roi" %in% names(metadata(spe)))){
+  if (!("roi" %in% names(spe@metadata))){
     stop("Please run findROI before using this function.")
   }
   
-  dens_dat <- metadata(spe)$grid_density
-  rois <- metadata(spe)$roi
+  dens_dat <- spe@metadata$grid_density
+  rois <- spe@metadata$roi
   
   
   # filter rois
