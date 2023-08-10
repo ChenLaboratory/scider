@@ -11,9 +11,9 @@
 #' 
 #' data("xenium_bc_spe")
 #' 
-#' spe_b <- spe[,colData(spe)$cell_type == "B cells"]
+#' spe_b <- spe[,SummarizedExperiment::colData(spe)$cell_type == "B cells"]
 #' 
-#' dat <- as.data.frame(spatialCoords(spe_b))
+#' dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 #' 
 #' selectRegion(dat, x_col = "x_centroid", y_col = "y_centroid")
 #' 

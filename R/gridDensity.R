@@ -76,7 +76,6 @@ gridDensity <- function(spe,
     
     if(is.null(spe@metadata$grid_density)){
       spe@metadata <- list("grid_density" = RES[, 1:2])
-      spe@metadata$grid_density <- RES[, 1:2]
       spe@metadata$grid_density$node_x <- rep(1:ngrid_x, each = ngrid_y) # horizontal ind
       spe@metadata$grid_density$node_y <- rep(1:ngrid_y, ngrid_x) # vertical ind
       spe@metadata$grid_density$node <- paste(spe@metadata$grid_density$node_x,

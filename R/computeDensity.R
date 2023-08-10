@@ -31,6 +31,7 @@ computeDensity <- function(spe, mode = "pixels",
                            grid_length_x = NULL, grid_length_y = NULL, 
                            xlim = NULL, ylim = NULL){
 
+  
   if(!mode %in% c("points","pixels"))
     stop("mode must be either pixels or points.")
 
@@ -68,10 +69,17 @@ computeDensity <- function(spe, mode = "pixels",
   if(mode == "points"){
     return(density_est)
   } else if (mode == "pixels"){
+    
     grid_density <- density_est$v * scale
     rownames(grid_density) <- density_est$yrow
     colnames(grid_density) <- density_est$xcol
-    grid_density <- setNames(reshape2::melt(grid_density), c('y_grid', 'x_grid', 'density'))
+    
+    grid_density <- grid_density |>
+      as.data.frame() |>
+      rownames_to_column("y_grid") |>
+      tidyr::pivot_longer(cols = -y_grid, names_to = "x_grid", values_to = "density")
+    
+    grid_density <- as.data.frame(sapply(grid_density, as.numeric))
  
     return(list(grid_density = grid_density[,c(2,1,3)], density_est = density_est))
   }
