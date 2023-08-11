@@ -28,7 +28,7 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
       ),
       mainPanel(
         style = "display: flex; flex-direction: column; align-items: center;",
-        plotlyOutput("scatterplot", height = "60vh"),
+        plotly::plotlyOutput("scatterplot", height = "60vh"),
         verbatimTextOutput("sel_points")
       )
     )
