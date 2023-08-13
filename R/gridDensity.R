@@ -50,6 +50,11 @@ gridDensity <- function(spe,
   coord <- spatialCoords(spe)
   xlim <- c(min(coord[, "x_centroid"]), max(coord[, "x_centroid"]))
   ylim <- c(min(coord[, "y_centroid"]), max(coord[, "y_centroid"]))
+
+  # Calculate bandwidth
+  pts <- spatstat.geom::ppp(coord[,1], coord[,2], xlim, ylim)
+  if(is.null(bandwidth))
+    bandwidth <- spatstat.explore::bw.diggle(pts)
   
   if(is.null(spe@metadata)) spe@metadata <- list()
 
@@ -92,7 +97,8 @@ gridDensity <- function(spe,
                                      xcol = out$density_est$xcol, 
                                      yrow = out$density_est$yrow, 
                                      xstep = out$density_est$xstep, 
-                                     ystep = out$density_est$ystep)
+                                     ystep = out$density_est$ystep,
+                                     bandwidth = bandwidth)
     }
   }
   return(spe)
