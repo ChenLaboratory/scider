@@ -1,10 +1,10 @@
 #' Plot ROIs on spatial.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param id A character. The name of the column of colData(spe) containing the cell type identifiers.
+#' @param id Character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
 #' @param k Integer value. The number of distinct color to be generated, default is 30.
-#' @param ngrid Integer value. The threshold (number of grid) used to find large ROIs.
+#' @param ngrid Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.
 #' @param showlegend Logical. Show legend or not.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()` for point.
 #'
@@ -25,7 +25,7 @@
 #' 
 plotROI <- function(spe, 
                     id = "cell_type", k = 30, 
-                    ngrid = 1, showlegend = FALSE, ...){
+                    ngrid = 20, showlegend = FALSE, ...){
 
   rois <- spe@metadata$roi
 

@@ -25,7 +25,7 @@ gridDensity(
 \item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
 Set to cell_type by default.}
 
-\item{kernel}{The smoothing kernel. Options are gaussian, epanechnikov, quartic or disc.}
+\item{kernel}{The smoothing kernel. Options are "gaussian", "epanechnikov", "quartic" or "disc".}
 
 \item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
 selection using cross-validation using function spatstat.explore::bw.diggle.}

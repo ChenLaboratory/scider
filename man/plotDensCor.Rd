@@ -9,8 +9,9 @@ plotDensCor(
   celltype1 = NULL,
   celltype2 = NULL,
   by_roi = TRUE,
-  threshold = 50,
+  ngrid = 20,
   fit = c("spline", "linear"),
+  df = 3,
   ...
 )
 }
@@ -23,9 +24,11 @@ plotDensCor(
 
 \item{by_roi}{Logical. Plot facet by ROIs or not.}
 
-\item{threshold}{Integer. Threshold used to filter ROIs.}
+\item{ngrid}{Integer. Threshold (minimum number of grids) used to filter small ROIs. Default to 20.}
 
-\item{fit}{Character. Choose either cubic spline fit or linear fit.}
+\item{fit}{Character. Options are "spline" and "linear".}
+
+\item{df}{Integer. Degrees of freedom of the spline fit. Default to 3 (i.e., a cubic spline fit).}
 
 \item{...}{aesthetic mappings to pass to \code{ggplot2::aes()}.}
 }

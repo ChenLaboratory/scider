@@ -4,7 +4,7 @@
 #' @param coi A character vector of cell types of interest (COIs). Default to all cell types.
 #' @param id A character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
-#' @param kernel The smoothing kernel. Options are gaussian, epanechnikov, quartic or disc.
+#' @param kernel The smoothing kernel. Options are "gaussian", "epanechnikov", "quartic" or "disc".
 #' @param bandwidth The smoothing bandwidth. By default performing automatic bandwidth
 #' selection using cross-validation using function spatstat.explore::bw.diggle.
 #' @param scale A munmeric vector to scale the density values. 

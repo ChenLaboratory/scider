@@ -4,17 +4,17 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", k = 30, ngrid = 1, showlegend = FALSE, ...)
+plotROI(spe, id = "cell_type", k = 30, ngrid = 20, showlegend = FALSE, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
+\item{id}{Character. The name of the column of colData(spe) containing the cell type identifiers.
 Set to cell_type by default.}
 
 \item{k}{Integer value. The number of distinct color to be generated, default is 30.}
 
-\item{ngrid}{Integer value. The threshold (number of grid) used to find large ROIs.}
+\item{ngrid}{Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.}
 
 \item{showlegend}{Logical. Show legend or not.}
 

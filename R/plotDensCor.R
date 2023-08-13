@@ -4,8 +4,9 @@
 #' @param celltype1 Cell type 1 to compare.
 #' @param celltype2 Cell type 2 to compare.
 #' @param by_roi Logical. Plot facet by ROIs or not.
-#' @param threshold Integer. Threshold used to filter ROIs.
-#' @param fit Character. Choose either cubic spline fit or linear fit.
+#' @param ngrid Integer. Threshold (minimum number of grids) used to filter small ROIs. Default to 20.
+#' @param fit Character. Options are "spline" and "linear".
+#' @param df Integer. Degrees of freedom of the spline fit. Default to 3 (i.e., a cubic spline fit).
 #' @param ... aesthetic mappings to pass to `ggplot2::aes()`.
 #'
 #' @return A ggplot object.
@@ -24,8 +25,8 @@
 #' plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 #' 
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                        by_roi = TRUE, threshold = 50, 
-                        fit = c("spline","linear"), ...){
+                        by_roi = TRUE, ngrid = 20, 
+                        fit = c("spline","linear"), df = 3, ...){
   
   if (!("grid_density" %in% names(spe@metadata))){
     stop("Please run gridDensity before using this function.")
@@ -40,7 +41,7 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   
   
   # filter rois
-  kp <- which(table(rois$component) > threshold)
+  kp <- which(table(rois$component) >= ngrid)
   rois_f <- rois[rois$component %in% kp, ]
   
   # clean names
@@ -94,7 +95,7 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     
     if (fit == "spline"){
       p <- p + 
-        geom_smooth(method='lm', formula = y ~ splines::ns(x, df = 3), 
+        geom_smooth(method='lm', formula = y ~ splines::ns(x, df = df), 
                   color = "red", se = FALSE) 
     } else if (fit == "linear"){
       p <- p + 
