@@ -6,7 +6,7 @@
 \usage{
 gridDensity(
   spe,
-  coi = "all",
+  coi = NULL,
   id = "cell_type",
   kernel = "gaussian",
   bandwidth = NULL,

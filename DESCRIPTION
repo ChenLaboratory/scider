@@ -37,6 +37,7 @@ Imports:
     SummarizedExperiment,
     spatstat,
     sf,
+    lwgeom, 
     dplyr,
     tibble,
     ggplot2,
