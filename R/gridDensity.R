@@ -25,7 +25,7 @@
 #'
 
 gridDensity <- function(spe, 
-                        coi = "all", 
+                        coi = NULL, 
                         id = "cell_type",
                         kernel = "gaussian",
                         bandwidth = NULL,
@@ -37,11 +37,12 @@ gridDensity <- function(spe,
   if(! id %in% colnames(colData(spe))) 
     stop(paste(id, "is not a column of the colData."))
 
-  if(any(coi == "all"))
+  if(is.null(coi))
     coi <- names(table(colData(spe)[[id]]))
-
-  if(any(! coi %in% names(table(colData(spe)[[id]]))))
-    stop("One or more cell types of interest is not found.")
+  
+  if(length(which(! coi %in% names(table(colData(spe)[[id]])))) > 0L)
+    stop(paste(paste0(coi[which(! coi %in% names(table(colData(spe)[[id]])))], 
+                      collapse = ", "), "not found in data!", sep = " "))
 
   coi_clean <- janitor::make_clean_names(coi)
   
