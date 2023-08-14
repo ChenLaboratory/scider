@@ -46,8 +46,8 @@ plotROI <- function(spe,
   set.seed(100)
   col.p <- randomcoloR::distinctColorPalette(k)
   
-  xlim <- c(min(posdat[,1]), max(posdat[,1]))
-  ylim <- c(min(posdat[,2]), max(posdat[,2]))
+  xlim <- spe@metadata$grid_info$xlim
+  ylim <- spe@metadata$grid_info$ylim
   plot.xlim <- xlim + c(-1e-10, 1e-10)
   plot.ylim <- ylim + c(-1e-10, 1e-10)
   
