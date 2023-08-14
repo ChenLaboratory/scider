@@ -36,7 +36,7 @@ findROI <- function(spe, coi,
     stop("The method chosen is not supported, please choose walktrap or connected.")
   }
 
-  grid_data$density_coi_average <- rowMeans(grid_data[, which(colnames(grid_data) %in% dens_cols), drop=FALSE])
+  grid_data$density_coi_average <- rowMeans(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop=FALSE]))
 
   # Filter grids for COI(s)
   #  kp <- rep(FALSE, nrow(grid_data))
@@ -84,7 +84,7 @@ findROI <- function(spe, coi,
   component_list$ycoord <- spe@metadata$grid_info$yrow[as.numeric(component_list$y)]
   component_list$component <- as.factor(component_list$component)
   
-  spe@metadata$roi <- component_list
+  spe@metadata$roi <- S4Vectors::DataFrame(component_list)
   spe@metadata$coi <- coi
   return(spe)
 }

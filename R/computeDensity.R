@@ -78,12 +78,12 @@ computeDensity <- function(spe, mode = "pixels",
     
     grid_density <- grid_density |>
       as.data.frame() |>
-      rownames_to_column("y_grid") |>
+      tibble::rownames_to_column("y_grid") |>
       tidyr::pivot_longer(cols = -y_grid, names_to = "x_grid", values_to = "density")
     
     grid_density <- as.data.frame(sapply(grid_density, as.numeric)) |>
-      arrange(x_grid, y_grid)
+      dplyr::arrange(x_grid, y_grid)
  
-    return(list(grid_density = grid_density[,c(2,1,3)], density_est = density_est))
+    return(list(grid_density = S4Vectors::DataFrame(grid_density[,c(2,1,3)]), density_est = density_est))
   }
 }

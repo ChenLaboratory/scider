@@ -4,7 +4,7 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", k = 30, ngrid = 20, showlegend = FALSE, ...)
+plotROI(spe, id = "cell_type", k = 30, ngrid = 20, show.legend = FALSE, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -16,7 +16,7 @@ Set to cell_type by default.}
 
 \item{ngrid}{Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.}
 
-\item{showlegend}{Logical. Show legend or not.}
+\item{show.legend}{Logical. Show legend or not.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()} for point.}
 }

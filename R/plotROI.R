@@ -5,7 +5,7 @@
 #' Set to cell_type by default.
 #' @param k Integer value. The number of distinct color to be generated, default is 30.
 #' @param ngrid Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.
-#' @param showlegend Logical. Show legend or not.
+#' @param show.legend Logical. Show legend or not.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()` for point.
 #'
 #' @return A ggplot object.
@@ -25,14 +25,14 @@
 #' 
 plotROI <- function(spe, 
                     id = "cell_type", k = 30, 
-                    ngrid = 20, showlegend = FALSE, ...){
+                    ngrid = 20, show.legend = FALSE, ...){
 
   rois <- spe@metadata$roi
 
   coi <- spe@metadata$coi
   coi_clean <- janitor::make_clean_names(coi)
 
-  dat <- as.data.frame(colData(spe))
+  dat <- as.data.frame(spe@colData)
   
   if (!is.null(coi)) {
     spe <- spe[, dat[, id] %in% coi]
@@ -40,7 +40,7 @@ plotROI <- function(spe,
   
   posdat <- as.data.frame(spatialCoords(spe))
   
-  dat <- as.data.frame(colData(spe)) |>
+  dat <- as.data.frame(spe@colData) |>
     cbind(posdat)
   
   set.seed(100)
@@ -52,7 +52,7 @@ plotROI <- function(spe,
   plot.ylim <- ylim + c(-1e-10, 1e-10)
   
   filtered <- which(table(rois$component) >= ngrid)
-  rois_filtered <- rois[rois$component %in% filtered, ]
+  rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
   
   roi_plot <- plotSpatial(spe, ...) +
     geom_tile(data = rois_filtered, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
@@ -61,7 +61,7 @@ plotROI <- function(spe,
     scale_x_continuous(limits = plot.xlim) +
     scale_y_continuous(limits = plot.ylim)
   
-  if (isFALSE(showlegend)){
+  if (isFALSE(show.legend)){
     roi_plot <- roi_plot +
       theme(legend.position = "none")
   } 
