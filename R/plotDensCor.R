@@ -36,8 +36,8 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     stop("Please run findROI before using this function.")
   }
   
-  dens_dat <- spe@metadata$grid_density
-  rois <- spe@metadata$roi
+  dens_dat <- as.data.frame(spe@metadata$grid_density)
+  rois <- as.data.frame(spe@metadata$roi)
   
   
   # filter rois

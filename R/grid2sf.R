@@ -12,7 +12,7 @@ grid2sf <- function(spe, ngrid = 20) {
   if (is.null(spe@metadata$roi))
     stop("ROI not yet computed!")
   
-  rois <- spe@metadata$roi
+  rois <- as.data.frame(spe@metadata$roi)
   filtered <- which(table(rois$component) >= ngrid)
   rois_filtered <- rois[rois$component %in% filtered, ]
   

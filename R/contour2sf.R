@@ -27,7 +27,7 @@ contour2sf <- function(spe, contour, coi, level) {
   coi_clean <- janitor::make_clean_names(coi)
   dens_cols <- paste("density", coi_clean, sep="_")
   
-  dens <- spe@metadata$grid_density
+  dens <- as.data.frame(spe@metadata$grid_density)
   dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in% dens_cols), drop=FALSE])
   
   # grid centroid points
