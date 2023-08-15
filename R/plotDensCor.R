@@ -92,23 +92,26 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
       ggplot2::facet_wrap(~component, scales = "free", 
                  labeller = ggplot2::labeller(component = function(label) paste0("ROI #", label))) +
       theme_classic()
-    
-    if (fit == "spline"){
-      p <- p + 
-        geom_smooth(method='lm', formula = y ~ splines::ns(x, df = df), 
-                  color = "red", se = FALSE) 
-    } else if (fit == "linear"){
-      p <- p + 
-        geom_smooth(method='lm', formula = y ~ x, 
-                    color = "red", se = FALSE) 
-    } else {
-      stop("The fit parameter should either be spline or linear.")
-    }
   
   } else {
-    p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
+    defaultmap$shape <- 16
+    defaultmap$alpha <- 0.8
+    
+    p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, color = component, !!!aesmap)) +
       do.call(ggplot2::geom_point, defaultmap) +
       theme_classic()
+  }
+  
+  if (fit == "spline"){
+    p <- p + 
+      geom_smooth(method='lm', formula = y ~ splines::ns(x, df = df), 
+                  color = "red", se = FALSE) 
+  } else if (fit == "linear"){
+    p <- p + 
+      geom_smooth(method='lm', formula = y ~ x, 
+                  color = "red", se = FALSE) 
+  } else {
+    stop("The fit parameter should either be spline or linear.")
   }
   
   return(p)
