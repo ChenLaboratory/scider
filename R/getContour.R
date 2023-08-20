@@ -12,6 +12,9 @@
 #' @examples
 getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   
+  if (is.null(spe@metadata$grid_density))
+    stop("Have to calculate grid density, run gridDensity() first!")
+  
   dens <- spe@metadata$grid_density
   dups <- duplicated(dens[, c("y_grid", "x_grid"), drop = FALSE], fromLast = TRUE)
   dens <- dens[!dups, , drop = FALSE]
