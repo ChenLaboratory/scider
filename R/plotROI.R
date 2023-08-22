@@ -27,6 +27,9 @@ plotROI <- function(spe,
                     id = "cell_type", k = 30, 
                     ngrid = 20, show.legend = FALSE, ...){
 
+  if (is.null(spe@metadata$roi))
+    stop("ROI not yet computed!")
+
   rois <- spe@metadata$roi
 
   coi <- spe@metadata$coi
@@ -60,9 +63,22 @@ plotROI <- function(spe,
   #  }
   #}
   
+
+  # Label ROI numbers at the center
+  sf <- grid2sf(spe, ngrid = ngrid)
+  rois_center <- do.call(rbind, lapply(sf, function(rr) {
+    center <- st_point_on_surface(rr)
+    as.data.frame(st_coordinates(center))
+  }))
+  
+  rois_center <- as.data.frame(rois_center) |>
+    rownames2col("component")
+
   roi_plot <- plotSpatial(spe, ...) +
     geom_tile(data = rois_filtered, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
     #scale_fill_manual(values = col.p) +
+    annotate("text", x = rois_center$X, y = rois_center$Y, 
+    label = rois_center$component, color = "black", fontface = 2) +
     scale_fill_manual(values = rep(col.p[1:10], 100)) +
     scale_x_continuous(limits = plot.xlim) +
     scale_y_continuous(limits = plot.ylim)
@@ -74,4 +90,3 @@ plotROI <- function(spe,
 
   return(roi_plot)
 }
-

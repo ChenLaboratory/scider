@@ -12,7 +12,7 @@
 #' 
 #' data("xenium_bc_spe")
 #'
-#' plotSpatial(spe, shape = ".", color = cell_type)
+#' plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
 #' 
 plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
   

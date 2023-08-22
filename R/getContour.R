@@ -2,15 +2,28 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
-#' @param bins 
-#' @param binwidth 
-#' @param breaks 
+#' @param bins An integer. Number of contour levels. 
+#' @param binwidth A numeric scale of the smoothing bandwidth.
+#' @param breaks A numeric scale referring to the breaks in `ggplot2:::contour_breaks`.
 #'
-#' @return An sf object of the contour region of the specified level. 
+#' @return A SpatialExperiment object. An sf object of the contour region of the specified level is stored in the metadata of the SpatialExperiment object.
 #' @export
 #'
 #' @examples
+#' 
+#' data("xenium_bc_spe")
+#' 
+#' spe <- gridDensity(spe)
+#' 
+#' coi <- "Breast cancer"
+#' 
+#' spe <- getContour(spe, coi = coi)
+#' 
+
 getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
+  
+  if (is.null(spe@metadata$grid_density))
+    stop("Have to calculate grid density, run gridDensity() first!")
   
   dens <- spe@metadata$grid_density
   dups <- duplicated(dens[, c("y_grid", "x_grid"), drop = FALSE], fromLast = TRUE)

@@ -4,22 +4,37 @@
 \alias{cellsInRegion}
 \title{Check which cells are in which regions}
 \usage{
-cellsInRegion(spe, sf, name_to, NA_level = NULL, levels = NULL)
+cellsInRegion(spe, region, name_to, NA_level = "0", levels = NULL)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{sf}{List or an sf object that represents a region or an ROI.}
+\item{region}{List or an sf object that represents a region or an ROI.}
 
 \item{name_to}{Colname in colData(spe) to store the annotation.}
 
-\item{NA_level}{Label for cells not falling in any of the regions.}
+\item{NA_level}{Label for cells not falling in any of the regions. Default to 0.}
 
 \item{levels}{Factor levels.}
 }
 \value{
-An spe object.
+A SpatialExperiment object. The region information of each cell is stored in the colData.
 }
 \description{
 Check which cells are in which regions
+}
+\examples{
+
+data("xenium_bc_spe")
+
+spe <- gridDensity(spe)
+
+coi <- "Breast cancer"
+
+spe <- getContour(spe, coi = coi)
+
+region <- getContourRegions(spe, coi = coi)
+
+spe <- cellsInRegion(spe, region, name_to = "breast_cancer_contour_level")
+
 }
