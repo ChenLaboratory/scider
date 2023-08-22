@@ -11,15 +11,26 @@ getContour(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL)
 
 \item{coi}{A character vector of cell types of interest (COIs).}
 
-\item{bins}{}
+\item{bins}{An integer. Number of contour levels.}
 
-\item{binwidth}{}
+\item{binwidth}{A numeric scale of the smoothing bandwidth.}
 
-\item{breaks}{}
+\item{breaks}{A numeric scale referring to the breaks in \code{ggplot2:::contour_breaks}.}
 }
 \value{
-An sf object of the contour region of the specified level.
+A SpatialExperiment object. An sf object of the contour region of the specified level is stored in the metadata of the SpatialExperiment object.
 }
 \description{
 Get contour from density
+}
+\examples{
+
+data("xenium_bc_spe")
+
+spe <- gridDensity(spe)
+
+coi <- "Breast cancer"
+
+spe <- getContour(spe, coi = coi)
+
 }

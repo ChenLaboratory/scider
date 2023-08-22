@@ -12,9 +12,20 @@ getContourRegions(spe, coi)
 \item{coi}{A character vector of cell types of interest (COIs).}
 }
 \value{
-A list of sf objects, each representing the region between two
-density levels.
+A list of sf objects, each representing the region between two contour density levels.
 }
 \description{
 Calculate areas between every two density levels
+}
+\examples{
+data("xenium_bc_spe")
+
+spe <- gridDensity(spe)
+
+coi <- "Breast cancer"
+
+spe <- getContour(spe, coi = coi)
+
+region <- getContourRegions(spe, coi = coi)
+
 }

@@ -7,6 +7,18 @@
 #' @export
 #'
 #' @examples
+#' 
+#' data("xenium_bc_spe")
+#' 
+#' spe <- gridDensity(spe)
+#' 
+#' coi <- "Breast cancer"
+#' 
+#' spe <- findROI(spe, coi = coi, probs = 0.85)
+#' 
+#' rois <- grid2sf(spe, ngrid = 20)
+#' 
+
 grid2sf <- function(spe, ngrid = 20) {
   
   if (is.null(spe@metadata$roi))
