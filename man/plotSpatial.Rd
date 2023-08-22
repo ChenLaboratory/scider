@@ -25,6 +25,6 @@ Plot cells based on spatial coordinates.
 
 data("xenium_bc_spe")
 
-plotSpatial(spe, shape = ".", color = cell_type)
+plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
 
 }

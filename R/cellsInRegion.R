@@ -1,22 +1,36 @@
 #' Check which cells are in which regions
 #'
 #' @param spe A SpatialExperiment object.
-#' @param sf List or an sf object that represents a region or an ROI. 
+#' @param region List or an sf object that represents a region or an ROI. 
 #' @param name_to Colname in colData(spe) to store the annotation. 
-#' @param NA_level Label for cells not falling in any of the regions. 
+#' @param NA_level Label for cells not falling in any of the regions. Default to 0.
 #' @param levels Factor levels. 
 #'
-#' @return An spe object. 
+#' @return A SpatialExperiment object. The region information of each cell is stored in the colData. 
 #' @export
 #'
 #' @examples
-cellsInRegion <- function(spe, sf, name_to, NA_level = NULL, levels = NULL) {
+#' 
+#' data("xenium_bc_spe")
+#' 
+#' spe <- gridDensity(spe)
+#' 
+#' coi <- "Breast cancer"
+#' 
+#' spe <- getContour(spe, coi = coi)
+#' 
+#' region <- getContourRegions(spe, coi = coi)
+#' 
+#' spe <- cellsInRegion(spe, region, name_to = "breast_cancer_contour_level")
+#' 
+
+cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
   
-  if (length(sf) > 1L) {
-    sf_classes <- sapply(sf, class)[1, ]
+  if (length(region) > 1L) {
+    sf_classes <- sapply(region, class)[1, ]
   }
-  if (length(sf) == 1L) {
-    sf_classes <- class(sf)[1]
+  if (length(region) == 1L) {
+    sf_classes <- class(region)[1]
   }
   if (any(sf_classes != "sf"))
     stop("One or more regions not converted to the sf class!")
@@ -29,9 +43,13 @@ cellsInRegion <- function(spe, sf, name_to, NA_level = NULL, levels = NULL) {
   
   # calculate overlaps
   isIn <- list()
+<<<<<<< HEAD
   for (aa in 1:length(sf)) {
+=======
+  for (aa in names(region)) {
+>>>>>>> 1edd96109c58c339af3ed0fbc0db6ab931242680
     # contour region
-    this_area <- sf[[aa]]
+    this_area <- region[[aa]]
     # calculate intersection
     overlap_ind <- st_intersects(xy_allcells, this_area, sparse = FALSE)
     overlap_ind <- which(overlap_ind == 1)
