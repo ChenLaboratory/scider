@@ -43,11 +43,7 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
   
   # calculate overlaps
   isIn <- list()
-<<<<<<< HEAD
   for (aa in 1:length(sf)) {
-=======
-  for (aa in names(region)) {
->>>>>>> 1edd96109c58c339af3ed0fbc0db6ab931242680
     # contour region
     this_area <- region[[aa]]
     # calculate intersection
