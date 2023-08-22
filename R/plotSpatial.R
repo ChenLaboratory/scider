@@ -23,11 +23,11 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
   
   if("cell_id" %in% colnames(cdata)){
-    cdata <- dplyr::select(cdata, -cell_id)
+    cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
   
   toplot <- cbind(toplot, cdata) |>
-    tibble::rownames_to_column("cell_id")
+    rownames2col("cell_id")
   
   aesmap <- rlang::enquos(...)
   

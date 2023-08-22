@@ -54,6 +54,12 @@ plotROI <- function(spe,
   filtered <- which(table(rois$component) >= ngrid)
   rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
   
+  #for(n in colnames(colData(spe))){
+  #  if (!(n %in% colnames(rois_filtered))){
+  #    rois_filtered[, n] <- "dummy"
+  #  }
+  #}
+  
   roi_plot <- plotSpatial(spe, ...) +
     geom_tile(data = rois_filtered, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
     #scale_fill_manual(values = col.p) +
