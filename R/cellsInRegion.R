@@ -35,15 +35,15 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
   if (any(sf_classes != "sf"))
     stop("One or more regions not converted to the sf class!")
   
-  if (is.null(names(sf)))
-    warning("The sf input is unnamed! We recommend a named list of sf object(s) as input!")
+  if (is.null(names(region)))
+    warning("The region input is unnamed! We recommend a named list of region object(s) as input!")
     
   # all cells
   xy_allcells <- st_as_sf(as.data.frame(spatialCoords(spe)), coords = c("x_centroid", "y_centroid"))
   
   # calculate overlaps
   isIn <- list()
-  for (aa in 1:length(sf)) {
+  for (aa in 1:length(region)) {
     # contour region
     this_area <- region[[aa]]
     # calculate intersection
@@ -52,10 +52,10 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
     isIn[[aa]] <- overlap_ind
   }
   
-  if (!is.null(names(sf))) {
-    names(isIn) <- names(sf)
+  if (!is.null(names(region))) {
+    names(isIn) <- names(region)
   } else {
-    names(isIn) <- as.character(1:length(sf))
+    names(isIn) <- as.character(1:length(region))
   }
   
   # annotate colData
