@@ -12,14 +12,16 @@
 
 contour2sf <- function(spe, contour, coi, level) {
   
-  if (is.null(spe@metadata[[contour]]))
-    stop("Have to calculate contours first!")
+  if(!requireNamespace("sf",quietly=TRUE)) stop("sf required but is not available")
+  if(!requireNamespace("lwgeom",quietly=TRUE)) stop("lwgeom required but is not available")
+
+  if(is.null(spe@metadata[[contour]])) stop("Have to calculate contours first!")
   
   clines <- spe@metadata[[contour]]
   xlim <- c(min(clines$x), max(clines$x))
   ylim <- c(min(clines$y), max(clines$y))
   lims <- c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2])
-  canvas_sf <- st_sf(st_as_sfc(st_bbox(lims)))
+  canvas_sf <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(lims)))
   levs <- sort(unique(clines$level))
   lev_code <- findInterval(level, levs, rightmost.closed = TRUE)
   clines_lev <- clines[clines$level == level, c("x", "y", "piece")]
@@ -33,31 +35,31 @@ contour2sf <- function(spe, contour, coi, level) {
   # grid centroid points
   dens$level <- findInterval(dens$density_coi_average, levs, rightmost.closed = TRUE)
   grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "level")]
-  grids_pts_sf <- st_as_sf(grids_pts_sf, coords = c("x_grid", "y_grid"))
+  grids_pts_sf <- sf::st_as_sf(grids_pts_sf, coords = c("x_grid", "y_grid"))
   
   clines_lev_sf <- lapply(unique(clines_lev$piece), function(pp) {
     
     line_piece <- clines_lev[clines_lev$piece == pp, ]
-    line_piece_sf <- st_as_sf(line_piece, coords = c("x", "y")) |> st_combine() |> 
-      st_multilinestring() |> st_combine()
+    line_piece_sf <- sf::st_as_sf(line_piece, coords = c("x", "y")) |> sf::st_combine() |> 
+      sf::st_multilinestring() |> sf::st_combine()
     
     # check if the region is at boundary
-    bbox <- st_bbox(line_piece_sf)
-    bbox_sf <- st_sf(st_as_sfc(bbox))
+    bbox <- sf::st_bbox(line_piece_sf)
+    bbox_sf <- sf::st_sf(sf::st_as_sfc(bbox))
     if (any(bbox == lims)) {
-      regions <- st_split(bbox_sf, line_piece_sf) |> st_collection_extract("POLYGON")
-      inds <- st_intersects(regions, grids_pts_sf)
+      regions <- lwgeom::st_split(bbox_sf, line_piece_sf) |> sf::st_collection_extract("POLYGON")
+      inds <- sf::st_intersects(regions, grids_pts_sf)
       avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$level[ii]))
       area_up <- regions[avglevel >= lev_code, ]
       area_down <- regions[avglevel < lev_code, ]
-      st_geometry(area_up) <- "area"
-      st_geometry(area_down) <- "area"
-      area_up <- st_sf(area_up)
-      area_down <- st_sf(area_down)
+      sf::st_geometry(area_up) <- "area"
+      sf::st_geometry(area_down) <- "area"
+      area_up <- sf::st_sf(area_up)
+      area_down <- sf::st_sf(area_down)
     } else {
-      area <- st_cast(line_piece_sf, "POLYGON")
-      area <- st_sf(area)
-      inds <- st_intersects(area, grids_pts_sf)
+      area <- sf::st_cast(line_piece_sf, "POLYGON")
+      area <- sf::st_sf(area)
+      inds <- sf::st_intersects(area, grids_pts_sf)
       avglevel <- mean(grids_pts_sf$level[unlist(inds)])
       if (avglevel >= lev_code) {
         area_up <- area; area_down <- NULL
@@ -74,18 +76,18 @@ contour2sf <- function(spe, contour, coi, level) {
   areas_down <- do.call(rbind, lapply(clines_lev_sf, "[[", "area_down"))
   
   if (!is.null(areas_down)) {
-    areas_up_union <- st_union(areas_up)
-    out <- st_covered_by(areas_down, areas_up_union, sparse = FALSE)
+    areas_up_union <- sf::st_union(areas_up)
+    out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
     areas_down <- areas_down[c(out), ]
-    areas_down <- st_combine(areas_down)
-    areas <- st_difference(areas_up_union, areas_down)
+    areas_down <- sf::st_combine(areas_down)
+    areas <- sf::st_difference(areas_up_union, areas_down)
     # check if there is any missed area
-    missed <- !st_intersects(areas_up, areas, sparse = FALSE)
+    missed <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
     if (any(missed)) {
-      areas <- st_union(st_sf(areas), areas_up[missed, ])
+      areas <- sf::st_union(sf::st_sf(areas), areas_up[missed, ])
     }
   } else {
-    areas <- st_union(areas_up)
+    areas <- sf::st_union(areas_up)
   }
   
   return(areas)

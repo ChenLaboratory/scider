@@ -64,8 +64,9 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   spe@metadata$contour$level_factor <- as.factor(as.numeric(as.factor(spe@metadata$contour$level)))
   names(spe@metadata)[which(names(spe@metadata) == "contour")] <- paste(coi_clean, "contour", sep = "_")
   
+  spe@metadata$contour <- S4Vectors::DataFrame(spe@metadata$contour)
   return(spe)
-  
+
 }
 
 

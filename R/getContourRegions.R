@@ -34,10 +34,10 @@ getContourRegions <- function(spe, coi) {
                                                        level = levs[ll]))
   # area b/w every two levels
   all_areas <- lapply(1:(nlevs - 1), function(ii) 
-    st_as_sf(st_union(st_difference(area_levs[[ii]], area_levs[[ii + 1]]))))
+    sf::st_as_sf(sf::st_union(sf::st_difference(area_levs[[ii]], area_levs[[ii + 1]]))))
   
   # highest level
-  all_areas[[nlevs]] <- st_as_sf(area_levs[[nlevs]])
+  all_areas[[nlevs]] <- sf::st_as_sf(area_levs[[nlevs]])
   names(all_areas) <- as.character(1:nlevs)
   
   all_areas
