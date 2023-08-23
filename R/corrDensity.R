@@ -23,11 +23,11 @@
 #' 
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #' 
-#' spe <- correlationDensity(spe, cal_all = TRUE)
+#' spe <- corrDensity(spe, cal_all = TRUE)
 #' 
-correlationDensity <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                               cal_all = FALSE, by_roi = TRUE, ngrid = 20, 
-                               fit = c("spline","linear"), df = 3){
+corrDensity <- function(spe, celltype1 = NULL, celltype2 = NULL,
+                        cal_all = FALSE, by_roi = TRUE, ngrid = 20, 
+                        fit = c("spline","linear"), df = 3){
   
   if (!("grid_density" %in% names(spe@metadata))){
     stop("Please run gridDensity before using this function.")
@@ -72,7 +72,7 @@ correlationDensity <- function(spe, celltype1 = NULL, celltype2 = NULL,
   spe@metadata$model_result <- S4Vectors::DataFrame(model_results)
   return(spe)
 }
-  
+
 
 fit_model <- function(dens_dat, rois_f, ct1, ct2, by_roi, fit){
   
