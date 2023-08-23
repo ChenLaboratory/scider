@@ -90,6 +90,8 @@ contour2sf <- function(spe, contour, coi, level) {
     areas <- sf::st_union(areas_up)
   }
   
+  areas <- st_as_sf(st_union(areas))
+  
   return(areas)
 }
 

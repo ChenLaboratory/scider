@@ -74,15 +74,20 @@ computeDensity <- function(spe, mode = "pixels",
     rownames(grid_density) <- density_est$yrow
     colnames(grid_density) <- density_est$xcol
     
-    #grid_density <- setNames(reshape2::melt(grid_density), c('y_grid', 'x_grid', 'density'))
+    grid_density <- as.data.frame(grid_density) |>
+      rownames2col("y_grid")
     
-    grid_density <- grid_density |>
-      as.data.frame() |>
-      tibble::rownames_to_column("y_grid") |>
-      tidyr::pivot_longer(cols = -y_grid, names_to = "x_grid", values_to = "density")
+    reshaped_dat <- stats::reshape(grid_density, direction = "long", 
+                                   varying = names(grid_density)[(names(grid_density) != "y_grid")],
+                                   v.names = "density", 
+                                   timevar = "x_grid", 
+                                   times = names(grid_density)[(names(grid_density) != "y_grid")])
     
-    grid_density <- as.data.frame(sapply(grid_density, as.numeric)) |>
-      dplyr::arrange(x_grid, y_grid)
+    reshaped_dat <- reshaped_dat[,names(reshaped_dat) != "id"]
+    rownames(reshaped_dat) <- NULL
+    grid_density <- as.data.frame(sapply(reshaped_dat, as.numeric))
+    grid_density <- grid_density[order(grid_density$x_grid, grid_density$y_grid),]
+      
  
     return(list(grid_density = S4Vectors::DataFrame(grid_density[,c(2,1,3)]), density_est = density_est))
   }

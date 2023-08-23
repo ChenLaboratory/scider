@@ -48,8 +48,8 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   ct1 <- paste0("density_",janitor::make_clean_names(celltype1))
   ct2 <- paste0("density_",janitor::make_clean_names(celltype2))
   
-  plotdf <- dplyr::left_join(rois_f, dens_dat, by = c("members"="node")) |>
-    dplyr::select(c("component", all_of(c(ct1, ct2))))
+  plotdf <- merge(rois_f, dens_dat, by.x = "members", by.y = "node", all.x = TRUE, sort = FALSE)
+  plotdf <- plotdf[,c("component", c(ct1, ct2))]
   
   x <- rlang::sym(ct1)
   y <- rlang::sym(ct2)

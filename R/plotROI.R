@@ -56,6 +56,13 @@ plotROI <- function(spe,
   
   filtered <- which(table(rois$component) >= ngrid)
   rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
+  
+  #for(n in colnames(colData(spe))){
+  #  if (!(n %in% colnames(rois_filtered))){
+  #    rois_filtered[, n] <- "dummy"
+  #  }
+  #}
+  
 
   # Label ROI numbers at the center
   sf <- grid2sf(spe, ngrid = ngrid)
@@ -63,8 +70,9 @@ plotROI <- function(spe,
     center <- st_point_on_surface(rr)
     as.data.frame(st_coordinates(center))
   }))
+  
   rois_center <- as.data.frame(rois_center) |>
-  tibble::rownames_to_column("component")
+    rownames2col("component")
 
   roi_plot <- plotSpatial(spe, ...) +
     geom_tile(data = rois_filtered, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
