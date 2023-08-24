@@ -25,17 +25,17 @@ plotContour <- function(spe, coi, ...){
   coi_clean <- janitor::make_clean_names(coi)
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
 
-  contour_data <- spe@metadata[[coi_clean_contour]]
+  contour_data <- as.data.frame(spe@metadata[[coi_clean_contour]])
   levs <- unique(contour_data$level)
   nlevs <- length(levs)
 
   p <- plotSpatial(spe, ...) + 
     ggplot2::geom_path(data = contour_data, 
-      ggplot2::aes(x = x, y = y, group = group, color = level_factor)) + 
-    scale_color_manual(values= rev(RColorBrewer::brewer.pal(nlevs, "Spectral"))) +
-    theme_classic() +
-    labs(x = "x", y = "y", color = "Density") +
-    ggtitle(coi) 
+      ggplot2::aes(x = x, y = y, group = group, color = level)) + 
+    ggplot2::scale_color_manual(values= rev(RColorBrewer::brewer.pal(nlevs, "Spectral"))) +
+    ggplot2::theme_classic() +
+    ggplot2::labs(x = "x", y = "y", color = "Density") +
+    ggplot2::ggtitle(coi) 
 
   return(p)
 }

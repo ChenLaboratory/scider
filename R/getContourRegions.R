@@ -24,14 +24,14 @@ getContourRegions <- function(spe, coi) {
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
 
   contour_data <- spe@metadata[[coi_clean_contour]]
-  levs <- unique(contour_data$level)
+  levs <- unique(contour_data$cutoff)
   nlevs <- length(levs)
   
   # calculate regions for each level
   area_levs <- lapply(1:nlevs, function(ll) contour2sf(spe, 
                                                        contour = coi_clean_contour, 
                                                        coi = coi, 
-                                                       level = levs[ll]))
+                                                       cutoff = levs[ll]))
   # area b/w every two levels
   all_areas <- lapply(1:(nlevs - 1), function(ii) 
     sf::st_as_sf(sf::st_union(sf::st_difference(area_levs[[ii]], area_levs[[ii + 1]]))))

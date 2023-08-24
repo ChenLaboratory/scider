@@ -67,8 +67,8 @@ plotROI <- function(spe,
   # Label ROI numbers at the center
   sf <- grid2sf(spe, ngrid = ngrid)
   rois_center <- do.call(rbind, lapply(sf, function(rr) {
-    center <- st_point_on_surface(rr)
-    as.data.frame(st_coordinates(center))
+    center <- sf::st_point_on_surface(rr)
+    as.data.frame(sf::st_coordinates(center))
   }))
   
   rois_center <- as.data.frame(rois_center) |>

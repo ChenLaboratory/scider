@@ -3,28 +3,28 @@
 #' @param spe A SpatialExperiment object.
 #' @param contour Name in metadata
 #' @param coi A character vector of cell types of interest (COIs).
-#' @param level 
+#' @param cutoff A numeric scalar specifying the density cutoff.
 #'
 #' @return An sf object of the contour region of the specified level. 
 #' @export
 #'
 #' @examples
 
-contour2sf <- function(spe, contour, coi, level) {
+contour2sf <- function(spe, contour, coi, cutoff) {
   
   if(!requireNamespace("sf",quietly=TRUE)) stop("sf required but is not available")
   if(!requireNamespace("lwgeom",quietly=TRUE)) stop("lwgeom required but is not available")
 
   if(is.null(spe@metadata[[contour]])) stop("Have to calculate contours first!")
   
-  clines <- spe@metadata[[contour]]
+  clines <- as.data.frame(spe@metadata[[contour]])
   xlim <- c(min(clines$x), max(clines$x))
   ylim <- c(min(clines$y), max(clines$y))
   lims <- c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2])
   canvas_sf <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(lims)))
-  levs <- sort(unique(clines$level))
-  lev_code <- findInterval(level, levs, rightmost.closed = TRUE)
-  clines_lev <- clines[clines$level == level, c("x", "y", "piece")]
+  levs <- sort(unique(clines$cutoff))
+  lev_code <- findInterval(cutoff, levs, rightmost.closed = TRUE)
+  clines_lev <- clines[clines$cutoff == cutoff, c("x", "y", "piece")]
   
   coi_clean <- janitor::make_clean_names(coi)
   dens_cols <- paste("density", coi_clean, sep="_")
@@ -33,8 +33,8 @@ contour2sf <- function(spe, contour, coi, level) {
   dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in% dens_cols), drop=FALSE])
   
   # grid centroid points
-  dens$level <- findInterval(dens$density_coi_average, levs, rightmost.closed = TRUE)
-  grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "level")]
+  dens$cutoff <- findInterval(dens$density_coi_average, levs, rightmost.closed = TRUE)
+  grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "cutoff")]
   grids_pts_sf <- sf::st_as_sf(grids_pts_sf, coords = c("x_grid", "y_grid"))
   
   clines_lev_sf <- lapply(unique(clines_lev$piece), function(pp) {
@@ -49,7 +49,7 @@ contour2sf <- function(spe, contour, coi, level) {
     if (any(bbox == lims)) {
       regions <- lwgeom::st_split(bbox_sf, line_piece_sf) |> sf::st_collection_extract("POLYGON")
       inds <- sf::st_intersects(regions, grids_pts_sf)
-      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$level[ii]))
+      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
       area_up <- regions[avglevel >= lev_code, ]
       area_down <- regions[avglevel < lev_code, ]
       sf::st_geometry(area_up) <- "area"
@@ -60,7 +60,7 @@ contour2sf <- function(spe, contour, coi, level) {
       area <- sf::st_cast(line_piece_sf, "POLYGON")
       area <- sf::st_sf(area)
       inds <- sf::st_intersects(area, grids_pts_sf)
-      avglevel <- mean(grids_pts_sf$level[unlist(inds)])
+      avglevel <- mean(grids_pts_sf$cutoff[unlist(inds)])
       if (avglevel >= lev_code) {
         area_up <- area; area_down <- NULL
       } else {
@@ -90,7 +90,7 @@ contour2sf <- function(spe, contour, coi, level) {
     areas <- sf::st_union(areas_up)
   }
   
-  areas <- st_as_sf(st_union(areas))
+  areas <- sf::st_as_sf(st_union(areas))
   
   return(areas)
 }
