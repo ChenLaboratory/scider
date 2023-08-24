@@ -59,14 +59,14 @@ corrDensity <- function(spe, celltype1 = NULL, celltype2 = NULL,
       ct1 <- den_cols[i]
       for(j in seq(i+1, length(den_cols))){
         ct2 <- den_cols[j]
-        model_result <- fit_model(dens_dat, rois_f, ct1, ct2, by_roi, fit)
+        model_result <- fit_model(dens_dat, rois_f, ct1, ct2, by_roi, fit, df)
         model_results <- rbind(model_results, model_result)
       }
     }
   } else {
     ct1 <- paste0("density_",janitor::make_clean_names(celltype1))
     ct2 <- paste0("density_",janitor::make_clean_names(celltype2))
-    model_results <- fit_model(dens_dat, rois_f, ct1, ct2, by_roi, fit)
+    model_results <- fit_model(dens_dat, rois_f, ct1, ct2, by_roi, fit, df)
   }
   
   spe@metadata$model_result <- S4Vectors::DataFrame(model_results)
@@ -74,7 +74,7 @@ corrDensity <- function(spe, celltype1 = NULL, celltype2 = NULL,
 }
 
 
-fit_model <- function(dens_dat, rois_f, ct1, ct2, by_roi, fit){
+fit_model <- function(dens_dat, rois_f, ct1, ct2, by_roi, fit, df){
   
   model_data_pre <- merge(rois_f, dens_dat, by.x = "members", 
                           by.y = "node", all.x = TRUE, sort = FALSE)
