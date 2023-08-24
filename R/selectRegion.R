@@ -1,8 +1,8 @@
 #' Select region of interest from plot
 #'
 #' @param data A data.frame object.
-#' @param xcol Column name of the x coordinates.
-#' @param ycol Column name of the y coordinates.
+#' @param x_col Column name of the x coordinates.
+#' @param y_col Column name of the y coordinates.
 #'
 #' @return A data.frame object in the global environment.
 #' @export
@@ -72,8 +72,10 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
       sel_points <- x()
       if (!is.null(sel_points)) {
         sel_region <- as.data.frame(sel_points)
-        envir <- as.environment(sel_region)
-        assign("sel_region", sel_region, envir = envir)
+        pos <- 1
+        assign("sel_region", sel_region, envir = as.environment(pos))
+        #envir <- as.environment(sel_region)
+        #assign("sel_region", sel_region, envir = envir)
         cat("Selected region exported as 'sel_region' in the global environment.\n")
       }
     })
