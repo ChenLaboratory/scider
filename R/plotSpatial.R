@@ -47,6 +47,19 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
     toplot[,"y"] <- final_y
   }
   
+  # set some default plotting parameters
+  if (is.null(defaultmap$shape)) {
+    defaultmap$size <- 0.3
+  }
+  
+  if (is.null(defaultmap$shape)) {
+    defaultmap$shape <- 16
+  }
+  
+  if (is.null(defaultmap$alpha)) {
+    defaultmap$alpha <- 0.2
+  }
+  
   p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
   
   set.seed(100)
