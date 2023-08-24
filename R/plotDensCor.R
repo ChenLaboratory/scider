@@ -6,7 +6,8 @@
 #' @param by_roi Logical. Plot facet by ROIs or not.
 #' @param ngrid Integer. Threshold (minimum number of grids) used to filter small ROIs. Default to 20.
 #' @param fit Character. Options are "spline" and "linear".
-#' @param df Integer. Degrees of freedom of the spline fit. Default to 3 (i.e., a cubic spline fit).
+#' @param df Integer. Degrees of freedom of the spline fit. 
+#' Default to 3 (i.e., a cubic spline fit).
 #' @param ... aesthetic mappings to pass to `ggplot2::aes()`.
 #'
 #' @return A ggplot object.
@@ -38,7 +39,6 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   
   dens_dat <- as.data.frame(spe@metadata$grid_density)
   rois <- as.data.frame(spe@metadata$roi)
-  
   
   # filter rois
   kp <- which(table(rois$component) >= ngrid)
@@ -82,7 +82,6 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   }
   
   if(isTRUE(by_roi)){
-    
     if (is.null(defaultmap$fill)) {
       defaultmap$fill <- "royalblue"
     }
