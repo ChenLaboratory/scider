@@ -9,9 +9,9 @@ selectRegion(data, x_col = "x", y_col = "y")
 \arguments{
 \item{data}{A data.frame object.}
 
-\item{xcol}{Column name of the x coordinates.}
+\item{x_col}{Column name of the x coordinates.}
 
-\item{ycol}{Column name of the y coordinates.}
+\item{y_col}{Column name of the y coordinates.}
 }
 \value{
 A data.frame object in the global environment.

@@ -42,6 +42,7 @@ Imports:
     stats,
     randomcoloR,
     RColorBrewer,
+    pheatmap,
     plotly,
     shiny,
     igraph,
