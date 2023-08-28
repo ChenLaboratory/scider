@@ -34,6 +34,8 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
     )
   )
   
+  data <- as.data.frame(data)
+  
   server <- function(input, output) {
     x <- reactiveVal(NULL)
     

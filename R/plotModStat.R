@@ -83,11 +83,11 @@ plotModStat <- function(spe, stats = c("coefficient","t"), roi = NULL){
   
   paletteLength <- 100
   hmColor <- rev(colorRampPalette(c("#ED254EFF","#EF6079FF", "#F1F4FFFF", "#97B3D0FF", "#011936FF"))(paletteLength))
-  myBreaks <- c(seq(min(filled_data), 0, length.out=ceiling(paletteLength/2) + 1), 
-                seq(max(filled_data)/paletteLength, max(filled_data), length.out=floor(paletteLength/2)))
+  #myBreaks <- c(seq(min(filled_data), 0, length.out=ceiling(paletteLength/2) + 1), 
+  #              seq(max(filled_data)/paletteLength, max(filled_data), length.out=floor(paletteLength/2)))
   
   pheatmap::pheatmap(filled_data, angle_col = 45, border_color = "white",
-                     color = hmColor, breaks = myBreaks,
+                     color = hmColor, #breaks = myBreaks,
                      main = title)
 }
 

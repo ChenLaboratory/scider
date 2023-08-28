@@ -1,0 +1,267 @@
+---
+title: "A quick start guide to the scider package"
+author: "Ning Liu, Mengbo Li, Yunshun Chen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: show
+vignette: >
+  %\VignetteIndexEntry{scider_introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+  body{
+  font-size: 14pt;
+}
+</style>
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72, fig.retina = 1)
+suppressWarnings(library(ggplot2))
+```
+
+# Installation
+
+```{r eval=FALSE}
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+BiocManager::install("scider")
+```
+
+The development version of `scider` can be installed from GitHub:
+
+```{r eval=FALSE}
+devtools::install_github("ChenLaboratory/scider")
+```
+
+# Quick start
+
+```{r}
+library(scider)
+library(SpatialExperiment)
+library(patchwork)
+library(sf)
+```
+
+
+# Load data
+
+In this vignette, we will use a subset of a Xenium Breast Cancer dataset.
+
+```{r}
+data("xenium_bc_spe")
+```
+
+In the data, we have quantification of 541 genes from 185211 cells.
+
+```{r}
+spe
+```
+
+We also have cell-type annotations of these cells, there are 4 cell types.
+
+```{r}
+table(colData(spe)$cell_type)
+```
+
+We can use the function `plotSpatial` to visualise the cell position and color the cells by cell types.
+
+```{r, fig.width=4, fig.height=3}
+plotSpatial(spe, color = cell_type, alpha = 0.8)
+```
+
+We can also visualise the cell type one by one.
+
+```{r}
+
+p1 <- plotSpatial(spe, color = cell_type == "Fibroblasts", alpha = 0.6) +
+  theme(legend.position = "none") +
+  ggtitle("Fibroblasts")
+p2 <- plotSpatial(spe, color = cell_type == "Breast cancer", alpha = 0.6) +
+  theme(legend.position = "none") +
+  ggtitle("Breast cancer")
+p3 <- plotSpatial(spe, color = cell_type == "T cells", alpha = 0.6) +
+  theme(legend.position = "none") +
+  ggtitle("T cells")
+p4 <- plotSpatial(spe, color = cell_type == "B cells", alpha = 0.6) +
+  theme(legend.position = "none") +
+  ggtitle("B cells")
+```
+
+
+```{r, fig.width=5, fig.height=5}
+wrap_plots(list(p1,p2,p3,p4), ncol = 2, nrow = 2)
+```
+
+# Grid-based analysis
+
+`scider` can conduct grid-based density analysis for spatial transcriptomics data.
+
+## Density calculation
+
+Before calculating density, we need to define cell type-of-interest (COI).
+In this case, all cell types are COIs.
+
+```{r}
+coi <- unique(colData(spe)$cell_type)
+coi
+```
+
+We can perform density calculation for each COI using function `gridDensity`.
+The calculated density and grid information are saved in the metadata of the SpatialExperimnet object.
+
+```{r}
+spe <- gridDensity(spe, coi = coi)
+
+names(spe@metadata)
+```
+
+```{r}
+spe@metadata$grid_density
+```
+
+We can visualise the density of each COI using function `plotDensity`.
+
+```{r}
+pd_list <- list()
+for(i in seq(4)){
+  pd_list[[i]] <- plotDensity(spe, coi = coi[i])
+}
+
+```
+
+
+```{r, fig.width=6, fig.height=5}
+wrap_plots(pd_list, ncol = 2, nrow = 2)
+```
+
+## Find Regions-of-interest (ROIs)
+
+After obtaining grid-based density for each COI, we can then detect regions-of-interest (ROIs) based on density or select by user.
+
+### Detected by algorithm
+
+To detect ROIs automatically, we can use the function `findROI`.
+
+The detected ROIs are saved in the metadat of the SpatialExperiment object.
+
+```{r}
+spe <- findROI(spe, coi = coi)
+
+spe@metadata$roi
+```
+
+We can visualise the ROIs with function `plotROI`.
+
+```{r, fig.width=4, fig.height=4}
+plotROI(spe)
+```
+
+### Select ROI by user
+
+Alternatively, users can select ROIs based on their own research interest (drawn by hand).
+This can be done using function `selectRegion`.
+This function will open an interactive window with an interactive plot for users to zoom-in/-out and select ROI using either a rectangular or lasso selection tool. Users can also press the `Export selected points` button to save the ROIs as object in the R environment.
+
+```{r}
+selectRegion(spe@metadata$grid_density, x_col = "x_grid", y_col = "y_grid")
+```
+
+After closing the interactive window, the selected ROI has been saved as a data.frame object named `sel_region` in the R environment.
+
+```{r}
+sel_region
+```
+
+We can then use the `posSelRegion` to save the ROI in the metadata of the SpatialExperiment object.
+
+```{r}
+spe1 <- postSelRegion(spe, sel_region = sel_region)
+
+spe1@metadata$roi
+```
+
+Similarly, we can plot visualise the user-defined ROI with function `plotROI`.
+
+```{r}
+plotROI(spe1)
+```
+
+# Testing relationship between cell types
+
+After defining ROIs, we can then test the relationship between any two cell types within each ROI or overall but account for ROI variation using a cubic spline or a linear fit.
+
+This can be done with function `corrDensity`, by setting the `celltype1` and `celltype2` parameters, the modelling results are saved in the metadata of the SpatialExperiment object.
+
+
+```{r}
+spe <- corrDensity(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts", ngrid = 30)
+```
+
+We can see the correlation between breast cancer and fibroblasts in each ROI.
+
+```{r}
+spe@metadata$model_result
+```
+
+We can also visualise the fitting using function `plotDensCor`.
+
+```{r}
+plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts", ngrid = 30)
+```
+
+Or, we can visualise the statistics between cell types using function `plotModStat` with a heatmap.
+
+
+```{r}
+plotModStat(spe)
+```
+
+
+Alternatively, by setting the parameter `cal_all` to TRUE and `by_roi` to FALSE, we can perform the model fitting with all the cell types in a pair-wise mode while account for ROI variation.
+
+```{r}
+spe <- corrDensity(spe, ngrid = 30, cal_all = TRUE, by_roi = FALSE)
+```
+
+Similarly, we can use function `plotDensCor` to visualise the fitting.
+
+```{r}
+plotDensCor(spe, celltype1 = "Breast cancer", 
+            celltype2 = "Fibroblasts", by_roi = FALSE, ngrid = 30)
+```
+
+And use `plotModStat` to visualise the model statistics between each cell types.
+In this case, fibroblasts, T cells and B cells are positively correlate with each other while negatively correlate with breast cancer cells in this tissue slide.
+
+```{r}
+plotModStat(spe)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

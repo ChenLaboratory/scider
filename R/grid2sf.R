@@ -25,7 +25,7 @@ grid2sf <- function(spe, ngrid = 20) {
     stop("ROI not yet computed!")
   
   rois <- as.data.frame(spe@metadata$roi)
-  filtered <- which(table(rois$component) >= ngrid)
+  filtered <- names(which(table(rois$component) >= ngrid))
   rois_filtered <- rois[rois$component %in% filtered, ]
   
   grid_width <- spe@metadata$grid_info$xstep

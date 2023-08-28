@@ -54,7 +54,7 @@ plotROI <- function(spe,
   plot.xlim <- xlim + c(-1e-10, 1e-10)
   plot.ylim <- ylim + c(-1e-10, 1e-10)
   
-  filtered <- which(table(rois$component) >= ngrid)
+  filtered <- names(which(table(rois$component) >= ngrid))
   rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
   
   #for(n in colnames(colData(spe))){
@@ -62,7 +62,6 @@ plotROI <- function(spe,
   #    rois_filtered[, n] <- "dummy"
   #  }
   #}
-  
 
   # Label ROI numbers at the center
   sf <- grid2sf(spe, ngrid = ngrid)
