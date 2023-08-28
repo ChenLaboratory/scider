@@ -35,10 +35,10 @@ postSelRegion <- function(spe, sel_region){
                                                 "x" = sel_region[,"node_x"],
                                                 "y" = sel_region[,"node_y"]))
   
-  spe@metadata$components$xcoord <- spe@metadata$grid_info$xcol[as.numeric(components$x)]
-  spe@metadata$components$ycoord <- spe@metadata$grid_info$yrow[as.numeric(components$y)]
+  components$xcoord <- spe@metadata$grid_info$xcol[as.numeric(components$x)]
+  components$ycoord <- spe@metadata$grid_info$yrow[as.numeric(components$y)]
   
-  spe@metadata$components <- components
+  spe@metadata$roi <- components
   
   return(spe)
 }
