@@ -4,7 +4,7 @@
 \alias{plotSpatial}
 \title{Plot cells based on spatial coordinates.}
 \usage{
-plotSpatial(spe, reverseY = FALSE, n = 30, ...)
+plotSpatial(spe, reverseY = FALSE, n = 30, seed = 66, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -12,6 +12,8 @@ plotSpatial(spe, reverseY = FALSE, n = 30, ...)
 \item{reverseY}{Reverse y coordinates.}
 
 \item{n}{Integer value. The number of distinct color to be generated, default is 30.}
+
+\item{seed}{Integer. Used for random color selection.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 }

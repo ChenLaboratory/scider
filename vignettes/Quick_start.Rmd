@@ -171,19 +171,19 @@ Alternatively, users can select ROIs based on their own research interest (drawn
 This can be done using function `selectRegion`.
 This function will open an interactive window with an interactive plot for users to zoom-in/-out and select ROI using either a rectangular or lasso selection tool. Users can also press the `Export selected points` button to save the ROIs as object in the R environment.
 
-```{r}
+```{r, eval=FALSE}
 selectRegion(spe@metadata$grid_density, x_col = "x_grid", y_col = "y_grid")
 ```
 
 After closing the interactive window, the selected ROI has been saved as a data.frame object named `sel_region` in the R environment.
 
-```{r}
+```{r, eval=FALSE}
 sel_region
 ```
 
 We can then use the `posSelRegion` to save the ROI in the metadata of the SpatialExperiment object.
 
-```{r}
+```{r, eval=FALSE}
 spe1 <- postSelRegion(spe, sel_region = sel_region)
 
 spe1@metadata$roi
@@ -191,11 +191,11 @@ spe1@metadata$roi
 
 Similarly, we can plot visualise the user-defined ROI with function `plotROI`.
 
-```{r}
+```{r, eval=FALSE}
 plotROI(spe1)
 ```
 
-# Testing relationship between cell types
+## Testing relationship between cell types
 
 After defining ROIs, we can then test the relationship between any two cell types within each ROI or overall but account for ROI variation using a cubic spline or a linear fit.
 
@@ -244,6 +244,113 @@ In this case, fibroblasts, T cells and B cells are positively correlate with eac
 
 ```{r}
 plotModStat(spe)
+```
+
+
+# Cell-based analysis
+
+Based on the grid density, we can ask many biological question about the data. For example, we would like to know if a certain cell type that are located in high density of breast cancer cells are different to the same cell type from a different level of breast cancer region.
+
+## cell annotation based on grid density
+
+To address this question, we first need to divide cells into different levels of grid density. This can be done using a contour identification strategy with function `getContour`.
+
+
+```{r}
+spe <- getContour(spe, coi = "Breast cancer")
+```
+
+Different level of contour can be visualised with cells using `plotContour`.
+
+```{r}
+plotContour(spe, coi = "breast cancer")
+```
+
+Or with density using parameter `overlay = "density"`.
+
+```{r}
+plotContour(spe, coi = "breast cancer", overlay = "density")
+```
+
+Or we can subset on specific density level with parameter `sub_level`.
+
+
+```{r}
+plotContour(spe, coi = "breast cancer", 
+            sub_level = "1")
+```
+
+We can then annotate cells by their locations within each contour using function `contourAssign`.
+
+
+```{r}
+spe <- contourAssign(spe, coi = "breast cancer")
+```
+
+
+```{r}
+plotSpatial(spe, color = at_level_breast_cancer, alpha = 0.5)
+```
+
+We can visualise cell type composition per level.
+
+```{r}
+dat <- as.data.frame(colData(spe))[, c("cell_type", "at_level_breast_cancer")]
+
+dat <- dat[dat$cell_type != "Breast cancer",]
+
+cell_count <- table(dat$at_level_breast_cancer, dat$cell_type)
+
+cell_count <- cell_count[rowSums(cell_count) != 0,]
+
+cell_prop <- as.data.frame(prop.table(cell_count, margin = 1))
+
+colnames(cell_prop) <- c("at_level_breast_cancer", 
+                         "cell_type", "Proportion")
+
+
+
+
+```
+
+
+```{r}
+set.seed(33)
+col.p <- randomcoloR::distinctColorPalette(3)
+
+ggplot(cell_prop, aes(x = at_level_breast_cancer, 
+                       y = Proportion, fill = cell_type)) +
+  geom_bar(stat = "identity") + 
+  scale_fill_manual("Cell type", values = col.p) + 
+  ggtitle("Cell type composition at each breast cancer density level")
+```
+
+
+
+
+
+
+
+
+```{r}
+
+```
+
+
+
+
+```{r}
+
+```
+
+
+```{r}
+pdat <- cbind(as.data.frame(colData(spe)), as.data.frame(spatialCoords(spe)))
+
+
+plotSpatial(spe) +
+  geom_path(data = spe@metadata$breast_cancer_contour, 
+            aes(x = x, y = y, group = group, color = level_factor))
 ```
 
 

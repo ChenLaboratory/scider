@@ -4,12 +4,26 @@
 \alias{plotContour}
 \title{Plot contour lines.}
 \usage{
-plotContour(spe, coi, ...)
+plotContour(
+  spe,
+  coi,
+  overlay = c("cell", "density"),
+  sub_level = NULL,
+  seed = 66,
+  ...
+)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{coi}{A character vector of cell types of interest (COIs).}
+
+\item{overlay}{Character vector. Either plot overlay on density or cell.
+By default is cell.}
+
+\item{sub_level}{Character vector. Subset on specific level.}
+
+\item{seed}{Integer. Used for random color selection.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 }

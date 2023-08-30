@@ -45,7 +45,7 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   
   # levels for contour
   if (is.null(bins) && is.null(binwidth) && is.null(breaks)) {
-    warning("Using bins = 10 to draw contours!")
+    message("Using bins = 10 to draw contours!")
     bins <- 10L
   }
   if (!is.null(bins)) binwidth <- breaks <- NULL
@@ -56,7 +56,8 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   
   # note that when calculating contours, density is not filtered at any quantile cutoff!
   spe@metadata$contour <- compute_group(dens,
-                                        z.range = range(dens$density_coi_average, na.rm = TRUE, finite = TRUE),
+                                        z.range = range(dens$density_coi_average, 
+                                                        na.rm = TRUE, finite = TRUE),
                                         bins = bins,
                                         binwidth = binwidth,
                                         breaks = breaks,
@@ -120,7 +121,8 @@ iso_to_path <- function(iso, group = 1) {
   )
 }
 
-compute_group <-  function(data, z.range, bins = NULL, binwidth = NULL, breaks = NULL, na.rm = FALSE) {
+compute_group <-  function(data, z.range, bins = NULL, binwidth = NULL,
+                           breaks = NULL, na.rm = FALSE) {
   breaks <- ggplot2:::contour_breaks(z.range, bins, binwidth, breaks)
   isolines <- xyz_to_isolines(data, breaks)
   path_df <- iso_to_path(isolines, data$group[1])

@@ -1,7 +1,8 @@
 #' Combine grids in each ROI to a sf region
 #'
 #' @param spe A SpatialExperiment object.
-#' @param ngrid Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.
+#' @param ngrid Integer. The threshold (minimum number of grids) used to filter 
+#' small ROIs. Default to 20.
 #'
 #' @return List of ROIs saved as sf objects. 
 #' @export

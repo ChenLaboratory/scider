@@ -32,8 +32,10 @@ plotDensity <- function(spe, coi, probs = 0.8){
 
   kp <- grid_data$density_coi_average >= quantile(grid_data$density_coi_average, probs=probs)
 
-  p <- ggplot(grid_data[kp,], aes(x=x_grid, y=y_grid, z = density_coi_average)) +
-    geom_tile(aes(fill = density_coi_average)) + 
+  p <- ggplot() +
+    geom_tile(data = grid_data[kp,],
+              aes(x=x_grid, y=y_grid, 
+                  fill = density_coi_average)) + 
     theme_classic() +
     scale_fill_gradientn(colours = rev(RColorBrewer::brewer.pal(11,"Spectral"))) + 
     labs(x = "x", y = "y", fill = "Density") +

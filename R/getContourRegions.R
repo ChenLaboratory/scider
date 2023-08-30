@@ -3,8 +3,8 @@
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
 #'
-#' @return A list of sf objects, each representing the region between two contour density levels. 
-#' @export
+#' @return A list of sf objects, each representing the region between 
+#' two contour density levels. 
 #'
 #' @examples
 #' data("xenium_bc_spe")
@@ -34,10 +34,10 @@ getContourRegions <- function(spe, coi) {
                                                        level = levs[ll]))
   # area b/w every two levels
   all_areas <- lapply(1:(nlevs - 1), function(ii) 
-    st_as_sf(st_union(st_difference(area_levs[[ii]], area_levs[[ii + 1]]))))
+    sf::st_as_sf(sf::st_union(sf::st_difference(area_levs[[ii]], area_levs[[ii + 1]]))))
   
   # highest level
-  all_areas[[nlevs]] <- st_as_sf(area_levs[[nlevs]])
+  all_areas[[nlevs]] <- sf::st_as_sf(area_levs[[nlevs]])
   names(all_areas) <- as.character(1:nlevs)
   
   all_areas
