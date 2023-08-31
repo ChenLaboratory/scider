@@ -3,8 +3,8 @@
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
 #'
-#' @return A list of sf objects, each representing the region between two contour density levels. 
-#' @export
+#' @return A list of sf objects, each representing the region between 
+#' two contour density levels. 
 #'
 #' @examples
 #' data("xenium_bc_spe")
