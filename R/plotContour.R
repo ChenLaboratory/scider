@@ -30,8 +30,8 @@ plotContour <- function(spe, coi, overlay = c("cell","density"),
   coi_clean <- janitor::make_clean_names(coi)
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
   
-  contour_data <- spe@metadata[[coi_clean_contour]]
-  levs <- unique(contour_data$level_factor)
+  contour_data <- as.data.frame(spe@metadata[[coi_clean_contour]])
+  levs <- unique(contour_data$level)
   nlevs <- length(levs)
   
   set.seed(seed)
@@ -54,23 +54,23 @@ plotContour <- function(spe, coi, overlay = c("cell","density"),
       p <- p +
         ggplot2::geom_path(data = contour_data, 
                            ggplot2::aes(x = x, y = y, group = group, 
-                                        color = level_factor)) +
+                                        color = level)) +
         scale_color_manual(name = "Density level",
                            values = col.p)
     )
   } else {
-    if(length(sub_level) == 1L & sub_level %in% contour_data$level_factor){
+    if(length(sub_level) == 1L & sub_level %in% contour_data$level){
       suppressMessages(
         p <- p +
           ggplot2::geom_path(data = contour_data, 
                              ggplot2::aes(x = x, y = y, group = group, 
-                                          color = level_factor == sub_level)) +
+                                          color = level == sub_level)) +
           scale_color_manual(name = paste0("level",sub_level," density"),
                              values = c("royalblue","tomato2"))
       )
     } else {
       stop("The length sub_level is expected to be 1 and 
-           should be included in contour_data$level_factor.")
+           should be included in contour_data$level.")
     }
   }
   
