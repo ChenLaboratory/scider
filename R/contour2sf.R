@@ -9,12 +9,11 @@
 #' @export
 #'
 #' @examples
-
 contour2sf <- function(spe, contour, coi, cutoff) {
   
   if(!requireNamespace("sf",quietly=TRUE)) stop("sf required but is not available")
   if(!requireNamespace("lwgeom",quietly=TRUE)) stop("lwgeom required but is not available")
-
+  
   if(is.null(spe@metadata[[contour]])) stop("Have to calculate contours first!")
   
   clines <- as.data.frame(spe@metadata[[contour]])
@@ -46,6 +45,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     # check if the region is at boundary
     bbox <- sf::st_bbox(line_piece_sf)
     bbox_sf <- sf::st_sf(sf::st_as_sfc(bbox))
+    
     if (any(bbox == lims)) {
       regions <- lwgeom::st_split(bbox_sf, line_piece_sf) |> sf::st_collection_extract("POLYGON")
       inds <- sf::st_intersects(regions, grids_pts_sf)
@@ -56,6 +56,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       sf::st_geometry(area_down) <- "area"
       area_up <- sf::st_sf(area_up)
       area_down <- sf::st_sf(area_down)
+      # bbox at boundaries
+      bbox_boundary <- bbox_sf
     } else {
       area <- sf::st_cast(line_piece_sf, "POLYGON")
       area <- sf::st_sf(area)
@@ -66,32 +68,48 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       } else {
         area_up <- NULL; area_down <- area
       }
+      bbox_boundary <- NULL
     }
     
-    return(list(area_up = area_up, area_down = area_down))
+    return(list(area_up = area_up, area_down = area_down, bbox_boundary = bbox_boundary))
     
   })
   
   areas_up <- do.call(rbind, lapply(clines_lev_sf, "[[", "area_up"))
   areas_down <- do.call(rbind, lapply(clines_lev_sf, "[[", "area_down"))
+  bboxes_boundary <- do.call(rbind, lapply(clines_lev_sf, "[[", "bbox_boundary"))
   
   if (!is.null(areas_down)) {
     areas_up_union <- sf::st_union(areas_up)
-    out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
-    areas_down <- areas_down[c(out), ]
-    areas_down <- sf::st_combine(areas_down)
-    areas <- sf::st_difference(areas_up_union, areas_down)
+    out1 <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
+    out2 <- sf::st_intersects(areas_down, areas_up_union, sparse = FALSE)
+    out <- out1 | out2
+    areas_down_out <- areas_down[c(out), ]
+    areas_down_out <- sf::st_combine(areas_down_out)
+    areas <- sf::st_difference(areas_up_union, areas_down_out)
     # check if there is any missed area
     missed <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
     if (any(missed)) {
       areas <- sf::st_union(sf::st_sf(areas), areas_up[missed, ])
     }
+    # check if rest of the region still has up areas
+    bboxes_boundary <- sf::st_union(bboxes_boundary)
+    area_rest <- sf::st_difference(canvas_sf, bboxes_boundary)
+    # boundary grids
+    boundar_ind <- dens$x_grid == min(dens$x_grid) | dens$x_grid == max(dens$x_grid) | 
+      dens$y_grid == min(dens$y_grid) | dens$y_grid == max(dens$y_grid)
+    boundary_grids_pts_sf <- dens[boundar_ind, c("node", "x_grid", "y_grid", "cutoff")]
+    boundary_grids_pts_sf <- sf::st_as_sf(boundary_grids_pts_sf, coords = c("x_grid", "y_grid"))
+    inds <- sf::st_intersects(area_rest, boundary_grids_pts_sf)
+    anyUp <- boundary_grids_pts_sf$cutoff[unlist(inds)] >= lev_code
+    if (any(anyUp)) {
+      area_still_up <- sf::st_difference(area_rest, sf::st_combine(areas_down))
+      areas <- sf::st_union(areas, area_still_up)
+    }
+    areas <- sf::st_union(areas)
   } else {
     areas <- sf::st_union(areas_up)
   }
-  
-  areas <- sf::st_as_sf(st_union(areas))
-  
   return(areas)
 }
 
