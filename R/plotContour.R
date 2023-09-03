@@ -59,7 +59,7 @@ plotContour <- function(spe,
         ggplot2::geom_path(data = contour_data, 
                            ggplot2::aes(x = x, y = y, group = group, 
                                         color = level)) +
-        labs(color = "Density level")
+        ggplot2::scale_color_hue(name = "Density level")
     )
   } else {
     if(length(sub_level) == 1L & sub_level %in% contour_data$level){
