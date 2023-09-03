@@ -2,42 +2,23 @@
 % Please edit documentation in R/corrDensity.R
 \name{corrDensity}
 \alias{corrDensity}
-\title{Model density correlation between two cell types}
+\title{Test for density correlation between two cell types.}
 \usage{
-corrDensity(
-  spe,
-  celltype1 = NULL,
-  celltype2 = NULL,
-  cal_all = FALSE,
-  by_roi = TRUE,
-  ngrid = 20,
-  fit = c("spline", "linear"),
-  df = 3
-)
+corrDensity(spe, ngrid = 20, by.roi = TRUE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{celltype1}{Cell type 1 to compare.}
-
-\item{celltype2}{Cell type 2 to compare.}
-
-\item{cal_all}{Logical. If set to true, will model all cell types pairwise.}
-
-\item{by_roi}{Logical. Plot facet by ROIs or not.}
-
 \item{ngrid}{Integer. Threshold (minimum number of grids) used to filter small ROIs.}
 
-\item{fit}{Character. Options are "spline" and "linear".}
-
-\item{df}{Integer. Degrees of freedom of the spline fit.
-Default to 3 (i.e., a cubic spline fit).}
+\item{by.roi}{Logical. If TRUE (default), then return the testing results at ROI level.
+If FALSE, then combine the testing results across all ROIs.}
 }
 \value{
-SpatialExperiment object.
+A DataFrame containing the testing results.
 }
 \description{
-Model density correlation between two cell types
+Test for density correlation between two cell types.
 }
 \examples{
 
@@ -49,6 +30,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-spe <- corrDensity(spe, cal_all = TRUE)
+result <- corrDensity(spe, ngrid = 30)
 
 }

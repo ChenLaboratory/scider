@@ -34,9 +34,6 @@ plotContour <- function(spe, coi, overlay = c("cell","density"),
   levs <- unique(contour_data$level)
   nlevs <- length(levs)
   
-  set.seed(seed)
-  col.p <- randomcoloR::distinctColorPalette(nlevs)
-  
   if(length(overlay) == 2){
     overlay <- "cell"
   }
@@ -55,8 +52,7 @@ plotContour <- function(spe, coi, overlay = c("cell","density"),
         ggplot2::geom_path(data = contour_data, 
                            ggplot2::aes(x = x, y = y, group = group, 
                                         color = level)) +
-        scale_color_manual(name = "Density level",
-                           values = col.p)
+        labs(color = "Density level")
     )
   } else {
     if(length(sub_level) == 1L & sub_level %in% contour_data$level){
