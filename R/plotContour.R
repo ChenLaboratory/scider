@@ -1,7 +1,7 @@
 #' Plot contour lines.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param coi A character vector of cell types of interest (COIs).
+#' @param coi A character vector of length 1 of the cell type of interest (COIs).
 #' @param overlay Character vector. Either plot overlay on density or cell. 
 #' By default is cell.
 #' @param sub_level Character vector. Subset on specific level.
@@ -23,9 +23,15 @@
 #' 
 #' plotContour(spe, coi = coi, size = 0.3, alpha = 0.2)
 #' 
-plotContour <- function(spe, coi, overlay = c("cell","density"),
-                        sub_level = NULL,
-                        seed = 66, ...){
+plotContour <- function(spe, 
+                        coi, 
+                        id = "cell_type", 
+                        overlay = c("cell","density"),
+                        sub_level = NULL, ...){
+  
+  if (length(coi) > 1L) {
+    stop("coi must be of length 1!")
+  }
   
   coi_clean <- janitor::make_clean_names(coi)
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
@@ -39,7 +45,8 @@ plotContour <- function(spe, coi, overlay = c("cell","density"),
   }
   
   if(overlay == "cell"){
-    p <- plotSpatial(spe, ...)
+    sub <- grep(coi, colData(spe)[[id]])
+    p <- plotSpatial(spe[, sub], ...)
   } else if (overlay == "density"){
     p <- plotDensity(spe, coi = coi)
   } else {
