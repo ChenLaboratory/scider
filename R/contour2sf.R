@@ -36,11 +36,17 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "cutoff")]
   grids_pts_sf <- sf::st_as_sf(grids_pts_sf, coords = c("x_grid", "y_grid"))
   
+  # all pieces
+  all_clines_sf <- lapply(unique(clines_lev$piece), function(pp) {
+    line_piece <- clines_lev[clines_lev$piece == pp, ]
+    sf::st_as_sf(line_piece, coords = c("x", "y")) |> sf::st_combine() |> 
+      sf::st_multilinestring() |> sf::st_combine()
+  })
+  names(all_clines_sf) <- unique(clines_lev$piece)
+  
   clines_lev_sf <- lapply(unique(clines_lev$piece), function(pp) {
     
-    line_piece <- clines_lev[clines_lev$piece == pp, ]
-    line_piece_sf <- sf::st_as_sf(line_piece, coords = c("x", "y")) |> sf::st_combine() |> 
-      sf::st_multilinestring() |> sf::st_combine()
+    line_piece_sf <- all_clines_sf[[as.character(pp)]]
     
     # check if the region is at boundary
     bbox <- sf::st_bbox(line_piece_sf)
@@ -48,6 +54,21 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     
     if (any(bbox == lims)) {
       regions <- lwgeom::st_split(bbox_sf, line_piece_sf) |> sf::st_collection_extract("POLYGON")
+      other_clines_ind <- which(names(all_clines_sf) != as.character(pp))
+      other_clines_sf <- do.call(rbind, lapply(all_clines_sf[other_clines_ind], sf::st_sf))
+      whether_cross <- c(sf::st_crosses(other_clines_sf, bbox_sf, sparse = FALSE))
+      if (any(whether_cross)) {
+        sub_region_ind <- sf::st_intersects(regions, other_clines_sf[whether_cross, ], 
+                                            sparse = FALSE)
+        sub_region_ind <- which(rowSums(sub_region_ind) > 0L)
+        subregions <- lapply(sub_region_ind, function(subr) {
+          lwgeom::st_split(regions[sub_region_ind, ], 
+                           sf::st_combine(other_clines_sf[whether_cross, ])) |>
+            sf::st_collection_extract("POLYGON")
+        })
+        regions <- regions[-sub_region_ind, ]
+        regions <- rbind(do.call(rbind, subregions), regions)
+      }
       inds <- sf::st_intersects(regions, grids_pts_sf)
       avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
       area_up <- regions[avglevel >= lev_code, ]
@@ -56,8 +77,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       sf::st_geometry(area_down) <- "area"
       area_up <- sf::st_sf(area_up)
       area_down <- sf::st_sf(area_down)
-      # bbox at boundaries
-      bbox_boundary <- bbox_sf
+      # # bbox at boundaries
+      # bbox_boundary <- bbox_sf
     } else {
       area <- sf::st_cast(line_piece_sf, "POLYGON")
       area <- sf::st_sf(area)
@@ -68,7 +89,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       } else {
         area_up <- NULL; area_down <- area
       }
-      bbox_boundary <- NULL
+      # bbox_boundary <- NULL
     }
     
     return(list(area_up = area_up, area_down = area_down))
@@ -82,31 +103,34 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     areas_up_union <- sf::st_union(areas_up)
     out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
     areas_down_out <- areas_down[c(out), ]
-    # flatten out overlaps
-    downHasOverlap <- sf::st_intersection(areas_down_out)
-    areas_down_out <- sf::st_sf(sf::st_geometry(downHasOverlap))
-    # remove MULTILINESTRING
-    areas_down_out <- areas_down_out[st_geometry_type(areas_down_out) == "POLYGON", ]
-    # check if downs are really down
-    areas_down_out_code <- sapply(1:nrow(areas_down_out), function(xx) {
-      xx <- areas_down_out[xx, ]
-      inds <- sf::st_intersects(xx, grids_pts_sf)
-      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
-    })
-    areas_down_out <- areas_down_out[areas_down_out_code <= lev_code, ]
-    areas_down_out <- sf::st_combine(areas_down_out)
-    areas <- sf::st_difference(areas_up_union, areas_down_out)
-    # check if there is any missed area
-    missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
-    if (any(missed_up)) {
-      areas <- sf::st_union(sf::st_sf(areas), areas_up[missed_up, ])
+    if (nrow(areas_down_out) > 0L) {
+      # flatten out overlaps
+      downHasOverlap <- sf::st_intersection(areas_down_out)
+      areas_down_out <- sf::st_sf(sf::st_geometry(downHasOverlap))
+      # remove MULTILINESTRING
+      areas_down_out <- areas_down_out[sf::st_geometry_type(areas_down_out) %in% c("POLYGON",
+                                                                                   "MULTIPOLYGON"), ]
+      # check if downs are really down
+      areas_down_out_code <- sapply(1:nrow(areas_down_out), function(xx) {
+        xx <- areas_down_out[xx, ]
+        inds <- sf::st_intersects(xx, grids_pts_sf)
+        avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
+      })
+      areas_down_out <- areas_down_out[areas_down_out_code < lev_code, ]
+      areas_down_out <- sf::st_combine(areas_down_out)
+      areas <- sf::st_difference(areas_up_union, areas_down_out)
+      # check if there is any missed area
+      missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
+      if (any(missed_up)) {
+        areas <- sf::st_union(sf::st_sf(areas), areas_up[missed_up, ])
+      }
+    } else {
+      areas <- sf::st_union(areas_up)
     }
   } else {
     areas <- sf::st_union(areas_up)
   }
   
   areas <- sf::st_as_sf(st_union(areas))
-  
-  
 }
 
