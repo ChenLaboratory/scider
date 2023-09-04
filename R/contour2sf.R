@@ -32,8 +32,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in% dens_cols), drop=FALSE])
   
   # grid centroid points
-  dens$cutoff <- findInterval(dens$density_coi_average, levs, rightmost.closed = TRUE)
-  grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "cutoff")]
+  # dens$cutoff <- findInterval(dens$density_coi_average, levs, rightmost.closed = TRUE)
+  grids_pts_sf <- dens[, c("node", "x_grid", "y_grid", "density_coi_average")]
   grids_pts_sf <- sf::st_as_sf(grids_pts_sf, coords = c("x_grid", "y_grid"))
   
   # all pieces
@@ -44,9 +44,9 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   })
   names(all_clines_sf) <- unique(clines_lev$piece)
   
-  clines_lev_sf <- lapply(unique(clines_lev$piece), function(pp) {
+  clines_lev_sf <- lapply(names(all_clines_sf), function(pp) {
     
-    line_piece_sf <- all_clines_sf[[as.character(pp)]]
+    line_piece_sf <- all_clines_sf[[pp]]
     
     # check if the region is at boundary
     bbox <- sf::st_bbox(line_piece_sf)
@@ -70,7 +70,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
         regions <- rbind(do.call(rbind, subregions), regions)
       }
       inds <- sf::st_intersects(regions, grids_pts_sf)
-      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
+      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$density_coi_average[ii]))
+      avglevel <- findInterval(avglevel, levs, rightmost.closed = TRUE)
       area_up <- regions[avglevel >= lev_code, ]
       area_down <- regions[avglevel < lev_code, ]
       sf::st_geometry(area_up) <- "area"
@@ -83,7 +84,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       area <- sf::st_cast(line_piece_sf, "POLYGON")
       area <- sf::st_sf(area)
       inds <- sf::st_intersects(area, grids_pts_sf)
-      avglevel <- mean(grids_pts_sf$cutoff[unlist(inds)])
+      avglevel <- mean(grids_pts_sf$density_coi_average[unlist(inds)])
+      avglevel <- findInterval(avglevel, levs, rightmost.closed = TRUE)
       if (avglevel >= lev_code) {
         area_up <- area; area_down <- NULL
       } else {
@@ -114,7 +116,8 @@ contour2sf <- function(spe, contour, coi, cutoff) {
       areas_down_out_code <- sapply(1:nrow(areas_down_out), function(xx) {
         xx <- areas_down_out[xx, ]
         inds <- sf::st_intersects(xx, grids_pts_sf)
-        avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
+        avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$density_coi_average[ii]))
+        avglevel <- findInterval(avglevel, levs, rightmost.closed = TRUE)
       })
       areas_down_out <- areas_down_out[areas_down_out_code < lev_code, ]
       areas_down_out <- sf::st_combine(areas_down_out)
