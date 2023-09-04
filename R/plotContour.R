@@ -4,8 +4,9 @@
 #' @param coi A character vector of length 1 of the cell type of interest (COIs).
 #' @param overlay Character vector. Either plot overlay on density or cell. 
 #' By default is cell.
+#' @param id A character. The name of the column of colData(spe) containing the cell type identifiers.
+#' Set to cell_type by default.
 #' @param sub.level Character vector. Subset on specific level.
-#' @param seed Integer. Used for random color selection.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
 #' @return A ggplot object.
@@ -25,8 +26,8 @@
 #' 
 plotContour <- function(spe, 
                         coi, 
-                        id = "cell_type", 
                         overlay = c("cell","density"),
+                        id = "cell_type", 
                         sub.level = NULL, ...){
   
   if (length(coi) > 1L) {
@@ -36,6 +37,10 @@ plotContour <- function(spe,
   coi_clean <- janitor::make_clean_names(coi)
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
   
+  if(!coi_clean_contour %in% names(spe@metadata)){
+    stop("Contour of coi doesn't exist. Please run getContour() first!")
+  }
+
   contour_data <- as.data.frame(spe@metadata[[coi_clean_contour]])
   levs <- unique(contour_data$level)
   nlevs <- length(levs)

@@ -47,7 +47,7 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
     # contour region
     this_area <- region[[aa]]
     # calculate intersection
-    overlap_ind <- st_intersects(xy_allcells, this_area, sparse = FALSE)
+    overlap_ind <- sf::st_intersects(xy_allcells, this_area, sparse = FALSE)
     overlap_ind <- which(overlap_ind == 1)
     isIn[[aa]] <- overlap_ind
   }

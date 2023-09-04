@@ -7,8 +7,8 @@
 plotContour(
   spe,
   coi,
-  id = "cell_type",
   overlay = c("cell", "density"),
+  id = "cell_type",
   sub.level = NULL,
   ...
 )
@@ -21,11 +21,12 @@ plotContour(
 \item{overlay}{Character vector. Either plot overlay on density or cell.
 By default is cell.}
 
+\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
+Set to cell_type by default.}
+
 \item{sub.level}{Character vector. Subset on specific level.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
-
-\item{seed}{Integer. Used for random color selection.}
 }
 \value{
 A ggplot object.
