@@ -4,7 +4,7 @@
 \alias{contour2sf}
 \title{Draw a contour region on some density level}
 \usage{
-contour2sf(spe, contour, coi, level)
+contour2sf(spe, contour, coi, cutoff)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,7 +13,7 @@ contour2sf(spe, contour, coi, level)
 
 \item{coi}{A character vector of cell types of interest (COIs).}
 
-\item{level}{}
+\item{cutoff}{A numeric scalar specifying the density cutoff.}
 }
 \value{
 An sf object of the contour region of the specified level.

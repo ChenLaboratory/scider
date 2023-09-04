@@ -8,22 +8,23 @@ plotContour(
   spe,
   coi,
   overlay = c("cell", "density"),
-  sub_level = NULL,
-  seed = 66,
+  id = "cell_type",
+  sub.level = NULL,
   ...
 )
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).}
+\item{coi}{A character vector of length 1 of the cell type of interest (COIs).}
 
 \item{overlay}{Character vector. Either plot overlay on density or cell.
 By default is cell.}
 
-\item{sub_level}{Character vector. Subset on specific level.}
+\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
+Set to cell_type by default.}
 
-\item{seed}{Integer. Used for random color selection.}
+\item{sub.level}{Character vector. Subset on specific level.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 }

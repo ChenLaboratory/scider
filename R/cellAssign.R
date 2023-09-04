@@ -25,7 +25,7 @@ cellAssign <- function(spe, coi = NULL,
                        name_to = paste0("at_level_",
                                            janitor::make_clean_names(coi)),
                           NA_level = "0", levels = NULL,
-                          assign = c("contour", "roi"), ngrid = 20){
+                          assign = c("contour", "roi")){
   
   if(length(assign) == 2L){
     assign <- "contour"
@@ -41,9 +41,9 @@ cellAssign <- function(spe, coi = NULL,
   } else {
     name_to <- "at_rois"
     NA_level = "no_roi"
-    all_areas <- grid2sf(spe, ngrid = ngrid)
+    all_areas <- grid2sf(spe)
   }
-  
+
   spe <- cellsInRegion(spe, all_areas, name_to = name_to,
                        NA_level = NA_level, levels = levels)
   

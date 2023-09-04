@@ -45,7 +45,7 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   
   # levels for contour
   if (is.null(bins) && is.null(binwidth) && is.null(breaks)) {
-    message("Using bins = 10 to draw contours!")
+    message("Using bins = 10 to draw contours.")
     bins <- 10L
   }
   if (!is.null(bins)) binwidth <- breaks <- NULL
@@ -55,18 +55,18 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   dens <- dens[dens$density_coi_average > 0L, ]
   
   # note that when calculating contours, density is not filtered at any quantile cutoff!
-  spe@metadata$contour <- compute_group(dens,
-                                        z.range = range(dens$density_coi_average, 
-                                                        na.rm = TRUE, finite = TRUE),
-                                        bins = bins,
-                                        binwidth = binwidth,
-                                        breaks = breaks,
-                                        na.rm = FALSE)
-  spe@metadata$contour$level_factor <- as.factor(as.numeric(as.factor(spe@metadata$contour$level)))
-  names(spe@metadata)[which(names(spe@metadata) == "contour")] <- paste(coi_clean, "contour", sep = "_")
+  contour <- compute_group(dens,
+                           z.range = range(dens$density_coi_average, na.rm = TRUE, finite = TRUE),
+                           bins = bins,
+                           binwidth = binwidth,
+                           breaks = breaks,
+                           na.rm = FALSE)
   
+  contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
+  spe@metadata[[paste(coi_clean, "contour", sep = "_")]] <- S4Vectors::DataFrame(contour)
+
   return(spe)
-  
+
 }
 
 
@@ -121,12 +121,12 @@ iso_to_path <- function(iso, group = 1) {
   )
 }
 
-compute_group <-  function(data, z.range, bins = NULL, binwidth = NULL,
-                           breaks = NULL, na.rm = FALSE) {
+compute_group <-  function(data, z.range, bins = NULL, binwidth = NULL, breaks = NULL, na.rm = FALSE) {
   breaks <- ggplot2:::contour_breaks(z.range, bins, binwidth, breaks)
   isolines <- xyz_to_isolines(data, breaks)
   path_df <- iso_to_path(isolines, data$group[1])
-  path_df$level <- as.numeric(path_df$level)
-  path_df$nlevel <- scales::rescale_max(path_df$level)
+  path_df$cutoff <- as.numeric(path_df$level)
+  #path_df$level <- as.numeric(path_df$level)
+  #path_df$nlevel <- scales::rescale_max(path_df$level)
   path_df
 }

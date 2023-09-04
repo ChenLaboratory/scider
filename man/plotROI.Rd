@@ -4,7 +4,7 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", k = 30, ngrid = 20, show.legend = FALSE, ...)
+plotROI(spe, id = "cell_type", k = 30, show.legend = FALSE, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,8 +13,6 @@ plotROI(spe, id = "cell_type", k = 30, ngrid = 20, show.legend = FALSE, ...)
 Set to cell_type by default.}
 
 \item{k}{Integer value. The number of distinct color to be generated, default is 30.}
-
-\item{ngrid}{Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.}
 
 \item{show.legend}{Logical. Show legend or not.}
 
@@ -36,6 +34,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap", steps = 5)
 
-plotROI(spe, ngrid = 30, size = 0.3, alpha = 0.2)
+plotROI(spe, size = 0.3, alpha = 0.2)
 
 }

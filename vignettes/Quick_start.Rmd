@@ -181,7 +181,7 @@ After closing the interactive window, the selected ROI has been saved as a data.
 sel_region
 ```
 
-We can then use the `posSelRegion` to save the ROI in the metadata of the SpatialExperiment object.
+We can then use the `postSelRegion` to save the ROI in the metadata of the SpatialExperiment object.
 
 ```{r, eval=FALSE}
 spe1 <- postSelRegion(spe, sel_region = sel_region)

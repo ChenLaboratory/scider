@@ -4,6 +4,7 @@
 #' @param coi A character vector of cell types of interest (COIs). 
 #' @param probs A numeric scalar. The threshold of proportion that used to
 #'  filter grid by density. Default to 0.85.
+#' @param ngrid.min An integer. The minimum number of grids required for defining a ROI. Default to 20.
 #' @param method The community dectection method to be used, either walktrap or connected. Default to walktrap.
 #' @param ... Other parameters that passed to walktrap.community.
 #'
@@ -22,7 +23,8 @@
 #' 
 
 findROI <- function(spe, coi, 
-                    probs = 0.85, method = "walktrap", ...) {
+                    probs = 0.85, ngrid.min = 20, 
+                    method = "walktrap", ...) {
   
   grid_data <- spe@metadata$grid_density
 
@@ -84,8 +86,14 @@ findROI <- function(spe, coi,
   component_list$ycoord <- spe@metadata$grid_info$yrow[as.numeric(component_list$y)]
   component_list$component <- as.factor(component_list$component)
   
-  spe@metadata$roi <- S4Vectors::DataFrame(component_list)
+  # filtering ROIs based on ngrid.min
+  filtered <- names(which(table(component_list$component) >= ngrid.min))
+  rois_filtered <- component_list[component_list$component %in% filtered, ]
+
   spe@metadata$coi <- coi
+  spe@metadata$ngrid.min <- ngrid.min
+  spe@metadata$roi <- S4Vectors::DataFrame(rois_filtered)
+
   return(spe)
 }
 

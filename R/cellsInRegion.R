@@ -39,7 +39,7 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
     warning("The region input is unnamed! We recommend a named list of region object(s) as input!")
     
   # all cells
-  xy_allcells <- st_as_sf(as.data.frame(spatialCoords(spe)), coords = c("x_centroid", "y_centroid"))
+  xy_allcells <- sf::st_as_sf(as.data.frame(spatialCoords(spe)), coords = c("x_centroid", "y_centroid"))
   
   # calculate overlaps
   isIn <- list()
@@ -47,7 +47,7 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
     # contour region
     this_area <- region[[aa]]
     # calculate intersection
-    overlap_ind <- st_intersects(xy_allcells, this_area, sparse = FALSE)
+    overlap_ind <- sf::st_intersects(xy_allcells, this_area, sparse = FALSE)
     overlap_ind <- which(overlap_ind == 1)
     isIn[[aa]] <- overlap_ind
   }

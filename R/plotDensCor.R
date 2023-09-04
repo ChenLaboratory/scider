@@ -3,8 +3,7 @@
 #' @param spe A SpatialExperiment object.
 #' @param celltype1 Cell type 1 to compare.
 #' @param celltype2 Cell type 2 to compare.
-#' @param by_roi Logical. Plot facet by ROIs or not.
-#' @param ngrid Integer. Threshold (minimum number of grids) used to filter small ROIs. Default to 20.
+#' @param by.roi Logical. Plot facet by ROIs or not.
 #' @param fit Character. Options are "spline" and "linear".
 #' @param df Integer. Degrees of freedom of the spline fit. 
 #' Default to 3 (i.e., a cubic spline fit).
@@ -26,7 +25,7 @@
 #' plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 #' 
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                        by_roi = TRUE, ngrid = 20, 
+                        by.roi = TRUE, 
                         fit = c("spline","linear"), df = 3, ...){
   
   if (!("grid_density" %in% names(spe@metadata))){
@@ -40,15 +39,11 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   dens_dat <- as.data.frame(spe@metadata$grid_density)
   rois <- as.data.frame(spe@metadata$roi)
   
-  # filter rois
-  kp <- which(table(rois$component) >= ngrid)
-  rois_f <- rois[rois$component %in% kp, ]
-  
   # clean names
   ct1 <- paste0("density_",janitor::make_clean_names(celltype1))
   ct2 <- paste0("density_",janitor::make_clean_names(celltype2))
   
-  plotdf <- merge(rois_f, dens_dat, by.x = "members", by.y = "node", all.x = TRUE, sort = FALSE)
+  plotdf <- merge(rois, dens_dat, by.x = "members", by.y = "node", all.x = TRUE, sort = FALSE)
   plotdf <- plotdf[,c("component", c(ct1, ct2))]
   
   x <- rlang::sym(ct1)
@@ -81,7 +76,7 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     defaultmap$alpha <- 0.8
   }
   
-  if(isTRUE(by_roi)){
+  if(isTRUE(by.roi)){
     if (is.null(defaultmap$fill)) {
       defaultmap$fill <- "royalblue"
     }
@@ -115,7 +110,3 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
   
   return(p)
 }
-
-
-
-

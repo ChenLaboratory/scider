@@ -4,13 +4,10 @@
 \alias{grid2sf}
 \title{Combine grids in each ROI to a sf region}
 \usage{
-grid2sf(spe, ngrid = 20)
+grid2sf(spe)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
-
-\item{ngrid}{Integer. The threshold (minimum number of grids) used to filter
-small ROIs. Default to 20.}
 }
 \value{
 List of ROIs saved as sf objects.
@@ -28,6 +25,6 @@ coi <- "Breast cancer"
 
 spe <- findROI(spe, coi = coi, probs = 0.85)
 
-rois <- grid2sf(spe, ngrid = 20)
+rois <- grid2sf(spe)
 
 }

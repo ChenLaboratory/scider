@@ -55,7 +55,7 @@ gridDensity <- function(spe,
   # Calculate bandwidth
   pts <- spatstat.geom::ppp(coord[,1], coord[,2], xlim, ylim)
   if(is.null(bandwidth))
-    bandwidth <- spatstat.explore::bw.diggle(pts)
+    bandwidth <- spatstat.explore::bw.diggle(pts) * 4
   
   if(is.null(spe@metadata)) spe@metadata <- list()
 
