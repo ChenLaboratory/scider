@@ -81,13 +81,25 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   if (!is.null(areas_down)) {
     areas_up_union <- sf::st_union(areas_up)
     out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
-    areas_down <- areas_down[c(out), ]
-    areas_down <- sf::st_combine(areas_down)
-    areas <- sf::st_difference(areas_up_union, areas_down)
+    areas_down_out <- areas_down[c(out), ]
+    # flatten out overlaps
+    downHasOverlap <- sf::st_intersection(areas_down_out)
+    areas_down_out <- sf::st_sf(sf::st_geometry(downHasOverlap))
+    # remove MULTILINESTRING
+    areas_down_out <- areas_down_out[st_geometry_type(areas_down_out) == "POLYGON", ]
+    # check if downs are really down
+    areas_down_out_code <- sapply(1:nrow(areas_down_out), function(xx) {
+      xx <- areas_down_out[xx, ]
+      inds <- sf::st_intersects(xx, grids_pts_sf)
+      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$cutoff[ii]))
+    })
+    areas_down_out <- areas_down_out[areas_down_out_code <= lev_code, ]
+    areas_down_out <- sf::st_combine(areas_down_out)
+    areas <- sf::st_difference(areas_up_union, areas_down_out)
     # check if there is any missed area
-    missed <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
-    if (any(missed)) {
-      areas <- sf::st_union(sf::st_sf(areas), areas_up[missed, ])
+    missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
+    if (any(missed_up)) {
+      areas <- sf::st_union(sf::st_sf(areas), areas_up[missed_up, ])
     }
   } else {
     areas <- sf::st_union(areas_up)
