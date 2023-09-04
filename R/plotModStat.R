@@ -1,6 +1,6 @@
 #' Plot model statistics using heatmap.
 #'
-#' @param spe A SpatialExperiment object.
+#' @param model.result A data.frame object.
 #' @param stats Character value. Choose either coefficient or t. 
 #' Coefficient by default.
 #' @param roi Specify the ROI to be plotted. Leave it as default if modelling
@@ -23,34 +23,30 @@
 #' 
 #' plotModStat(spe)
 #' 
-plotModStat <- function(spe, stats = c("coefficient","t"), roi = NULL){
+plotModStat <- function(model.result, stats = c("cor.coef","t","p.Pos","p.Neg"), roi = NULL){
   
-  if (!("model_result" %in% names(spe@metadata))){
+  if (!all(c("cor.coef","p.Pos","p.Neg") %in% colnames(model.result))){
     stop("Please run corrDensity before using this function.")
   }
   
-  fit_dat <- as.data.frame(spe@metadata$model_result)
+  fit_dat <- model.result
   
   if (length(stats) != 1){
-    stats <- "coefficient"
-  } else if (!(stats %in% c("coefficient","t"))){
-    stop("stats can only allow either coefficient or t.")
+    stats <- "cor.coef"
+  } else if (!(stats %in% c("cor.coef","t","p.Pos","p.Neg"))){
+    stop("stats can only allow either cor.coef, t, p.Pos and p.Neg.")
   }
   
-  if (!(stats %in% colnames(fit_dat))){
-    stop(paste0("stats: ", stats, " is not in the colnames of spe@metadata$model_result."))
-  }
-  
-  if ("roi" %in% colnames(fit_dat)){
+  if ("ROI" %in% colnames(fit_dat)){
     if (is.null(roi)){
-      message(paste0("Parameter roi is set to NULL, so ROI #", fit_dat$roi[1], " is plotted."))
-      roi <- fit_dat$roi[1]
+      message(paste0("Parameter roi is set to NULL, so ROI #", fit_dat$ROI[1], " is plotted."))
+      roi <- fit_dat$ROI[1]
       title <- paste0("Statistics (",stats,") of ROI #", roi)
     } else {
       roi <- roi
       title <- paste0("Statistics (",stats,") of ROI #", roi)
     }
-    fit_dat_sub <- fit_dat[fit_dat$roi == roi,]
+    fit_dat_sub <- fit_dat[fit_dat$ROI == roi,]
   } else {
     fit_dat_sub <- fit_dat
     title <- paste0("Statistics (",stats,")")
@@ -69,10 +65,13 @@ plotModStat <- function(spe, stats = c("coefficient","t"), roi = NULL){
   
   plot_dat <- rbind(plot_dat, sup_dat)
   
+  #browser()
+  
   plot_dat <- reshape(plot_dat, 
                       idvar = "celltype1", 
                       timevar = "celltype2", 
                       direction = "wide") |>
+    as.data.frame(optional = TRUE) |> 
     col2rownames("celltype1")
   
   colnames(plot_dat) <- gsub(paste0("^",stats,"\\."), "", colnames(plot_dat))

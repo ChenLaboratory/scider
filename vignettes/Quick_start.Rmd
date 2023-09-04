@@ -172,7 +172,7 @@ This can be done using function `selectRegion`.
 This function will open an interactive window with an interactive plot for users to zoom-in/-out and select ROI using either a rectangular or lasso selection tool. Users can also press the `Export selected points` button to save the ROIs as object in the R environment.
 
 ```{r, eval=FALSE}
-selectRegion(spe@metadata$grid_density, x_col = "x_grid", y_col = "y_grid")
+selectRegion(spe@metadata$grid_density, x.col = "x_grid", y.col = "y_grid")
 ```
 
 After closing the interactive window, the selected ROI has been saved as a data.frame object named `sel_region` in the R environment.
@@ -203,47 +203,34 @@ This can be done with function `corrDensity`, by setting the `celltype1` and `ce
 
 
 ```{r}
-spe <- corrDensity(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts", ngrid = 30)
+model_result <- corrDensity(spe)
 ```
 
 We can see the correlation between breast cancer and fibroblasts in each ROI.
 
 ```{r}
-spe@metadata$model_result
+model_result
 ```
 
 We can also visualise the fitting using function `plotDensCor`.
 
 ```{r}
-plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts", ngrid = 30)
+plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 ```
 
 Or, we can visualise the statistics between cell types using function `plotModStat` with a heatmap.
 
 
 ```{r}
-plotModStat(spe)
+plotModStat(model_result)
 ```
 
 
-Alternatively, by setting the parameter `cal_all` to TRUE and `by_roi` to FALSE, we can perform the model fitting with all the cell types in a pair-wise mode while account for ROI variation.
 
 ```{r}
-spe <- corrDensity(spe, ngrid = 30, cal_all = TRUE, by_roi = FALSE)
-```
+model_result2 <- corrDensity(spe, by.roi = FALSE)
 
-Similarly, we can use function `plotDensCor` to visualise the fitting.
-
-```{r}
-plotDensCor(spe, celltype1 = "Breast cancer", 
-            celltype2 = "Fibroblasts", by_roi = FALSE, ngrid = 30)
-```
-
-And use `plotModStat` to visualise the model statistics between each cell types.
-In this case, fibroblasts, T cells and B cells are positively correlate with each other while negatively correlate with breast cancer cells in this tissue slide.
-
-```{r}
-plotModStat(spe)
+plotModStat(model_result2)
 ```
 
 
@@ -263,21 +250,21 @@ spe <- getContour(spe, coi = "Breast cancer")
 Different level of contour can be visualised with cells using `plotContour`.
 
 ```{r}
-plotContour(spe, coi = "breast cancer")
+plotContour(spe, coi = "Breast cancer")
 ```
 
 Or with density using parameter `overlay = "density"`.
 
 ```{r}
-plotContour(spe, coi = "breast cancer", overlay = "density")
+plotContour(spe, coi = "Breast cancer", overlay = "density")
 ```
 
 Or we can subset on specific density level with parameter `sub_level`.
 
 
 ```{r}
-plotContour(spe, coi = "breast cancer", 
-            sub_level = "1")
+plotContour(spe, coi = "Breast cancer", 
+            sub.level = "1")
 ```
 
 
@@ -285,7 +272,7 @@ We can then annotate cells by their locations within each contour using function
 
 
 ```{r}
-spe <- contourAssign(spe, coi = "breast cancer")
+spe <- allocateCells(spe)
 ```
 
 

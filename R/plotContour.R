@@ -34,6 +34,10 @@ plotContour <- function(spe,
     stop("coi must be of length 1!")
   }
   
+  if (!(coi %in% colData(spe)[[id]])){
+    stop("coi not in colData(spe)[[id]]!")
+  }
+  
   coi_clean <- janitor::make_clean_names(coi)
   coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
   

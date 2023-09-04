@@ -4,14 +4,14 @@
 \alias{selectRegion}
 \title{Select region of interest from plot}
 \usage{
-selectRegion(data, x_col = "x", y_col = "y")
+selectRegion(data, x.col = "x", y.col = "y")
 }
 \arguments{
 \item{data}{A data.frame object.}
 
-\item{x_col}{Column name of the x coordinates.}
+\item{x.col}{Column name of the x coordinates.}
 
-\item{y_col}{Column name of the y coordinates.}
+\item{y.col}{Column name of the y coordinates.}
 }
 \value{
 A data.frame object in the global environment.
@@ -27,6 +27,6 @@ spe_b <- spe[,SummarizedExperiment::colData(spe)$cell_type == "B cells"]
 
 dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 
-selectRegion(dat, x_col = "x_centroid", y_col = "y_centroid")
+selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
 
 }

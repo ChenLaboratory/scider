@@ -11,10 +11,10 @@ computeDensity(
   bandwidth = NULL,
   weights = NULL,
   scale = 10000,
-  ngrid_x = 100,
-  ngrid_y = NULL,
-  grid_length_x = NULL,
-  grid_length_y = NULL,
+  ngrid.x = 100,
+  ngrid.y = NULL,
+  grid.length.x = NULL,
+  grid.length.y = NULL,
   xlim = NULL,
   ylim = NULL
 )
@@ -34,13 +34,13 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 
 \item{scale}{A munmeric vector to scale the density values.}
 
-\item{ngrid_x}{Number of grids in the x-direction. Default to 100.}
+\item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
 
-\item{ngrid_y}{Number of grids in the y-direction.}
+\item{ngrid.y}{Number of grids in the y-direction.}
 
-\item{grid_length_x}{Grid length in the x-direction.}
+\item{grid.length.x}{Grid length in the x-direction.}
 
-\item{grid_length_y}{Grid length in the y-direction.}
+\item{grid.length.y}{Grid length in the y-direction.}
 
 \item{xlim}{The range of the x-coordinates of the image.}
 

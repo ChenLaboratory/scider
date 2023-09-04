@@ -4,10 +4,14 @@
 \alias{plotModStat}
 \title{Plot model statistics using heatmap.}
 \usage{
-plotModStat(spe, stats = c("coefficient", "t"), roi = NULL)
+plotModStat(
+  model.result,
+  stats = c("cor.coef", "t", "p.Pos", "p.Neg"),
+  roi = NULL
+)
 }
 \arguments{
-\item{spe}{A SpatialExperiment object.}
+\item{model.result}{A data.frame object.}
 
 \item{stats}{Character value. Choose either coefficient or t.
 Coefficient by default.}

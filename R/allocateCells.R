@@ -36,7 +36,7 @@ allocateCells <- function(spe,
                        NA_level = NA_level, levels = NULL)
     }
   }
-
+  
   if(to.contour){
     ind <- grep("_contour", names(spe@metadata))
     if(length(ind) == 0){

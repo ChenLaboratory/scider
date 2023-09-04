@@ -1,8 +1,8 @@
 #' Select region of interest from plot
 #'
 #' @param data A data.frame object.
-#' @param x_col Column name of the x coordinates.
-#' @param y_col Column name of the y coordinates.
+#' @param x.col Column name of the x coordinates.
+#' @param y.col Column name of the y coordinates.
 #'
 #' @return A data.frame object in the global environment.
 #' @export
@@ -15,9 +15,9 @@
 #' 
 #' dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 #' 
-#' selectRegion(dat, x_col = "x_centroid", y_col = "y_centroid")
+#' selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
 #' 
-selectRegion <- function(data, x_col = "x", y_col = "y") {
+selectRegion <- function(data, x.col = "x", y.col = "y") {
   
   ui <- fluidPage(
     sidebarLayout(
@@ -42,7 +42,7 @@ selectRegion <- function(data, x_col = "x", y_col = "y") {
     output$scatterplot <- renderPlotly({
       color_var <- input$color_by
       
-      p <- plot_ly(data, x = ~get(x_col), y = ~get(y_col), type = "scatter", 
+      p <- plot_ly(data, x = ~get(x.col), y = ~get(y.col), type = "scatter", 
                    mode = "markers", marker = list(size = input$point_size))
       
       if (!is.null(color_var)) {

@@ -8,10 +8,10 @@
 #' @param bandwidth The smoothing bandwidth. By default performing automatic bandwidth
 #' selection using cross-validation using function spatstat.explore::bw.diggle.
 #' @param scale A munmeric vector to scale the density values. 
-#' @param ngrid_x Number of grids in the x-direction. Default to 100.
-#' @param ngrid_y Number of grids in the y-direction. 
-#' @param grid_length_x Grid length in the x-direction.
-#' @param grid_length_y Grid length in the y-direction.
+#' @param ngrid.x Number of grids in the x-direction. Default to 100.
+#' @param ngrid.y Number of grids in the y-direction. 
+#' @param grid.length.x Grid length in the x-direction.
+#' @param grid.length.y Grid length in the y-direction.
 #'
 #' @return A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info
 #' 
@@ -30,8 +30,8 @@ gridDensity <- function(spe,
                         kernel = "gaussian",
                         bandwidth = NULL,
                         scale = 1e4, 
-                        ngrid_x = 100, ngrid_y = NULL, 
-                        grid_length_x = NULL, grid_length_y = NULL
+                        ngrid.x = 100, ngrid.y = NULL, 
+                        grid.length.x = NULL, grid.length.y = NULL
                         ) {
   
   if(! id %in% colnames(colData(spe))) 
@@ -72,18 +72,18 @@ gridDensity <- function(spe,
     # compute density
     out <- computeDensity(obj, mode = "pixels", kernel = kernel, 
                            bandwidth = bandwidth, scale = scale, 
-                           ngrid_x = ngrid_x, ngrid_y = ngrid_y, 
-                           grid_length_x = grid_length_x, grid_length_y = grid_length_y,
+                           ngrid.x = ngrid.x, ngrid.y = ngrid.y, 
+                           grid.length.x = grid.length.x, grid.length.y = grid.length.y,
                            xlim = xlim, ylim = ylim)
     RES <- out$grid_density
     
-    ngrid_x <- out$density_est$dim[2]
-    ngrid_y <- out$density_est$dim[1]
+    ngrid.x <- out$density_est$dim[2]
+    ngrid.y <- out$density_est$dim[1]
     
     if(is.null(spe@metadata$grid_density)){
       spe@metadata <- list("grid_density" = RES[, 1:2])
-      spe@metadata$grid_density$node_x <- rep(1:ngrid_x, each = ngrid_y) # horizontal ind
-      spe@metadata$grid_density$node_y <- rep(1:ngrid_y, ngrid_x) # vertical ind
+      spe@metadata$grid_density$node_x <- rep(1:ngrid.x, each = ngrid.y) # horizontal ind
+      spe@metadata$grid_density$node_y <- rep(1:ngrid.y, ngrid.x) # vertical ind
       spe@metadata$grid_density$node <- paste(spe@metadata$grid_density$node_x,
                                                spe@metadata$grid_density$node_y, sep = "-")
     }
@@ -92,7 +92,7 @@ gridDensity <- function(spe,
     
     # grid info
     if(is.null(spe@metadata$grid_info)){
-      spe@metadata$grid_info <- list(dims = c(ngrid_x, ngrid_y), 
+      spe@metadata$grid_info <- list(dims = c(ngrid.x, ngrid.y), 
                                      xlim = xlim, 
                                      ylim = ylim, 
                                      xcol = out$density_est$xcol, 
