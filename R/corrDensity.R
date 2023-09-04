@@ -1,7 +1,6 @@
 #' Test for density correlation between two cell types.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param ngrid Integer. Threshold (minimum number of grids) used to filter small ROIs.
 #' @param by.roi Logical. If TRUE (default), then return the testing results at ROI level. 
 #' If FALSE, then combine the testing results across all ROIs.
 #'
@@ -18,9 +17,9 @@
 #' 
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #' 
-#' result <- corrDensity(spe, ngrid = 30)
+#' result <- corrDensity(spe)
 #' 
-corrDensity <- function(spe, ngrid = 20, by.roi = TRUE){
+corrDensity <- function(spe, by.roi = TRUE){
 
   if (!("grid_density" %in% names(spe@metadata))){
     stop("Please run gridDensity before using this function.")
@@ -37,13 +36,9 @@ corrDensity <- function(spe, ngrid = 20, by.roi = TRUE){
   den_cols <- colnames(dens_dat)[grepl("density_", colnames(dens_dat))]
   nCT <- length(den_cols)
   if (nCT == 1) stop("Only one cell type detected.")
-  
-  # filter rois
-  kp <- which(table(rois$component) >= ngrid)
-  rois_f <- rois[rois$component %in% kp, ]
 
   # construct data table
-  model_data <- merge(rois_f, dens_dat, by.x = "members", 
+  model_data <- merge(rois, dens_dat, by.x = "members", 
                           by.y = "node", all.x = TRUE, sort = FALSE)
   component <- factor(model_data$component)
   nGrids <- table(component)

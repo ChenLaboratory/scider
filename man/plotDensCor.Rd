@@ -8,8 +8,7 @@ plotDensCor(
   spe,
   celltype1 = NULL,
   celltype2 = NULL,
-  by_roi = TRUE,
-  ngrid = 20,
+  by.roi = TRUE,
   fit = c("spline", "linear"),
   df = 3,
   ...
@@ -22,9 +21,7 @@ plotDensCor(
 
 \item{celltype2}{Cell type 2 to compare.}
 
-\item{by_roi}{Logical. Plot facet by ROIs or not.}
-
-\item{ngrid}{Integer. Threshold (minimum number of grids) used to filter small ROIs. Default to 20.}
+\item{by.roi}{Logical. Plot facet by ROIs or not.}
 
 \item{fit}{Character. Options are "spline" and "linear".}
 

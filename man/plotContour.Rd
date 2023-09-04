@@ -9,7 +9,7 @@ plotContour(
   coi,
   id = "cell_type",
   overlay = c("cell", "density"),
-  sub_level = NULL,
+  sub.level = NULL,
   ...
 )
 }
@@ -21,7 +21,7 @@ plotContour(
 \item{overlay}{Character vector. Either plot overlay on density or cell.
 By default is cell.}
 
-\item{sub_level}{Character vector. Subset on specific level.}
+\item{sub.level}{Character vector. Subset on specific level.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 

@@ -4,12 +4,10 @@
 \alias{corrDensity}
 \title{Test for density correlation between two cell types.}
 \usage{
-corrDensity(spe, ngrid = 20, by.roi = TRUE)
+corrDensity(spe, by.roi = TRUE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
-
-\item{ngrid}{Integer. Threshold (minimum number of grids) used to filter small ROIs.}
 
 \item{by.roi}{Logical. If TRUE (default), then return the testing results at ROI level.
 If FALSE, then combine the testing results across all ROIs.}
@@ -30,6 +28,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-result <- corrDensity(spe, ngrid = 30)
+result <- corrDensity(spe)
 
 }

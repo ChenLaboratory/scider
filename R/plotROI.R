@@ -4,7 +4,6 @@
 #' @param id Character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
 #' @param k Integer value. The number of distinct color to be generated, default is 30.
-#' @param ngrid Integer. The threshold (minimum number of grids) used to filter small ROIs. Default to 20.
 #' @param show.legend Logical. Show legend or not.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()` for point.
 #'
@@ -21,11 +20,11 @@
 #' 
 #' spe <- findROI(spe, coi = coi, method = "walktrap", steps = 5)
 #' 
-#' plotROI(spe, ngrid = 30, size = 0.3, alpha = 0.2)
+#' plotROI(spe, size = 0.3, alpha = 0.2)
 #' 
 plotROI <- function(spe, 
                     id = "cell_type", k = 30, 
-                    ngrid = 20, show.legend = FALSE, ...){
+                    show.legend = FALSE, ...){
 
   if (is.null(spe@metadata$roi))
     stop("ROI not yet computed!")
@@ -54,8 +53,8 @@ plotROI <- function(spe,
   plot.xlim <- xlim + c(-1e-10, 1e-10)
   plot.ylim <- ylim + c(-1e-10, 1e-10)
   
-  filtered <- names(which(table(rois$component) >= ngrid))
-  rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
+  #filtered <- names(which(table(rois$component) >= ngrid))
+  #rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
   
   #for(n in colnames(colData(spe))){
   #  if (!(n %in% colnames(rois_filtered))){
@@ -64,7 +63,7 @@ plotROI <- function(spe,
   #}
 
   # Label ROI numbers at the center
-  sf <- grid2sf(spe, ngrid = ngrid)
+  sf <- grid2sf(spe)
   rois_center <- do.call(rbind, lapply(sf, function(rr) {
     center <- sf::st_point_on_surface(rr)
     as.data.frame(sf::st_coordinates(center))
@@ -74,7 +73,7 @@ plotROI <- function(spe,
     rownames2col("component")
 
   roi_plot <- plotSpatial(spe, ...) +
-    geom_tile(data = rois_filtered, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
+    geom_tile(data = rois, aes(x = xcoord, y = ycoord, fill = component), alpha = 0.6) +
     #scale_fill_manual(values = col.p) +
     annotate("text", x = rois_center$X, y = rois_center$Y, 
     label = rois_center$component, color = "black", fontface = 2) +

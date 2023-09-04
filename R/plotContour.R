@@ -4,7 +4,7 @@
 #' @param coi A character vector of length 1 of the cell type of interest (COIs).
 #' @param overlay Character vector. Either plot overlay on density or cell. 
 #' By default is cell.
-#' @param sub_level Character vector. Subset on specific level.
+#' @param sub.level Character vector. Subset on specific level.
 #' @param seed Integer. Used for random color selection.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
@@ -27,7 +27,7 @@ plotContour <- function(spe,
                         coi, 
                         id = "cell_type", 
                         overlay = c("cell","density"),
-                        sub_level = NULL, ...){
+                        sub.level = NULL, ...){
   
   if (length(coi) > 1L) {
     stop("coi must be of length 1!")
@@ -53,7 +53,7 @@ plotContour <- function(spe,
     stop("Overlay should either be cell or density.")
   }
   
-  if(is.null(sub_level)){
+  if(is.null(sub.level)){
     suppressMessages(
       p <- p +
         ggplot2::geom_path(data = contour_data, 
@@ -62,17 +62,17 @@ plotContour <- function(spe,
         ggplot2::scale_color_hue(name = "Density level")
     )
   } else {
-    if(length(sub_level) == 1L & sub_level %in% contour_data$level){
+    if(length(sub.level) == 1L & sub.level %in% contour_data$level){
       suppressMessages(
         p <- p +
           ggplot2::geom_path(data = contour_data, 
                              ggplot2::aes(x = x, y = y, group = group, 
-                                          color = level == sub_level)) +
-          scale_color_manual(name = paste0("level",sub_level," density"),
+                                          color = level == sub.level)) +
+          scale_color_manual(name = paste0("level",sub.level," density"),
                              values = c("royalblue","tomato2"))
       )
     } else {
-      stop("The length sub_level is expected to be 1 and 
+      stop("The length sub.level is expected to be 1 and 
            should be included in contour_data$level.")
     }
   }

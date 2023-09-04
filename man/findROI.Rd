@@ -4,7 +4,7 @@
 \alias{findROI}
 \title{Find ROIs based on cell type-specific densities via graph-based method.}
 \usage{
-findROI(spe, coi, probs = 0.85, method = "walktrap", ...)
+findROI(spe, coi, probs = 0.85, ngrid.min = 20, method = "walktrap", ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,6 +13,8 @@ findROI(spe, coi, probs = 0.85, method = "walktrap", ...)
 
 \item{probs}{A numeric scalar. The threshold of proportion that used to
 filter grid by density. Default to 0.85.}
+
+\item{ngrid.min}{An integer. The minimum number of grids required for defining a ROI. Default to 20.}
 
 \item{method}{The community dectection method to be used, either walktrap or connected. Default to walktrap.}
 

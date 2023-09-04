@@ -1,8 +1,6 @@
 #' Combine grids in each ROI to a sf region
 #'
 #' @param spe A SpatialExperiment object.
-#' @param ngrid Integer. The threshold (minimum number of grids) used to filter 
-#' small ROIs. Default to 20.
 #'
 #' @return List of ROIs saved as sf objects. 
 #' @export
@@ -17,17 +15,15 @@
 #' 
 #' spe <- findROI(spe, coi = coi, probs = 0.85)
 #' 
-#' rois <- grid2sf(spe, ngrid = 20)
+#' rois <- grid2sf(spe)
 #' 
 
-grid2sf <- function(spe, ngrid = 20) {
+grid2sf <- function(spe) {
   
   if (is.null(spe@metadata$roi))
     stop("ROI not yet computed!")
   
   rois <- as.data.frame(spe@metadata$roi)
-  filtered <- names(which(table(rois$component) >= ngrid))
-  rois_filtered <- rois[rois$component %in% filtered, ]
   
   grid_width <- spe@metadata$grid_info$xstep
   grid_height <- spe@metadata$grid_info$ystep
@@ -38,8 +34,8 @@ grid2sf <- function(spe, ngrid = 20) {
                                       spe@metadata$grid_info$dims[2]), what = "polygons")
   
   rois_sf <- list()
-  for (rr in unique(rois_filtered$component)) {
-    this_roi <- rois_filtered[rois_filtered$component == rr, ]
+  for (rr in unique(rois$component)) {
+    this_roi <- rois[rois$component == rr, ]
     this_roi_centroids <- sf::st_as_sf(this_roi, coords = c("xcoord", "ycoord"))
     kp <- sf::st_intersects(this_roi_centroids, grids)
     rois_sf[[rr]] <- sf::st_as_sf(sf::st_union(grids[as.numeric(kp)]))

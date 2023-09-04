@@ -10,8 +10,7 @@ cellAssign(
   name_to = paste0("at_level_", janitor::make_clean_names(coi)),
   NA_level = "0",
   levels = NULL,
-  assign = c("contour", "roi"),
-  ngrid = 20
+  assign = c("contour", "roi")
 )
 }
 \arguments{
