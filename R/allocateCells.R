@@ -24,7 +24,7 @@ allocateCells <- function(spe,
   to.roi = TRUE,
   to.contour = TRUE){
 
-  if(assign.roi){
+  if(to.roi){
     if(is.null(spe@metadata$roi)){ 
       message("No ROI detected.")
     } else {
@@ -37,7 +37,7 @@ allocateCells <- function(spe,
     }
   }
 
-  if(assign.contour){
+  if(to.contour){
     ind <- grep("_contour", names(spe@metadata))
     if(length(ind) == 0){
       message("No contour detected.")

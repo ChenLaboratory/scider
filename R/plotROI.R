@@ -29,7 +29,7 @@ plotROI <- function(spe,
   if (is.null(spe@metadata$roi))
     stop("ROI not yet computed!")
 
-  rois <- spe@metadata$roi
+  rois <- as.data.frame(spe@metadata$roi)
 
   coi <- spe@metadata$coi
   coi_clean <- janitor::make_clean_names(coi)
