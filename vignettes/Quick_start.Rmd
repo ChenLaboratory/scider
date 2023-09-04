@@ -280,11 +280,18 @@ plotContour(spe, coi = "breast cancer",
             sub_level = "1")
 ```
 
+
 We can then annotate cells by their locations within each contour using function `contourAssign`.
 
 
 ```{r}
 spe <- contourAssign(spe, coi = "breast cancer")
+```
+
+
+```{r}
+plotSpatial(spe, color = cell_type == "Breast cancer") +
+  scale_color_manual(values = c("gray", "red"))
 ```
 
 
@@ -302,6 +309,72 @@ plotCellCompo(spe, coi = "Breast cancer")
 ```{r}
 plotCellCompo(spe, coi = "Breast cancer", per_roi = TRUE)
 ```
+
+## Comparison between T cells from low bc level and T cells from high bc level
+
+Excluding level 0.
+
+```{r}
+
+spe2 <- spe[, colData(spe)$at_level_breast_cancer != "0"]
+
+colData(spe2)$Group <- ifelse(colData(spe2)$at_level_breast_cancer %in% as.character(seq(4)),
+                              "low", "high")
+
+
+cdat <- as.data.frame(colData(spe2))[,c("cell_type","at_rois","Group")] 
+
+cdat <- as.data.frame(apply(cdat, 2, function(x) gsub(" ","_",x)))
+
+```
+
+
+```{r}
+factors <- c("cell_type","at_rois","Group")
+
+f <- as.formula(paste("~ 0 +", paste(factors, collapse = ":")))
+
+mm <- model.matrix(f, data = cdat)
+
+n <- colnames(mm)
+for(i in factors){
+  n <- gsub(i,"",n)
+}
+
+n
+
+colnames(mm) <- n
+
+all(rowSums(mm) == 1)
+
+head(mm)[,1:5]
+```
+
+```{r}
+em <- assay(spe2, 1)
+```
+
+
+```{r}
+dim(em)[2] == dim(mm)[1]
+```
+
+
+```{r}
+psm <- em %*% mm
+```
+
+```{r}
+dim(psm)
+```
+
+
+```{r}
+data.frame("sample_id" = paste0("Ps", seq(dim(psm)[2])),
+           "id" = colnames(psm))
+```
+
+
 
 
 
