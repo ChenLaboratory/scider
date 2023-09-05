@@ -20,14 +20,14 @@
 #' 
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #' 
-#' spe <- corDensity(spe, cal_all = TRUE)
+#' model_result <- corDensity(spe, cal_all = TRUE)
 #' 
-#' plotCorHeatmap(spe)
+#' plotCorHeatmap(model_result)
 #' 
 plotCorHeatmap <- function(model.result, 
                         stats = c("cor.coef","t","p.Pos","p.Neg"), 
-                        roi = NULL,
-                        mode = c("withinROI","acrossROI")){
+                        roi = "all",
+                        cell.type = "all"){
   
   if (!all(c("cor.coef","p.Pos","p.Neg") %in% colnames(model.result))){
     stop("Please run corDensity before using this function.")
@@ -41,68 +41,63 @@ plotCorHeatmap <- function(model.result,
     stop("stats can only allow either cor.coef, t, p.Pos and p.Neg.")
   }
   
-  if(length(mode) == 2L){
-    mode <- "withinROI"
-  }
-  
-  if(mode == "withinROI"){
-    if ("ROI" %in% colnames(fit_dat)){
-      if (is.null(roi)){
-        message(paste0("Parameter roi is set to NULL, so ROI #", fit_dat$ROI[1], " is plotted."))
-        roi <- fit_dat$ROI[1]
-        title <- paste0("Statistics (",stats,") of ROI #", roi)
-      } else {
-        roi <- roi
-        title <- paste0("Statistics (",stats,") of ROI #", roi)
-      }
-      fit_dat_sub <- fit_dat[fit_dat$ROI == roi,]
-    } else {
-      fit_dat_sub <- fit_dat
-      title <- paste0("Statistics (",stats,")")
+  if (all(cell.type != "all")){
+    if (length(cell.type) < 2L){
+      stop("cell.type must be either all or length larger than 1.")
     }
-    plot_dat <- fit_dat_sub[, c("celltype1","celltype2",stats)]
-    cts <- unique(c(plot_dat$celltype1, plot_dat$celltype2))
-    sup_dat <- data.frame("celltype1" = cts,
-                          "celltype2" = cts)
-    sup_dat[,stats] <- 0
-    plot_dat <- rbind(plot_dat, sup_dat)
-    plot_dat <- reshape(plot_dat, 
-                        idvar = "celltype1", 
-                        timevar = "celltype2", 
-                        direction = "wide") |>
-      as.data.frame(optional = TRUE) |> 
-      col2rownames("celltype1")
+    if (!all(cell.type %in% unique(c(fit_dat$celltype1, fit_dat$celltype2)))){
+      stop("cell.type must be all in celltype1 or celltype2 columns.")
+    }
     
-    colnames(plot_dat) <- gsub(paste0("^",stats,"\\."), "", colnames(plot_dat))
-    
-    plot_dat <- plot_dat[colnames(plot_dat),]
-    
-    filled_data <- fill_symmetric_na(plot_dat)
-  } else if (mode == "acrossROI"){
-    fit_dat <- as.data.frame(fit_dat[,c("celltype1","celltype2","ROI",stats)])
-    
-    fit_dat[["pair"]] <- paste0(fit_dat[["celltype1"]],"-",fit_dat[["celltype2"]])
-    
-    fit_dat <- fit_dat[,c("pair","ROI",stats)]
-    
-    filled_data <- reshape(fit_dat, idvar = "pair", timevar = "ROI", 
-                           direction = "wide") |>
-      col2rownames("pair")
-    
-    colnames(filled_data) <- gsub(paste0("^",stats,"\\."),"ROI#",colnames(x1))
-    
+    fit_dat <- fit_dat[(fit_dat$celltype1 %in% cell.type) & 
+                         (fit_dat$celltype2 %in% cell.type),]
   }
   
-  
+  if (!("ROI" %in% colnames(fit_dat))){
+    fit_dat <- fit_dat
+    title <- paste0("Statistics (",stats,")")
+    filled_data <- plot_type1_transformation(fit_dat, stats)
+  } else {
+    if (all(roi != "all")){
+      if (length(roi) == 1L){
+        if (!(roi %in% fit_dat[["ROI"]])){
+          stop("roi is not in the ROI column.")
+        }
+        fit_dat <- fit_dat[fit_dat$ROI == roi,]
+        title <- paste0("Statistics (",stats,") of ROI #", roi)
+        filled_data <- plot_type1_transformation(fit_dat, stats)
+      } else {
+        if (!all(roi %in% fit_dat[["ROI"]])){
+          stop("rois are not all in the ROI column.")
+        }
+        fit_dat <- fit_dat[fit_dat$ROI %in% roi,]
+        title <- paste0("Statistics (",stats,") of ROI #", paste(roi,
+                                                                 collapse=","))
+        filled_data <- plot_type2_transformation(fit_dat, stats)
+      }
+    } else {
+      title <- paste0("Statistics (",stats,")" )
+      filled_data <- plot_type2_transformation(fit_dat, stats)
+    }
+  }
   
   paletteLength <- 100
-  hmColor <- rev(colorRampPalette(c("#ED254EFF","#EF6079FF", "#F1F4FFFF", "#97B3D0FF", "#011936FF"))(paletteLength))
-  #myBreaks <- c(seq(min(filled_data), 0, length.out=ceiling(paletteLength/2) + 1), 
-  #              seq(max(filled_data)/paletteLength, max(filled_data), length.out=floor(paletteLength/2)))
+  hmColor <- rev(colorRampPalette(c("#ED254EFF","#EF6079FF", 
+                                    "#F1F4FFFF", "#97B3D0FF", 
+                                    "#011936FF"))(paletteLength))
+  #myBreaks <- c(seq(min(filled_data), 0, length.out=ceiling(paletteLength/2)+1), 
+  #              seq(max(filled_data)/paletteLength, max(filled_data), 
+  #                  length.out=floor(paletteLength/2)))
   
-  pheatmap::pheatmap(filled_data, angle_col = 45, border_color = "white",
-                     color = hmColor, #breaks = myBreaks,
-                     main = title)
+  if(nrow(filled_data) == 1L){
+    pheatmap::pheatmap(filled_data, angle_col = 45, border_color = "white",
+                       color = hmColor, #breaks = myBreaks,
+                       main = title, cluster_rows = FALSE)
+  } else {
+    pheatmap::pheatmap(filled_data, angle_col = 45, border_color = "white",
+                       color = hmColor, #breaks = myBreaks,
+                       main = title)
+  }
 }
 
 
@@ -110,5 +105,35 @@ fill_symmetric_na <- function(mat) {
   is_na <- is.na(mat)
   mat[is_na] <- t(mat)[is_na]
   return(mat)
+}
+
+plot_type1_transformation <- function(fit_dat_sub, stats){
+  plot_dat <- fit_dat_sub[, c("celltype1","celltype2",stats)]
+  cts <- unique(c(plot_dat$celltype1, plot_dat$celltype2))
+  sup_dat <- data.frame("celltype1" = cts,
+                        "celltype2" = cts)
+  sup_dat[,stats] <- 0
+  plot_dat <- rbind(plot_dat, sup_dat)
+  plot_dat <- reshape(plot_dat, 
+                      idvar = "celltype1", 
+                      timevar = "celltype2", 
+                      direction = "wide") |>
+    as.data.frame(optional = TRUE) |> 
+    col2rownames("celltype1")
+  colnames(plot_dat) <- gsub(paste0("^",stats,"\\."), "", colnames(plot_dat))
+  plot_dat <- plot_dat[colnames(plot_dat),]
+  filled_data <- fill_symmetric_na(plot_dat)
+  return(filled_data)
+}
+
+plot_type2_transformation <- function(fit_dat, stats){
+  fit_dat <- as.data.frame(fit_dat[,c("celltype1","celltype2","ROI",stats)])
+  fit_dat[["pair"]] <- paste0(fit_dat[["celltype1"]],"-",fit_dat[["celltype2"]])
+  fit_dat <- fit_dat[,c("pair","ROI",stats)]
+  filled_data <- reshape(fit_dat, idvar = "pair", timevar = "ROI", 
+                         direction = "wide") |>
+    col2rownames("pair")
+  colnames(filled_data) <- gsub(paste0("^",stats,"\\."),"ROI#",colnames(filled_data))
+  return(filled_data)
 }
 

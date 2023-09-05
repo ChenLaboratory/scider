@@ -7,8 +7,8 @@
 plotCorHeatmap(
   model.result,
   stats = c("cor.coef", "t", "p.Pos", "p.Neg"),
-  roi = NULL,
-  mode = c("withinROI", "acrossROI")
+  roi = "all",
+  cell.type = "all"
 )
 }
 \arguments{
@@ -38,8 +38,8 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-spe <- corDensity(spe, cal_all = TRUE)
+model_result <- corDensity(spe, cal_all = TRUE)
 
-plotCorHeatmap(spe)
+plotCorHeatmap(model_result)
 
 }
