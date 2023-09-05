@@ -63,16 +63,17 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
   for (aa in names(isIn)) {
     to_append[isIn[[aa]]] <- aa
   }
+  
   if (anyNA(to_append)) {
     if (is.null(NA_level))
       stop("Need to specify `NA_level` as labels for cells not in any of the regions!")
     to_append[is.na(to_append)] <- NA_level
   }
   
-  if (is.null(levels))
-    levels <- unique(to_append)
-  colData(spe)[[name_to]] <- factor(to_append, levels = levels)
-  
+  if (is.null(levels)){
+    val <- unique(to_append)[unique(to_append) != NA_level]
+    levels <- c(val[order(as.numeric(val))],NA_level)
+    colData(spe)[[name_to]] <- factor(to_append, levels = levels)
+  }
   return(spe)
-  
 }
