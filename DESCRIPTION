@@ -1,7 +1,7 @@
 Package: scider
 Type: Package
 Title: Spatial cell-type inter-correlation by density in R.
-Version: 0.1.7
+Version: 0.1.8
 Author: Ning Liu [cre,aut], Mengbo Li [cre,aut], Yunshun Chen [cre,aut]
 Maintainer: Ning Liu <liu.n@wehi.edu.au>, Mengbo Li <li.me@wehi.edu.au>, Yunshun Chen <yuchen@wehi.edu.au>
 Description: scider is an user-friendly R package providing functions to model 
