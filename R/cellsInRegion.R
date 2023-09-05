@@ -71,8 +71,9 @@ cellsInRegion <- function(spe, region, name_to, NA_level = "0", levels = NULL) {
   }
   
   if (is.null(levels)){
+    #levels <- unique(to_append)[order(as.numeric(unique(to_append)))]
     val <- unique(to_append)[unique(to_append) != NA_level]
-    levels <- c(val[order(as.numeric(val))],NA_level)
+    levels <- c(NA_level, val[order(as.numeric(val))])
     colData(spe)[[name_to]] <- factor(to_append, levels = levels)
   }
   return(spe)

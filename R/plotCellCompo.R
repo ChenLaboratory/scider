@@ -23,10 +23,10 @@
 #' plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
 #' 
 plotCellCompo <- function(spe, coi, id = "cell_type", 
-                          level.name = paste0("at_level_", 
-                                              janitor::make_clean_names(coi)),
+                          level.name = paste0(janitor::make_clean_names(coi),
+                                              "_contour"),
                           seed = 33, by.roi = FALSE){
-  
+
   dat <- as.data.frame(colData(spe))
   
   if(!(id %in% colnames(dat)) | !(level.name %in% colnames(dat))){
@@ -37,10 +37,10 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
   if(isFALSE(by.roi)){
     dat <- as.data.frame(colData(spe))[, c(id, level.name)]
   } else {
-    if(!("at_rois" %in% colnames(dat))){
-      stop("Column at_rois not found, please run cellAssign with assign=roi first.")
+    if(!("roi" %in% colnames(dat))){
+      stop("Column roi not found, please run allocateCells with to.roi=TRUE first.")
     }
-    dat <- as.data.frame(colData(spe))[, c(id, level.name, "at_rois")]
+    dat <- as.data.frame(colData(spe))[, c(id, level.name, "roi")]
   }
 
   if(!(coi %in% dat$cell_type)){
@@ -52,7 +52,7 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
   if(isFALSE(by.roi)){
     toplot <- calc_proportions(dat, level.name, id)
   } else {
-    dat <- dat[dat[["at_rois"]] != "no_roi",]
+    dat <- dat[dat[["roi"]] != "no_roi",]
     
     grouped_data <- split(dat, as.character(dat[["at_rois"]]))
     
@@ -64,10 +64,11 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
   }
   
   set.seed(seed)
-  col.p <- randomcoloR::distinctColorPalette(3)
+  col.p <- randomcoloR::distinctColorPalette(length(unique(toplot[["cell_type"]])))
   
-  p <- ggplot(toplot, aes(x = at_level_breast_cancer, 
-                        y = Proportion, fill = cell_type)) +
+  p <- ggplot(toplot, aes(x = !!rlang::sym(level.name), 
+                          y = Proportion, 
+                          fill = cell_type)) +
     geom_bar(stat = "identity") + 
     scale_fill_manual("Cell type", values = col.p) + 
     ggtitle(paste0("Cell type composition at each ",coi," density level")) +
