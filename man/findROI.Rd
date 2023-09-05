@@ -4,7 +4,15 @@
 \alias{findROI}
 \title{Find ROIs based on cell type-specific densities via graph-based method.}
 \usage{
-findROI(spe, coi, probs = 0.85, ngrid.min = 20, method = "walktrap", ...)
+findROI(
+  spe,
+  coi,
+  probs = 0.85,
+  ngrid.min = 20,
+  method = "walktrap",
+  diag.nodes = FALSE,
+  ...
+)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
