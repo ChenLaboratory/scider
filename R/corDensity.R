@@ -17,9 +17,9 @@
 #' 
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #' 
-#' result <- corrDensity(spe)
+#' result <- corDensity(spe)
 #' 
-corrDensity <- function(spe, by.roi = TRUE){
+corDensity <- function(spe, by.roi = TRUE){
 
   if (!("grid_density" %in% names(spe@metadata))){
     stop("Please run gridDensity before using this function.")

@@ -8,7 +8,7 @@ plotCellCompo(
   spe,
   coi,
   id = "cell_type",
-  level.name = paste0("at_level_", janitor::make_clean_names(coi)),
+  level.name = paste0(janitor::make_clean_names(coi), "_contour"),
   seed = 33,
   by.roi = FALSE
 )
