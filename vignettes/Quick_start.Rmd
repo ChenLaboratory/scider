@@ -259,7 +259,7 @@ Or with density using parameter `overlay = "density"`.
 plotContour(spe, coi = "Breast cancer", overlay = "density")
 ```
 
-Or we can subset on specific density level with parameter `sub_level`.
+Or we can subset on specific density level with parameter `sub.level`.
 
 
 ```{r}
@@ -268,7 +268,7 @@ plotContour(spe, coi = "Breast cancer",
 ```
 
 
-We can then annotate cells by their locations within each contour using function `contourAssign`.
+We can then annotate cells by their locations within each contour using function `allocateCells`.
 
 
 ```{r}
@@ -283,7 +283,7 @@ plotSpatial(spe, color = cell_type == "Breast cancer") +
 
 
 ```{r}
-plotSpatial(spe, color = at_level_breast_cancer, alpha = 0.5)
+plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5)
 ```
 
 We can visualise cell type composition per level.
@@ -303,9 +303,9 @@ Excluding level 0.
 
 ```{r}
 
-spe2 <- spe[, colData(spe)$at_level_breast_cancer != "0"]
+spe2 <- spe[, colData(spe)$breast_cancer_contour != "0"]
 
-colData(spe2)$Group <- ifelse(colData(spe2)$at_level_breast_cancer %in% as.character(seq(4)),
+colData(spe2)$Group <- ifelse(colData(spe2)$breast_cancer_contour %in% as.character(seq(4)),
                               "low", "high")
 
 
