@@ -11,6 +11,7 @@ findROI(
   ngrid.min = 20,
   method = "walktrap",
   diag.nodes = FALSE,
+  sequential.roi.name = TRUE,
   ...
 )
 }
@@ -25,6 +26,11 @@ filter grid by density. Default to 0.85.}
 \item{ngrid.min}{An integer. The minimum number of grids required for defining a ROI. Default to 20.}
 
 \item{method}{The community dectection method to be used, either walktrap or connected. Default to walktrap.}
+
+\item{diag.nodes}{Logical. Set this to TRUE to allow diagonal grid points to be adjacent nodes.}
+
+\item{sequential.roi.name}{Logical. Set this to FALSE if you want the original ROI name before
+filtering are retained.}
 
 \item{...}{Other parameters that passed to walktrap.community.}
 }

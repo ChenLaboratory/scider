@@ -7,6 +7,9 @@
 #' @param ngrid.min An integer. The minimum number of grids required for defining a ROI. Default to 20.
 #' @param method The community dectection method to be used, either walktrap or connected. Default to walktrap.
 #' @param ... Other parameters that passed to walktrap.community.
+#' @param diag.nodes Logical. Set this to TRUE to allow diagonal grid points to be adjacent nodes.
+#' @param sequential.roi.name Logical. Set this to FALSE if you want the original ROI name before 
+#' filtering are retained.
 #'
 #' @return A SpatialExperiment object.
 #' @export
@@ -26,7 +29,8 @@ findROI <- function(spe, coi,
                     probs = 0.85, 
                     ngrid.min = 20, 
                     method = "walktrap", 
-                    diag.nodes = FALSE, ...) {
+                    diag.nodes = FALSE,
+                    sequential.roi.name = TRUE, ...) {
   
   grid_data <- spe@metadata$grid_density
   
@@ -89,6 +93,11 @@ findROI <- function(spe, coi,
   # filtering ROIs based on ngrid.min
   filtered <- names(which(table(component_list$component) >= ngrid.min))
   rois_filtered <- component_list[component_list$component %in% filtered, ]
+  
+  if (sequential.roi.name){
+    rois_filtered$component <- factor(rank(rois_filtered$component), 
+                                      labels = seq(length(unique(rois_filtered$component))))
+  }
   
   spe@metadata$coi <- coi
   spe@metadata$ngrid.min <- ngrid.min
