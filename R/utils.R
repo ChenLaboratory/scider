@@ -12,3 +12,9 @@ col2rownames <- function(df, rn = "rowname"){
   df[[rn]] <- NULL
   return(df)
 }
+
+
+col.spec <- c("#D53E4F", "#F46D43", "#FDAE61",
+              "#FEE08B", "#FFFFBF", "#E6F598", "#ABDDA4",
+              "#66C2A5", "#3288BD", "#5E4FA2")
+

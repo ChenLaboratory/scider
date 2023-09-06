@@ -6,9 +6,8 @@
 #' @param cutoff A numeric scalar specifying the density cutoff.
 #'
 #' @return An sf object of the contour region of the specified level. 
-#' @export
-#'
-#' @examples
+#' 
+#' 
 contour2sf <- function(spe, contour, coi, cutoff) {
   
   if(!requireNamespace("sf",quietly=TRUE)) stop("sf required but is not available")

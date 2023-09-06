@@ -7,7 +7,6 @@
 #' @param id A character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
 #' @param sub.level Character vector. Subset on specific level.
-#' @param seed Integer. Random seed for computing dinstinct color if level number is larger than 11.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
 #' @return A ggplot object.
@@ -29,8 +28,7 @@ plotContour <- function(spe,
                         coi, 
                         overlay = c("cell","density"),
                         id = "cell_type", 
-                        sub.level = NULL,
-                        seed = 30, ...){
+                        sub.level = NULL, ...){
   
   if (length(coi) > 1L) {
     stop("coi must be of length 1!")
@@ -64,12 +62,7 @@ plotContour <- function(spe,
     stop("Overlay should either be cell or density.")
   }
   
-  if(length(unique(contour_data$level)) <= 11){
-    col.p <- RColorBrewer::brewer.pal(11, "Spectral")
-  } else {
-    set.seed(seed)
-    col.p <- randomcoloR::distinctColorPalette(length(unique(contour_data$level)))
-  }
+  col.spec <- colorRampPalette(col.spec)(length(unique(contour_data$level)))
   
   if(is.null(sub.level)){
     suppressMessages(
@@ -77,7 +70,7 @@ plotContour <- function(spe,
         ggplot2::geom_path(data = contour_data, 
                            ggplot2::aes(x = x, y = y, group = group, 
                                         color = level)) +
-        scale_color_manual(name = "Density level", values = rev(col.p))
+        scale_color_manual(name = "Density level", values = rev(col.spec))
     )
   } else {
     if(length(sub.level) == 1L & sub.level %in% contour_data$level){

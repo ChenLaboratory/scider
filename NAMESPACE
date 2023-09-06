@@ -2,12 +2,9 @@
 
 export(allocateCells)
 export(cellsInRegion)
-export(computeDensity)
-export(contour2sf)
 export(corDensity)
 export(findROI)
 export(getContour)
-export(grid2sf)
 export(gridDensity)
 export(plotCellCompo)
 export(plotContour)

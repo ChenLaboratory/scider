@@ -27,7 +27,6 @@ Imports:
     ggplot2,
     stats,
     randomcoloR,
-    RColorBrewer,
     pheatmap,
     plotly,
     shiny,

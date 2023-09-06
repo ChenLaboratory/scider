@@ -3,7 +3,6 @@
 #' @param spe A SpatialExperiment object.
 #'
 #' @return List of ROIs saved as sf objects. 
-#' @export
 #'
 #' @examples
 #' 

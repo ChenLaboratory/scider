@@ -48,7 +48,6 @@ devtools::install_github("ChenLaboratory/scider")
 library(scider)
 library(SpatialExperiment)
 library(patchwork)
-library(sf)
 ```
 
 
@@ -203,7 +202,7 @@ This can be done with function `corrDensity`, by setting the `celltype1` and `ce
 
 
 ```{r}
-model_result <- corrDensity(spe)
+model_result <- corDensity(spe)
 ```
 
 We can see the correlation between breast cancer and fibroblasts in each ROI.
@@ -222,15 +221,15 @@ Or, we can visualise the statistics between cell types using function `plotModSt
 
 
 ```{r}
-plotModStat(model_result)
+plotCorHeatmap(model_result)
 ```
 
 
 
 ```{r}
-model_result2 <- corrDensity(spe, by.roi = FALSE)
+model_result2 <- corDensity(spe, by.roi = FALSE)
 
-plotModStat(model_result2)
+plotCorHeatmap(model_result2)
 ```
 
 
@@ -283,7 +282,8 @@ plotSpatial(spe, color = cell_type == "Breast cancer") +
 
 
 ```{r}
-plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5)
+plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5) +
+  scale_color_manual(values = rev(RColorBrewer::brewer.pal(11, "Spectral")))
 ```
 
 We can visualise cell type composition per level.
@@ -294,76 +294,8 @@ plotCellCompo(spe, coi = "Breast cancer")
 
 
 ```{r}
-plotCellCompo(spe, coi = "Breast cancer", per_roi = TRUE)
+plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
 ```
-
-## Comparison between T cells from low bc level and T cells from high bc level
-
-Excluding level 0.
-
-```{r}
-
-spe2 <- spe[, colData(spe)$breast_cancer_contour != "0"]
-
-colData(spe2)$Group <- ifelse(colData(spe2)$breast_cancer_contour %in% as.character(seq(4)),
-                              "low", "high")
-
-
-cdat <- as.data.frame(colData(spe2))[,c("cell_type","at_rois","Group")] 
-
-cdat <- as.data.frame(apply(cdat, 2, function(x) gsub(" ","_",x)))
-
-```
-
-
-```{r}
-factors <- c("cell_type","at_rois","Group")
-
-f <- as.formula(paste("~ 0 +", paste(factors, collapse = ":")))
-
-mm <- model.matrix(f, data = cdat)
-
-n <- colnames(mm)
-for(i in factors){
-  n <- gsub(i,"",n)
-}
-
-n
-
-colnames(mm) <- n
-
-all(rowSums(mm) == 1)
-
-head(mm)[,1:5]
-```
-
-```{r}
-em <- assay(spe2, 1)
-```
-
-
-```{r}
-dim(em)[2] == dim(mm)[1]
-```
-
-
-```{r}
-psm <- em %*% mm
-```
-
-```{r}
-dim(psm)
-```
-
-
-```{r}
-data.frame("sample_id" = paste0("Ps", seq(dim(psm)[2])),
-           "id" = colnames(psm))
-```
-
-
-
-
 
 
 
