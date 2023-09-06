@@ -91,9 +91,13 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
     defaultmap$shape <- 16
     defaultmap$alpha <- 0.8
     
+    set.seed(100)
+    col.p <- randomcoloR::distinctColorPalette(length(unique(plotdf$component)))
+    
     p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, color = component, !!!aesmap)) +
       do.call(ggplot2::geom_point, defaultmap) +
-      theme_classic()
+      theme_classic() +
+      scale_color_manual(name = "ROI", values = col.p)
   }
   
   if (fit == "spline"){
