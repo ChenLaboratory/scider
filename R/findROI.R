@@ -53,11 +53,11 @@ findROI <- function(spe, coi,
   
   if (!diag.nodes) {
     adj_edges <- do.call(rbind, lapply(1:nrow(grid_data_filter), function(ii) {
-      adjacent_grids(grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])
+      adjacent_grids(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])
     }))
   } else {
     adj_edges <- do.call(rbind, lapply(1:nrow(grid_data_filter), function(ii) {
-      adjacent_grids_with_corner(grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])
+      adjacent_grids_with_corner(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])
     }))
   }
   
@@ -108,7 +108,7 @@ findROI <- function(spe, coi,
 
 
 # get edge list
-adjacent_grids <- function(node_xx, node_yy) {
+adjacent_grids <- function(spe, node_xx, node_yy) {
   center_cell <- paste(node_xx, node_yy, sep = "-")
   cells <- paste(c(node_xx, node_xx, pmax(node_xx - 1, 1), 
                    pmin(node_xx + 1, spe@metadata$grid_info$dims[1])), 
@@ -120,7 +120,7 @@ adjacent_grids <- function(node_xx, node_yy) {
 }
 
 
-adjacent_grids_with_corner <- function (node_xx, node_yy) {
+adjacent_grids_with_corner <- function (spe, node_xx, node_yy) {
   center_cell <- paste(node_xx, node_yy, sep = "-")
   all_xx <- c(pmax(node_xx - 1, 1), node_xx, pmin(node_xx + 1, spe@metadata$grid_info$dims[1]))
   all_xx <- all_xx[!duplicated(all_xx)]

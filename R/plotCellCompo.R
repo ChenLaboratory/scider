@@ -54,7 +54,7 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
   } else {
     dat <- dat[dat[["roi"]] != "no_roi",]
     
-    grouped_data <- split(dat, as.character(dat[["at_rois"]]))
+    grouped_data <- split(dat, as.character(dat[["roi"]]))
     
     proportions_by_roi <- lapply(grouped_data, function(group) {
       calc_proportions(group, level.name, id, by.roi)
@@ -78,7 +78,7 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
     return(p)
   } else {
     p <- p +
-      facet_wrap(~at_rois)
+      facet_wrap(~roi)
     
     return(p)
   }
@@ -90,7 +90,7 @@ calc_proportions <- function(x, level.name, id, by.roi = FALSE) {
   colnames(cell_prop) <- c(level.name, id, "Proportion")
   cell_prop <- cell_prop[!is.na(cell_prop$Proportion),]
   if(isTRUE(by.roi)){
-    cell_prop$at_rois <- unique(x[["at_rois"]])
+    cell_prop$roi <- unique(x[["roi"]])
   }
   return(cell_prop)
 }

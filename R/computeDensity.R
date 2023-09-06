@@ -16,7 +16,6 @@
 #' @param ylim The range of the y-coordinates of the image.
 #'
 #' @return Output from spatstat.explore::density.ppp.
-#' @export
 #'
 #' @examples
 #' 

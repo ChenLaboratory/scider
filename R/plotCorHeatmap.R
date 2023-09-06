@@ -42,6 +42,7 @@ plotCorHeatmap <- function(model.result,
   }
   
   if (all(cell.type != "all")){
+    cell.type <- janitor::make_clean_names(cell.type, case = "sentence")
     if (length(cell.type) < 2L){
       stop("cell.type must be either all or length larger than 1.")
     }
