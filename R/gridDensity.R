@@ -32,18 +32,18 @@ gridDensity <- function(spe,
                         scale = 1e4, 
                         ngrid.x = 100, ngrid.y = NULL, 
                         grid.length.x = NULL, grid.length.y = NULL
-                        ) {
+) {
   
   if(! id %in% colnames(colData(spe))) 
     stop(paste(id, "is not a column of the colData."))
-
+  
   if(is.null(coi))
     coi <- names(table(colData(spe)[[id]]))
   
   if(length(which(! coi %in% names(table(colData(spe)[[id]])))) > 0L)
     stop(paste(paste0(coi[which(! coi %in% names(table(colData(spe)[[id]])))], 
                       collapse = ", "), "not found in data!", sep = " "))
-
+  
   coi_clean <- janitor::make_clean_names(coi)
   
   # define canvas
@@ -51,17 +51,19 @@ gridDensity <- function(spe,
   coord <- spatialCoords(spe)
   xlim <- c(min(coord[, "x_centroid"]), max(coord[, "x_centroid"]))
   ylim <- c(min(coord[, "y_centroid"]), max(coord[, "y_centroid"]))
-
+  
   # Calculate bandwidth
   pts <- spatstat.geom::ppp(coord[,1], coord[,2], xlim, ylim)
+  if(is.null(bandwidth) & !is.null(spe@metadata$grid_info$bandwidth))
+    bandwidth <- spe@metadata$grid_info$bandwidth
   if(is.null(bandwidth))
     bandwidth <- spatstat.explore::bw.diggle(pts) * 4
   
   if(is.null(spe@metadata)) spe@metadata <- list()
-
+  
   # Reset when the function is rerun again
   spe@metadata$grid_density <- spe@metadata$grid_info <- NULL
-
+  
   # compute density for each cell type and then, filter
   for(ii in 1:length(coi)){
     
@@ -71,10 +73,10 @@ gridDensity <- function(spe,
     
     # compute density
     out <- computeDensity(obj, mode = "pixels", kernel = kernel, 
-                           bandwidth = bandwidth, scale = scale, 
-                           ngrid.x = ngrid.x, ngrid.y = ngrid.y, 
-                           grid.length.x = grid.length.x, grid.length.y = grid.length.y,
-                           xlim = xlim, ylim = ylim)
+                          bandwidth = bandwidth, scale = scale, 
+                          ngrid.x = ngrid.x, ngrid.y = ngrid.y, 
+                          grid.length.x = grid.length.x, grid.length.y = grid.length.y,
+                          xlim = xlim, ylim = ylim)
     RES <- out$grid_density
     
     ngrid.x <- out$density_est$dim[2]
@@ -85,7 +87,7 @@ gridDensity <- function(spe,
       spe@metadata$grid_density$node_x <- rep(1:ngrid.x, each = ngrid.y) # horizontal ind
       spe@metadata$grid_density$node_y <- rep(1:ngrid.y, ngrid.x) # vertical ind
       spe@metadata$grid_density$node <- paste(spe@metadata$grid_density$node_x,
-                                               spe@metadata$grid_density$node_y, sep = "-")
+                                              spe@metadata$grid_density$node_y, sep = "-")
     }
     spe@metadata$grid_density <- cbind(spe@metadata$grid_density, RES$density)
     colnames(spe@metadata$grid_density)[5 + ii] <- paste("density", coi_clean[ii], sep="_")
