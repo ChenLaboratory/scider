@@ -54,8 +54,10 @@ gridDensity <- function(spe,
   
   # Calculate bandwidth
   pts <- spatstat.geom::ppp(coord[,1], coord[,2], xlim, ylim)
-  if(is.null(bandwidth) & !is.null(spe@metadata$grid_info$bandwidth))
+  if(is.null(bandwidth) & !is.null(spe@metadata$grid_info$bandwidth)) {
     bandwidth <- spe@metadata$grid_info$bandwidth
+    message("Reusing existing bandwidth for kernel smoothing!")
+  }
   if(is.null(bandwidth))
     bandwidth <- spatstat.explore::bw.diggle(pts) * 4
   

@@ -10,7 +10,6 @@ plotContour(
   overlay = c("cell", "density"),
   id = "cell_type",
   sub.level = NULL,
-  seed = 30,
   ...
 )
 }
@@ -26,8 +25,6 @@ By default is cell.}
 Set to cell_type by default.}
 
 \item{sub.level}{Character vector. Subset on specific level.}
-
-\item{seed}{Integer. Random seed for computing dinstinct color if level number is larger than 11.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 }
