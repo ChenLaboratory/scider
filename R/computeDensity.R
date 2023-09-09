@@ -14,6 +14,8 @@
 #' @param grid.length.y Grid length in the y-direction.
 #' @param xlim The range of the x-coordinates of the image.
 #' @param ylim The range of the y-coordinates of the image.
+#' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge 
+#' correction. See spatstat.explore::density.ppp() for details. 
 #'
 #' @return Output from spatstat.explore::density.ppp.
 #'
@@ -28,7 +30,7 @@ computeDensity <- function(spe, mode = "pixels",
                            bandwidth = NULL, weights = NULL, scale=1e4,
                            ngrid.x = 100, ngrid.y = NULL, 
                            grid.length.x = NULL, grid.length.y = NULL, 
-                           xlim = NULL, ylim = NULL){
+                           xlim = NULL, ylim = NULL, diggle = FALSE){
 
   
   if(!mode %in% c("points","pixels"))
@@ -64,7 +66,8 @@ computeDensity <- function(spe, mode = "pixels",
 
   density_est <- spatstat.explore::density.ppp(y, sigma = bandwidth,
                                                kernel = kernel, weights = weights,
-                                               at = mode, dimyx = c(ngrid.y, ngrid.x))
+                                               at = mode, dimyx = c(ngrid.y, ngrid.x), 
+                                               diggle = diggle)
   if(mode == "points"){
     return(density_est)
   } else if (mode == "pixels"){

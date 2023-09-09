@@ -134,7 +134,6 @@ pd_list <- list()
 for(i in seq(4)){
   pd_list[[i]] <- plotDensity(spe, coi = coi[i])
 }
-
 ```
 
 
@@ -150,10 +149,10 @@ After obtaining grid-based density for each COI, we can then detect regions-of-i
 
 To detect ROIs automatically, we can use the function `findROI`.
 
-The detected ROIs are saved in the metadat of the SpatialExperiment object.
+The detected ROIs are saved in the metadata of the SpatialExperiment object.
 
 ```{r}
-spe <- findROI(spe, coi = coi)
+spe <- findROI(spe, coi = coi, sequential.roi.name = TRUE, steps = 5)
 
 spe@metadata$roi
 ```

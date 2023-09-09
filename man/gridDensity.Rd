@@ -14,7 +14,8 @@ gridDensity(
   ngrid.x = 100,
   ngrid.y = NULL,
   grid.length.x = NULL,
-  grid.length.y = NULL
+  grid.length.y = NULL,
+  diggle = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 \item{grid.length.x}{Grid length in the x-direction.}
 
 \item{grid.length.y}{Grid length in the y-direction.}
+
+\item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
+correction. See spatstat.explore::density.ppp() for details.}
 }
 \value{
 A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info

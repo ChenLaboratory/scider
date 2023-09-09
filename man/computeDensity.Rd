@@ -16,7 +16,8 @@ computeDensity(
   grid.length.x = NULL,
   grid.length.y = NULL,
   xlim = NULL,
-  ylim = NULL
+  ylim = NULL,
+  diggle = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 \item{xlim}{The range of the x-coordinates of the image.}
 
 \item{ylim}{The range of the y-coordinates of the image.}
+
+\item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
+correction. See spatstat.explore::density.ppp() for details.}
 }
 \value{
 Output from spatstat.explore::density.ppp.

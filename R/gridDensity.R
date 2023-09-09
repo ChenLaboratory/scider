@@ -12,7 +12,9 @@
 #' @param ngrid.y Number of grids in the y-direction. 
 #' @param grid.length.x Grid length in the x-direction.
 #' @param grid.length.y Grid length in the y-direction.
-#'
+#' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge 
+#' correction. See spatstat.explore::density.ppp() for details. 
+#' 
 #' @return A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info
 #' 
 #' @export
@@ -31,7 +33,8 @@ gridDensity <- function(spe,
                         bandwidth = NULL,
                         scale = 1e4, 
                         ngrid.x = 100, ngrid.y = NULL, 
-                        grid.length.x = NULL, grid.length.y = NULL
+                        grid.length.x = NULL, grid.length.y = NULL, 
+                        diggle = FALSE
 ) {
   
   if(! id %in% colnames(colData(spe))) 
@@ -78,7 +81,7 @@ gridDensity <- function(spe,
                           bandwidth = bandwidth, scale = scale, 
                           ngrid.x = ngrid.x, ngrid.y = ngrid.y, 
                           grid.length.x = grid.length.x, grid.length.y = grid.length.y,
-                          xlim = xlim, ylim = ylim)
+                          xlim = xlim, ylim = ylim, diggle = diggle)
     RES <- out$grid_density
     
     ngrid.x <- out$density_est$dim[2]
