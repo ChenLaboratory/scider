@@ -152,7 +152,7 @@ To detect ROIs automatically, we can use the function `findROI`.
 The detected ROIs are saved in the metadata of the SpatialExperiment object.
 
 ```{r}
-spe <- findROI(spe, coi = coi, sequential.roi.name = TRUE, steps = 5)
+spe <- findROI(spe, coi = coi)
 
 spe@metadata$roi
 ```
