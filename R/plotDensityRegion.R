@@ -4,7 +4,6 @@
 #' @param coi A character vector of length 1 of the cell type of interest (COIs).
 #' @param id A character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
-#' @param contour Name in metadata. 
 #' @param overlay Character vector. Either plot overlay on density or cells. 
 #' @param sub.level Numeric vector of length 1 or 2, identifies which density level
 #' to plot. When length is 1, plot the density region above this level. When 
@@ -15,7 +14,6 @@
 plotDensityRegion <- function(spe, 
                               coi, 
                               id = "cell_type", 
-                              contour, 
                               overlay = c("density", "cell"), 
                               sub.level) {
   if (length(coi) > 1L) {

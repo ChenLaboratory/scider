@@ -208,34 +208,36 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   if (any(cline_touches_bound)) {
     canvas_minus_areas <- sf::st_difference(canvas_sf, sf::st_union(areas))
     if (!is.null(areas_down)) canvas_minus_areas <- sf::st_difference(canvas_minus_areas, sf::st_union(areas_down))
-    # if there are any other isolines crossing
-    all_clines_sf_collapsed <- do.call(rbind, lapply(all_clines_sf, sf::st_sf))
-    whether_cross <- c(sf::st_crosses(all_clines_sf_collapsed, sf::st_union(canvas_minus_areas), sparse = FALSE))
-    if (any(whether_cross)) {
-      sub_region_ind <- sf::st_intersects(canvas_minus_areas, all_clines_sf_collapsed[whether_cross, ], sparse = FALSE)
-      sub_region_ind <- which(rowSums(sub_region_ind) > 0L)
-      subregions <- lapply(sub_region_ind, function(subr) {
-        lwgeom::st_split(canvas_minus_areas[sub_region_ind, ], 
-                         sf::st_combine(all_clines_sf_collapsed[whether_cross, ])) |>
-          sf::st_collection_extract("POLYGON")
-      })
-      canvas_minus_areas <- canvas_minus_areas[-sub_region_ind, ]
-      canvas_minus_areas <- rbind(do.call(rbind, subregions), canvas_minus_areas)
-    }
-    # check if any ups
-    canvas_minus_areas_code <- sapply(1:nrow(canvas_minus_areas), function(xx) {
-      xx <- canvas_minus_areas[xx, ]
-      inds <- sf::st_intersects(xx, grids_pts_sf)
-      if (length(unlist(inds)) == 0L) {
-        inds <- sf::st_intersects(sf::st_buffer(xx, dist = mean(spe@metadata$grid_info$xstep, spe@metadata$grid_info$ystep)/2), grids_pts_sf)
+    if (nrow(canvas_minus_areas) > 0L) {
+      # if there are any other isolines crossing
+      all_clines_sf_collapsed <- do.call(rbind, lapply(all_clines_sf, sf::st_sf))
+      whether_cross <- c(sf::st_crosses(all_clines_sf_collapsed, sf::st_union(canvas_minus_areas), sparse = FALSE))
+      if (any(whether_cross)) {
+        sub_region_ind <- sf::st_intersects(canvas_minus_areas, all_clines_sf_collapsed[whether_cross, ], sparse = FALSE)
+        sub_region_ind <- which(rowSums(sub_region_ind) > 0L)
+        subregions <- lapply(sub_region_ind, function(subr) {
+          lwgeom::st_split(canvas_minus_areas[sub_region_ind, ], 
+                           sf::st_combine(all_clines_sf_collapsed[whether_cross, ])) |>
+            sf::st_collection_extract("POLYGON")
+        })
+        canvas_minus_areas <- canvas_minus_areas[-sub_region_ind, ]
+        canvas_minus_areas <- rbind(do.call(rbind, subregions), canvas_minus_areas)
       }
-      avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$density_coi_average[ii]))
-      avglevel <- findInterval(avglevel, levs, rightmost.closed = TRUE)
-      return(avglevel)
-    })
-    if (any(canvas_minus_areas_code >= lev_code)) {
-      canvas_minus_areas_still_up <- canvas_minus_areas[canvas_minus_areas_code >= lev_code, ]
-      areas <- sf::st_union(areas, canvas_minus_areas_still_up)
+      # check if any ups
+      canvas_minus_areas_code <- sapply(1:nrow(canvas_minus_areas), function(xx) {
+        xx <- canvas_minus_areas[xx, ]
+        inds <- sf::st_intersects(xx, grids_pts_sf)
+        if (length(unlist(inds)) == 0L) {
+          inds <- sf::st_intersects(sf::st_buffer(xx, dist = mean(spe@metadata$grid_info$xstep, spe@metadata$grid_info$ystep)/2), grids_pts_sf)
+        }
+        avglevel <- sapply(inds, function(ii) mean(grids_pts_sf$density_coi_average[ii]))
+        avglevel <- findInterval(avglevel, levs, rightmost.closed = TRUE)
+        return(avglevel)
+      })
+      if (any(canvas_minus_areas_code >= lev_code)) {
+        canvas_minus_areas_still_up <- canvas_minus_areas[canvas_minus_areas_code >= lev_code, ]
+        areas <- sf::st_union(areas, canvas_minus_areas_still_up)
+      }
     }
   }
   

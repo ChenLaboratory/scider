@@ -8,7 +8,6 @@ plotDensityRegion(
   spe,
   coi,
   id = "cell_type",
-  contour,
   overlay = c("density", "cell"),
   sub.level
 )
@@ -20,8 +19,6 @@ plotDensityRegion(
 
 \item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
 Set to cell_type by default.}
-
-\item{contour}{Name in metadata.}
 
 \item{overlay}{Character vector. Either plot overlay on density or cells.}
 
