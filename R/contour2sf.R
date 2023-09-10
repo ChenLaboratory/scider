@@ -1,12 +1,11 @@
 #' Draw a contour region on some density level
 #'
 #' @param spe A SpatialExperiment object.
-#' @param contour Name in metadata
+#' @param contour Name in metadata.
 #' @param coi A character vector of cell types of interest (COIs).
 #' @param cutoff A numeric scalar specifying the density cutoff.
 #'
 #' @return An sf object of the contour region of the specified level. 
-#' 
 #' 
 contour2sf <- function(spe, contour, coi, cutoff) {
   

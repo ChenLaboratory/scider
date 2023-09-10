@@ -9,7 +9,7 @@ contour2sf(spe, contour, coi, cutoff)
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{contour}{Name in metadata}
+\item{contour}{Name in metadata.}
 
 \item{coi}{A character vector of cell types of interest (COIs).}
 
