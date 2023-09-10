@@ -48,6 +48,11 @@ plotDensityRegion <- function(spe,
     overlay <- "density"
   }
   
+  xlim <- spe@metadata$grid_info$xlim
+  ylim <- spe@metadata$grid_info$ylim
+  plot.xlim <- xlim + c(-1e-10, 1e-10)
+  plot.ylim <- ylim + c(-1e-10, 1e-10)
+  
   if(overlay == "cell"){
     sub <- grep(coi, colData(spe)[[id]])
     p <- ggplot() +
@@ -93,7 +98,9 @@ plotDensityRegion <- function(spe,
     }
   }
   
-  p <- p + labs(x = "x", y = "y")
+  p <- p +
+    scale_x_continuous(limits = plot.xlim) +
+    scale_y_continuous(limits = plot.ylim) + labs(x = "x", y = "y")
   
   return(p)
   
