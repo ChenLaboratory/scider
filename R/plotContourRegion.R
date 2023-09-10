@@ -11,7 +11,7 @@
 #'
 #' @return A ggplot object. 
 #' 
-plotDensityRegion <- function(spe, 
+plotContourRegion <- function(spe, 
                               coi, 
                               id = "cell_type", 
                               overlay = c("density", "cell"), 
