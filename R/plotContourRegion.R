@@ -52,6 +52,8 @@ plotContourRegion <- function(spe,
   ylim <- spe@metadata$grid_info$ylim
   plot.xlim <- xlim + c(-1e-10, 1e-10)
   plot.ylim <- ylim + c(-1e-10, 1e-10)
+  w <- spe@metadata$grid_info$xstep
+  h <- spe@metadata$grid_info$ystep
   
   if(overlay == "cell"){
     sub <- grep(coi, colData(spe)[[id]])
@@ -74,7 +76,7 @@ plotContourRegion <- function(spe,
       lev_name <- paste0(sub.level, collapse = "-")
     }
     p <- ggplot() +
-      geom_tile(data = dens_df[kp_grids, ], aes(x = x_grid, y = y_grid), fill = "lightgrey") +
+      geom_tile(data = dens_df[kp_grids, ], aes(x = x_grid, y = y_grid, width = w, height = h), fill = "lightgrey") +
       geom_path(data = contour_data[kp_isolines, ], aes(x = x, y = y, group = group)) + 
       ggtitle(paste("Level = ", lev_name, sep = ""))
   } else {

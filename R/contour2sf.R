@@ -99,7 +99,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     }
     
     if (!is.null(area_up)) {
-      area_up <- area_up[!is.na(st_dimension(area_up)), ]
+      area_up <- area_up[!is.na(sf::st_dimension(area_up)), ]
       if (nrow(area_up) == 0L) area_up <- NULL
     }
     if (!is.null(area_down)) {
@@ -156,7 +156,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
   # if there are clines cross parallel boundaries of the canvas
   if (!is.null(bbox_parabound)) {
     # get regions outside the bbox(es)
-    # bbox_parabound <- sf::st_combine(bbox_parabound)
+    bbox_parabound <- sf::st_union(bbox_parabound)
     stripes <- sf::st_difference(canvas_sf, bbox_parabound)
     if (nrow(stripes) > 0L) {
       stripes <- sf::st_cast(stripes, to = "POLYGON")
