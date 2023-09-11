@@ -26,7 +26,6 @@ Imports:
     lwgeom, 
     ggplot2,
     stats,
-    randomcoloR,
     pheatmap,
     plotly,
     shiny,

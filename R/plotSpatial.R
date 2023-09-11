@@ -3,7 +3,6 @@
 #' @param spe A SpatialExperiment object.
 #' @param reverseY Reverse y coordinates.
 #' @param n Integer value. The number of distinct color to be generated, default is 30.
-#' @param seed Integer. Used for random color selection.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
 #' @return A ggplot object.
@@ -15,7 +14,7 @@
 #'
 #' plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
 #' 
-plotSpatial <- function(spe, reverseY = FALSE, n = 30, seed = 66,...){
+plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
   
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
   
@@ -62,10 +61,8 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30, seed = 66,...){
   }
   
   p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
-  
-  set.seed(seed)
-  col.p <- randomcoloR::distinctColorPalette(n)
-  
+  col.p <- selectColor(n)
+
   p <- p +
     do.call(ggplot2::geom_point, defaultmap) +
     scale_color_manual(values=col.p) +

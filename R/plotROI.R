@@ -3,7 +3,6 @@
 #' @param spe A SpatialExperiment object.
 #' @param id Character. The name of the column of colData(spe) containing the cell type identifiers.
 #' Set to cell_type by default.
-#' @param k Integer value. The number of distinct color to be generated, default is 30.
 #' @param show.legend Logical. Show legend or not.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()` for point.
 #'
@@ -23,7 +22,7 @@
 #' plotROI(spe, size = 0.3, alpha = 0.2)
 #' 
 plotROI <- function(spe, 
-                    id = "cell_type", k = 30, 
+                    id = "cell_type", 
                     show.legend = FALSE, ...){
 
   if (is.null(spe@metadata$roi))
@@ -45,9 +44,9 @@ plotROI <- function(spe,
   dat <- as.data.frame(spe@colData) |>
     cbind(posdat)
   
-  set.seed(100)
-  col.p <- randomcoloR::distinctColorPalette(k)
-  
+  nROIs <- nlevels(rois$component)
+  col.p <- selectColor(nROIs)
+
   xlim <- spe@metadata$grid_info$xlim
   ylim <- spe@metadata$grid_info$ylim
   plot.xlim <- xlim + c(-1e-10, 1e-10)
@@ -77,7 +76,7 @@ plotROI <- function(spe,
     #scale_fill_manual(values = col.p) +
     annotate("text", x = rois_center$X, y = rois_center$Y, 
     label = rois_center$component, color = "black", fontface = 2) +
-    scale_fill_manual(values = rep(col.p[1:10], 100)) +
+    scale_fill_manual(values = col.p) +
     scale_x_continuous(limits = plot.xlim) +
     scale_y_continuous(limits = plot.ylim)
   
