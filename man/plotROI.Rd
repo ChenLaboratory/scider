@@ -4,15 +4,13 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", k = 30, show.legend = FALSE, ...)
+plotROI(spe, id = "cell_type", show.legend = FALSE, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{id}{Character. The name of the column of colData(spe) containing the cell type identifiers.
 Set to cell_type by default.}
-
-\item{k}{Integer value. The number of distinct color to be generated, default is 30.}
 
 \item{show.legend}{Logical. Show legend or not.}
 

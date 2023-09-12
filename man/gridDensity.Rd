@@ -10,7 +10,6 @@ gridDensity(
   id = "cell_type",
   kernel = "gaussian",
   bandwidth = NULL,
-  scale = 10000,
   ngrid.x = 100,
   ngrid.y = NULL,
   grid.length.x = NULL,
@@ -30,8 +29,6 @@ Set to cell_type by default.}
 
 \item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
 selection using cross-validation using function spatstat.explore::bw.diggle.}
-
-\item{scale}{A munmeric vector to scale the density values.}
 
 \item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
 

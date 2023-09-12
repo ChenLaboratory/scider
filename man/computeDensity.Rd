@@ -10,7 +10,6 @@ computeDensity(
   kernel = "gaussian",
   bandwidth = NULL,
   weights = NULL,
-  scale = 10000,
   ngrid.x = 100,
   ngrid.y = NULL,
   grid.length.x = NULL,
@@ -32,8 +31,6 @@ density at a grid pixel location or at at point.}
 selection using cross-validation using function spatstat.explore::bw.diggle.}
 
 \item{weights}{Optional weights to be attached to the points.}
-
-\item{scale}{A munmeric vector to scale the density values.}
 
 \item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
 
