@@ -7,7 +7,6 @@
 #' @param kernel The smoothing kernel. Options are "gaussian", "epanechnikov", "quartic" or "disc".
 #' @param bandwidth The smoothing bandwidth. By default performing automatic bandwidth
 #' selection using cross-validation using function spatstat.explore::bw.diggle.
-#' @param scale A munmeric vector to scale the density values. 
 #' @param ngrid.x Number of grids in the x-direction. Default to 100.
 #' @param ngrid.y Number of grids in the y-direction. 
 #' @param grid.length.x Grid length in the x-direction.
@@ -31,7 +30,6 @@ gridDensity <- function(spe,
                         id = "cell_type",
                         kernel = "gaussian",
                         bandwidth = NULL,
-                        scale = 1e4, 
                         ngrid.x = 100, ngrid.y = NULL, 
                         grid.length.x = NULL, grid.length.y = NULL, 
                         diggle = FALSE
@@ -78,7 +76,7 @@ gridDensity <- function(spe,
     
     # compute density
     out <- computeDensity(obj, mode = "pixels", kernel = kernel, 
-                          bandwidth = bandwidth, scale = scale, 
+                          bandwidth = bandwidth, 
                           ngrid.x = ngrid.x, ngrid.y = ngrid.y, 
                           grid.length.x = grid.length.x, grid.length.y = grid.length.y,
                           xlim = xlim, ylim = ylim, diggle = diggle)

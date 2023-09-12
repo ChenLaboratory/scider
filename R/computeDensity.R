@@ -7,7 +7,6 @@
 #' @param bandwidth The smoothing bandwidth. By default performing automatic bandwidth
 #' selection using cross-validation using function spatstat.explore::bw.diggle.
 #' @param weights Optional weights to be attached to the points.
-#' @param scale A munmeric vector to scale the density values. 
 #' @param ngrid.x Number of grids in the x-direction. Default to 100.
 #' @param ngrid.y Number of grids in the y-direction.
 #' @param grid.length.x Grid length in the x-direction.
@@ -27,7 +26,7 @@
 #' 
 computeDensity <- function(spe, mode = "pixels", 
                            kernel = "gaussian", 
-                           bandwidth = NULL, weights = NULL, scale=1e4,
+                           bandwidth = NULL, weights = NULL, 
                            ngrid.x = 100, ngrid.y = NULL, 
                            grid.length.x = NULL, grid.length.y = NULL, 
                            xlim = NULL, ylim = NULL, diggle = FALSE){
@@ -72,7 +71,7 @@ computeDensity <- function(spe, mode = "pixels",
     return(density_est)
   } else if (mode == "pixels"){
     
-    grid_density <- density_est$v * scale
+    grid_density <- density_est$v * density_est$xstep * density_est$ystep
     rownames(grid_density) <- density_est$yrow
     colnames(grid_density) <- density_est$xcol
     
