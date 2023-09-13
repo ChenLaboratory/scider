@@ -55,22 +55,27 @@ plotContourRegion <- function(spe,
   w <- spe@metadata$grid_info$xstep
   h <- spe@metadata$grid_info$ystep
   
+  if (length(sub.level) == 1L) {
+    density_at_level <- unique(contour_data$cutoff[contour_data$level == sub.level])
+  }
+  if (length(sub.level) == 2L) {
+    density_at_level <- unique(contour_data$cutoff[contour_data$level %in% sub.level])
+    density_at_level <- sort(density_at_level, decreasing = FALSE)
+  }
+  
   if(overlay == "cell"){
     sub <- grep(coi, colData(spe)[[id]])
     p <- ggplot() +
-      geom_point(data = as.data.frame(spatialCoords(spe[, sub])), aes(x = x_centroid, y = y_centroid), size = 0.02, stroke = 0.2)
+      geom_point(data = as.data.frame(spatialCoords(spe[, sub])), aes(x = x_centroid, y = y_centroid), size = 0.02, stroke = 0.2, alpha = 0.4)
   } else if (overlay == "density"){
     dens_df <- as.data.frame(spe@metadata$grid_density)
     colnames(dens_df)[which(colnames(dens_df) == coi_clean_density)] <- "density"
     if (length(sub.level) == 1L) {
-      density_at_level <- unique(contour_data$cutoff[contour_data$level == sub.level])
       kp_grids <- dens_df$density >= density_at_level
       kp_isolines <- contour_data$level == sub.level
       lev_name <- sub.level
     }
     if (length(sub.level) == 2L) {
-      density_at_level <- unique(contour_data$cutoff[contour_data$level %in% sub.level])
-      density_at_level <- sort(density_at_level, decreasing = FALSE)
       kp_grids <- dens_df$density >= density_at_level[1] & dens_df$density < density_at_level[2]
       kp_isolines <- contour_data$level %in% sub.level
       lev_name <- paste0(sub.level, collapse = "-")
