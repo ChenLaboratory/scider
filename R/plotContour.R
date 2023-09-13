@@ -57,7 +57,7 @@ plotContour <- function(spe,
     sub <- grep(coi, colData(spe)[[id]])
     p <- plotSpatial(spe[, sub], ...)
   } else if (overlay == "density"){
-    p <- plotDensity(spe, coi = coi)
+    p <- plotDensity(spe, coi = coi, ...)
   } else {
     stop("Overlay should either be cell or density.")
   }
