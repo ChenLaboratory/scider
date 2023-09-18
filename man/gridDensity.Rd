@@ -20,12 +20,14 @@ gridDensity(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs). Default to all cell types.}
+\item{coi}{A character vector of cell types of interest (COIs).
+Default to all cell types.}
 
-\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
-Set to cell_type by default.}
+\item{id}{A character. The name of the column of colData(spe) containing
+the cell type identifiers. Set to cell_type by default.}
 
-\item{kernel}{The smoothing kernel. Options are "gaussian", "epanechnikov", "quartic" or "disc".}
+\item{kernel}{The smoothing kernel. Options are "gaussian",
+"epanechnikov", "quartic" or "disc".}
 
 \item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
 selection using cross-validation using function spatstat.explore::bw.diggle.}
@@ -42,7 +44,9 @@ selection using cross-validation using function spatstat.explore::bw.diggle.}
 correction. See spatstat.explore::density.ppp() for details.}
 }
 \value{
-A SpatialExperiment object. Grid density estimates for all cell type of interest are stored in spe@metadata$grid_density. Grid information is stored in spe@metadata$grid_info
+A SpatialExperiment object. Grid density estimates for
+all cell type of interest are stored in spe@metadata$grid_density.
+Grid information is stored in spe@metadata$grid_info
 }
 \description{
 Perform kernel density estimation on SpatialExperiment for cell types of interest

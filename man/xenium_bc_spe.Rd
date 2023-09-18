@@ -11,6 +11,9 @@ A SpatialExperiment object
 \usage{
 data("xenium_bc_spe")
 }
+\value{
+A SpatialExperiment object
+}
 \description{
 scider-package has 1 datasets: \itemize{
 \item xenium_bc_spe Example subset of a Xenium breast cancer dataset,

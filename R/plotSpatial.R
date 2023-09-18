@@ -2,35 +2,35 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param reverseY Reverse y coordinates.
-#' @param n Integer value. The number of distinct color to be generated, default is 30.
+#' @param n Integer value. The number of distinct color to be generated,
+#' default is 30.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
 #' @return A ggplot object.
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' data("xenium_bc_spe")
 #'
 #' plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
-#' 
-plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
-  
+#'
+plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
-  
+
   colnames(toplot) <- c("x", "y")
-  
+
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
-  
-  if("cell_id" %in% colnames(cdata)){
+
+  if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
-  
+
   toplot <- cbind(toplot, cdata) |>
     rownames2col("cell_id")
-  
+
   aesmap <- rlang::enquos(...)
-  
+
   # split aes params into those that are not aes i.e. static parametrisation
   if (length(aesmap) > 0) {
     is_aes <- vapply(aesmap, rlang::quo_is_symbolic, FUN.VALUE = logical(1))
@@ -39,37 +39,37 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...){
   } else {
     defaultmap <- list()
   }
-  
-  if (reverseY){
-    y_tmp <- toplot[,"y"]
-    mid_y <- (max(y_tmp) + min(y_tmp))/2
+
+  if (reverseY) {
+    y_tmp <- toplot[, "y"]
+    mid_y <- (max(y_tmp) + min(y_tmp)) / 2
     final_y <- 2 * mid_y - y_tmp
-    toplot[,"y"] <- final_y
+    toplot[, "y"] <- final_y
   }
-  
+
   # set some default plotting parameters
   if (is.null(defaultmap$shape)) {
     defaultmap$size <- 0.3
   }
-  
+
   if (is.null(defaultmap$shape)) {
     defaultmap$shape <- 16
   }
-  
+
   if (is.null(defaultmap$alpha)) {
     defaultmap$alpha <- 0.2
   }
-  
+
   p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
   col.p <- selectColor(n)
 
   p <- p +
     do.call(ggplot2::geom_point, defaultmap) +
-    scale_color_manual(values=col.p) +
+    scale_color_manual(values = col.p) +
     theme_classic() +
-    guides(colour = guide_legend(override.aes = list(shape=16, size=5)))
-  
+    guides(colour = guide_legend(override.aes = list(shape = 16, size = 5)))
+
   return(p)
 }
 
-
+utils::globalVariables(c("x", "y"))

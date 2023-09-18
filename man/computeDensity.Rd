@@ -53,10 +53,3 @@ Output from spatstat.explore::density.ppp.
 \description{
 Perform kernel density estimation on SpatialExperiment
 }
-\examples{
-
-data("xenium_bc_spe")
-
-dens <- computeDensity(spe)
-
-}

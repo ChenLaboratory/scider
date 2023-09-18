@@ -11,7 +11,8 @@ plotSpatial(spe, reverseY = FALSE, n = 30, ...)
 
 \item{reverseY}{Reverse y coordinates.}
 
-\item{n}{Integer value. The number of distinct color to be generated, default is 30.}
+\item{n}{Integer value. The number of distinct color to be generated,
+default is 30.}
 
 \item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
 }

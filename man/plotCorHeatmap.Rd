@@ -17,10 +17,9 @@ plotCorHeatmap(
 \item{stats}{Character value. Choose either coefficient or t.
 Coefficient by default.}
 
-\item{roi}{Specify the ROI to be plotted. Leave it as default if modelling
-is not done by per ROI or just want to first ROI to be plotted.}
+\item{roi}{Character value. By default is all. The specific ROIs to be plotted.}
 
-\item{mode}{Character vector. Choose either withinROI or acrossROI.}
+\item{cell.type}{Character value. By default is all. The cell types to be plotted.}
 }
 \value{
 A pheatmap object.
@@ -38,7 +37,7 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-model_result <- corDensity(spe, cal_all = TRUE)
+model_result <- corDensity(spe)
 
 plotCorHeatmap(model_result)
 

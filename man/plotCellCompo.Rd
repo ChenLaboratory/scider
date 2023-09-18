@@ -9,7 +9,6 @@ plotCellCompo(
   coi,
   id = "cell_type",
   level.name = paste0(janitor::make_clean_names(coi), "_contour"),
-  seed = 33,
   by.roi = FALSE
 )
 }
@@ -34,11 +33,10 @@ Plot cell type composition in each density level of cell of interest.
 \examples{
 
 data("xenium_bc_spe")
-spe <- spe <- gridDensity(spe, coi = c("Breast cancer", "Fibroblasts"))
+spe <- gridDensity(spe, coi = c("Breast cancer", "Fibroblasts"))
 spe <- findROI(spe, coi = c("Breast cancer", "Fibroblasts"))
 spe <- getContour(spe, coi = "Breast cancer")
-spe <- cellAssign(spe, coi = "Breast cancer")
-spe <- cellAssign(spe, assign = "roi", NA_level = "no_roi")
+spe <- allocateCells(spe)
 plotCellCompo(spe, coi = "Breast cancer")
 plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
 

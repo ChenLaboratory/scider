@@ -25,9 +25,11 @@ coi <- c("Breast cancer", "Fibroblasts", "B cells", "T cells")
 
 spe <- gridDensity(spe, coi = coi)
 
-sel_region <- data.frame("node" = seq(10), 
-                         "node_x" = seq(10), 
-                         "node_y" = seq(10))
+sel_region <- data.frame(
+  "node" = seq(10),
+  "node_x" = seq(10),
+  "node_y" = seq(10)
+)
 
 spe1 <- postSelRegion(spe, sel_region)
 

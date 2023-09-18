@@ -21,8 +21,8 @@ plotContour(
 \item{overlay}{Character vector. Either plot overlay on density or cell.
 By default is cell.}
 
-\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
-Set to cell_type by default.}
+\item{id}{A character. The name of the column of colData(spe) containing
+the cell type identifiers. Set to cell_type by default.}
 
 \item{sub.level}{Character vector. Subset on specific level.}
 

@@ -47,7 +47,6 @@ devtools::install_github("ChenLaboratory/scider")
 ```{r}
 library(scider)
 library(SpatialExperiment)
-library(patchwork)
 ```
 
 
@@ -80,24 +79,14 @@ plotSpatial(spe, color = cell_type, alpha = 0.8)
 We can also visualise the cell type one by one.
 
 ```{r}
-
 p1 <- plotSpatial(spe, color = cell_type == "Fibroblasts", alpha = 0.6) +
   theme(legend.position = "none") +
   ggtitle("Fibroblasts")
-p2 <- plotSpatial(spe, color = cell_type == "Breast cancer", alpha = 0.6) +
-  theme(legend.position = "none") +
-  ggtitle("Breast cancer")
-p3 <- plotSpatial(spe, color = cell_type == "T cells", alpha = 0.6) +
-  theme(legend.position = "none") +
-  ggtitle("T cells")
-p4 <- plotSpatial(spe, color = cell_type == "B cells", alpha = 0.6) +
-  theme(legend.position = "none") +
-  ggtitle("B cells")
 ```
 
 
 ```{r, fig.width=5, fig.height=5}
-wrap_plots(list(p1,p2,p3,p4), ncol = 2, nrow = 2)
+p1
 ```
 
 # Grid-based analysis
@@ -120,26 +109,20 @@ The calculated density and grid information are saved in the metadata of the Spa
 ```{r}
 spe <- gridDensity(spe, coi = coi)
 
-names(spe@metadata)
+names(metadata(spe))
 ```
 
 ```{r}
-spe@metadata$grid_density
+metadata(spe)$grid_density
 ```
 
 We can visualise the density of each COI using function `plotDensity`.
 
 ```{r}
-pd_list <- list()
-for(i in seq(4)){
-  pd_list[[i]] <- plotDensity(spe, coi = coi[i])
-}
+plotDensity(spe, coi = coi[1])
 ```
 
 
-```{r, fig.width=6, fig.height=5}
-wrap_plots(pd_list, ncol = 2, nrow = 2)
-```
 
 ## Find Regions-of-interest (ROIs)
 
@@ -154,7 +137,7 @@ The detected ROIs are saved in the metadata of the SpatialExperiment object.
 ```{r}
 spe <- findROI(spe, coi = coi)
 
-spe@metadata$roi
+metadata(spe)$roi
 ```
 
 We can visualise the ROIs with function `plotROI`.
@@ -170,7 +153,7 @@ This can be done using function `selectRegion`.
 This function will open an interactive window with an interactive plot for users to zoom-in/-out and select ROI using either a rectangular or lasso selection tool. Users can also press the `Export selected points` button to save the ROIs as object in the R environment.
 
 ```{r, eval=FALSE}
-selectRegion(spe@metadata$grid_density, x.col = "x_grid", y.col = "y_grid")
+selectRegion(metadata(spe)$grid_density, x.col = "x_grid", y.col = "y_grid")
 ```
 
 After closing the interactive window, the selected ROI has been saved as a data.frame object named `sel_region` in the R environment.
@@ -184,7 +167,7 @@ We can then use the `postSelRegion` to save the ROI in the metadata of the Spati
 ```{r, eval=FALSE}
 spe1 <- postSelRegion(spe, sel_region = sel_region)
 
-spe1@metadata$roi
+metadata(spe1)$roi
 ```
 
 Similarly, we can plot visualise the user-defined ROI with function `plotROI`.
@@ -261,8 +244,10 @@ Or we can subset on specific density level with parameter `sub.level`.
 
 
 ```{r}
-plotContour(spe, coi = "Breast cancer", 
-            sub.level = "1")
+plotContour(spe,
+  coi = "Breast cancer",
+  sub.level = "1"
+)
 ```
 
 
@@ -281,8 +266,7 @@ plotSpatial(spe, color = cell_type == "Breast cancer") +
 
 
 ```{r}
-plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5) +
-  scale_color_manual(values = rev(RColorBrewer::brewer.pal(11, "Spectral")))
+plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5)
 ```
 
 We can visualise cell type composition per level.
@@ -300,6 +284,9 @@ plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
 
 
 
+```{r}
+sessionInfo()
+```
 
 
 

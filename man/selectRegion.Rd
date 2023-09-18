@@ -23,7 +23,7 @@ Select region of interest from plot
 
 data("xenium_bc_spe")
 
-spe_b <- spe[,SummarizedExperiment::colData(spe)$cell_type == "B cells"]
+spe_b <- spe[, SummarizedExperiment::colData(spe)$cell_type == "B cells"]
 
 dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 

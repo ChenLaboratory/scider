@@ -2,47 +2,50 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
-#' @param bins An integer. Number of contour levels. 
+#' @param bins An integer. Number of contour levels.
 #' @param binwidth A numeric scale of the smoothing bandwidth.
 #' @param breaks A numeric scale referring to the breaks in `ggplot2:::contour_breaks`.
 #'
-#' @return A SpatialExperiment object. An sf object of the contour region of the specified level is stored in the metadata of the SpatialExperiment object.
+#' @return A SpatialExperiment object. An sf object of the contour region of
+#' the specified level is stored in the metadata of the SpatialExperiment object.
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' data("xenium_bc_spe")
-#' 
+#'
 #' spe <- gridDensity(spe)
-#' 
+#'
 #' coi <- "Breast cancer"
-#' 
+#'
 #' spe <- getContour(spe, coi = coi)
-#' 
-
+#'
 getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
-  
-  if (is.null(spe@metadata$grid_density))
+  if (is.null(spe@metadata$grid_density)) {
     stop("Have to calculate grid density, run gridDensity() first!")
-  
+  }
+
   dens <- spe@metadata$grid_density
   dups <- duplicated(dens[, c("y_grid", "x_grid"), drop = FALSE], fromLast = TRUE)
   dens <- dens[!dups, , drop = FALSE]
-  
+
   coi_clean <- janitor::make_clean_names(coi)
-  dens_cols <- paste("density", coi_clean, sep="_")
-  
-  if(!all(dens_cols %in% colnames(dens)))
+  dens_cols <- paste("density", coi_clean, sep = "_")
+
+  if (!all(dens_cols %in% colnames(dens))) {
     stop("Density of COI is not yet computed.")
-  
+  }
+
   if (length(dens_cols) > 1L) {
     message("Plotting contour of average density of input COIs. ")
-    dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in% dens_cols), drop=FALSE])
+    dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in% dens_cols),
+      drop = FALSE
+    ])
   } else {
     dens$density_coi_average <- dens[, dens_cols]
   }
-  dens <- dens[, c(1:5, which(colnames(dens) == "density_coi_average"))]
-  
+  dens <- dens[, c(seq_len(5), which(colnames(dens) == "density_coi_average"))]
+
   # levels for contour
   if (is.null(bins) && is.null(binwidth) && is.null(breaks)) {
     message("Using bins = 10 to draw contours.")
@@ -50,23 +53,23 @@ getContour <- function(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL) {
   }
   if (!is.null(bins)) binwidth <- breaks <- NULL
   if (is.null(bins) && !is.null(binwidth)) breaks <- NULL
-  
+
   # filter out negative densities when calculating contours
   dens <- dens[dens$density_coi_average > 0L, ]
-  
+
   # note that when calculating contours, density is not filtered at any quantile cutoff!
   contour <- compute_group(dens,
-                           z.range = range(dens$density_coi_average, na.rm = TRUE, finite = TRUE),
-                           bins = bins,
-                           binwidth = binwidth,
-                           breaks = breaks,
-                           na.rm = FALSE)
-  
+    z.range = range(dens$density_coi_average, na.rm = TRUE, finite = TRUE),
+    bins = bins,
+    binwidth = binwidth,
+    breaks = breaks,
+    na.rm = FALSE
+  )
+
   contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
   spe@metadata[[paste(coi_clean, "contour", sep = "_")]] <- S4Vectors::DataFrame(contour)
 
   return(spe)
-
 }
 
 
@@ -95,22 +98,24 @@ isoband_z_matrix <- function(data) {
 
 iso_to_path <- function(iso, group = 1) {
   lengths <- vapply(iso, function(x) length(x$x), integer(1))
-  
+
   if (all(lengths == 0)) {
-    cli::cli_warn("{.fn stat_contour}: Zero contours were generated")
+    message("Zero contours were generated.")
     return(ggplot2:::data_frame0())
   }
-  
+
   levels <- names(iso)
   xs <- unlist(lapply(iso, "[[", "x"), use.names = FALSE)
   ys <- unlist(lapply(iso, "[[", "y"), use.names = FALSE)
   ids <- unlist(lapply(iso, "[[", "id"), use.names = FALSE)
   item_id <- rep(seq_along(iso), lengths)
-  
+
   # Add leading zeros so that groups can be properly sorted
-  groups <- paste(group, sprintf("%03d", item_id), sprintf("%03d", ids), sep = "-")
+  groups <- paste(group, sprintf("%03d", item_id), sprintf("%03d", ids),
+    sep = "-"
+  )
   groups <- factor(groups)
-  
+
   ggplot2:::data_frame0(
     level = rep(levels, lengths),
     x = xs,
@@ -121,12 +126,13 @@ iso_to_path <- function(iso, group = 1) {
   )
 }
 
-compute_group <-  function(data, z.range, bins = NULL, binwidth = NULL, breaks = NULL, na.rm = FALSE) {
+compute_group <- function(data, z.range, bins = NULL,
+                          binwidth = NULL, breaks = NULL, na.rm = FALSE) {
   breaks <- ggplot2:::contour_breaks(z.range, bins, binwidth, breaks)
   isolines <- xyz_to_isolines(data, breaks)
   path_df <- iso_to_path(isolines, data$group[1])
   path_df$cutoff <- as.numeric(path_df$level)
-  #path_df$level <- as.numeric(path_df$level)
-  #path_df$nlevel <- scales::rescale_max(path_df$level)
+  # path_df$level <- as.numeric(path_df$level)
+  # path_df$nlevel <- scales::rescale_max(path_df$level)
   path_df
 }

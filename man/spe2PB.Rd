@@ -17,19 +17,26 @@ spe2PB(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{by.group}{Logical. Whether to perform pseudo-bulking by group. TRUE by default.}
+\item{by.group}{Logical. Whether to perform pseudo-bulking by group.
+TRUE by default.}
 
-\item{group.id}{Character. The column name of the colData(spe) that contains the group information. Default to 'cell_type'.}
+\item{group.id}{Character. The column name of the colData(spe) that
+contains the group information. Default to 'cell_type'.}
 
-\item{by.roi}{Logical. Whether to perform pseudo-bulking by ROI. TRUE by default.}
+\item{by.roi}{Logical. Whether to perform pseudo-bulking by ROI.
+TRUE by default.}
 
-\item{roi.only}{Logical. Whether to filter out pseudo-bulk samples formed by cells not in any ROIs. TRUE by default.}
+\item{roi.only}{Logical. Whether to filter out pseudo-bulk samples formed
+by cells not in any ROIs. TRUE by default.}
 
-\item{contour}{Character. The name of the group or cell type on which the contour level is computed.
-If NULL, then no pseudo-bulking will be performed based on contour level. Default to NULL.}
+\item{contour}{Character. The name of the group or cell type on which
+the contour level is computed.
+If NULL, then no pseudo-bulking will be performed based on contour level.
+Default to NULL.}
 }
 \value{
-An edgeR::DGEList object where each library (column) is a pseudo-bulk sample.
+An edgeR::DGEList object where each library (column) is a
+pseudo-bulk sample.
 }
 \description{
 Given a 'SpatialExperiment' data object, create pseudo-bulk samples using

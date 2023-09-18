@@ -18,7 +18,8 @@ getContour(spe, coi, bins = NULL, binwidth = NULL, breaks = NULL)
 \item{breaks}{A numeric scale referring to the breaks in \code{ggplot2:::contour_breaks}.}
 }
 \value{
-A SpatialExperiment object. An sf object of the contour region of the specified level is stored in the metadata of the SpatialExperiment object.
+A SpatialExperiment object. An sf object of the contour region of
+the specified level is stored in the metadata of the SpatialExperiment object.
 }
 \description{
 Get contour from density

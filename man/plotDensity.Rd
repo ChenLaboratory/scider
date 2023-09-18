@@ -11,7 +11,8 @@ plotDensity(spe, coi, probs = 0.8)
 
 \item{coi}{A character vector of cell types of interest (COIs).}
 
-\item{probs}{Numeric value between 0 and 1, used for filtering uninformative grid, default is 0.8.}
+\item{probs}{Numeric value between 0 and 1, used for filtering
+uninformative grid, default is 0.8.}
 }
 \value{
 A ggplot object.

@@ -15,16 +15,3 @@ List of ROIs saved as sf objects.
 \description{
 Combine grids in each ROI to a sf region
 }
-\examples{
-
-data("xenium_bc_spe")
-
-spe <- gridDensity(spe)
-
-coi <- "Breast cancer"
-
-spe <- findROI(spe, coi = coi, probs = 0.85)
-
-rois <- grid2sf(spe)
-
-}

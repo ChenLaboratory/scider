@@ -2,36 +2,27 @@
 #'
 #' @param spe A SpatialExperiment object.
 #'
-#' @return List of ROIs saved as sf objects. 
+#' @return List of ROIs saved as sf objects.
 #'
-#' @examples
-#' 
-#' data("xenium_bc_spe")
-#' 
-#' spe <- gridDensity(spe)
-#' 
-#' coi <- "Breast cancer"
-#' 
-#' spe <- findROI(spe, coi = coi, probs = 0.85)
-#' 
-#' rois <- grid2sf(spe)
-#' 
-
 grid2sf <- function(spe) {
-  
-  if (is.null(spe@metadata$roi))
+  if (is.null(spe@metadata$roi)) {
     stop("ROI not yet computed!")
-  
+  }
+
   rois <- as.data.frame(spe@metadata$roi)
-  
+
   grid_width <- spe@metadata$grid_info$xstep
   grid_height <- spe@metadata$grid_info$ystep
-  canvas <- data.frame(x = rep(spe@metadata$grid_info$xlim, each = 2), 
-                       y = rep(spe@metadata$grid_info$ylim, 2)) |>
+  canvas <- data.frame(
+    x = rep(spe@metadata$grid_info$xlim, each = 2),
+    y = rep(spe@metadata$grid_info$ylim, 2)
+  ) |>
     sf::st_as_sf(coords = c("x", "y"))
-  grids <- sf::st_make_grid(canvas, n = c(spe@metadata$grid_info$dims[1], 
-                                      spe@metadata$grid_info$dims[2]), what = "polygons")
-  
+  grids <- sf::st_make_grid(canvas, n = c(
+    spe@metadata$grid_info$dims[1],
+    spe@metadata$grid_info$dims[2]
+  ), what = "polygons")
+
   rois_sf <- list()
   for (rr in unique(rois$component)) {
     this_roi <- rois[rois$component == rr, ]
@@ -39,7 +30,6 @@ grid2sf <- function(spe) {
     kp <- sf::st_intersects(this_roi_centroids, grids)
     rois_sf[[rr]] <- sf::st_as_sf(sf::st_union(grids[as.numeric(kp)]))
   }
-  
+
   return(rois_sf)
-  
 }

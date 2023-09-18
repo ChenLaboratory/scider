@@ -1,9 +1,23 @@
 Package: scider
 Type: Package
-Title: Spatial cell-type inter-correlation by density in R.
+Title: Spatial cell-type inter-correlation by density in R
 Version: 0.1.9
-Author: Ning Liu [cre,aut], Mengbo Li [cre,aut], Yunshun Chen [cre,aut]
-Maintainer: Ning Liu <liu.n@wehi.edu.au>, Mengbo Li <li.me@wehi.edu.au>, Yunshun Chen <yuchen@wehi.edu.au>
+Authors@R: 
+    c(person(given = "Ning",
+             family = "Liu",
+             role = c("aut"),
+             email = "liu.n@wehi.edu.au",
+             comment = c(ORCID = "0000-0002-9487-9305")),
+      person(given = "Mengbo",
+             family = "Li",
+             role = c("aut"),
+             email = "li.me@wehi.edu.au",
+             comment = c(ORCID = "")),
+      person(given = "Yunshun",
+             family = "Chen",
+             role = c("aut", "cre"),
+             email = "yuchen@wehi.edu.au",
+             comment = c(ORCID = "")))
 Description: scider is an user-friendly R package providing functions to model 
     the global density of cells in a slide of spatial transcriptomics data. All functions 
     in the package are built based on the SpatialExperiment object, allowing integration 
@@ -21,7 +35,8 @@ RoxygenNote: 7.2.3
 Imports:
     SpatialExperiment,
     SummarizedExperiment,
-    spatstat,
+    spatstat.geom,
+    spatstat.explore,
     sf,
     lwgeom, 
     ggplot2,
@@ -32,9 +47,15 @@ Imports:
     igraph,
     janitor,
     knitr,
-    methods
+    methods,
+    utils,
+    rlang,
+    isoband,
+    S4Vectors,
+    grDevices
 Suggests:
+    edgeR
 Config/testthat/edition: 3
 Depends: 
-    R (>= 4.1)
+    R (>= 4.3)
 VignetteBuilder: knitr

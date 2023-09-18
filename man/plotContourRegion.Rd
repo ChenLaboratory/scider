@@ -17,8 +17,8 @@ plotContourRegion(
 
 \item{coi}{A character vector of length 1 of the cell type of interest (COIs).}
 
-\item{id}{A character. The name of the column of colData(spe) containing the cell type identifiers.
-Set to cell_type by default.}
+\item{id}{A character. The name of the column of colData(spe) containing
+the cell type identifiers. Set to cell_type by default.}
 
 \item{overlay}{Character vector. Either plot overlay on density or cells.}
 

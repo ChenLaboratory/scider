@@ -23,18 +23,3 @@ A SpatialExperiment object. The region information of each cell is stored in the
 \description{
 Check which cells are in which regions
 }
-\examples{
-
-data("xenium_bc_spe")
-
-spe <- gridDensity(spe)
-
-coi <- "Breast cancer"
-
-spe <- getContour(spe, coi = coi)
-
-region <- getContourRegions(spe, coi = coi)
-
-spe <- cellsInRegion(spe, region, name_to = "breast_cancer_contour_level")
-
-}
