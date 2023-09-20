@@ -77,12 +77,11 @@ mergeROI <- function(spe, merge.list, id = "component", rename = FALSE) {
     roi_levels <- c(sort(names(merge.list)), 
                     as.character(sort(as.numeric(roi_levels[!(roi_levels %in% names(merge.list))]))))
     ROI_merged <- factor(ROI_merged, levels = roi_levels)
-    spe@metadata$roi$component <- ROI_merged
   } else {
     ROI_merged <- factor(rank(ROI_merged),
                          labels = seq(length(unique(ROI_merged))))
-    spe@metadata$roi$component <- ROI_merged
   }
+  spe@metadata$roi$component <- ROI_merged
   
   return(spe)
   
