@@ -1,12 +1,8 @@
-# scider: Spatial cell-type inter-correlation by density in R. <img src="man/figures/hoodscanR_sticker.png" align="right" 
-alt="" width="120" />
+# scider: Spatial cell-type inter-correlation by density in R. <img src="man/figures/scider_sticker.png" align="right" alt="" width="120" />
 
-[![R-CMD-check](https://github.com/DavisLaboratory/hoodscanR/workflows/
-R-CMD-check-bioc/badge.svg)](https://github.com/
-ChenLaboratory/scider/actions)
-[![Coverage status](https://codecov.io/gh/DavisLaboratory/hoodscanR/
-branch/devel/graph/badge.svg)](https://app.codecov.io/gh/
-ChenLaboratory/scider?branch=master)
+[![R-CMD-check](https://github.com/DavisLaboratory/hoodscanR/workflows/R-CMD-check-bioc/badge.svg)(https://github.com/ChenLaboratory/scider/actions)
+
+[![Coverage status](https://codecov.io/gh/DavisLaboratory/hoodscanR/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/ChenLaboratory/scider?branch=master)
 
 *scider* implements functions to analyse spatial transcriptomics 
 data with cell type annotations by performing cell type 
