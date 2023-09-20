@@ -27,6 +27,6 @@ spe_b <- spe[, SummarizedExperiment::colData(spe)$cell_type == "B cells"]
 
 dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 
-selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
+#selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
 
 }
