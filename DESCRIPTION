@@ -28,7 +28,7 @@ Description: scider is an user-friendly R package providing functions
     boundary detection analysis and differential density analysis.
 biocViews: Spatial, Transcriptomics
 License: GPL-3 + file LICENSE
-URL: https://github.com/ChenLaboratory/scider
+URL: https://github.com/ChenLaboratory/scider, https://chenlaboratory.github.io/scider/
 BugReports: https://github.com/ChenLaboratory/scider/issues
 Encoding: UTF-8
 LazyData: false
