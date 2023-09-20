@@ -7,16 +7,19 @@
 \title{Spatial cell-type inter-correlation by density in R.}
 \description{
 \code{scider} implements functions to analyse spatial transcriptomics data with
-cell type annotations by performing cell type correlation via density estimation
-and cell type co-localization via real number distance. Functions include
-density estimation, statistical modelling and visualizations.
+cell type annotations by performing cell type correlation via density
+estimation and cell type co-localization via real number distance.
+Functions include density estimation, statistical modelling and
+visualizations.
 }
 \details{
-\code{scider} uses SpatialExperiment objects as the main infrastructure, which can
-easily be integrated with a wide variety of Bioconductor packages.
+\code{scider} uses SpatialExperiment objects as the main infrastructure,
+which can easily be integrated with a wide variety
+of Bioconductor packages.
 }
 \author{
-Ning Liu \email{liu.n@wehi.edu.au}, Mengbo Li \email{li.me@wehi.edu.au},
+Ning Liu \email{liu.n@wehi.edu.au},
+Mengbo Li \email{li.me@wehi.edu.au},
 Yunshun Chen \email{yuchen@wehi.edu.au}
 }
 \keyword{internal}

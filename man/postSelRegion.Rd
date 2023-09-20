@@ -9,7 +9,8 @@ postSelRegion(spe, sel_region)
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{sel_region}{A dataframe object. Can be generated from function selectRegion.}
+\item{sel_region}{A dataframe object. Can be generated from
+function selectRegion.}
 }
 \value{
 A SpatialExperiment object.
@@ -26,9 +27,9 @@ coi <- c("Breast cancer", "Fibroblasts", "B cells", "T cells")
 spe <- gridDensity(spe, coi = coi)
 
 sel_region <- data.frame(
-  "node" = seq(10),
-  "node_x" = seq(10),
-  "node_y" = seq(10)
+    "node" = seq(10),
+    "node_x" = seq(10),
+    "node_y" = seq(10)
 )
 
 spe1 <- postSelRegion(spe, sel_region)

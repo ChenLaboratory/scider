@@ -22,13 +22,15 @@ computeDensity(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{mode}{Choose either points or pixels. Specifying whether to compute the
-density at a grid pixel location or at at point.}
+\item{mode}{Choose either points or pixels. Specifying
+whether to compute the density at a grid pixel location or at at point.}
 
-\item{kernel}{The smoothing kernel. Options are gaussian, epanechnikov, quartic or disc.}
+\item{kernel}{The smoothing kernel. Options are gaussian, epanechnikov,
+quartic or disc.}
 
-\item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
-selection using cross-validation using function spatstat.explore::bw.diggle.}
+\item{bandwidth}{The smoothing bandwidth. By default performing automatic
+bandwidth selection using cross-validation using function
+spatstat.explore::bw.diggle.}
 
 \item{weights}{Optional weights to be attached to the points.}
 

@@ -13,12 +13,14 @@ cellsInRegion(spe, region, name_to, NA_level = "0", levels = NULL)
 
 \item{name_to}{Colname in colData(spe) to store the annotation.}
 
-\item{NA_level}{Label for cells not falling in any of the regions. Default to 0.}
+\item{NA_level}{Label for cells not falling in any of the regions.
+Default to 0.}
 
 \item{levels}{Factor levels.}
 }
 \value{
-A SpatialExperiment object. The region information of each cell is stored in the colData.
+A SpatialExperiment object. The region information of each cell is
+stored in the colData.
 }
 \description{
 Check which cells are in which regions

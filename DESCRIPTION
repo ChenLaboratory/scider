@@ -3,26 +3,28 @@ Type: Package
 Title: Spatial cell-type inter-correlation by density in R
 Version: 0.1.9
 Authors@R: 
-    c(person(given = "Ning",
-             family = "Liu",
-             role = c("aut"),
-             email = "liu.n@wehi.edu.au",
-             comment = c(ORCID = "0000-0002-9487-9305")),
+    c(person(given = "Ning", 
+            family = "Liu",
+            role = c("aut"),
+            email = "liu.n@wehi.edu.au",
+            comment = c(ORCID = "0000-0002-9487-9305")),
       person(given = "Mengbo",
              family = "Li",
              role = c("aut"),
              email = "li.me@wehi.edu.au",
-             comment = c(ORCID = "")),
+             comment = c(ORCID = "0000-0002-9666-5810")),
       person(given = "Yunshun",
              family = "Chen",
              role = c("aut", "cre"),
              email = "yuchen@wehi.edu.au",
-             comment = c(ORCID = "")))
-Description: scider is an user-friendly R package providing functions to model 
-    the global density of cells in a slide of spatial transcriptomics data. All functions 
-    in the package are built based on the SpatialExperiment object, allowing integration 
-    into various spatial transcriptomics-related packages from Bioconductor. After modelling
-    density, the package allows for serveral downstream analysis, including colocalization analysis,
+             comment = c(ORCID = "0000-0003-4911-5653")))
+Description: scider is an user-friendly R package providing functions 
+    to model the global density of cells in a slide of spatial 
+    transcriptomics data. All functions in the package are built 
+    based on the SpatialExperiment object, allowing integration into 
+    various spatial transcriptomics-related packages from Bioconductor. 
+    After modelling density, the package allows for serveral 
+    downstream analysis, including colocalization analysis, 
     boundary detection analysis and differential density analysis.
 biocViews: Spatial, Transcriptomics
 License: GPL-3 + file LICENSE
@@ -54,7 +56,8 @@ Imports:
     S4Vectors,
     grDevices
 Suggests:
-    edgeR
+    edgeR,
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
     R (>= 4.3)

@@ -17,9 +17,11 @@ plotCorHeatmap(
 \item{stats}{Character value. Choose either coefficient or t.
 Coefficient by default.}
 
-\item{roi}{Character value. By default is all. The specific ROIs to be plotted.}
+\item{roi}{Character value. By default is all. The specific
+ROIs to be plotted.}
 
-\item{cell.type}{Character value. By default is all. The cell types to be plotted.}
+\item{cell.type}{Character value. By default is all. The cell types
+to be plotted.}
 }
 \value{
 A pheatmap object.

@@ -16,7 +16,7 @@ plotContour(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of length 1 of the cell type of interest (COIs).}
+\item{coi}{A character vector of length 1 of the cell type of interest.}
 
 \item{overlay}{Character vector. Either plot overlay on density or cell.
 By default is cell.}

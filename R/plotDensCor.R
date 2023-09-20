@@ -27,100 +27,106 @@
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
                         by.roi = TRUE,
                         fit = c("spline", "linear"), df = 3, ...) {
-  if (!("grid_density" %in% names(spe@metadata))) {
-    stop("Please run gridDensity before using this function.")
-  }
-
-  if (!("roi" %in% names(spe@metadata))) {
-    stop("Please run findROI before using this function.")
-  }
-
-  dens_dat <- as.data.frame(spe@metadata$grid_density)
-  rois <- as.data.frame(spe@metadata$roi)
-
-  # clean names
-  ct1 <- paste0("density_", janitor::make_clean_names(celltype1))
-  ct2 <- paste0("density_", janitor::make_clean_names(celltype2))
-
-  plotdf <- merge(rois, dens_dat,
-    by.x = "members", by.y = "node",
-    all.x = TRUE, sort = FALSE
-  )
-  plotdf <- plotdf[, c("component", c(ct1, ct2))]
-
-  x <- rlang::sym(ct1)
-  y <- rlang::sym(ct2)
-
-  # extract aes
-  aesmap <- rlang::enquos(...)
-  # compute plot
-  aesmap <- aesmap[!names(aesmap) %in% c("x", "y")] # remove x,y mappings if present
-
-  # split aes params into those that are not aes i.e. static parametrisation
-  if (length(aesmap) > 0) {
-    is_aes <- vapply(aesmap, rlang::quo_is_symbolic, FUN.VALUE = logical(1))
-    defaultmap <- lapply(aesmap[!is_aes], rlang::eval_tidy)
-    aesmap <- aesmap[is_aes]
-  } else {
-    defaultmap <- list()
-  }
-
-  if (length(fit) > 1) {
-    fit <- "spline"
-  }
-
-  # set some default plotting parameters
-  if (is.null(defaultmap$shape)) {
-    defaultmap$shape <- 21
-  }
-
-  if (is.null(defaultmap$alpha)) {
-    defaultmap$alpha <- 0.8
-  }
-
-  if (isTRUE(by.roi)) {
-    if (is.null(defaultmap$fill)) {
-      defaultmap$fill <- "royalblue"
+    if (!("grid_density" %in% names(spe@metadata))) {
+        stop("Please run gridDensity before using this function.")
     }
 
-    p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
-      do.call(ggplot2::geom_point, defaultmap) +
-      ggplot2::facet_wrap(~component,
-        scales = "free",
-        labeller = ggplot2::labeller(component = function(label) paste0("ROI #", label))
-      ) +
-      theme_classic()
-  } else {
-    defaultmap$shape <- 16
-    defaultmap$alpha <- 0.8
+    if (!("roi" %in% names(spe@metadata))) {
+        stop("Please run findROI before using this function.")
+    }
 
-    col.p <- selectColor(length(unique(plotdf$component)))
+    dens_dat <- as.data.frame(spe@metadata$grid_density)
+    rois <- as.data.frame(spe@metadata$roi)
 
-    p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y,
-      color = component, !!!aesmap
-    )) +
-      do.call(ggplot2::geom_point, defaultmap) +
-      theme_classic() +
-      scale_color_manual(name = "ROI", values = col.p)
-  }
+    # clean names
+    ct1 <- paste0("density_", janitor::make_clean_names(celltype1))
+    ct2 <- paste0("density_", janitor::make_clean_names(celltype2))
 
-  if (fit == "spline") {
-    p <- p +
-      geom_smooth(
-        method = "lm", formula = y ~ splines::ns(x, df = df),
-        color = "red", se = FALSE
-      )
-  } else if (fit == "linear") {
-    p <- p +
-      geom_smooth(
-        method = "lm", formula = y ~ x,
-        color = "red", se = FALSE
-      )
-  } else {
-    stop("The fit parameter should either be spline or linear.")
-  }
+    plotdf <- merge(rois, dens_dat,
+        by.x = "members", by.y = "node",
+        all.x = TRUE, sort = FALSE
+    )
+    plotdf <- plotdf[, c("component", c(ct1, ct2))]
 
-  return(p)
+    x <- rlang::sym(ct1)
+    y <- rlang::sym(ct2)
+
+    # extract aes
+    aesmap <- rlang::enquos(...)
+    # compute plot
+    aesmap <- aesmap[!names(aesmap) %in% c("x", "y")]
+    # remove x,y mappings if present
+
+    # split aes params into those that are not aes
+    # i.e. static parametrisation
+    if (length(aesmap) > 0) {
+        is_aes <- vapply(aesmap, rlang::quo_is_symbolic,
+            FUN.VALUE = logical(1)
+        )
+        defaultmap <- lapply(aesmap[!is_aes], rlang::eval_tidy)
+        aesmap <- aesmap[is_aes]
+    } else {
+        defaultmap <- list()
+    }
+
+    if (length(fit) > 1) {
+        fit <- "spline"
+    }
+
+    # set some default plotting parameters
+    if (is.null(defaultmap$shape)) {
+        defaultmap$shape <- 21
+    }
+
+    if (is.null(defaultmap$alpha)) {
+        defaultmap$alpha <- 0.8
+    }
+
+    if (isTRUE(by.roi)) {
+        if (is.null(defaultmap$fill)) {
+            defaultmap$fill <- "royalblue"
+        }
+
+        p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y, !!!aesmap)) +
+            do.call(ggplot2::geom_point, defaultmap) +
+            ggplot2::facet_wrap(~component,
+                scales = "free",
+                labeller = ggplot2::labeller(component = function(label) {
+                    paste0("ROI #", label)
+                })
+            ) +
+            theme_classic()
+    } else {
+        defaultmap$shape <- 16
+        defaultmap$alpha <- 0.8
+
+        col.p <- selectColor(length(unique(plotdf$component)))
+
+        p <- ggplot2::ggplot(plotdf, ggplot2::aes(!!x, !!y,
+            color = component, !!!aesmap
+        )) +
+            do.call(ggplot2::geom_point, defaultmap) +
+            theme_classic() +
+            scale_color_manual(name = "ROI", values = col.p)
+    }
+
+    if (fit == "spline") {
+        p <- p +
+            geom_smooth(
+                method = "lm", formula = y ~ splines::ns(x, df = df),
+                color = "red", se = FALSE
+            )
+    } else if (fit == "linear") {
+        p <- p +
+            geom_smooth(
+                method = "lm", formula = y ~ x,
+                color = "red", se = FALSE
+            )
+    } else {
+        stop("The fit parameter should either be spline or linear.")
+    }
+
+    return(p)
 }
 
 

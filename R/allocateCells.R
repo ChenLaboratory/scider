@@ -23,47 +23,50 @@ allocateCells <- function(
     spe,
     to.roi = TRUE,
     to.contour = TRUE) {
-  if (to.roi) {
-    if (is.null(spe@metadata$roi)) {
-      message("No ROI detected.")
-    } else {
-      message(paste(
-        "Assigning cells to ROIs defined by",
-        paste(spe@metadata$coi, collapse = ", "), "\n"
-      ))
-      all_areas <- grid2sf(spe)
-      name_to <- "roi"
-      NA_level <- "None"
-      spe <- cellsInRegion(spe, all_areas,
-        name_to = name_to,
-        NA_level = NA_level, levels = NULL
-      )
+    if (to.roi) {
+        if (is.null(spe@metadata$roi)) {
+            message("No ROI detected.")
+        } else {
+            message(paste(
+                "Assigning cells to ROIs defined by",
+                paste(spe@metadata$coi, collapse = ", "), "\n"
+            ))
+            all_areas <- grid2sf(spe)
+            name_to <- "roi"
+            NA_level <- "None"
+            spe <- cellsInRegion(spe, all_areas,
+                name_to = name_to,
+                NA_level = NA_level, levels = NULL
+            )
+        }
     }
-  }
 
-  if (to.contour) {
-    ind <- grep("_contour", names(spe@metadata))
-    if (length(ind) == 0) {
-      message("No contour detected.")
-    } else {
-      for (i in ind) {
-        coi <- janitor::make_clean_names(names(spe@metadata)[i],
-          case = "sentence", replace = c("contour" = "")
-        )
-        message(paste("Assigning cells to contour levels of", coi, "\n"))
+    if (to.contour) {
+        ind <- grep("_contour", names(spe@metadata))
+        if (length(ind) == 0) {
+            message("No contour detected.")
+        } else {
+            for (i in ind) {
+                coi <- janitor::make_clean_names(names(spe@metadata)[i],
+                    case = "sentence", replace = c("contour" = "")
+                )
+                message(paste(
+                    "Assigning cells to contour levels of",
+                    coi, "\n"
+                ))
 
-        all_areas <- getContourRegions(spe, coi = coi)
+                all_areas <- getContourRegions(spe, coi = coi)
 
-        name_to <- names(spe@metadata)[i]
-        NA_level <- 0
+                name_to <- names(spe@metadata)[i]
+                NA_level <- 0
 
-        spe <- cellsInRegion(spe, all_areas,
-          name_to = name_to,
-          NA_level = NA_level, levels = NULL
-        )
-      }
+                spe <- cellsInRegion(spe, all_areas,
+                    name_to = name_to,
+                    NA_level = NA_level, levels = NULL
+                )
+            }
+        }
     }
-  }
 
-  return(spe)
+    return(spe)
 }

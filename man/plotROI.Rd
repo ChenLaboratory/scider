@@ -14,7 +14,7 @@ the cell type identifiers. Set to cell_type by default.}
 
 \item{show.legend}{Logical. Show legend or not.}
 
-\item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()} for point.}
+\item{...}{Aesthetic mappings pass for point.}
 }
 \value{
 A ggplot object.

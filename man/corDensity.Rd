@@ -9,8 +9,9 @@ corDensity(spe, by.roi = TRUE)
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{by.roi}{Logical. If TRUE (default), then return the testing results at ROI level.
-If FALSE, then combine the testing results across all ROIs.}
+\item{by.roi}{Logical. If TRUE (default), then return the testing
+results at ROI level. If FALSE, then combine the testing results
+across all ROIs.}
 }
 \value{
 A DataFrame containing the testing results.

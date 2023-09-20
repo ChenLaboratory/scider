@@ -17,20 +17,22 @@ vignette: >
 
 <style type="text/css">
   body{
-  font-size: 14pt;
+  font-size: 12pt;
 }
 </style>
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72, fig.retina = 1)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72)
 suppressWarnings(library(ggplot2))
+suppressMessages(library(scider))
+suppressMessages(library(SpatialExperiment))
 ```
 
 # Installation
 
 ```{r eval=FALSE}
 if (!require("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
+    install.packages("BiocManager")
 }
 
 BiocManager::install("scider")
@@ -58,7 +60,7 @@ In this vignette, we will use a subset of a Xenium Breast Cancer dataset.
 data("xenium_bc_spe")
 ```
 
-In the data, we have quantification of 541 genes from 185211 cells.
+In the data, we have quantification of 541 genes from 10000 cells.
 
 ```{r}
 spe
@@ -70,28 +72,18 @@ We also have cell-type annotations of these cells, there are 4 cell types.
 table(colData(spe)$cell_type)
 ```
 
-We can use the function `plotSpatial` to visualise the cell position and color the cells by cell types.
+We can use the function `plotSpatial` to visualise the cell position and 
+color the cells by cell types.
 
-```{r, fig.width=4, fig.height=3}
+```{r, fig.width=5, fig.height=4}
 plotSpatial(spe, color = cell_type, alpha = 0.8)
 ```
 
-We can also visualise the cell type one by one.
-
-```{r}
-p1 <- plotSpatial(spe, color = cell_type == "Fibroblasts", alpha = 0.6) +
-  theme(legend.position = "none") +
-  ggtitle("Fibroblasts")
-```
-
-
-```{r, fig.width=5, fig.height=5}
-p1
-```
 
 # Grid-based analysis
 
-`scider` can conduct grid-based density analysis for spatial transcriptomics data.
+`scider` can conduct grid-based density analysis for spatial transcriptomics 
+data.
 
 ## Density calculation
 
@@ -104,7 +96,8 @@ coi
 ```
 
 We can perform density calculation for each COI using function `gridDensity`.
-The calculated density and grid information are saved in the metadata of the SpatialExperimnet object.
+The calculated density and grid information are saved in the metadata of the 
+SpatialExperimnet object.
 
 ```{r}
 spe <- gridDensity(spe, coi = coi)
@@ -118,7 +111,7 @@ metadata(spe)$grid_density
 
 We can visualise the density of each COI using function `plotDensity`.
 
-```{r}
+```{r, fig.width=5, fig.height=4}
 plotDensity(spe, coi = coi[1])
 ```
 
@@ -126,7 +119,8 @@ plotDensity(spe, coi = coi[1])
 
 ## Find Regions-of-interest (ROIs)
 
-After obtaining grid-based density for each COI, we can then detect regions-of-interest (ROIs) based on density or select by user.
+After obtaining grid-based density for each COI, we can then detect 
+regions-of-interest (ROIs) based on density or select by user.
 
 ### Detected by algorithm
 
@@ -142,27 +136,33 @@ metadata(spe)$roi
 
 We can visualise the ROIs with function `plotROI`.
 
-```{r, fig.width=4, fig.height=4}
+```{r, fig.width=5, fig.height=5}
 plotROI(spe)
 ```
 
 ### Select ROI by user
 
-Alternatively, users can select ROIs based on their own research interest (drawn by hand).
+Alternatively, users can select ROIs based on their own 
+research interest (drawn by hand).
 This can be done using function `selectRegion`.
-This function will open an interactive window with an interactive plot for users to zoom-in/-out and select ROI using either a rectangular or lasso selection tool. Users can also press the `Export selected points` button to save the ROIs as object in the R environment.
+This function will open an interactive window with an interactive plot for 
+users to zoom-in/-out and select ROI using either a rectangular or lasso 
+selection tool. Users can also press the `Export selected points` button to 
+save the ROIs as object in the R environment.
 
 ```{r, eval=FALSE}
 selectRegion(metadata(spe)$grid_density, x.col = "x_grid", y.col = "y_grid")
 ```
 
-After closing the interactive window, the selected ROI has been saved as a data.frame object named `sel_region` in the R environment.
+After closing the interactive window, the selected ROI has been saved as 
+a data.frame object named `sel_region` in the R environment.
 
 ```{r, eval=FALSE}
 sel_region
 ```
 
-We can then use the `postSelRegion` to save the ROI in the metadata of the SpatialExperiment object.
+We can then use the `postSelRegion` to save the ROI in the metadata of 
+the SpatialExperiment object.
 
 ```{r, eval=FALSE}
 spe1 <- postSelRegion(spe, sel_region = sel_region)
@@ -178,9 +178,13 @@ plotROI(spe1)
 
 ## Testing relationship between cell types
 
-After defining ROIs, we can then test the relationship between any two cell types within each ROI or overall but account for ROI variation using a cubic spline or a linear fit.
+After defining ROIs, we can then test the relationship between any two 
+cell types within each ROI or overall but account for ROI variation using 
+a cubic spline or a linear fit.
 
-This can be done with function `corrDensity`, by setting the `celltype1` and `celltype2` parameters, the modelling results are saved in the metadata of the SpatialExperiment object.
+This can be done with function `corrDensity`, by setting the `celltype1` and 
+`celltype2` parameters, the modelling results are saved in the metadata 
+of the SpatialExperiment object.
 
 
 ```{r}
@@ -195,20 +199,21 @@ model_result
 
 We can also visualise the fitting using function `plotDensCor`.
 
-```{r}
+```{r, fig.width=8, fig.height=6}
 plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 ```
 
-Or, we can visualise the statistics between cell types using function `plotModStat` with a heatmap.
+Or, we can visualise the statistics between cell types using 
+function `plotModStat` with a heatmap.
 
 
-```{r}
+```{r, fig.width=7, fig.height=4}
 plotCorHeatmap(model_result)
 ```
 
 
 
-```{r}
+```{r, fig.width=5, fig.height=4}
 model_result2 <- corDensity(spe, by.roi = FALSE)
 
 plotCorHeatmap(model_result2)
@@ -217,11 +222,16 @@ plotCorHeatmap(model_result2)
 
 # Cell-based analysis
 
-Based on the grid density, we can ask many biological question about the data. For example, we would like to know if a certain cell type that are located in high density of breast cancer cells are different to the same cell type from a different level of breast cancer region.
+Based on the grid density, we can ask many biological question about the data. 
+For example, we would like to know if a certain cell type that are located in 
+high density of breast cancer cells are different to the same cell type from 
+a different level of breast cancer region.
 
 ## cell annotation based on grid density
 
-To address this question, we first need to divide cells into different levels of grid density. This can be done using a contour identification strategy with function `getContour`.
+To address this question, we first need to divide cells into different 
+levels of grid density. This can be done using a contour identification 
+strategy with function `getContour`.
 
 
 ```{r}
@@ -230,28 +240,13 @@ spe <- getContour(spe, coi = "Breast cancer")
 
 Different level of contour can be visualised with cells using `plotContour`.
 
-```{r}
+```{r, fig.width=5, fig.height=4}
 plotContour(spe, coi = "Breast cancer")
 ```
 
-Or with density using parameter `overlay = "density"`.
 
-```{r}
-plotContour(spe, coi = "Breast cancer", overlay = "density")
-```
-
-Or we can subset on specific density level with parameter `sub.level`.
-
-
-```{r}
-plotContour(spe,
-  coi = "Breast cancer",
-  sub.level = "1"
-)
-```
-
-
-We can then annotate cells by their locations within each contour using function `allocateCells`.
+We can then annotate cells by their locations within each contour 
+using function `allocateCells`.
 
 
 ```{r}
@@ -259,24 +254,18 @@ spe <- allocateCells(spe)
 ```
 
 
-```{r}
-plotSpatial(spe, color = cell_type == "Breast cancer") +
-  scale_color_manual(values = c("gray", "red"))
-```
-
-
-```{r}
+```{r, fig.width=6, fig.height=4}
 plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5)
 ```
 
 We can visualise cell type composition per level.
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 plotCellCompo(spe, coi = "Breast cancer")
 ```
 
 
-```{r}
+```{r, fig.width=7, fig.height=5}
 plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
 ```
 

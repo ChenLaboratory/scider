@@ -2,7 +2,8 @@
 % Please edit documentation in R/gridDensity.R
 \name{gridDensity}
 \alias{gridDensity}
-\title{Perform kernel density estimation on SpatialExperiment for cell types of interest}
+\title{Perform kernel density estimation on SpatialExperiment for
+cell types of interest}
 \usage{
 gridDensity(
   spe,
@@ -29,8 +30,9 @@ the cell type identifiers. Set to cell_type by default.}
 \item{kernel}{The smoothing kernel. Options are "gaussian",
 "epanechnikov", "quartic" or "disc".}
 
-\item{bandwidth}{The smoothing bandwidth. By default performing automatic bandwidth
-selection using cross-validation using function spatstat.explore::bw.diggle.}
+\item{bandwidth}{The smoothing bandwidth. By default performing
+automatic bandwidth selection using cross-validation using
+function spatstat.explore::bw.diggle.}
 
 \item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
 
@@ -49,7 +51,8 @@ all cell type of interest are stored in spe@metadata$grid_density.
 Grid information is stored in spe@metadata$grid_info
 }
 \description{
-Perform kernel density estimation on SpatialExperiment for cell types of interest
+Perform kernel density estimation on SpatialExperiment for
+cell types of interest
 }
 \examples{
 

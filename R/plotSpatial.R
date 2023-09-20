@@ -16,60 +16,66 @@
 #' plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
 #'
 plotSpatial <- function(spe, reverseY = FALSE, n = 30, ...) {
-  toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
+    toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
 
-  colnames(toplot) <- c("x", "y")
+    colnames(toplot) <- c("x", "y")
 
-  cdata <- as.data.frame(SummarizedExperiment::colData(spe))
+    cdata <- as.data.frame(SummarizedExperiment::colData(spe))
 
-  if ("cell_id" %in% colnames(cdata)) {
-    cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
-  }
+    if ("cell_id" %in% colnames(cdata)) {
+        cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
+    }
 
-  toplot <- cbind(toplot, cdata) |>
-    rownames2col("cell_id")
+    toplot <- cbind(toplot, cdata) |>
+        rownames2col("cell_id")
 
-  aesmap <- rlang::enquos(...)
+    aesmap <- rlang::enquos(...)
 
-  # split aes params into those that are not aes i.e. static parametrisation
-  if (length(aesmap) > 0) {
-    is_aes <- vapply(aesmap, rlang::quo_is_symbolic, FUN.VALUE = logical(1))
-    defaultmap <- lapply(aesmap[!is_aes], rlang::eval_tidy)
-    aesmap <- aesmap[is_aes]
-  } else {
-    defaultmap <- list()
-  }
+    # split aes params into those that are not aes
+    # i.e. static parametrisation
+    if (length(aesmap) > 0) {
+        is_aes <- vapply(aesmap, rlang::quo_is_symbolic,
+            FUN.VALUE = logical(1)
+        )
+        defaultmap <- lapply(aesmap[!is_aes], rlang::eval_tidy)
+        aesmap <- aesmap[is_aes]
+    } else {
+        defaultmap <- list()
+    }
 
-  if (reverseY) {
-    y_tmp <- toplot[, "y"]
-    mid_y <- (max(y_tmp) + min(y_tmp)) / 2
-    final_y <- 2 * mid_y - y_tmp
-    toplot[, "y"] <- final_y
-  }
+    if (reverseY) {
+        y_tmp <- toplot[, "y"]
+        mid_y <- (max(y_tmp) + min(y_tmp)) / 2
+        final_y <- 2 * mid_y - y_tmp
+        toplot[, "y"] <- final_y
+    }
 
-  # set some default plotting parameters
-  if (is.null(defaultmap$shape)) {
-    defaultmap$size <- 0.3
-  }
+    # set some default plotting parameters
+    if (is.null(defaultmap$shape)) {
+        defaultmap$size <- 0.3
+    }
 
-  if (is.null(defaultmap$shape)) {
-    defaultmap$shape <- 16
-  }
+    if (is.null(defaultmap$shape)) {
+        defaultmap$shape <- 16
+    }
 
-  if (is.null(defaultmap$alpha)) {
-    defaultmap$alpha <- 0.2
-  }
+    if (is.null(defaultmap$alpha)) {
+        defaultmap$alpha <- 0.2
+    }
 
-  p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
-  col.p <- selectColor(n)
+    p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
+    col.p <- selectColor(n)
 
-  p <- p +
-    do.call(ggplot2::geom_point, defaultmap) +
-    scale_color_manual(values = col.p) +
-    theme_classic() +
-    guides(colour = guide_legend(override.aes = list(shape = 16, size = 5)))
+    p <- p +
+        do.call(ggplot2::geom_point, defaultmap) +
+        scale_color_manual(values = col.p) +
+        theme_classic() +
+        guides(colour = guide_legend(override.aes = list(
+            shape = 16,
+            size = 5
+        )))
 
-  return(p)
+    return(p)
 }
 
 utils::globalVariables(c("x", "y"))

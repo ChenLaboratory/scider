@@ -2,8 +2,8 @@
 % Please edit documentation in R/spe2PB.R
 \name{spe2PB}
 \alias{spe2PB}
-\title{Given a 'SpatialExperiment' data object, create pseudo-bulk samples using
-the colData information and return a DGEList object}
+\title{Given a 'SpatialExperiment' data object, create pseudo-bulk
+samples using the colData information and return a DGEList object}
 \usage{
 spe2PB(
   spe,
@@ -39,8 +39,8 @@ An edgeR::DGEList object where each library (column) is a
 pseudo-bulk sample.
 }
 \description{
-Given a 'SpatialExperiment' data object, create pseudo-bulk samples using
-the colData information and return a DGEList object
+Given a 'SpatialExperiment' data object, create pseudo-bulk
+samples using the colData information and return a DGEList object
 }
 \examples{
 
