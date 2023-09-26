@@ -106,8 +106,11 @@ spe2PB <- function(spe,
     }
 
     # Pseudo-bulk counts
-    group <- paste(grp, rois, clvl, sep = "_")
-    group <- factor(gsub("^_|_$", "", group))
+    combo <- c(if (!is.null(grp)) "grp", 
+               if (!is.null(rois)) "rois", 
+               if (!is.null(clvl)) "clvl")
+    eval( parse(text=paste0('group <- paste(', paste(combo, collapse=","), ',sep ="_")') ))
+    group <- factor(group)
     # group_mat <- Matrix::sparse.model.matrix(~ 0 + group)
     group_mat <- stats::model.matrix(~ 0 + group)
     colnames(group_mat) <- gsub("^group", "", colnames(group_mat))
