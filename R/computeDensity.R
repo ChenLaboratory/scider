@@ -93,7 +93,6 @@ computeDensity <- function(spe, mode = "pixels",
 
         reshaped_dat <- reshaped_dat[, names(reshaped_dat) != "id"]
         rownames(reshaped_dat) <- NULL
-        # grid_density <- as.data.frame(sapply(reshaped_dat, as.numeric))
         grid_density <- as.data.frame(vapply(
             reshaped_dat, as.numeric,
             numeric(nrow(reshaped_dat))

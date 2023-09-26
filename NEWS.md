@@ -1,2 +1,2 @@
-# scider 1.0.0
+# scider 0.99.0
 First release.
