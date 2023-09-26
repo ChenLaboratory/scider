@@ -9,6 +9,15 @@ correlation via density estimation and cell type co-localization
 via real number distance. Functions include density 
 estimation, statistical modelling and visualizations.
 
+Install released version form Bioconductor
+
+```
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("scider")
+```
+
 
 Install development version from GitHub
 

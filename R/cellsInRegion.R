@@ -14,7 +14,7 @@
 cellsInRegion <- function(spe, region, name_to,
                           NA_level = "0", levels = NULL) {
     if (length(region) > 1L) {
-        sf_classes <- sapply(region, class)[1, ]
+        sf_classes <- vapply(region, class, character(2))[1, ]
     }
     if (length(region) == 1L) {
         sf_classes <- class(region)[1]
