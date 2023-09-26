@@ -140,7 +140,7 @@ spe2PB <- function(spe,
         counts = as.matrix(counts.pb),
         samples = sample.pb, genes = genes
     )
-    if (roi.only) dge <- dge[, keep]
+    if (!is.null(rois) & roi.only) dge <- dge[, keep]
 
     return(dge)
 }
