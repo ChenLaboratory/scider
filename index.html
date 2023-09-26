@@ -85,6 +85,11 @@
 </h1></div>
 <p><a href="https://github.com/ChenLaboratory/scider/actions" class="external-link"><img src="https://github.com/ChenLaboratory/scider/workflows/R-CMD-check-bioc/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/ChenLaboratory/scider?branch=devel" class="external-link"><img src="https://codecov.io/gh/ChenLaboratory/scider/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></p>
 <p><em>scider</em> implements functions to analyse spatial transcriptomics data with cell type annotations by performing cell type correlation via density estimation and cell type co-localization via real number distance. Functions include density estimation, statistical modelling and visualizations.</p>
+<p>Install released version form Bioconductor</p>
+<pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"scider"</span><span class="op">)</span></span></code></pre>
 <p>Install development version from GitHub</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span>   </span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ChenLaboratory/scider"</span><span class="op">)</span></span></code></pre>
