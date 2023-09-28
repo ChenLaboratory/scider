@@ -26,69 +26,72 @@
 #'
 #' spe <- mergeROI(spe, list("1-2" = 1:2))
 #'
-mergeROI <- function(spe, merge.list, id = "component", 
+mergeROI <- function(spe, merge.list, id = "component",
                      rename = FALSE) {
-  
-  # check ROI exists
-  if (is.null(spe@metadata$roi)) {
-    stop("ROI not yet computed!")
-  }
-  
-  # check input
-  if (id == "component") {
-    to_be_merged <- unique(spe@metadata$roi$component)
-  } else {
-    to_be_merged <- spe@metadata$roi[[id]]
-  }
-  if (any(!(unlist(merge.list) %in% to_be_merged))) {
-    stop("Some ROIs are not present in spe@metadata$roi$component. 
+    # check ROI exists
+    if (is.null(spe@metadata$roi)) {
+        stop("ROI not yet computed!")
+    }
+
+    # check input
+    if (id == "component") {
+        to_be_merged <- unique(spe@metadata$roi$component)
+    } else {
+        to_be_merged <- spe@metadata$roi[[id]]
+    }
+    if (any(!(unlist(merge.list) %in% to_be_merged))) {
+        stop("Some ROIs are not present in spe@metadata$roi$component.
          Check input list!")
-  }
-  if (any(table(unlist(merge.list)) > 1L)) {
-    stop("Each ROI can only be merged once. Check input list!")
-  }
-  list_sizes <- vapply(merge.list, function (rr) {
-    length(unique(rr))
-  }, numeric(length = 1L))
-  if (any(list_sizes < 2L)) {
-    stop("Each vector in the list must have at least 
+    }
+    if (any(table(unlist(merge.list)) > 1L)) {
+        stop("Each ROI can only be merged once. Check input list!")
+    }
+    list_sizes <- vapply(merge.list, function(rr) {
+        length(unique(rr))
+    }, numeric(length = 1L))
+    if (any(list_sizes < 2L)) {
+        stop("Each vector in the list must have at least
          2 unique ROI IDs to merge!")
-  }
-  
-  # give names to the list if not input
-  if (length(names(merge.list)) < length(merge.list)) {
-    names(merge.list) <- vapply(merge.list, function(rr) {
-      paste0(sort(rr), collapse = "-")
-    }, character(length = 1L))
-  }
-  
-  # keep a copy of the original ROI list
-  if (id == "component") {
-    ROI_merged <- 
-      spe@metadata$roi[["component_before_merge"]] <- 
-      spe@metadata$roi$component
-  } else {
-    ROI_merged <- spe@metadata$roi[[id]]
-  }
-  
-  # merge ROIs
-  ROI_merged <- as.character(ROI_merged)
-  for (mm in names(merge.list)) {
-    ROI_merged[ROI_merged %in% as.character(merge.list[[mm]])] <- mm
-  }
-  if (!rename) {
-    # re-order by merged ROI then individual ROIs
-    roi_levels <- unique(ROI_merged)
-    roi_levels <- c(sort(names(merge.list)), 
-                    as.character(sort(
-                      as.numeric(roi_levels[!(
-                        roi_levels %in% names(merge.list))]))))
-    ROI_merged <- factor(ROI_merged, levels = roi_levels)
-  } else {
-    ROI_merged <- factor(rank(ROI_merged),
-                         labels = seq(length(unique(ROI_merged))))
-  }
-  spe@metadata$roi$component <- ROI_merged
-  
-  return(spe)
+    }
+
+    # give names to the list if not input
+    if (length(names(merge.list)) < length(merge.list)) {
+        names(merge.list) <- vapply(merge.list, function(rr) {
+            paste0(sort(rr), collapse = "-")
+        }, character(length = 1L))
+    }
+
+    # keep a copy of the original ROI list
+    if (id == "component") {
+        ROI_merged <-
+            spe@metadata$roi[["component_before_merge"]] <-
+            spe@metadata$roi$component
+    } else {
+        ROI_merged <- spe@metadata$roi[[id]]
+    }
+
+    # merge ROIs
+    ROI_merged <- as.character(ROI_merged)
+    for (mm in names(merge.list)) {
+        ROI_merged[ROI_merged %in% as.character(merge.list[[mm]])] <- mm
+    }
+    if (!rename) {
+        # re-order by merged ROI then individual ROIs
+        roi_levels <- unique(ROI_merged)
+        roi_levels <- c(
+            sort(names(merge.list)),
+            as.character(sort(
+                as.numeric(roi_levels[!(
+                    roi_levels %in% names(merge.list))])
+            ))
+        )
+        ROI_merged <- factor(ROI_merged, levels = roi_levels)
+    } else {
+        ROI_merged <- factor(rank(ROI_merged),
+            labels = seq(length(unique(ROI_merged)))
+        )
+    }
+    spe@metadata$roi$component <- ROI_merged
+
+    return(spe)
 }

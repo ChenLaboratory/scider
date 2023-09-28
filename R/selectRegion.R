@@ -15,7 +15,7 @@
 #'
 #' dat <- as.data.frame(SpatialExperiment::spatialCoords(spe_b))
 #'
-#' #selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
+#' # selectRegion(dat, x.col = "x_centroid", y.col = "y_centroid")
 #'
 selectRegion <- function(data, x.col = "x", y.col = "y") {
     ui <- fluidPage(

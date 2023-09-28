@@ -49,7 +49,7 @@ NULL
 #'
 #' scider-package has 1 datasets: \itemize{
 #'   \item xenium_bc_spe Example test spatial transcriptomics data
-#'   in SpatialExperiment format. This test data is randomly subsetting 
+#'   in SpatialExperiment format. This test data is randomly subsetting
 #'   from a publicly available 10X Xenium breast cancer data.
 #'   Source data: https://www.10xgenomics.com/resources/datasets/xenium-ffpe-human-breast-with-custom-add-on-panel-1-standard
 #'  }

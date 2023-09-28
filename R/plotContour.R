@@ -65,7 +65,7 @@ plotContour <- function(spe,
         length(unique(contour_data$level)))
 
     if (is.null(sub.level)) {
-        p <- p +
+        suppressMessages(p <- p +
             ggplot2::geom_path(
                 data = contour_data,
                 ggplot2::aes(
@@ -73,10 +73,10 @@ plotContour <- function(spe,
                     color = level
                 )
             ) +
-            scale_color_manual(name = "Density level", values = rev(col.p))
+            scale_color_manual(name = "Density level", values = rev(col.p)))
     } else {
         if (length(sub.level) == 1L & sub.level %in% contour_data$level) {
-            p <- p +
+            suppressMessages(p <- p +
                 ggplot2::geom_path(
                     data = contour_data,
                     ggplot2::aes(
@@ -87,7 +87,7 @@ plotContour <- function(spe,
                 scale_color_manual(
                     name = paste0("level", sub.level, " density"),
                     values = c("royalblue", "tomato2")
-                )
+                ))
         } else {
             stop("The length sub.level is expected to be 1 and
            should be included in contour_data$level.")

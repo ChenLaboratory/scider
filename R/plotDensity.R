@@ -50,7 +50,17 @@ plotDensity <- function(spe, coi, probs = 0.8) {
         theme_classic() +
         scale_fill_gradientn(colours = rev(col.spec)) +
         labs(x = "x", y = "y", fill = "Density") +
-        ggtitle(coi)
+        lims(
+            x = c(
+                min(grid_data[, "x_grid"]),
+                max(grid_data[, "x_grid"])
+            ),
+            y = c(
+                min(grid_data[, "y_grid"]),
+                max(grid_data[, "y_grid"])
+            )
+        )
+    ggtitle(coi)
 
     return(p)
 }
