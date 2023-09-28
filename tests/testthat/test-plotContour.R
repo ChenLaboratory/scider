@@ -4,9 +4,9 @@ test_that("plotContour works", {
     coi <- "Breast cancer"
     spe <- getContour(spe, coi = coi)
 
-    expect_message(plotContour(spe, coi = coi))
+    expect_silent(plotContour(spe, coi = coi))
 
-    expect_message(plotContour(spe, coi = coi, size = 0.3, alpha = 0.2))
+    expect_silent(plotContour(spe, coi = coi, size = 0.3, alpha = 0.2))
 
     expect_error(plotContour(spe, coi = "xyz"))
 
@@ -21,7 +21,7 @@ test_that("plotContour works", {
         sub.level = "1"
     ))
 
-    expect_message(plotContour(spe, coi = coi, sub.level = "1"))
+    expect_silent(plotContour(spe, coi = coi, sub.level = "1"))
 
     expect_error(plotContour(spe, coi = coi, sub.level = "xyz"))
 })
