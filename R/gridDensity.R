@@ -80,7 +80,7 @@ gridDensity <- function(spe,
     # compute density for each cell type and then, filter
     for (ii in seq_len(length(coi))) {
         # subset data to this COI
-        sub <- grep(coi[ii], colData(spe)[[id]])
+        sub <- which(colData(spe)[[id]] == coi[ii])
         obj <- spe[, sub]
 
         # compute density
