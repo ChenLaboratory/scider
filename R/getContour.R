@@ -33,6 +33,7 @@ getContour <- function(spe, coi, bins = NULL,
         fromLast = TRUE
     )
     dens <- dens[!dups, , drop = FALSE]
+    dens <- as.data.frame(dens)
 
     coi_clean <- janitor::make_clean_names(coi)
     dens_cols <- paste("density", coi_clean, sep = "_")
@@ -42,16 +43,16 @@ getContour <- function(spe, coi, bins = NULL,
     }
 
     if (length(dens_cols) > 1L) {
-        message("Plotting contour of average density of input COIs. ")
-        dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in%
+        message("Plotting contour of total density of input COIs. ")
+        dens$density_coi <- rowSums(dens[, which(colnames(dens) %in%
             dens_cols),
         drop = FALSE
         ])
     } else {
-        dens$density_coi_average <- dens[, dens_cols]
+        dens$density_coi <- dens[, dens_cols]
     }
     dens <- dens[, c(seq_len(5), which(colnames(dens) ==
-        "density_coi_average"))]
+        "density_coi"))]
 
     # levels for contour
     if (is.null(bins) && is.null(binwidth) && is.null(breaks)) {
@@ -62,12 +63,12 @@ getContour <- function(spe, coi, bins = NULL,
     if (is.null(bins) && !is.null(binwidth)) breaks <- NULL
 
     # filter out negative densities when calculating contours
-    dens <- dens[dens$density_coi_average > 0L, ]
+    dens <- dens[dens$density_coi > 0L, ]
 
     # note that when calculating contours, density is not filtered at any
     # quantile cutoff!
     contour <- compute_group(dens,
-        z.range = range(dens$density_coi_average, na.rm = TRUE, finite = TRUE),
+        z.range = range(dens$density_coi, na.rm = TRUE, finite = TRUE),
         bins = bins,
         binwidth = binwidth,
         breaks = breaks,
@@ -75,7 +76,7 @@ getContour <- function(spe, coi, bins = NULL,
     )
 
     contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
-    spe@metadata[[paste(coi_clean,
+    spe@metadata[[paste(coi_clean[1],
         "contour",
         sep = "_"
     )]] <- S4Vectors::DataFrame(contour)
@@ -110,7 +111,7 @@ isoband_z_matrix <- function(data) {
     nrow <- max(y_pos)
     ncol <- max(x_pos)
     raster <- matrix(NA_real_, nrow = nrow, ncol = ncol)
-    raster[cbind(y_pos, x_pos)] <- data$density_coi_average
+    raster[cbind(y_pos, x_pos)] <- data$density_coi
     raster
 }
 
