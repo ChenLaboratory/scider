@@ -1,6 +1,6 @@
 #' Plot model statistics using heatmap.
 #'
-#' @param model.result A data.frame object.
+#' @param model.result A dataFrame object.
 #' @param stats Character value. Choose either coefficient or t.
 #' Coefficient by default.
 #' @param roi Character value. By default is all. The specific
@@ -22,7 +22,7 @@
 #'
 #' model_result <- corDensity(spe)
 #'
-#' plotCorHeatmap(model_result)
+#' plotCorHeatmap(model_result$overall)
 #'
 plotCorHeatmap <- function(model.result,
                            stats = c("cor.coef", "t", "p.Pos", "p.Neg"),

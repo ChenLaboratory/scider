@@ -12,7 +12,7 @@ plotCorHeatmap(
 )
 }
 \arguments{
-\item{model.result}{A data.frame object.}
+\item{model.result}{A dataFrame object.}
 
 \item{stats}{Character value. Choose either coefficient or t.
 Coefficient by default.}
@@ -41,6 +41,6 @@ spe <- findROI(spe, coi = coi, method = "walktrap")
 
 model_result <- corDensity(spe)
 
-plotCorHeatmap(model_result)
+plotCorHeatmap(model_result$overall)
 
 }

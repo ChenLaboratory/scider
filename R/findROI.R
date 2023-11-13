@@ -6,17 +6,19 @@
 #'  filter grid by density. Default to 0.85.
 #' @param ngrid.min An integer. The minimum number of grids required for
 #' defining a ROI. Default to 20.
-#' @param method The community dectection method to be used, either walktrap
-#' or connected. Default to walktrap.
-#' @param ... Other parameters that passed to walktrap.community.
+#' @param method The community dectection method to be used, either walktrap or
+#' connected. Default to walktrap, can be abbreviated.
 #' @param diag.nodes Logical. Set this to TRUE to allow diagonal grid points
 #' to be adjacent nodes.
 #' @param sequential.roi.name Logical. Set this to FALSE if you want the
 #' original ROI name before
 #' filtering are retained.
+#' @param ... Other parameters that passed to walktrap.community when method =
+#' "walktrap".
 #'
 #' @return A SpatialExperiment object.
 #' @export
+#'
 #'
 #' @examples
 #'
@@ -42,7 +44,8 @@ findROI <- function(spe, coi,
     if (!all(dens_cols %in% colnames(grid_data))) {
         stop("Density of COI is not yet computed.")
     }
-
+    
+    method <- match.arg(method, c("walktrap","connected"))
     if (!(method %in% c("walktrap", "connected"))) {
         stop("The method chosen is not supported, please choose
          walktrap or connected.")

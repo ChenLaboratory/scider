@@ -197,14 +197,21 @@ of the SpatialExperiment object.
 
 
 ```{r}
-model_result <- corDensity(spe)
+model_result <- corDensity(spe, trace = FALSE)
 ```
 
 We can see the correlation between breast cancer and fibroblasts in each ROI.
 
 ```{r}
-model_result
+model_result$ROI
 ```
+
+Or the correlation between breast cancer and fibroblasts across the whole slide:
+
+```{r}
+model_result$overall
+```
+
 
 We can also visualise the fitting using function `plotDensCor`.
 
@@ -212,20 +219,18 @@ We can also visualise the fitting using function `plotDensCor`.
 plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 ```
 
-Or, we can visualise the statistics between cell types using 
-function `plotModStat` with a heatmap.
+Or, we can visualise the statistics between each pair of cell types using 
+function `plotCorHeatmap` in the ROIs: 
 
 
 ```{r, fig.width=7, fig.height=4}
-plotCorHeatmap(model_result)
+plotCorHeatmap(model_result$ROI)
 ```
 
+Or the correlation between cell type pairs across the whole slide:
 
-
-```{r, fig.width=5, fig.height=4}
-model_result2 <- corDensity(spe, by.roi = FALSE)
-
-plotCorHeatmap(model_result2)
+```{r, fig.width=7, fig.height=4}
+plotCorHeatmap(model_result$overall)
 ```
 
 

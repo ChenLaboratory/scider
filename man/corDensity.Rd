@@ -4,7 +4,7 @@
 \alias{corDensity}
 \title{Test for density correlation between two cell types.}
 \usage{
-corDensity(spe, coi = NULL, verbose = TRUE)
+corDensity(spe, coi = NULL, trace = TRUE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,7 +13,7 @@ corDensity(spe, coi = NULL, verbose = TRUE)
 correlation analysis. Default is NULL, which is to consider all cell types
 previously calculated in the gridDensity() step.}
 
-\item{verbose}{Logical. If TRUE (default), print testing process.}
+\item{trace}{Logical. If TRUE (default), print process pf testing.}
 }
 \value{
 A DataFrame containing the testing results.

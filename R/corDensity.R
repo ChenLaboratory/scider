@@ -4,10 +4,12 @@
 #' @param coi Character vector for cell types of interest for density 
 #' correlation analysis. Default is NULL, which is to consider all cell types
 #' previously calculated in the gridDensity() step. 
-#' @param verbose Logical. If TRUE (default), print testing process. 
+#' @param trace Logical. If TRUE (default), print process pf testing. 
 #'
 #' @return A DataFrame containing the testing results.
 #' @export
+#' 
+#' @importFrom SpatialPack modified.ttest
 #'
 #' @examples
 #'
@@ -21,7 +23,7 @@
 #'
 #' result <- corDensity(spe)
 #'
-corDensity <- function(spe, coi = NULL, verbose = TRUE) {
+corDensity <- function(spe, coi = NULL, trace = TRUE) {
   if (!("grid_density" %in% names(spe@metadata))) {
     stop("Please run gridDensity before using this function.")
   }
@@ -87,11 +89,11 @@ corDensity <- function(spe, coi = NULL, verbose = TRUE) {
       m <- choose(nCT, 2) - (choose(nCT - j, 1) + choose(nCT - i, 2))
       
       for (k in seq_len(nCpnts)) {
-        if (verbose) cat(paste("i =", i, ", j =", j, ", ROI", k, "\n"))
+        if (trace) cat(paste("i =", i, ", j =", j, ", ROI", k, "\n"))
         data <- model_data[model_data$component == cpnts[k], c(ct1, ct2, "x", "y")]
         
-        res <- SpatialPack::modified.ttest(x=data[,1], y=data[,2], 
-                                           coords=data[,c("x","y")], nclass=7)
+        res <- modified.ttest(x=data[,1], y=data[,2], 
+                              coords=data[,c("x","y")], nclass=7)
         tstat <- sqrt( res$Fstat * res$dof ) * sign(res$corr)
         
         ind <- (m - 1) * nCpnts + k

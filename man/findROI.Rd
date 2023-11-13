@@ -26,8 +26,8 @@ filter grid by density. Default to 0.85.}
 \item{ngrid.min}{An integer. The minimum number of grids required for
 defining a ROI. Default to 20.}
 
-\item{method}{The community dectection method to be used, either walktrap
-or connected. Default to walktrap.}
+\item{method}{The community dectection method to be used, either walktrap or
+connected. Default to walktrap, can be abbreviated.}
 
 \item{diag.nodes}{Logical. Set this to TRUE to allow diagonal grid points
 to be adjacent nodes.}
@@ -36,7 +36,8 @@ to be adjacent nodes.}
 original ROI name before
 filtering are retained.}
 
-\item{...}{Other parameters that passed to walktrap.community.}
+\item{...}{Other parameters that passed to walktrap.community when method =
+"walktrap".}
 }
 \value{
 A SpatialExperiment object.

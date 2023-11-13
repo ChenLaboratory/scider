@@ -1,2 +1,5 @@
+# scider 1.1.1
+* Bioconductor release.
+
 # scider 0.99.0
-First release.
+* Initial submission to _Bioconductor_.
