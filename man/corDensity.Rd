@@ -4,14 +4,16 @@
 \alias{corDensity}
 \title{Test for density correlation between two cell types.}
 \usage{
-corDensity(spe, by.roi = TRUE)
+corDensity(spe, coi = NULL, verbose = TRUE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{by.roi}{Logical. If TRUE (default), then return the testing
-results at ROI level. If FALSE, then combine the testing results
-across all ROIs.}
+\item{coi}{Character vector for cell types of interest for density
+correlation analysis. Default is NULL, which is to consider all cell types
+previously calculated in the gridDensity() step.}
+
+\item{verbose}{Logical. If TRUE (default), print testing process.}
 }
 \value{
 A DataFrame containing the testing results.
