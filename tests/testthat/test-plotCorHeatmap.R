@@ -4,6 +4,7 @@ test_that("plotCorHeatmap works", {
     spe <- gridDensity(spe, coi = coi)
     spe <- findROI(spe, coi = coi, method = "walktrap")
     model_result <- corDensity(spe)
+    model_result <- model_result$ROI
 
     expect_silent(plotCorHeatmap(model_result))
     expect_silent(plotCorHeatmap(model_result, stats = "t"))

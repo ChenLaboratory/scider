@@ -22,7 +22,7 @@
 #'
 #' model_result <- corDensity(spe)
 #'
-#' plotCorHeatmap(model_result$overall)
+#' plotCorHeatmap(model_result$ROI)
 #'
 plotCorHeatmap <- function(model.result,
                            stats = c("cor.coef", "t", "p.Pos", "p.Neg"),

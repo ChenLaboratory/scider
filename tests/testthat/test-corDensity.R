@@ -8,14 +8,12 @@ test_that("corDensity works", {
     spe <- findROI(spe, coi = coi)
 
     result <- corDensity(spe)
+    
+    expect_true(is(result, "list"))
+    
+    expect_true(identical(length(result), 2L))
 
-    expect_true(is(result, "DFrame"))
-
-    expect_true(all(c("celltype1", "celltype2", "cor.coef") %in% names(result)))
-
-    result2 <- corDensity(spe, by.roi = FALSE)
-
-    expect_true(all(c("celltype1", "celltype2", "cor.coef") %in% names(result2)))
-
-    expect_lt(nrow(result2), nrow(result))
+    expect_true(all(c("celltype1", "celltype2", "cor.coef") %in% names(result$ROI)))
+    
+    expect_true(all(c("celltype1", "celltype2", "cor.coef") %in% names(result$overall)))
 })

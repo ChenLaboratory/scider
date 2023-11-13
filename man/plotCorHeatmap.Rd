@@ -41,6 +41,6 @@ spe <- findROI(spe, coi = coi, method = "walktrap")
 
 model_result <- corDensity(spe)
 
-plotCorHeatmap(model_result$overall)
+plotCorHeatmap(model_result$ROI)
 
 }
