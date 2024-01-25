@@ -8,8 +8,8 @@
 <meta name="description" content="scider">
 <title>A quick start guide to the scider package • scider</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A quick start guide to the scider package">
 <meta property="og:description" content="scider">
@@ -75,7 +75,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Mengbo Li, Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2023-11-13</h4>
+            <h4 data-toc-skip class="date">2024-01-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/HEAD/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -228,20 +228,20 @@ object.</p>
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">roi</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 1464 rows and 6 columns</span></span>
+<pre><code><span><span class="co">## DataFrame with 1640 rows and 6 columns</span></span>
 <span><span class="co">##      component     members           x           y    xcoord    ycoord</span></span>
 <span><span class="co">##       &lt;factor&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1            1      83-107          83         107   8228.13  10375.37</span></span>
-<span><span class="co">## 2            1      83-108          83         108   8228.13  10471.33</span></span>
-<span><span class="co">## 3            1      84-107          84         107   8324.46  10375.37</span></span>
-<span><span class="co">## 4            1      84-108          84         108   8324.46  10471.33</span></span>
-<span><span class="co">## 5            1      85-102          85         102   8420.79   9895.58</span></span>
+<span><span class="co">## 1            1       72-86          72          86   7168.50   8360.26</span></span>
+<span><span class="co">## 2            1       72-87          72          87   7168.50   8456.21</span></span>
+<span><span class="co">## 3            1       73-84          73          84   7264.83   8168.34</span></span>
+<span><span class="co">## 4            1       73-85          73          85   7264.83   8264.30</span></span>
+<span><span class="co">## 5            1       73-86          73          86   7264.83   8360.26</span></span>
 <span><span class="co">## ...        ...         ...         ...         ...       ...       ...</span></span>
-<span><span class="co">## 1460        29      53-104          53         104   5338.24   10087.5</span></span>
-<span><span class="co">## 1461        29      53-105          53         105   5338.24   10183.5</span></span>
-<span><span class="co">## 1462        29      53-106          53         106   5338.24   10279.4</span></span>
-<span><span class="co">## 1463        29      54-105          54         105   5434.57   10183.5</span></span>
-<span><span class="co">## 1464        29      54-106          54         106   5434.57   10279.4</span></span></code></pre>
+<span><span class="co">## 1636        28      46-108          46         108   4663.93   10471.3</span></span>
+<span><span class="co">## 1637        28      46-109          46         109   4663.93   10567.3</span></span>
+<span><span class="co">## 1638        28      47-106          47         106   4760.26   10279.4</span></span>
+<span><span class="co">## 1639        28      47-107          47         107   4760.26   10375.4</span></span>
+<span><span class="co">## 1640        28      47-108          47         108   4760.26   10471.3</span></span></code></pre>
 <p>We can visualise the ROIs with function <code>plotROI</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotROI.html">plotROI</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
@@ -292,33 +292,33 @@ object.</p>
 each ROI.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">ROI</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 174 rows and 9 columns</span></span>
-<span><span class="co">##       celltype1     celltype2         ROI     ngrid   cor.coef          t</span></span>
-<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt;  &lt;numeric&gt;  &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer           1        25 -0.4212512 -1.0245270</span></span>
-<span><span class="co">## 2   Fibroblasts Breast cancer           2       106 -0.5961093 -1.9355647</span></span>
-<span><span class="co">## 3   Fibroblasts Breast cancer           3        27 -0.9058793 -4.2960802</span></span>
-<span><span class="co">## 4   Fibroblasts Breast cancer           4        42 -0.9245825 -4.6715844</span></span>
-<span><span class="co">## 5   Fibroblasts Breast cancer           5        36 -0.0392948 -0.0726054</span></span>
-<span><span class="co">## ...         ...           ...         ...       ...        ...        ...</span></span>
-<span><span class="co">## 170     T cells       B cells          25        25   0.459082   0.927392</span></span>
-<span><span class="co">## 171     T cells       B cells          26        29   0.865404   2.967469</span></span>
-<span><span class="co">## 172     T cells       B cells          27        21  -0.248482  -0.794860</span></span>
-<span><span class="co">## 173     T cells       B cells          28        38   0.628826   2.085314</span></span>
-<span><span class="co">## 174     T cells       B cells          29        22   0.110237   0.196324</span></span>
-<span><span class="co">##            df     p.Pos      p.Neg</span></span>
-<span><span class="co">##     &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;</span></span>
-<span><span class="co">## 1     4.86548  0.823101 0.17689886</span></span>
-<span><span class="co">## 2     6.79658  0.952305 0.04769536</span></span>
-<span><span class="co">## 3     4.03445  0.993774 0.00622555</span></span>
-<span><span class="co">## 4     3.70549  0.994294 0.00570564</span></span>
-<span><span class="co">## 5     3.40876  0.526912 0.47308757</span></span>
-<span><span class="co">## ...       ...       ...        ...</span></span>
-<span><span class="co">## 170   3.22076 0.2089220   0.791078</span></span>
-<span><span class="co">## 171   2.95215 0.0301950   0.969805</span></span>
-<span><span class="co">## 172   9.60089 0.7770505   0.222949</span></span>
-<span><span class="co">## 173   6.64867 0.0387964   0.961204</span></span>
-<span><span class="co">## 174   3.13313 0.4282031   0.571797</span></span></code></pre>
+<pre><code><span><span class="co">## DataFrame with 168 rows and 9 columns</span></span>
+<span><span class="co">##       celltype1     celltype2         ROI     ngrid  cor.coef         t</span></span>
+<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1   Fibroblasts Breast cancer           1        29 -0.810210 -2.195430</span></span>
+<span><span class="co">## 2   Fibroblasts Breast cancer           2        72 -0.668610 -1.821051</span></span>
+<span><span class="co">## 3   Fibroblasts Breast cancer           3       162 -0.763429 -2.929274</span></span>
+<span><span class="co">## 4   Fibroblasts Breast cancer           4        36 -0.274915 -0.525622</span></span>
+<span><span class="co">## 5   Fibroblasts Breast cancer           5        36 -0.878272 -2.315785</span></span>
+<span><span class="co">## ...         ...           ...         ...       ...       ...       ...</span></span>
+<span><span class="co">## 164     T cells       B cells          24        24  0.321072  0.885167</span></span>
+<span><span class="co">## 165     T cells       B cells          25        68  0.658631  1.791641</span></span>
+<span><span class="co">## 166     T cells       B cells          26        36 -0.208312 -0.440867</span></span>
+<span><span class="co">## 167     T cells       B cells          27        22 -0.780090 -1.739028</span></span>
+<span><span class="co">## 168     T cells       B cells          28        22  0.970415  6.607850</span></span>
+<span><span class="co">##            df     p.Pos     p.Neg</span></span>
+<span><span class="co">##     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1     2.52260  0.933764 0.0662360</span></span>
+<span><span class="co">## 2     4.10197  0.929540 0.0704600</span></span>
+<span><span class="co">## 3     6.14190  0.987197 0.0128029</span></span>
+<span><span class="co">## 4     3.37927  0.684141 0.3158586</span></span>
+<span><span class="co">## 5     1.58960  0.910855 0.0891448</span></span>
+<span><span class="co">## ...       ...       ...       ...</span></span>
+<span><span class="co">## 164   6.81704 0.2031018  0.796898</span></span>
+<span><span class="co">## 165   4.18977 0.0722069  0.927793</span></span>
+<span><span class="co">## 166   4.28468 0.6596756  0.340324</span></span>
+<span><span class="co">## 167   1.94541 0.8861726  0.113827</span></span>
+<span><span class="co">## 168   2.70293 0.0048402  0.995160</span></span></code></pre>
 <p>Or the correlation between breast cancer and fibroblasts across the
 whole slide:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
@@ -326,12 +326,12 @@ whole slide:</p>
 <pre><code><span><span class="co">## DataFrame with 6 rows and 5 columns</span></span>
 <span><span class="co">##       celltype1     celltype2  cor.coef       p.Pos       p.Neg</span></span>
 <span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer -0.680790 1.00000e+00 4.63811e-11</span></span>
-<span><span class="co">## 2   Fibroblasts       T cells  0.669896 6.05654e-10 1.00000e+00</span></span>
-<span><span class="co">## 3   Fibroblasts       B cells  0.202050 6.46826e-03 7.32280e-01</span></span>
-<span><span class="co">## 4 Breast cancer       T cells -0.789911 9.99999e-01 1.17273e-15</span></span>
-<span><span class="co">## 5 Breast cancer       B cells -0.327668 7.36709e-01 5.42730e-04</span></span>
-<span><span class="co">## 6       T cells       B cells  0.459552 3.81121e-07 9.29168e-01</span></span></code></pre>
+<span><span class="co">## 1   Fibroblasts Breast cancer -0.588355 9.99553e-01 1.46490e-10</span></span>
+<span><span class="co">## 2   Fibroblasts       T cells  0.500595 2.64942e-06 9.96745e-01</span></span>
+<span><span class="co">## 3   Fibroblasts       B cells  0.115157 9.12185e-02 5.23180e-01</span></span>
+<span><span class="co">## 4 Breast cancer       T cells -0.667864 9.99960e-01 1.65284e-11</span></span>
+<span><span class="co">## 5 Breast cancer       B cells -0.345501 9.87806e-01 1.29475e-04</span></span>
+<span><span class="co">## 6       T cells       B cells  0.453378 9.48117e-07 9.20867e-01</span></span></code></pre>
 <p>We can also visualise the fitting using function
 <code>plotDensCor</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -407,79 +407,52 @@ using function <code>allocateCells</code>.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] sf_1.0-14                   SpatialExperiment_1.10.0   </span></span>
-<span><span class="co">##  [3] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.2</span></span>
-<span><span class="co">##  [5] Biobase_2.60.0              GenomicRanges_1.52.1       </span></span>
-<span><span class="co">##  [7] GenomeInfoDb_1.36.4         IRanges_2.34.1             </span></span>
-<span><span class="co">##  [9] S4Vectors_0.38.2            BiocGenerics_0.46.0        </span></span>
-<span><span class="co">## [11] MatrixGenerics_1.12.3       matrixStats_1.1.0          </span></span>
+<span><span class="co">##  [1] sf_1.0-15                   SpatialExperiment_1.12.0   </span></span>
+<span><span class="co">##  [3] SingleCellExperiment_1.24.0 SummarizedExperiment_1.32.0</span></span>
+<span><span class="co">##  [5] Biobase_2.62.0              GenomicRanges_1.54.1       </span></span>
+<span><span class="co">##  [7] GenomeInfoDb_1.38.5         IRanges_2.36.0             </span></span>
+<span><span class="co">##  [9] S4Vectors_0.40.2            BiocGenerics_0.48.1        </span></span>
+<span><span class="co">## [11] MatrixGenerics_1.14.0       matrixStats_1.2.0          </span></span>
 <span><span class="co">## [13] scider_1.1.1                ggplot2_3.4.4              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] RColorBrewer_1.1-3        jsonlite_1.8.7           </span></span>
-<span><span class="co">##   [3] magrittr_2.0.3            spatstat.utils_3.0-4     </span></span>
-<span><span class="co">##   [5] magick_2.8.1              farver_2.1.1             </span></span>
-<span><span class="co">##   [7] rmarkdown_2.25            fs_1.6.3                 </span></span>
-<span><span class="co">##   [9] zlibbioc_1.46.0           ragg_1.2.6               </span></span>
-<span><span class="co">##  [11] vctrs_0.6.4               memoise_2.0.1            </span></span>
-<span><span class="co">##  [13] spatstat.explore_3.2-5    DelayedMatrixStats_1.22.6</span></span>
-<span><span class="co">##  [15] RCurl_1.98-1.13           SpatialPack_0.4          </span></span>
-<span><span class="co">##  [17] janitor_2.2.0             htmltools_0.5.7          </span></span>
-<span><span class="co">##  [19] S4Arrays_1.0.6            Rhdf5lib_1.22.1          </span></span>
-<span><span class="co">##  [21] rhdf5_2.44.0              sass_0.4.7               </span></span>
-<span><span class="co">##  [23] KernSmooth_2.23-22        bslib_0.5.1              </span></span>
-<span><span class="co">##  [25] htmlwidgets_1.6.2         desc_1.4.2               </span></span>
-<span><span class="co">##  [27] plotly_4.10.3             lubridate_1.9.3          </span></span>
-<span><span class="co">##  [29] cachem_1.0.8              igraph_1.5.1             </span></span>
-<span><span class="co">##  [31] mime_0.12                 lifecycle_1.0.4          </span></span>
-<span><span class="co">##  [33] pkgconfig_2.0.3           Matrix_1.6-1.1           </span></span>
-<span><span class="co">##  [35] R6_2.5.1                  fastmap_1.1.1            </span></span>
-<span><span class="co">##  [37] GenomeInfoDbData_1.2.10   shiny_1.7.5.1            </span></span>
-<span><span class="co">##  [39] snakecase_0.11.1          digest_0.6.33            </span></span>
-<span><span class="co">##  [41] colorspace_2.1-0          rprojroot_2.0.4          </span></span>
-<span><span class="co">##  [43] tensor_1.5                dqrng_0.3.1              </span></span>
-<span><span class="co">##  [45] textshaping_0.3.7         beachmat_2.16.0          </span></span>
-<span><span class="co">##  [47] lwgeom_0.2-13             labeling_0.4.3           </span></span>
-<span><span class="co">##  [49] fansi_1.0.5               spatstat.sparse_3.0-3    </span></span>
-<span><span class="co">##  [51] timechange_0.2.0          mgcv_1.9-0               </span></span>
-<span><span class="co">##  [53] httr_1.4.7                polyclip_1.10-6          </span></span>
-<span><span class="co">##  [55] abind_1.4-5               compiler_4.3.2           </span></span>
-<span><span class="co">##  [57] proxy_0.4-27              withr_2.5.2              </span></span>
-<span><span class="co">##  [59] BiocParallel_1.34.2       DBI_1.1.3                </span></span>
-<span><span class="co">##  [61] highr_0.10                HDF5Array_1.28.1         </span></span>
-<span><span class="co">##  [63] R.utils_2.12.2            DelayedArray_0.26.7      </span></span>
-<span><span class="co">##  [65] classInt_0.4-10           rjson_0.2.21             </span></span>
-<span><span class="co">##  [67] units_0.8-4               tools_4.3.2              </span></span>
-<span><span class="co">##  [69] httpuv_1.6.12             goftest_1.2-3            </span></span>
-<span><span class="co">##  [71] R.oo_1.25.0               glue_1.6.2               </span></span>
-<span><span class="co">##  [73] nlme_3.1-163              rhdf5filters_1.12.1      </span></span>
-<span><span class="co">##  [75] promises_1.2.1            grid_4.3.2               </span></span>
-<span><span class="co">##  [77] generics_0.1.3            isoband_0.2.7            </span></span>
-<span><span class="co">##  [79] gtable_0.3.4              spatstat.data_3.0-3      </span></span>
-<span><span class="co">##  [81] class_7.3-22              R.methodsS3_1.8.2        </span></span>
-<span><span class="co">##  [83] tidyr_1.3.0               data.table_1.14.8        </span></span>
-<span><span class="co">##  [85] utf8_1.2.4                XVector_0.40.0           </span></span>
-<span><span class="co">##  [87] spatstat.geom_3.2-7       pillar_1.9.0             </span></span>
-<span><span class="co">##  [89] stringr_1.5.0             limma_3.56.2             </span></span>
-<span><span class="co">##  [91] later_1.3.1               splines_4.3.2            </span></span>
-<span><span class="co">##  [93] dplyr_1.1.3               lattice_0.21-9           </span></span>
-<span><span class="co">##  [95] deldir_1.0-9              tidyselect_1.2.0         </span></span>
-<span><span class="co">##  [97] locfit_1.5-9.8            scuttle_1.10.3           </span></span>
-<span><span class="co">##  [99] knitr_1.45                edgeR_3.42.4             </span></span>
-<span><span class="co">## [101] xfun_0.41                 DropletUtils_1.20.0      </span></span>
-<span><span class="co">## [103] pheatmap_1.0.12           stringi_1.7.12           </span></span>
-<span><span class="co">## [105] lazyeval_0.2.2            yaml_2.3.7               </span></span>
-<span><span class="co">## [107] evaluate_0.23             codetools_0.2-19         </span></span>
-<span><span class="co">## [109] tibble_3.2.1              cli_3.6.1                </span></span>
-<span><span class="co">## [111] xtable_1.8-4              systemfonts_1.0.5        </span></span>
-<span><span class="co">## [113] munsell_0.5.0             jquerylib_0.1.4          </span></span>
-<span><span class="co">## [115] Rcpp_1.0.11               spatstat.random_3.2-1    </span></span>
-<span><span class="co">## [117] parallel_4.3.2            ellipsis_0.3.2           </span></span>
-<span><span class="co">## [119] pkgdown_2.0.7             fastmatrix_0.5-7         </span></span>
-<span><span class="co">## [121] sparseMatrixStats_1.12.2  bitops_1.0-7             </span></span>
-<span><span class="co">## [123] viridisLite_0.4.2         e1071_1.7-13             </span></span>
-<span><span class="co">## [125] scales_1.2.1              purrr_1.0.2              </span></span>
-<span><span class="co">## [127] crayon_1.5.2              rlang_1.1.2</span></span></code></pre>
+<span><span class="co">##   [1] DBI_1.2.1               bitops_1.0-7            deldir_2.0-2           </span></span>
+<span><span class="co">##   [4] rlang_1.1.3             magrittr_2.0.3          snakecase_0.11.1       </span></span>
+<span><span class="co">##   [7] e1071_1.7-14            compiler_4.3.2          spatstat.geom_3.2-7    </span></span>
+<span><span class="co">##  [10] mgcv_1.9-0              systemfonts_1.0.5       vctrs_0.6.5            </span></span>
+<span><span class="co">##  [13] stringr_1.5.1           pkgconfig_2.0.3         crayon_1.5.2           </span></span>
+<span><span class="co">##  [16] fastmap_1.1.1           magick_2.8.2            XVector_0.42.0         </span></span>
+<span><span class="co">##  [19] ellipsis_0.3.2          lwgeom_0.2-13           labeling_0.4.3         </span></span>
+<span><span class="co">##  [22] utf8_1.2.4              promises_1.2.1          rmarkdown_2.25         </span></span>
+<span><span class="co">##  [25] ragg_1.2.7              purrr_1.0.2             xfun_0.41              </span></span>
+<span><span class="co">##  [28] zlibbioc_1.48.0         cachem_1.0.8            jsonlite_1.8.8         </span></span>
+<span><span class="co">##  [31] goftest_1.2-3           highr_0.10              later_1.3.2            </span></span>
+<span><span class="co">##  [34] DelayedArray_0.28.0     spatstat.utils_3.0-4    R6_2.5.1               </span></span>
+<span><span class="co">##  [37] RColorBrewer_1.1-3      bslib_0.6.1             stringi_1.8.3          </span></span>
+<span><span class="co">##  [40] spatstat.data_3.0-4     lubridate_1.9.3         jquerylib_0.1.4        </span></span>
+<span><span class="co">##  [43] Rcpp_1.0.12             knitr_1.45              tensor_1.5             </span></span>
+<span><span class="co">##  [46] splines_4.3.2           igraph_1.6.0            timechange_0.3.0       </span></span>
+<span><span class="co">##  [49] httpuv_1.6.13           Matrix_1.6-1.1          tidyselect_1.2.0       </span></span>
+<span><span class="co">##  [52] abind_1.4-5             yaml_2.3.8              spatstat.random_3.2-2  </span></span>
+<span><span class="co">##  [55] spatstat.explore_3.2-5  lattice_0.21-9          tibble_3.2.1           </span></span>
+<span><span class="co">##  [58] shiny_1.8.0             withr_3.0.0             evaluate_0.23          </span></span>
+<span><span class="co">##  [61] desc_1.4.3              isoband_0.2.7           units_0.8-5            </span></span>
+<span><span class="co">##  [64] proxy_0.4-27            polyclip_1.10-6         pillar_1.9.0           </span></span>
+<span><span class="co">##  [67] KernSmooth_2.23-22      plotly_4.10.4           generics_0.1.3         </span></span>
+<span><span class="co">##  [70] RCurl_1.98-1.14         munsell_0.5.0           scales_1.3.0           </span></span>
+<span><span class="co">##  [73] xtable_1.8-4            class_7.3-22            glue_1.7.0             </span></span>
+<span><span class="co">##  [76] janitor_2.2.0           pheatmap_1.0.12         lazyeval_0.2.2         </span></span>
+<span><span class="co">##  [79] tools_4.3.2             data.table_1.14.10      fs_1.6.3               </span></span>
+<span><span class="co">##  [82] grid_4.3.2              tidyr_1.3.0             colorspace_2.1-0       </span></span>
+<span><span class="co">##  [85] nlme_3.1-163            GenomeInfoDbData_1.2.11 fastmatrix_0.5-772     </span></span>
+<span><span class="co">##  [88] cli_3.6.2               spatstat.sparse_3.0-3   textshaping_0.3.7      </span></span>
+<span><span class="co">##  [91] fansi_1.0.6             S4Arrays_1.2.0          viridisLite_0.4.2      </span></span>
+<span><span class="co">##  [94] dplyr_1.1.4             gtable_0.3.4            SpatialPack_0.4        </span></span>
+<span><span class="co">##  [97] sass_0.4.8              digest_0.6.34           classInt_0.4-10        </span></span>
+<span><span class="co">## [100] SparseArray_1.2.3       rjson_0.2.21            htmlwidgets_1.6.4      </span></span>
+<span><span class="co">## [103] farver_2.1.1            memoise_2.0.1           htmltools_0.5.7        </span></span>
+<span><span class="co">## [106] pkgdown_2.0.7           lifecycle_1.0.4         httr_1.4.7             </span></span>
+<span><span class="co">## [109] mime_0.12</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
