@@ -10,6 +10,7 @@
 #' @export
 #' 
 #' @importFrom SpatialPack modified.ttest
+#' @importFrom stats pt
 #'
 #' @examples
 #'

@@ -22,6 +22,7 @@
 #' @return A SpatialExperiment object.
 #' @export
 #'
+#' @importFrom dbscan hdbscan
 #'
 #' @examples
 #'
