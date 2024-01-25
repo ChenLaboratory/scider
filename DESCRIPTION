@@ -55,7 +55,8 @@ Imports:
     rlang,
     isoband,
     S4Vectors,
-    grDevices
+    grDevices,
+    dbscan
 Suggests:
     edgeR,
     testthat (>= 3.0.0)
