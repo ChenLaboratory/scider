@@ -74,10 +74,10 @@ findROI <- function(spe, coi,
     # network approaches
     if (diag.nodes) {
       adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
-        scider:::adjacent_grids_with_corner(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
+        adjacent_grids_with_corner(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
     } else {
       adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
-        scider:::adjacent_grids(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
+        adjacent_grids(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
     }
     keep <- (adj_edges$node1 %in% grid_data_filter$node) & (adj_edges$node2 %in% grid_data_filter$node)
     adj_edges <- adj_edges[keep, ]
