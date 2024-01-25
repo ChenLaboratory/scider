@@ -65,6 +65,7 @@
 <span>  method <span class="op">=</span> <span class="st">"walktrap"</span>,</span>
 <span>  diag.nodes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sequential.roi.name <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,8 +91,9 @@ defining a ROI. Default to 20.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>The community dectection method to be used, either walktrap or
-connected. Default to walktrap, can be abbreviated.</p></dd>
+<dd><p>The community dectection method to be used, possible options
+are  walktrap, connected, hdbscan, eigen or greedy.
+Default to walktrap, can be abbreviated.</p></dd>
 
 
 <dt>diag.nodes</dt>
@@ -103,6 +105,11 @@ to be adjacent nodes.</p></dd>
 <dd><p>Logical. Set this to FALSE if you want the
 original ROI name before
 filtering are retained.</p></dd>
+
+
+<dt>directed</dt>
+<dd><p>Logical. For graph-based approaches, whether to build a
+directed graph.</p></dd>
 
 
 <dt>...</dt>
