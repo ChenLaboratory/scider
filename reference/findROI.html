@@ -66,6 +66,8 @@
 <span>  diag.nodes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sequential.roi.name <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  zoom.in <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  zoom.in.size <span class="op">=</span> <span class="fl">500L</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,6 +112,16 @@ filtering are retained.</p></dd>
 <dt>directed</dt>
 <dd><p>Logical. For graph-based approaches, whether to build a
 directed graph.</p></dd>
+
+
+<dt>zoom.in</dt>
+<dd><p>Logical. For very large ROIs, whether to zoom in and try
+to get more refined ROIs.</p></dd>
+
+
+<dt>zoom.in.size</dt>
+<dd><p>A numeric scaler. Smallest size of an ROI to be able
+to zoom in. Default is 500L.</p></dd>
 
 
 <dt>...</dt>

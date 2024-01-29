@@ -75,7 +75,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Mengbo Li, Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2024-01-25</h4>
+            <h4 data-toc-skip class="date">2024-01-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/HEAD/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -228,20 +228,20 @@ object.</p>
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">roi</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 1640 rows and 6 columns</span></span>
+<pre><code><span><span class="co">## DataFrame with 1627 rows and 6 columns</span></span>
 <span><span class="co">##      component     members           x           y    xcoord    ycoord</span></span>
 <span><span class="co">##       &lt;factor&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1            1       72-86          72          86   7168.50   8360.26</span></span>
-<span><span class="co">## 2            1       72-87          72          87   7168.50   8456.21</span></span>
-<span><span class="co">## 3            1       73-84          73          84   7264.83   8168.34</span></span>
-<span><span class="co">## 4            1       73-85          73          85   7264.83   8264.30</span></span>
-<span><span class="co">## 5            1       73-86          73          86   7264.83   8360.26</span></span>
+<span><span class="co">## 1            1       73-97          73          97   7264.83   9415.79</span></span>
+<span><span class="co">## 2            1       73-98          73          98   7264.83   9511.75</span></span>
+<span><span class="co">## 3            1       73-99          73          99   7264.83   9607.71</span></span>
+<span><span class="co">## 4            1       74-95          74          95   7361.16   9223.88</span></span>
+<span><span class="co">## 5            1       74-96          74          96   7361.16   9319.83</span></span>
 <span><span class="co">## ...        ...         ...         ...         ...       ...       ...</span></span>
-<span><span class="co">## 1636        28      46-108          46         108   4663.93   10471.3</span></span>
-<span><span class="co">## 1637        28      46-109          46         109   4663.93   10567.3</span></span>
-<span><span class="co">## 1638        28      47-106          47         106   4760.26   10279.4</span></span>
-<span><span class="co">## 1639        28      47-107          47         107   4760.26   10375.4</span></span>
-<span><span class="co">## 1640        28      47-108          47         108   4760.26   10471.3</span></span></code></pre>
+<span><span class="co">## 1623        27      81-109          81         109   8035.47   10567.3</span></span>
+<span><span class="co">## 1624        27      82-106          82         106   8131.80   10279.4</span></span>
+<span><span class="co">## 1625        27      82-107          82         107   8131.80   10375.4</span></span>
+<span><span class="co">## 1626        27      82-108          82         108   8131.80   10471.3</span></span>
+<span><span class="co">## 1627        27      82-109          82         109   8131.80   10567.3</span></span></code></pre>
 <p>We can visualise the ROIs with function <code>plotROI</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotROI.html">plotROI</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
@@ -292,33 +292,33 @@ object.</p>
 each ROI.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">ROI</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 168 rows and 9 columns</span></span>
+<pre><code><span><span class="co">## DataFrame with 162 rows and 9 columns</span></span>
 <span><span class="co">##       celltype1     celltype2         ROI     ngrid  cor.coef         t</span></span>
 <span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer           1        29 -0.810210 -2.195430</span></span>
-<span><span class="co">## 2   Fibroblasts Breast cancer           2        72 -0.668610 -1.821051</span></span>
-<span><span class="co">## 3   Fibroblasts Breast cancer           3       162 -0.763429 -2.929274</span></span>
-<span><span class="co">## 4   Fibroblasts Breast cancer           4        36 -0.274915 -0.525622</span></span>
-<span><span class="co">## 5   Fibroblasts Breast cancer           5        36 -0.878272 -2.315785</span></span>
+<span><span class="co">## 1   Fibroblasts Breast cancer           1        51 -0.261185 -0.726206</span></span>
+<span><span class="co">## 2   Fibroblasts Breast cancer           2        64 -0.850429 -3.191725</span></span>
+<span><span class="co">## 3   Fibroblasts Breast cancer           3        37 -0.609734 -1.547117</span></span>
+<span><span class="co">## 4   Fibroblasts Breast cancer           4       109 -0.619364 -1.301741</span></span>
+<span><span class="co">## 5   Fibroblasts Breast cancer           5        81 -0.713589 -2.246380</span></span>
 <span><span class="co">## ...         ...           ...         ...       ...       ...       ...</span></span>
-<span><span class="co">## 164     T cells       B cells          24        24  0.321072  0.885167</span></span>
-<span><span class="co">## 165     T cells       B cells          25        68  0.658631  1.791641</span></span>
-<span><span class="co">## 166     T cells       B cells          26        36 -0.208312 -0.440867</span></span>
-<span><span class="co">## 167     T cells       B cells          27        22 -0.780090 -1.739028</span></span>
-<span><span class="co">## 168     T cells       B cells          28        22  0.970415  6.607850</span></span>
-<span><span class="co">##            df     p.Pos     p.Neg</span></span>
-<span><span class="co">##     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1     2.52260  0.933764 0.0662360</span></span>
-<span><span class="co">## 2     4.10197  0.929540 0.0704600</span></span>
-<span><span class="co">## 3     6.14190  0.987197 0.0128029</span></span>
-<span><span class="co">## 4     3.37927  0.684141 0.3158586</span></span>
-<span><span class="co">## 5     1.58960  0.910855 0.0891448</span></span>
-<span><span class="co">## ...       ...       ...       ...</span></span>
-<span><span class="co">## 164   6.81704 0.2031018  0.796898</span></span>
-<span><span class="co">## 165   4.18977 0.0722069  0.927793</span></span>
-<span><span class="co">## 166   4.28468 0.6596756  0.340324</span></span>
-<span><span class="co">## 167   1.94541 0.8861726  0.113827</span></span>
-<span><span class="co">## 168   2.70293 0.0048402  0.995160</span></span></code></pre>
+<span><span class="co">## 158     T cells       B cells          23        35  0.256837  0.588082</span></span>
+<span><span class="co">## 159     T cells       B cells          24        32  0.593693  1.300636</span></span>
+<span><span class="co">## 160     T cells       B cells          25        23  0.949763  5.778241</span></span>
+<span><span class="co">## 161     T cells       B cells          26        23  0.692722  1.719319</span></span>
+<span><span class="co">## 162     T cells       B cells          27        20  0.236879  0.534743</span></span>
+<span><span class="co">##            df      p.Pos     p.Neg</span></span>
+<span><span class="co">##     &lt;numeric&gt;  &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1     7.20338   0.754685 0.2453153</span></span>
+<span><span class="co">## 2     3.89846   0.982807 0.0171933</span></span>
+<span><span class="co">## 3     4.04464   0.902016 0.0979838</span></span>
+<span><span class="co">## 4     2.72278   0.853903 0.1460965</span></span>
+<span><span class="co">## 5     4.86369   0.961945 0.0380552</span></span>
+<span><span class="co">## ...       ...        ...       ...</span></span>
+<span><span class="co">## 158   4.89692 0.29127441  0.708726</span></span>
+<span><span class="co">## 159   3.10775 0.14071356  0.859286</span></span>
+<span><span class="co">## 160   3.62552 0.00299803  0.997002</span></span>
+<span><span class="co">## 161   3.20414 0.08909362  0.910906</span></span>
+<span><span class="co">## 162   4.81012 0.30830407  0.691696</span></span></code></pre>
 <p>Or the correlation between breast cancer and fibroblasts across the
 whole slide:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
@@ -326,12 +326,12 @@ whole slide:</p>
 <pre><code><span><span class="co">## DataFrame with 6 rows and 5 columns</span></span>
 <span><span class="co">##       celltype1     celltype2  cor.coef       p.Pos       p.Neg</span></span>
 <span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer -0.588355 9.99553e-01 1.46490e-10</span></span>
-<span><span class="co">## 2   Fibroblasts       T cells  0.500595 2.64942e-06 9.96745e-01</span></span>
-<span><span class="co">## 3   Fibroblasts       B cells  0.115157 9.12185e-02 5.23180e-01</span></span>
-<span><span class="co">## 4 Breast cancer       T cells -0.667864 9.99960e-01 1.65284e-11</span></span>
-<span><span class="co">## 5 Breast cancer       B cells -0.345501 9.87806e-01 1.29475e-04</span></span>
-<span><span class="co">## 6       T cells       B cells  0.453378 9.48117e-07 9.20867e-01</span></span></code></pre>
+<span><span class="co">## 1   Fibroblasts Breast cancer -0.533620 9.99967e-01 6.01577e-08</span></span>
+<span><span class="co">## 2   Fibroblasts       T cells  0.593064 1.36192e-07 9.99697e-01</span></span>
+<span><span class="co">## 3   Fibroblasts       B cells  0.219668 1.66538e-02 6.99226e-01</span></span>
+<span><span class="co">## 4 Breast cancer       T cells -0.633887 9.96068e-01 7.65064e-12</span></span>
+<span><span class="co">## 5 Breast cancer       B cells -0.130037 3.96428e-01 1.94609e-03</span></span>
+<span><span class="co">## 6       T cells       B cells  0.422464 2.22015e-07 9.88677e-01</span></span></code></pre>
 <p>We can also visualise the fitting using function
 <code>plotDensCor</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -443,7 +443,7 @@ using function <code>allocateCells</code>.</p>
 <span><span class="co">##  [73] scales_1.3.0            xtable_1.8-4            class_7.3-22           </span></span>
 <span><span class="co">##  [76] glue_1.7.0              janitor_2.2.0           pheatmap_1.0.12        </span></span>
 <span><span class="co">##  [79] lazyeval_0.2.2          tools_4.3.2             data.table_1.14.10     </span></span>
-<span><span class="co">##  [82] fs_1.6.3                grid_4.3.2              tidyr_1.3.0            </span></span>
+<span><span class="co">##  [82] fs_1.6.3                grid_4.3.2              tidyr_1.3.1            </span></span>
 <span><span class="co">##  [85] colorspace_2.1-0        nlme_3.1-163            GenomeInfoDbData_1.2.11</span></span>
 <span><span class="co">##  [88] fastmatrix_0.5-772      cli_3.6.2               spatstat.sparse_3.0-3  </span></span>
 <span><span class="co">##  [91] textshaping_0.3.7       fansi_1.0.6             S4Arrays_1.2.0         </span></span>
