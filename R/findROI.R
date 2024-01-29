@@ -16,6 +16,10 @@
 #' filtering are retained.
 #' @param directed Logical. For graph-based approaches, whether to build a
 #' directed graph. 
+#' @param zoom.in Logical. For very large ROIs, whether to zoom in and try
+#' to get more refined ROIs. 
+#' @param zoom.in.size A numeric scaler. Smallest size of an ROI to be able
+#' to zoom in. Default is 500L. 
 #' @param ... Other parameters that passed to walktrap.community when method =
 #' "walktrap".
 #'
@@ -40,7 +44,9 @@ findROI <- function(spe, coi,
                     method = "walktrap",
                     diag.nodes = FALSE,
                     sequential.roi.name = TRUE, 
-                    directed = FALSE, ...) {
+                    directed = FALSE, 
+                    zoom.in = FALSE, zoom.in.size = 500L, ...) {
+
   grid_data <- spe@metadata$grid_density
   
   coi_clean <- janitor::make_clean_names(coi)
@@ -50,11 +56,9 @@ findROI <- function(spe, coi,
     stop("Density of COI is not yet computed.")
   }
   
-  method <- match.arg(method, c("walktrap","connected","hdbscan", 
-                                "eigen", "greedy"))
-  if (!(method %in% c("walktrap", "connected", "hdbscan", "eigen", "greedy"))) {
-    stop("The method chosen is not supported, please choose from\n
-         walktrap, connected, hdbscan, eigen, greedy")
+  method <- match.arg(method, c("walktrap","connected","hdbscan","eigen", "greedy", "dbscan"))
+  if (!(method %in% c("walktrap", "connected", "hdbscan", "eigen", "greedy", "dbscan"))) {
+    stop("The method chosen is not supported, please choose from walktrap, connected, hdbscan, eigen, greedy, dbscan. ")
   }
   
   grid_data$density_coi_average <- rowMeans(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop = FALSE]))
@@ -65,12 +69,17 @@ findROI <- function(spe, coi,
   # clustering approach
   if (identical(method, "hdbscan")) {
     message(paste("For hdbscan, using minPts = ", ngrid.min, sep = ""))
-    cl <- dbscan::hdbscan(grid_data_filter[, c("x_grid", "y_grid")], 
-                          minPts = ngrid.min)
+    cl <- dbscan::hdbscan(grid_data_filter[, c("x_grid", "y_grid")], minPts = ngrid.min) #, ...)
     cls <- setdiff(sort(unique(cl$cluster)), 0)
-    g_community <- lapply(cls, function(cc) {
-      grid_data_filter$node[cl$cluster == cc]
-    })
+    g_community <- lapply(cls, function(cc) { grid_data_filter$node[cl$cluster == cc] })
+  } else if (identical(method, "dbscan")) {
+    message(paste("For dbscan, using minPts = ", ngrid.min, sep = ""))
+    cl <- dbscan::dbscan(grid_data_filter[, c("x_grid", "y_grid")], 
+                         eps = sum(spe@metadata$grid_info$xstep, spe@metadata$grid_info$ystep), 
+                         weights = grid_data_filter[["density_coi_average"]],
+                         minPts = ngrid.min)
+    cls <- setdiff(sort(unique(cl$cluster)), 0)
+    g_community <- lapply(cls, function(cc) { grid_data_filter$node[cl$cluster == cc] })
   } else {
     # network approaches
     if (diag.nodes) {
@@ -82,28 +91,24 @@ findROI <- function(spe, coi,
     }
     keep <- (adj_edges$node1 %in% grid_data_filter$node) & (adj_edges$node2 %in% grid_data_filter$node)
     adj_edges <- adj_edges[keep, ]
-    # not allow self-connected nodes
+    # not allowing self-connected nodes
     keep <- adj_edges$node1 != adj_edges$node2
     adj_edges <- adj_edges[keep, ]
     adj_edges$node1_wt <- grid_data_filter$density_coi_average[match(adj_edges$node1, grid_data_filter$node)]
     adj_edges$node2_wt <- grid_data_filter$density_coi_average[match(adj_edges$node2, grid_data_filter$node)]
     adj_edges$weight <- (adj_edges$node1_wt + adj_edges$node2_wt) * 0.5
-    # only keep edges going from low to high density nodes
-    adj_edges$low2high <- adj_edges$node1_wt < adj_edges$node2_wt
     
     if (diag.nodes) {
       adj_edges$weight[adj_edges$class == "corner"] <- adj_edges$weight[adj_edges$class == "corner"] / sqrt(2)
     }
     
-    df_edges <- adj_edges[adj_edges$low2high, c("node1", "node2", "weight")]
-    if (directed) {
-      g <- igraph::graph_from_data_frame(df_edges, directed = TRUE)
-    } else {
-      g <- igraph::graph_from_data_frame(df_edges, directed = FALSE)
-    }
+    df_edges <- adj_edges[, c("node1", "node2", "weight")]
+    
+    
+    g <- igraph::graph_from_data_frame(df_edges, directed = directed)
     
     if (method == "walktrap") {
-      g_community <- igraph::cluster_walktrap(g)
+      g_community <- igraph::cluster_walktrap(g, ...)
     }
     if (method == "connected") {
       g_community <- igraph::groups(igraph::components(g))
@@ -112,7 +117,26 @@ findROI <- function(spe, coi,
       g_community <- igraph::cluster_leading_eigen(g)
     }
     if (method == "greedy") {
+      df_edges <- adj_edges[adj_edges$node1_wt < adj_edges$node2_wt, c("node1", "node2", "weight")]
+      g <- igraph::graph_from_data_frame(df_edges, directed = directed)
       g_community <- igraph::cluster_fast_greedy(g)
+    }
+    if (zoom.in) {
+      connected_groups <- igraph::groups(igraph::components(g))
+      g_community <- lapply(names(connected_groups), function(ind) {
+        this_grp <- connected_groups[[ind]]
+        if (length(this_grp) > zoom.in.size) {
+          subg <- igraph::induced_subgraph(g, this_grp)
+          suppressWarnings(subg_community <- igraph::cluster_leading_eigen(subg))
+          subg_community <- igraph::communities(subg_community)
+          names(subg_community) <- paste(ind, names(subg_community), sep = "-")
+        } else {
+          subg_community <- list(this_grp)
+          names(subg_community) <- ind
+        }
+        return(subg_community)
+      })
+      g_community <- do.call(c, g_community)
     }
     
   }

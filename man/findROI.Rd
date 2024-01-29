@@ -13,6 +13,8 @@ findROI(
   diag.nodes = FALSE,
   sequential.roi.name = TRUE,
   directed = FALSE,
+  zoom.in = FALSE,
+  zoom.in.size = 500L,
   ...
 )
 }
@@ -40,6 +42,12 @@ filtering are retained.}
 
 \item{directed}{Logical. For graph-based approaches, whether to build a
 directed graph.}
+
+\item{zoom.in}{Logical. For very large ROIs, whether to zoom in and try
+to get more refined ROIs.}
+
+\item{zoom.in.size}{A numeric scaler. Smallest size of an ROI to be able
+to zoom in. Default is 500L.}
 
 \item{...}{Other parameters that passed to walktrap.community when method =
 "walktrap".}
