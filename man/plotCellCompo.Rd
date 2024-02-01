@@ -9,7 +9,8 @@ plotCellCompo(
   coi,
   id = "cell_type",
   level.name = paste0(janitor::make_clean_names(coi), "_contour"),
-  by.roi = FALSE
+  by.roi = FALSE,
+  all = TRUE
 )
 }
 \arguments{
@@ -24,6 +25,10 @@ containing the cell type identifiers. Set to cell_type by default.}
 
 \item{by.roi}{Logical. Default is FALSE, set to TRUE to allow
 plotting by ROI.}
+
+\item{all}{Logical. Whether to include all the cell types in the plot.
+Default to TRUE. If FALSE, the cell types specified in 'coi' will not
+be included in the plot.}
 }
 \value{
 A ggplot object.
