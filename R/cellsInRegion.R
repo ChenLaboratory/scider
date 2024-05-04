@@ -17,7 +17,7 @@ cellsInRegion <- function(spe, region, name_to,
         sf_classes <- vapply(region, class, character(2))[1, ]
     }
     if (length(region) == 1L) {
-        sf_classes <- class(region)[1]
+        sf_classes <- class(region[[1]])[1]
     }
     if (any(sf_classes != "sf")) {
         stop("One or more regions not converted to the sf class!")
