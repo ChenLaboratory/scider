@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   scider_userGuide: scider_userGuide.html
-last_built: 2024-04-09T06:08Z
+last_built: 2024-05-04T01:41Z
 urls:
   reference: https://chenlaboratory.github.io/scider/reference
   article: https://chenlaboratory.github.io/scider/articles
