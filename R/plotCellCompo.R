@@ -67,7 +67,7 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
         toplot <- do.call(rbind, proportions_by_roi)
     }
 
-    col.p <- selectColor(length(unique(toplot[["cell_type"]])))
+    col.p <- selectColor(length(unique(toplot[[id]])))
 
     p <- ggplot(toplot, aes(
         x = !!rlang::sym(level.name),
