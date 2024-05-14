@@ -46,12 +46,12 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
         dat <- as.data.frame(colData(spe))[, c(id, level.name, "roi")]
     }
 
-    if (!(coi %in% dat$cell_type)) {
+    if (!(coi %in% dat[[id]])) {
         stop("Input 'coi' is expected to be one of the
              cell types in the data.")
     }
 
-    if(!all) dat <- dat[dat$cell_type != coi, ]
+    if(!all) dat <- dat[dat[[id]] != coi, ]
 
     if (isFALSE(by.roi)) {
         toplot <- calc_proportions(dat, level.name, id)
@@ -72,7 +72,7 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
     p <- ggplot(toplot, aes(
         x = !!rlang::sym(level.name),
         y = Proportion,
-        fill = cell_type
+        fill = id
     )) +
         geom_bar(stat = "identity") +
         scale_fill_manual("Cell type", values = col.p) +

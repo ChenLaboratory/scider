@@ -17,6 +17,15 @@ visualizations.
 which can easily be integrated with a wide variety
 of Bioconductor packages.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ChenLaboratory/scider}
+  \item \url{https://chenlaboratory.github.io/scider/}
+  \item Report bugs at \url{https://github.com/ChenLaboratory/scider/issues}
+}
+
+}
 \author{
 Ning Liu \email{liu.n@wehi.edu.au},
 Mengbo Li \email{li.me@wehi.edu.au},
