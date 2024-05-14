@@ -66,13 +66,14 @@ plotCellCompo <- function(spe, coi, id = "cell_type",
 
         toplot <- do.call(rbind, proportions_by_roi)
     }
-
+    
     col.p <- selectColor(length(unique(toplot[[id]])))
+    cell_type <- rlang::sym(id)
 
     p <- ggplot(toplot, aes(
         x = !!rlang::sym(level.name),
         y = Proportion,
-        fill = id
+        fill = !!cell_type
     )) +
         geom_bar(stat = "identity") +
         scale_fill_manual("Cell type", values = col.p) +
