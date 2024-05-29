@@ -187,8 +187,12 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     ))
 
     if (!is.null(areas_down)) {
-        areas_up_union <- sf::st_union(areas_up)
-        out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
+        if (!is.null(areas_up)){
+            areas_up_union <- sf::st_union(areas_up)
+            out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
+        } else {
+            out <- sf::st_covered_by(areas_down, sparse = FALSE)
+        }
         areas_down_out <- areas_down[c(out), ]
         if (nrow(areas_down_out) > 0L) {
             # flatten out overlaps
@@ -218,11 +222,15 @@ contour2sf <- function(spe, contour, coi, cutoff) {
             )
             areas_down_out <- areas_down_out[areas_down_out_code < lev_code, ]
             areas_down_out <- sf::st_combine(areas_down_out)
-            areas <- sf::st_difference(areas_up_union, areas_down_out)
-            # check if there is any missed area
-            missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
-            if (any(missed_up)) {
-                areas <- sf::st_union(sf::st_sf(areas), areas_up[missed_up, ])
+            if (!is.null(areas_up)){
+                areas <- sf::st_difference(areas_up_union, areas_down_out)
+                # check if there is any missed area
+                missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
+                if (any(missed_up)) {
+                  areas <- sf::st_union(sf::st_sf(areas), areas_up[missed_up, ])
+                }
+            } else {
+                areas <- areas_down_out
             }
         } else {
             areas <- sf::st_union(areas_up)

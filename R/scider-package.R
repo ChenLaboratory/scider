@@ -21,6 +21,9 @@
 
 NULL
 
+#' @keywords internal 
+"_PACKAGE"
+
 #' Spatial cell-type inter-correlation by density in R.
 #'
 #' `scider` implements functions to analyse spatial transcriptomics data with
@@ -38,7 +41,6 @@ NULL
 #' Mengbo Li \email{li.me@@wehi.edu.au},
 #' Yunshun Chen \email{yuchen@@wehi.edu.au}
 #' @name scider-package
-#' @docType package
 #' @aliases scider scider-package
 #' @keywords internal
 #'
