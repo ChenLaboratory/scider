@@ -118,7 +118,7 @@ spe2PB <- function(spe,
 
     # Pseudo-bulk sample information
     sample.pb <- data.frame()[seq_len(ncol(counts.pb)), ]
-    sample.pb$n.cells <- table(group)
+    sample.pb$n.cells <- as.vector(table(group))
 
     if (!is.null(grp)) {
         grp.pb <- gsub("_ROI.*$", "", levels(group))
