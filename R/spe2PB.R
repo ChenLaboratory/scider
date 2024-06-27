@@ -53,7 +53,7 @@ spe2PB <- function(spe,
     }
 
     # Check 'counts'
-    counts <- spe@assays@data$counts
+    counts <- as.matrix(spe@assays@data$counts)
     if (is.null(counts)) stop("spe doesn't contain raw RNA counts")
 
     # Check 'colData'
