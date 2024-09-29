@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Mengbo Li, Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2024-07-12</h4>
+            <h4 data-toc-skip class="date">2024-09-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/devel/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -164,7 +164,7 @@ are saved in the metadata of the SpatialExperimnet object.</p>
 <pre><code><span><span class="co">## [1] "grid_density" "grid_info"</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">grid_density</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 11400 rows and 9 columns</span></span>
+<pre><code><span><span class="co">## DataFrame with 11400 rows and 10 columns</span></span>
 <span><span class="co">##          x_grid    y_grid    node_x    node_y        node density_fibroblasts</span></span>
 <span><span class="co">##       &lt;numeric&gt; &lt;numeric&gt; &lt;integer&gt; &lt;integer&gt; &lt;character&gt;           &lt;numeric&gt;</span></span>
 <span><span class="co">## 1       329.102   203.852         1         1         1-1          0.00352639</span></span>
@@ -178,19 +178,19 @@ are saved in the metadata of the SpatialExperimnet object.</p>
 <span><span class="co">## 11398   9865.73   10855.2       100       112     100-112          0.00482908</span></span>
 <span><span class="co">## 11399   9865.73   10951.1       100       113     100-113          0.00384286</span></span>
 <span><span class="co">## 11400   9865.73   11047.1       100       114     100-114          0.00303176</span></span>
-<span><span class="co">##       density_breast_cancer density_t_cells density_b_cells</span></span>
-<span><span class="co">##                   &lt;numeric&gt;       &lt;numeric&gt;       &lt;numeric&gt;</span></span>
-<span><span class="co">## 1               0.000124482      0.00200091      0.00308062</span></span>
-<span><span class="co">## 2               0.000158866      0.00269403      0.00447254</span></span>
-<span><span class="co">## 3               0.000207521      0.00360691      0.00639036</span></span>
-<span><span class="co">## 4               0.000278528      0.00478231      0.00893371</span></span>
-<span><span class="co">## 5               0.000385603      0.00624991      0.01215386</span></span>
-<span><span class="co">## ...                     ...             ...             ...</span></span>
-<span><span class="co">## 11396            0.00992645     1.85862e-05     0.000385502</span></span>
-<span><span class="co">## 11397            0.00715312     9.95949e-06     0.000337516</span></span>
-<span><span class="co">## 11398            0.00504125     5.53001e-06     0.000288967</span></span>
-<span><span class="co">## 11399            0.00348873     3.29144e-06     0.000242472</span></span>
-<span><span class="co">## 11400            0.00237981     2.14802e-06     0.000199856</span></span></code></pre>
+<span><span class="co">##       density_breast_cancer density_t_cells density_b_cells density_overall</span></span>
+<span><span class="co">##                   &lt;numeric&gt;       &lt;numeric&gt;       &lt;numeric&gt;       &lt;numeric&gt;</span></span>
+<span><span class="co">## 1               0.000124482      0.00200091      0.00308062       0.0087324</span></span>
+<span><span class="co">## 2               0.000158866      0.00269403      0.00447254       0.0116527</span></span>
+<span><span class="co">## 3               0.000207521      0.00360691      0.00639036       0.0154651</span></span>
+<span><span class="co">## 4               0.000278528      0.00478231      0.00893371       0.0203289</span></span>
+<span><span class="co">## 5               0.000385603      0.00624991      0.01215386       0.0263470</span></span>
+<span><span class="co">## ...                     ...             ...             ...             ...</span></span>
+<span><span class="co">## 11396            0.00992645     1.85862e-05     0.000385502      0.01776314</span></span>
+<span><span class="co">## 11397            0.00715312     9.95949e-06     0.000337516      0.01351718</span></span>
+<span><span class="co">## 11398            0.00504125     5.53001e-06     0.000288967      0.01016482</span></span>
+<span><span class="co">## 11399            0.00348873     3.29144e-06     0.000242472      0.00757736</span></span>
+<span><span class="co">## 11400            0.00237981     2.14802e-06     0.000199856      0.00561357</span></span></code></pre>
 <p>We can visualise the density of each COI using function
 <code>plotDensity</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -213,20 +213,20 @@ object.</p>
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">roi</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 1627 rows and 6 columns</span></span>
+<pre><code><span><span class="co">## DataFrame with 1702 rows and 6 columns</span></span>
 <span><span class="co">##      component     members           x           y    xcoord    ycoord</span></span>
 <span><span class="co">##       &lt;factor&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1            1       73-97          73          97   7264.83   9415.79</span></span>
-<span><span class="co">## 2            1       73-98          73          98   7264.83   9511.75</span></span>
-<span><span class="co">## 3            1       73-99          73          99   7264.83   9607.71</span></span>
-<span><span class="co">## 4            1       74-95          74          95   7361.16   9223.88</span></span>
-<span><span class="co">## 5            1       74-96          74          96   7361.16   9319.83</span></span>
+<span><span class="co">## 1            1       54-89          54          89   5434.57   8648.13</span></span>
+<span><span class="co">## 2            1       54-90          54          90   5434.57   8744.09</span></span>
+<span><span class="co">## 3            1       54-91          54          91   5434.57   8840.04</span></span>
+<span><span class="co">## 4            1       54-92          54          92   5434.57   8936.00</span></span>
+<span><span class="co">## 5            1       54-93          54          93   5434.57   9031.96</span></span>
 <span><span class="co">## ...        ...         ...         ...         ...       ...       ...</span></span>
-<span><span class="co">## 1623        27      81-109          81         109   8035.47   10567.3</span></span>
-<span><span class="co">## 1624        27      82-106          82         106   8131.80   10279.4</span></span>
-<span><span class="co">## 1625        27      82-107          82         107   8131.80   10375.4</span></span>
-<span><span class="co">## 1626        27      82-108          82         108   8131.80   10471.3</span></span>
-<span><span class="co">## 1627        27      82-109          82         109   8131.80   10567.3</span></span></code></pre>
+<span><span class="co">## 1698         9      34-111          34         111   3507.98   10759.2</span></span>
+<span><span class="co">## 1699         9      34-112          34         112   3507.98   10855.2</span></span>
+<span><span class="co">## 1700         9      34-113          34         113   3507.98   10951.1</span></span>
+<span><span class="co">## 1701         9      34-114          34         114   3507.98   11047.1</span></span>
+<span><span class="co">## 1702         9      26-106          26         106   2737.34   10279.4</span></span></code></pre>
 <p>We can visualise the ROIs with function <code>plotROI</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotROI.html">plotROI</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
@@ -277,46 +277,50 @@ object.</p>
 each ROI.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">ROI</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 162 rows and 9 columns</span></span>
-<span><span class="co">##       celltype1     celltype2         ROI     ngrid  cor.coef         t</span></span>
-<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer           1        51 -0.261185 -0.726206</span></span>
-<span><span class="co">## 2   Fibroblasts Breast cancer           2        64 -0.850429 -3.191725</span></span>
-<span><span class="co">## 3   Fibroblasts Breast cancer           3        37 -0.609734 -1.547117</span></span>
-<span><span class="co">## 4   Fibroblasts Breast cancer           4       109 -0.619364 -1.301741</span></span>
-<span><span class="co">## 5   Fibroblasts Breast cancer           5        81 -0.713589 -2.246380</span></span>
-<span><span class="co">## ...         ...           ...         ...       ...       ...       ...</span></span>
-<span><span class="co">## 158     T cells       B cells          23        35  0.256837  0.588082</span></span>
-<span><span class="co">## 159     T cells       B cells          24        32  0.593693  1.300636</span></span>
-<span><span class="co">## 160     T cells       B cells          25        23  0.949763  5.778241</span></span>
-<span><span class="co">## 161     T cells       B cells          26        23  0.692722  1.719319</span></span>
-<span><span class="co">## 162     T cells       B cells          27        20  0.236879  0.534743</span></span>
-<span><span class="co">##            df      p.Pos     p.Neg</span></span>
-<span><span class="co">##     &lt;numeric&gt;  &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">## 1     7.20338   0.754685 0.2453153</span></span>
-<span><span class="co">## 2     3.89846   0.982807 0.0171933</span></span>
-<span><span class="co">## 3     4.04464   0.902016 0.0979838</span></span>
-<span><span class="co">## 4     2.72278   0.853903 0.1460965</span></span>
-<span><span class="co">## 5     4.86369   0.961945 0.0380552</span></span>
-<span><span class="co">## ...       ...        ...       ...</span></span>
-<span><span class="co">## 158   4.89692 0.29127441  0.708726</span></span>
-<span><span class="co">## 159   3.10775 0.14071356  0.859286</span></span>
-<span><span class="co">## 160   3.62552 0.00299803  0.997002</span></span>
-<span><span class="co">## 161   3.20414 0.08909362  0.910906</span></span>
-<span><span class="co">## 162   4.81012 0.30830407  0.691696</span></span></code></pre>
+<pre><code><span><span class="co">## DataFrame with 90 rows and 9 columns</span></span>
+<span><span class="co">##       celltype1     celltype2         ROI     ngrid    cor.coef          t</span></span>
+<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;  &lt;numeric&gt;</span></span>
+<span><span class="co">## 1   Fibroblasts Breast cancer           1       260   -0.531521  -1.476259</span></span>
+<span><span class="co">## 2   Fibroblasts Breast cancer           2       134   -0.241165  -0.795319</span></span>
+<span><span class="co">## 3   Fibroblasts Breast cancer           3        34   -0.910997  -5.486463</span></span>
+<span><span class="co">## 4   Fibroblasts Breast cancer           4       365   -0.819615  -2.844135</span></span>
+<span><span class="co">## 5   Fibroblasts Breast cancer           5       143   -0.911208  -3.512353</span></span>
+<span><span class="co">## ...         ...           ...         ...       ...         ...        ...</span></span>
+<span><span class="co">## 86      B cells       Overall           5       143  0.29093028  0.6182580</span></span>
+<span><span class="co">## 87      B cells       Overall           6        51 -0.03590908 -0.1516607</span></span>
+<span><span class="co">## 88      B cells       Overall           7       256 -0.02748881 -0.0963216</span></span>
+<span><span class="co">## 89      B cells       Overall           8       157 -0.21739139 -0.6338573</span></span>
+<span><span class="co">## 90      B cells       Overall           9       302 -0.00357184 -0.0113272</span></span>
+<span><span class="co">##            df     p.Pos       p.Neg</span></span>
+<span><span class="co">##     &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">## 1     5.53475  0.902811 0.097188822</span></span>
+<span><span class="co">## 2    10.24308  0.777767 0.222233443</span></span>
+<span><span class="co">## 3     6.16902  0.999300 0.000700371</span></span>
+<span><span class="co">## 4     3.95239  0.976335 0.023664613</span></span>
+<span><span class="co">## 5     2.52141  0.974362 0.025637662</span></span>
+<span><span class="co">## ...       ...       ...         ...</span></span>
+<span><span class="co">## 86    4.13384  0.284424    0.715576</span></span>
+<span><span class="co">## 87   17.81464  0.559421    0.440579</span></span>
+<span><span class="co">## 88   12.26894  0.537590    0.462410</span></span>
+<span><span class="co">## 89    8.09978  0.728173    0.271827</span></span>
+<span><span class="co">## 90   10.05664  0.504408    0.495592</span></span></code></pre>
 <p>Or the correlation between breast cancer and fibroblasts across the
 whole slide:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">overall</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 6 rows and 5 columns</span></span>
-<span><span class="co">##       celltype1     celltype2  cor.coef       p.Pos       p.Neg</span></span>
-<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer -0.533620 9.99967e-01 6.01577e-08</span></span>
-<span><span class="co">## 2   Fibroblasts       T cells  0.593064 1.36192e-07 9.99697e-01</span></span>
-<span><span class="co">## 3   Fibroblasts       B cells  0.219668 1.66538e-02 6.99226e-01</span></span>
-<span><span class="co">## 4 Breast cancer       T cells -0.633887 9.96068e-01 7.65064e-12</span></span>
-<span><span class="co">## 5 Breast cancer       B cells -0.130037 3.96428e-01 1.94609e-03</span></span>
-<span><span class="co">## 6       T cells       B cells  0.422464 2.22015e-07 9.88677e-01</span></span></code></pre>
+<pre><code><span><span class="co">## DataFrame with 10 rows and 5 columns</span></span>
+<span><span class="co">##        celltype1     celltype2   cor.coef       p.Pos       p.Neg</span></span>
+<span><span class="co">##      &lt;character&gt;   &lt;character&gt;  &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">## 1    Fibroblasts Breast cancer -0.6753889 9.96007e-01 4.67727e-07</span></span>
+<span><span class="co">## 2    Fibroblasts       T cells  0.3707839         NaN         NaN</span></span>
+<span><span class="co">## 3    Fibroblasts       B cells -0.0531358 4.14978e-01 6.18940e-01</span></span>
+<span><span class="co">## 4    Fibroblasts       Overall -0.3380779 7.68369e-01 1.01143e-03</span></span>
+<span><span class="co">## 5  Breast cancer       T cells -0.6813525 1.00000e+00 7.26031e-07</span></span>
+<span><span class="co">## 6  Breast cancer       B cells -0.2506759 9.86903e-01 1.08842e-01</span></span>
+<span><span class="co">## 7  Breast cancer       Overall  0.9133944 9.22351e-25 1.00000e+00</span></span>
+<span><span class="co">## 8        T cells       B cells  0.4951966 4.76098e-03 9.92977e-01</span></span>
+<span><span class="co">## 9        T cells       Overall -0.4253390 9.99688e-01 2.99126e-03</span></span>
+<span><span class="co">## 10       B cells       Overall -0.1427232 9.50345e-01 3.64598e-01</span></span></code></pre>
 <p>We can also visualise the fitting using function
 <code>plotDensCor</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -372,7 +376,7 @@ using function <code>allocateCells</code>.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.5 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -392,51 +396,51 @@ using function <code>allocateCells</code>.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] sf_1.0-16                   SpatialExperiment_1.14.0   </span></span>
+<span><span class="co">##  [1] sf_1.0-17                   SpatialExperiment_1.14.0   </span></span>
 <span><span class="co">##  [3] SingleCellExperiment_1.26.0 SummarizedExperiment_1.34.0</span></span>
 <span><span class="co">##  [5] Biobase_2.64.0              GenomicRanges_1.56.1       </span></span>
 <span><span class="co">##  [7] GenomeInfoDb_1.40.1         IRanges_2.38.1             </span></span>
 <span><span class="co">##  [9] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
-<span><span class="co">## [11] MatrixGenerics_1.16.0       matrixStats_1.3.0          </span></span>
-<span><span class="co">## [13] scider_1.3.1                ggplot2_3.5.1              </span></span>
+<span><span class="co">## [11] MatrixGenerics_1.16.0       matrixStats_1.4.1          </span></span>
+<span><span class="co">## [13] scider_1.3.2                ggplot2_3.5.1              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] DBI_1.2.3               deldir_2.0-4            rlang_1.1.4            </span></span>
-<span><span class="co">##   [4] magrittr_2.0.3          snakecase_0.11.1        e1071_1.7-14           </span></span>
-<span><span class="co">##   [7] compiler_4.4.1          spatstat.geom_3.2-9     mgcv_1.9-1             </span></span>
+<span><span class="co">##   [4] magrittr_2.0.3          snakecase_0.11.1        e1071_1.7-16           </span></span>
+<span><span class="co">##   [7] compiler_4.4.1          spatstat.geom_3.3-3     mgcv_1.9-1             </span></span>
 <span><span class="co">##  [10] systemfonts_1.1.0       vctrs_0.6.5             stringr_1.5.1          </span></span>
 <span><span class="co">##  [13] pkgconfig_2.0.3         crayon_1.5.3            fastmap_1.2.0          </span></span>
-<span><span class="co">##  [16] magick_2.8.3            XVector_0.44.0          lwgeom_0.2-14          </span></span>
+<span><span class="co">##  [16] magick_2.8.5            XVector_0.44.0          lwgeom_0.2-14          </span></span>
 <span><span class="co">##  [19] labeling_0.4.3          utf8_1.2.4              promises_1.3.0         </span></span>
-<span><span class="co">##  [22] rmarkdown_2.27          UCSC.utils_1.0.0        ragg_1.3.2             </span></span>
-<span><span class="co">##  [25] purrr_1.0.2             xfun_0.45               zlibbioc_1.50.0        </span></span>
-<span><span class="co">##  [28] cachem_1.1.0            jsonlite_1.8.8          goftest_1.2-3          </span></span>
+<span><span class="co">##  [22] rmarkdown_2.28          UCSC.utils_1.0.0        ragg_1.3.3             </span></span>
+<span><span class="co">##  [25] purrr_1.0.2             xfun_0.47               zlibbioc_1.50.0        </span></span>
+<span><span class="co">##  [28] cachem_1.1.0            jsonlite_1.8.9          goftest_1.2-3          </span></span>
 <span><span class="co">##  [31] highr_0.11              later_1.3.2             DelayedArray_0.30.1    </span></span>
-<span><span class="co">##  [34] spatstat.utils_3.0-5    R6_2.5.1                RColorBrewer_1.1-3     </span></span>
-<span><span class="co">##  [37] bslib_0.7.0             stringi_1.8.4           spatstat.data_3.1-2    </span></span>
-<span><span class="co">##  [40] lubridate_1.9.3         jquerylib_0.1.4         Rcpp_1.0.12            </span></span>
-<span><span class="co">##  [43] knitr_1.48              tensor_1.5              splines_4.4.1          </span></span>
-<span><span class="co">##  [46] httpuv_1.6.15           Matrix_1.7-0            igraph_2.0.3           </span></span>
-<span><span class="co">##  [49] timechange_0.3.0        tidyselect_1.2.1        abind_1.4-5            </span></span>
-<span><span class="co">##  [52] yaml_2.3.9              spatstat.random_3.2-3   spatstat.explore_3.2-7 </span></span>
-<span><span class="co">##  [55] lattice_0.22-6          tibble_3.2.1            shiny_1.8.1.1          </span></span>
-<span><span class="co">##  [58] withr_3.0.0             evaluate_0.24.0         desc_1.4.3             </span></span>
-<span><span class="co">##  [61] isoband_0.2.7           units_0.8-5             proxy_0.4-27           </span></span>
-<span><span class="co">##  [64] polyclip_1.10-6         pillar_1.9.0            KernSmooth_2.23-24     </span></span>
-<span><span class="co">##  [67] plotly_4.10.4           generics_0.1.3          dbscan_1.2-0           </span></span>
-<span><span class="co">##  [70] munsell_0.5.1           scales_1.3.0            xtable_1.8-4           </span></span>
-<span><span class="co">##  [73] class_7.3-22            glue_1.7.0              janitor_2.2.0          </span></span>
-<span><span class="co">##  [76] pheatmap_1.0.12         lazyeval_0.2.2          tools_4.4.1            </span></span>
-<span><span class="co">##  [79] data.table_1.15.4       fs_1.6.4                grid_4.4.1             </span></span>
-<span><span class="co">##  [82] tidyr_1.3.1             colorspace_2.1-0        nlme_3.1-164           </span></span>
-<span><span class="co">##  [85] GenomeInfoDbData_1.2.12 fastmatrix_0.5-772      cli_3.6.3              </span></span>
-<span><span class="co">##  [88] spatstat.sparse_3.1-0   textshaping_0.4.0       fansi_1.0.6            </span></span>
-<span><span class="co">##  [91] S4Arrays_1.4.1          viridisLite_0.4.2       dplyr_1.1.4            </span></span>
-<span><span class="co">##  [94] gtable_0.3.5            SpatialPack_0.4         sass_0.4.9             </span></span>
-<span><span class="co">##  [97] digest_0.6.36           classInt_0.4-10         SparseArray_1.4.8      </span></span>
-<span><span class="co">## [100] rjson_0.2.21            htmlwidgets_1.6.4       farver_2.1.2           </span></span>
-<span><span class="co">## [103] htmltools_0.5.8.1       pkgdown_2.1.0           lifecycle_1.0.4        </span></span>
-<span><span class="co">## [106] httr_1.4.7              mime_0.12</span></span></code></pre>
+<span><span class="co">##  [34] spatstat.utils_3.1-0    R6_2.5.1                RColorBrewer_1.1-3     </span></span>
+<span><span class="co">##  [37] bslib_0.8.0             stringi_1.8.4           spatstat.data_3.1-2    </span></span>
+<span><span class="co">##  [40] spatstat.univar_3.0-1   lubridate_1.9.3         jquerylib_0.1.4        </span></span>
+<span><span class="co">##  [43] Rcpp_1.0.13             knitr_1.48              tensor_1.5             </span></span>
+<span><span class="co">##  [46] splines_4.4.1           httpuv_1.6.15           Matrix_1.7-0           </span></span>
+<span><span class="co">##  [49] igraph_2.0.3            timechange_0.3.0        tidyselect_1.2.1       </span></span>
+<span><span class="co">##  [52] abind_1.4-8             yaml_2.3.10             spatstat.random_3.3-2  </span></span>
+<span><span class="co">##  [55] spatstat.explore_3.3-2  lattice_0.22-6          tibble_3.2.1           </span></span>
+<span><span class="co">##  [58] shiny_1.9.1             withr_3.0.1             evaluate_1.0.0         </span></span>
+<span><span class="co">##  [61] desc_1.4.3              isoband_0.2.7           units_0.8-5            </span></span>
+<span><span class="co">##  [64] proxy_0.4-27            polyclip_1.10-7         pillar_1.9.0           </span></span>
+<span><span class="co">##  [67] KernSmooth_2.23-24      plotly_4.10.4           generics_0.1.3         </span></span>
+<span><span class="co">##  [70] dbscan_1.2-0            munsell_0.5.1           scales_1.3.0           </span></span>
+<span><span class="co">##  [73] xtable_1.8-4            class_7.3-22            glue_1.7.0             </span></span>
+<span><span class="co">##  [76] janitor_2.2.0           pheatmap_1.0.12         lazyeval_0.2.2         </span></span>
+<span><span class="co">##  [79] tools_4.4.1             data.table_1.16.0       fs_1.6.4               </span></span>
+<span><span class="co">##  [82] grid_4.4.1              tidyr_1.3.1             colorspace_2.1-1       </span></span>
+<span><span class="co">##  [85] nlme_3.1-164            GenomeInfoDbData_1.2.12 fastmatrix_0.5-7721    </span></span>
+<span><span class="co">##  [88] cli_3.6.3               spatstat.sparse_3.1-0   textshaping_0.4.0      </span></span>
+<span><span class="co">##  [91] fansi_1.0.6             S4Arrays_1.4.1          viridisLite_0.4.2      </span></span>
+<span><span class="co">##  [94] dplyr_1.1.4             gtable_0.3.5            SpatialPack_0.4        </span></span>
+<span><span class="co">##  [97] sass_0.4.9              digest_0.6.37           classInt_0.4-10        </span></span>
+<span><span class="co">## [100] SparseArray_1.4.8       rjson_0.2.23            htmlwidgets_1.6.4      </span></span>
+<span><span class="co">## [103] farver_2.1.2            htmltools_0.5.8.1       pkgdown_2.1.1          </span></span>
+<span><span class="co">## [106] lifecycle_1.0.4         httr_1.4.7              mime_0.12</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -450,7 +454,7 @@ using function <code>allocateCells</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
