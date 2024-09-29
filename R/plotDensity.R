@@ -63,7 +63,7 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5) {
                 max(grid_data[, "y_grid"])
             )
         ) +
-    ggtitle(coi)
+    ggtitle(paste(coi, collapse=", "))
 
     return(p)
 }
