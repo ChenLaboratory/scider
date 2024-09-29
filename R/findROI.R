@@ -2,6 +2,7 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
+#' Default to all cell types.
 #' @param probs A numeric scalar. The threshold of proportion that used to
 #'  filter grid by density. Default to 0.85.
 #' @param ngrid.min An integer. The minimum number of grids required for
@@ -38,7 +39,7 @@
 #'
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #'
-findROI <- function(spe, coi,
+findROI <- function(spe, coi = NULL,
                     probs = 0.85,
                     ngrid.min = 20,
                     method = "greedy",
@@ -48,7 +49,9 @@ findROI <- function(spe, coi,
                     zoom.in = FALSE, zoom.in.size = 500L, ...) {
 
   grid_data <- spe@metadata$grid_density
-  
+
+  if (is.null(coi)) coi <- "overall"
+  if (length(coi) >= 2) coi <- coi[coi!="overall"]
   coi_clean <- janitor::make_clean_names(coi)
   dens_cols <- paste("density", coi_clean, sep = "_")
   

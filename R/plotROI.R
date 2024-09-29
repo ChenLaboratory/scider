@@ -83,7 +83,9 @@ plotROI <- function(spe,
         ) +
         scale_fill_manual(values = col.p) +
         scale_x_continuous(limits = plot.xlim) +
-        scale_y_continuous(limits = plot.ylim)
+        scale_y_continuous(limits = plot.ylim) +
+        coord_fixed() +
+        ggtitle(paste0("ROI (", paste(coi, collapse=", "), ")"))
 
     if (isFALSE(show.legend)) {
         roi_plot <- roi_plot +

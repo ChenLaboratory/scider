@@ -42,6 +42,9 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5) {
             probs = probs
         )
 
+    xstep <- spe@metadata$grid_info$xstep
+    ystep <- spe@metadata$grid_info$ystep
+
     p <- ggplot() +
         geom_tile(
             data = grid_data[kp, ],
@@ -49,18 +52,19 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5) {
                 x = x_grid, y = y_grid,
                 fill = density_coi_average
             )
-        ) +
+        ) + 
+        coord_fixed() +
         theme_classic() +
         scale_fill_gradientn(colours = rev(col.spec)) +
         labs(x = "x", y = "y", fill = "Density") +
         lims(
             x = c(
-                min(grid_data[, "x_grid"]),
-                max(grid_data[, "x_grid"])
+                min(grid_data[, "x_grid"]) - xstep/2,
+                max(grid_data[, "x_grid"]) + xstep/2
             ),
             y = c(
-                min(grid_data[, "y_grid"]),
-                max(grid_data[, "y_grid"])
+                min(grid_data[, "y_grid"]) - ystep/2,
+                max(grid_data[, "y_grid"]) + ystep/2
             )
         ) +
     ggtitle(paste(coi, collapse=", "))
