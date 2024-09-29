@@ -7,8 +7,8 @@
 #' @param ngrid.min An integer. The minimum number of grids required for
 #' defining a ROI. Default to 20.
 #' @param method The community dectection method to be used, possible options
-#' are  walktrap, connected, hdbscan, eigen or greedy. 
-#' Default to walktrap, can be abbreviated.
+#' are greedy, walktrap, connected, hdbscan, eigen or dbscan. 
+#' Default to greedy, can be abbreviated.
 #' @param diag.nodes Logical. Set this to TRUE to allow diagonal grid points
 #' to be adjacent nodes.
 #' @param sequential.roi.name Logical. Set this to FALSE if you want the
@@ -41,7 +41,7 @@
 findROI <- function(spe, coi,
                     probs = 0.85,
                     ngrid.min = 20,
-                    method = "walktrap",
+                    method = "greedy",
                     diag.nodes = FALSE,
                     sequential.roi.name = TRUE, 
                     directed = FALSE, 
@@ -56,7 +56,7 @@ findROI <- function(spe, coi,
     stop("Density of COI is not yet computed.")
   }
   
-  method <- match.arg(method, c("walktrap","connected","hdbscan","eigen", "greedy", "dbscan"))
+  method <- match.arg(method, c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"))
   if (!(method %in% c("walktrap", "connected", "hdbscan", "eigen", "greedy", "dbscan"))) {
     stop("The method chosen is not supported, please choose from walktrap, connected, hdbscan, eigen, greedy, dbscan. ")
   }

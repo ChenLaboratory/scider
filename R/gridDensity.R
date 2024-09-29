@@ -2,10 +2,10 @@
 #' cell types of interest
 #'
 #' @param spe A SpatialExperiment object.
-#' @param coi A character vector of cell types of interest (COIs).
-#' Default to all cell types.
 #' @param id A character. The name of the column of colData(spe) containing
 #' the cell type identifiers. Set to cell_type by default.
+#' @param coi A character vector of cell types of interest (COIs).
+#' Default to all cell types.
 #' @param kernel The smoothing kernel. Options are "gaussian",
 #' "epanechnikov", "quartic" or "disc".
 #' @param bandwidth The smoothing bandwidth. By default performing
@@ -31,8 +31,8 @@
 #' spe <- gridDensity(spe)
 #'
 gridDensity <- function(spe,
-                        coi = NULL,
                         id = "cell_type",
+                        coi = NULL,
                         kernel = "gaussian",
                         bandwidth = NULL,
                         ngrid.x = 100, ngrid.y = NULL,
@@ -54,6 +54,7 @@ gridDensity <- function(spe,
         ), "not found in data!", sep = " "))
     }
 
+    coi <- c(coi, "overall")
     coi_clean <- janitor::make_clean_names(coi)
 
     # define canvas
@@ -79,9 +80,13 @@ gridDensity <- function(spe,
 
     # compute density for each cell type and then, filter
     for (ii in seq_len(length(coi))) {
-        # subset data to this COI
-        sub <- which(colData(spe)[[id]] == coi[ii])
-        obj <- spe[, sub]
+
+        if(coi[ii] != "overall"){
+            # subset data to this COI
+            sub <- which(colData(spe)[[id]] == coi[ii])
+            obj <- spe[, sub]
+        } else 
+            obj <- spe
 
         # compute density
         out <- computeDensity(obj,
@@ -136,5 +141,6 @@ gridDensity <- function(spe,
             )
         }
     }
+
     return(spe)
 }
