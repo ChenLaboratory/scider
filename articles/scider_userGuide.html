@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Mengbo Li, Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2024-09-29</h4>
+            <h4 data-toc-skip class="date">2024-09-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/devel/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -277,20 +277,20 @@ object.</p>
 each ROI.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">ROI</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 90 rows and 9 columns</span></span>
-<span><span class="co">##       celltype1     celltype2         ROI     ngrid    cor.coef          t</span></span>
-<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;  &lt;numeric&gt;</span></span>
-<span><span class="co">## 1   Fibroblasts Breast cancer           1       260   -0.531521  -1.476259</span></span>
-<span><span class="co">## 2   Fibroblasts Breast cancer           2       134   -0.241165  -0.795319</span></span>
-<span><span class="co">## 3   Fibroblasts Breast cancer           3        34   -0.910997  -5.486463</span></span>
-<span><span class="co">## 4   Fibroblasts Breast cancer           4       365   -0.819615  -2.844135</span></span>
-<span><span class="co">## 5   Fibroblasts Breast cancer           5       143   -0.911208  -3.512353</span></span>
-<span><span class="co">## ...         ...           ...         ...       ...         ...        ...</span></span>
-<span><span class="co">## 86      B cells       Overall           5       143  0.29093028  0.6182580</span></span>
-<span><span class="co">## 87      B cells       Overall           6        51 -0.03590908 -0.1516607</span></span>
-<span><span class="co">## 88      B cells       Overall           7       256 -0.02748881 -0.0963216</span></span>
-<span><span class="co">## 89      B cells       Overall           8       157 -0.21739139 -0.6338573</span></span>
-<span><span class="co">## 90      B cells       Overall           9       302 -0.00357184 -0.0113272</span></span>
+<pre><code><span><span class="co">## DataFrame with 54 rows and 9 columns</span></span>
+<span><span class="co">##       celltype1     celltype2         ROI     ngrid  cor.coef         t</span></span>
+<span><span class="co">##     &lt;character&gt;   &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1   Fibroblasts Breast cancer           1       260 -0.531521 -1.476259</span></span>
+<span><span class="co">## 2   Fibroblasts Breast cancer           2       134 -0.241165 -0.795319</span></span>
+<span><span class="co">## 3   Fibroblasts Breast cancer           3        34 -0.910997 -5.486463</span></span>
+<span><span class="co">## 4   Fibroblasts Breast cancer           4       365 -0.819615 -2.844135</span></span>
+<span><span class="co">## 5   Fibroblasts Breast cancer           5       143 -0.911208 -3.512353</span></span>
+<span><span class="co">## ...         ...           ...         ...       ...       ...       ...</span></span>
+<span><span class="co">## 50      T cells       B cells           5       143  0.793446  2.455943</span></span>
+<span><span class="co">## 51      T cells       B cells           6        51  0.971599  4.409954</span></span>
+<span><span class="co">## 52      T cells       B cells           7       256  0.242682  0.805451</span></span>
+<span><span class="co">## 53      T cells       B cells           8       157  0.513009  1.828657</span></span>
+<span><span class="co">## 54      T cells       B cells           9       302  0.423378  1.643954</span></span>
 <span><span class="co">##            df     p.Pos       p.Neg</span></span>
 <span><span class="co">##     &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span></span>
 <span><span class="co">## 1     5.53475  0.902811 0.097188822</span></span>
@@ -299,28 +299,24 @@ each ROI.</p>
 <span><span class="co">## 4     3.95239  0.976335 0.023664613</span></span>
 <span><span class="co">## 5     2.52141  0.974362 0.025637662</span></span>
 <span><span class="co">## ...       ...       ...         ...</span></span>
-<span><span class="co">## 86    4.13384  0.284424    0.715576</span></span>
-<span><span class="co">## 87   17.81464  0.559421    0.440579</span></span>
-<span><span class="co">## 88   12.26894  0.537590    0.462410</span></span>
-<span><span class="co">## 89    8.09978  0.728173    0.271827</span></span>
-<span><span class="co">## 90   10.05664  0.504408    0.495592</span></span></code></pre>
+<span><span class="co">## 50    3.54915 0.0390202    0.960980</span></span>
+<span><span class="co">## 51    1.15356 0.0583103    0.941690</span></span>
+<span><span class="co">## 52   10.36669 0.2193219    0.780678</span></span>
+<span><span class="co">## 53    9.36217 0.0497131    0.950287</span></span>
+<span><span class="co">## 54   12.37466 0.0626672    0.937333</span></span></code></pre>
 <p>Or the correlation between breast cancer and fibroblasts across the
 whole slide:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_result</span><span class="op">$</span><span class="va">overall</span></span></code></pre></div>
-<pre><code><span><span class="co">## DataFrame with 10 rows and 5 columns</span></span>
-<span><span class="co">##        celltype1     celltype2   cor.coef       p.Pos       p.Neg</span></span>
-<span><span class="co">##      &lt;character&gt;   &lt;character&gt;  &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
-<span><span class="co">## 1    Fibroblasts Breast cancer -0.6753889 9.96007e-01 4.67727e-07</span></span>
-<span><span class="co">## 2    Fibroblasts       T cells  0.3707839         NaN         NaN</span></span>
-<span><span class="co">## 3    Fibroblasts       B cells -0.0531358 4.14978e-01 6.18940e-01</span></span>
-<span><span class="co">## 4    Fibroblasts       Overall -0.3380779 7.68369e-01 1.01143e-03</span></span>
-<span><span class="co">## 5  Breast cancer       T cells -0.6813525 1.00000e+00 7.26031e-07</span></span>
-<span><span class="co">## 6  Breast cancer       B cells -0.2506759 9.86903e-01 1.08842e-01</span></span>
-<span><span class="co">## 7  Breast cancer       Overall  0.9133944 9.22351e-25 1.00000e+00</span></span>
-<span><span class="co">## 8        T cells       B cells  0.4951966 4.76098e-03 9.92977e-01</span></span>
-<span><span class="co">## 9        T cells       Overall -0.4253390 9.99688e-01 2.99126e-03</span></span>
-<span><span class="co">## 10       B cells       Overall -0.1427232 9.50345e-01 3.64598e-01</span></span></code></pre>
+<pre><code><span><span class="co">## DataFrame with 6 rows and 5 columns</span></span>
+<span><span class="co">##       celltype1     celltype2   cor.coef      p.Pos       p.Neg</span></span>
+<span><span class="co">##     &lt;character&gt;   &lt;character&gt;  &lt;numeric&gt;  &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">## 1   Fibroblasts Breast cancer -0.6753889 0.99600688 4.67727e-07</span></span>
+<span><span class="co">## 2   Fibroblasts       T cells  0.3707839        NaN         NaN</span></span>
+<span><span class="co">## 3   Fibroblasts       B cells -0.0531358 0.41497838 6.18940e-01</span></span>
+<span><span class="co">## 4 Breast cancer       T cells -0.6813525 0.99999999 7.26031e-07</span></span>
+<span><span class="co">## 5 Breast cancer       B cells -0.2506759 0.98690313 1.08842e-01</span></span>
+<span><span class="co">## 6       T cells       B cells  0.4951966 0.00476098 9.92977e-01</span></span></code></pre>
 <p>We can also visualise the fitting using function
 <code>plotDensCor</code>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -402,7 +398,7 @@ using function <code>allocateCells</code>.</p>
 <span><span class="co">##  [7] GenomeInfoDb_1.40.1         IRanges_2.38.1             </span></span>
 <span><span class="co">##  [9] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
 <span><span class="co">## [11] MatrixGenerics_1.16.0       matrixStats_1.4.1          </span></span>
-<span><span class="co">## [13] scider_1.3.2                ggplot2_3.5.1              </span></span>
+<span><span class="co">## [13] scider_1.3.3                ggplot2_3.5.1              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] DBI_1.2.3               deldir_2.0-4            rlang_1.1.4            </span></span>
