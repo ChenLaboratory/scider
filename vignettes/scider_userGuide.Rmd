@@ -96,34 +96,26 @@ data.
 
 ## Density calculation
 
-Before calculating density, we need to define cell type-of-interest (COI).
-In this case, all cell types are COIs.
-
-```{r}
-coi <- unique(colData(spe)$cell_type)
-coi
-```
-
-We can perform density calculation for each COI using function `gridDensity`.
+We can perform density calculation for each cell type using function `gridDensity`.
 The calculated density and grid information are saved in the metadata of the 
 SpatialExperimnet object.
-
 ```{r}
 spe <- gridDensity(spe, coi = coi)
-
 names(metadata(spe))
 ```
-
 ```{r}
 metadata(spe)$grid_density
 ```
 
-We can visualise the density of each COI using function `plotDensity`.
-
+We can visualise the overall cell density of the whole tissue using function `plotDensity`.
 ```{r, fig.width=5, fig.height=4}
-plotDensity(spe, coi = coi[1])
+plotDensity(spe)
 ```
 
+We can also visualise the density of individual cell type, e.g., fibroblast cells.
+```{r, fig.width=5, fig.height=4}
+plotDensity(spe, coi = "Fibroblasts")
+```
 
 
 ## Find Regions-of-interest (ROIs)
@@ -137,14 +129,13 @@ To detect ROIs automatically, we can use the function `findROI`.
 
 The detected ROIs are saved in the metadata of the SpatialExperiment object.
 
+Here we identify ROIs based on the fibroblasts cell density.
 ```{r}
-spe <- findROI(spe, coi = coi)
-
+spe <- findROI(spe, coi = "Fibroblasts")
 metadata(spe)$roi
 ```
 
 We can visualise the ROIs with function `plotROI`.
-
 ```{r, fig.width=5, fig.height=5}
 plotROI(spe)
 ```
@@ -197,7 +188,7 @@ of the SpatialExperiment object.
 
 
 ```{r}
-model_result <- corDensity(spe, trace = FALSE)
+model_result <- corDensity(spe)
 ```
 
 We can see the correlation between breast cancer and fibroblasts in each ROI.
@@ -238,8 +229,8 @@ plotCorHeatmap(model_result$overall)
 
 Based on the grid density, we can ask many biological question about the data. 
 For example, we would like to know if a certain cell type that are located in 
-high density of breast cancer cells are different to the same cell type from 
-a different level of breast cancer region.
+high density of fibroblast cells are different to the same cell type from 
+a different level of fibroblast region.
 
 ## cell annotation based on grid density
 
@@ -249,13 +240,13 @@ strategy with function `getContour`.
 
 
 ```{r}
-spe <- getContour(spe, coi = "Breast cancer")
+spe <- getContour(spe, coi = "Fibroblasts", equal.cell = TRUE)
 ```
 
 Different level of contour can be visualised with cells using `plotContour`.
 
 ```{r, fig.width=5, fig.height=4}
-plotContour(spe, coi = "Breast cancer")
+plotContour(spe, coi = "Fibroblasts")
 ```
 
 
@@ -269,18 +260,18 @@ spe <- allocateCells(spe)
 
 
 ```{r, fig.width=6, fig.height=4}
-plotSpatial(spe, color = breast_cancer_contour, alpha = 0.5)
+plotSpatial(spe, color = fibroblasts_contour, alpha = 0.5)
 ```
 
 We can visualise cell type composition per level.
 
 ```{r, fig.width=6, fig.height=4}
-plotCellCompo(spe, coi = "Breast cancer")
+plotCellCompo(spe, coi = "Fibroblasts")
 ```
 
 
 ```{r, fig.width=7, fig.height=5}
-plotCellCompo(spe, coi = "Breast cancer", by.roi = TRUE)
+plotCellCompo(spe, coi = "Fibroblasts", by.roi = TRUE)
 ```
 
 

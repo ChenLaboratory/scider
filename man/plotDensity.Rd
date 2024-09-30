@@ -4,15 +4,16 @@
 \alias{plotDensity}
 \title{Plot grid-based density.}
 \usage{
-plotDensity(spe, coi, probs = 0.8)
+plotDensity(spe, coi = NULL, probs = 0.5)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).}
+\item{coi}{A character vector of cell types of interest (COIs) to be plotted.
+Default to all cell types.}
 
 \item{probs}{Numeric value between 0 and 1, used for filtering
-uninformative grid, default is 0.8.}
+uninformative grid, default is 0.5.}
 }
 \value{
 A ggplot object.

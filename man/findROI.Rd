@@ -6,10 +6,10 @@
 \usage{
 findROI(
   spe,
-  coi,
+  coi = NULL,
   probs = 0.85,
   ngrid.min = 20,
-  method = "walktrap",
+  method = "greedy",
   diag.nodes = FALSE,
   sequential.roi.name = TRUE,
   directed = FALSE,
@@ -21,7 +21,8 @@ findROI(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).}
+\item{coi}{A character vector of cell types of interest (COIs).
+Default to all cell types.}
 
 \item{probs}{A numeric scalar. The threshold of proportion that used to
 filter grid by density. Default to 0.85.}
@@ -30,8 +31,8 @@ filter grid by density. Default to 0.85.}
 defining a ROI. Default to 20.}
 
 \item{method}{The community dectection method to be used, possible options
-are  walktrap, connected, hdbscan, eigen or greedy.
-Default to walktrap, can be abbreviated.}
+are greedy, walktrap, connected, hdbscan, eigen or dbscan.
+Default to greedy, can be abbreviated.}
 
 \item{diag.nodes}{Logical. Set this to TRUE to allow diagonal grid points
 to be adjacent nodes.}

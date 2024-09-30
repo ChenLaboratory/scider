@@ -7,8 +7,8 @@ cell types of interest}
 \usage{
 gridDensity(
   spe,
-  coi = NULL,
   id = "cell_type",
+  coi = NULL,
   kernel = "gaussian",
   bandwidth = NULL,
   ngrid.x = 100,
@@ -21,11 +21,11 @@ gridDensity(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).
-Default to all cell types.}
-
 \item{id}{A character. The name of the column of colData(spe) containing
 the cell type identifiers. Set to cell_type by default.}
+
+\item{coi}{A character vector of cell types of interest (COIs).
+Default to all cell types.}
 
 \item{kernel}{The smoothing kernel. Options are "gaussian",
 "epanechnikov", "quartic" or "disc".}

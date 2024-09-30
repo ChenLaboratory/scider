@@ -131,7 +131,7 @@ getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
 
     contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
 
-    coi_clean_output <- ifelse(length(coi_clean) == 1L, coi_clean, "coi")
+    coi_clean_output <- ifelse(length(coi_clean) == 1L, coi_clean, paste(coi_clean, collapse="_"))
     spe@metadata[[paste(coi_clean_output,
         "contour",
         sep = "_"
