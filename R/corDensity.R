@@ -4,7 +4,7 @@
 #' @param coi Character vector for cell types of interest for density 
 #' correlation analysis. Default is NULL, which is to consider all cell types
 #' previously calculated in the gridDensity() step. 
-#' @param trace Logical. If TRUE (default), print process pf testing. 
+#' @param trace Logical. If TRUE, print the process of testing. Default to FALSE.
 #'
 #' @return A DataFrame containing the testing results.
 #' @export
@@ -24,7 +24,7 @@
 #'
 #' result <- corDensity(spe)
 #'
-corDensity <- function(spe, coi = NULL, trace = TRUE) {
+corDensity <- function(spe, coi = NULL, trace = FALSE) {
   if (!("grid_density" %in% names(spe@metadata))) {
     stop("Please run gridDensity before using this function.")
   }
@@ -38,7 +38,8 @@ corDensity <- function(spe, coi = NULL, trace = TRUE) {
   
   # get cell type info
   den_cols <- colnames(dens_dat)[grepl("density_", colnames(dens_dat))]
-  
+  den_cols <- den_cols[den_cols != "density_overall"]
+
   if(any(!is.null(coi))){
     coi_clean <- paste0("density_", janitor::make_clean_names(coi))
     coi.exist <- coi_clean %in% den_cols
@@ -48,7 +49,7 @@ corDensity <- function(spe, coi = NULL, trace = TRUE) {
   }
   
   nCT <- length(den_cols)
-  if (nCT == 1) stop("Only one cell type detected.")
+  if (nCT < 2) stop("Please run gridDensity for at least two of the cell types specified in 'coi'.")
   
   # construct data table
   model_data <- merge(rois, dens_dat,

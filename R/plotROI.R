@@ -35,7 +35,7 @@ plotROI <- function(spe,
 
     dat <- as.data.frame(spe@colData)
 
-    if (!is.null(coi)) {
+    if (!is.null(coi) & !("overall" %in% coi)) {
         spe <- spe[, dat[, id] %in% coi]
     }
 
