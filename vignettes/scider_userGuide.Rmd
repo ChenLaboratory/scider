@@ -100,7 +100,7 @@ We can perform density calculation for each cell type using function `gridDensit
 The calculated density and grid information are saved in the metadata of the 
 SpatialExperimnet object.
 ```{r}
-spe <- gridDensity(spe, coi = coi)
+spe <- gridDensity(spe)
 names(metadata(spe))
 ```
 ```{r}
