@@ -45,8 +45,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotContour</span><span class="op">(</span></span>
 <span>  <span class="va">spe</span>,</span>
-<span>  <span class="va">coi</span>,</span>
-<span>  overlay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell"</span>, <span class="st">"density"</span><span class="op">)</span>,</span>
+<span>  coi <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  overlay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell"</span>, <span class="st">"density"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  id <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
 <span>  sub.level <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -62,17 +62,18 @@
 
 
 <dt id="arg-coi">coi<a class="anchor" aria-label="anchor" href="#arg-coi"></a></dt>
-<dd><p>A character vector of length 1 of the cell type of interest.</p></dd>
+<dd><p>A character vector of cell types of interest (COIs).
+All cell types are chosen if NULL or 'overall'.</p></dd>
 
 
 <dt id="arg-overlay">overlay<a class="anchor" aria-label="anchor" href="#arg-overlay"></a></dt>
-<dd><p>Character vector. Either plot overlay on density or cell.
-By default is cell.</p></dd>
+<dd><p>Character vector. Options are 'cell' (plot overlay on cells),
+'density' (overlay on density), or 'none'. Default to 'cell'.</p></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>A character. The name of the column of colData(spe) containing
-the cell type identifiers. Set to cell_type by default.</p></dd>
+the cell type identifiers. Set to 'cell_type' by default.</p></dd>
 
 
 <dt id="arg-sub-level">sub.level<a class="anchor" aria-label="anchor" href="#arg-sub-level"></a></dt>

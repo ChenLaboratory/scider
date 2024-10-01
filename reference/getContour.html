@@ -46,7 +46,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getContour</span><span class="op">(</span></span>
 <span>  <span class="va">spe</span>,</span>
 <span>  coi <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  equal.cell <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  equal.cell <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bins <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  binwidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -63,12 +63,14 @@
 
 
 <dt id="arg-coi">coi<a class="anchor" aria-label="anchor" href="#arg-coi"></a></dt>
-<dd><p>A character vector of cell types of interest (COIs).</p></dd>
+<dd><p>A character vector of cell types of interest (COIs).
+All cell types are chosen if NULL or <code>overall</code>.</p></dd>
 
 
 <dt id="arg-equal-cell">equal.cell<a class="anchor" aria-label="anchor" href="#arg-equal-cell"></a></dt>
 <dd><p>Logical. Whether to use produce contour levels so that
-there are roughly the same number of cells of the COI at each level.</p></dd>
+there are roughly the same number of cells of the COI at each level.
+Default to TRUE.</p></dd>
 
 
 <dt id="arg-bins">bins<a class="anchor" aria-label="anchor" href="#arg-bins"></a></dt>
