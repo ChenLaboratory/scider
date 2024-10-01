@@ -2,8 +2,8 @@
 % Please edit documentation in R/scider-package.R
 \docType{package}
 \name{scider-package}
-\alias{scider}
 \alias{scider-package}
+\alias{scider}
 \title{scider: Spatial cell-type inter-correlation by density in R}
 \description{
 scider is an user-friendly R package providing functions to model the global density of cells in a slide of spatial transcriptomics data. All functions in the package are built based on the SpatialExperiment object, allowing integration into various spatial transcriptomics-related packages from Bioconductor. After modelling density, the package allows for serveral downstream analysis, including colocalization analysis, boundary detection analysis and differential density analysis.

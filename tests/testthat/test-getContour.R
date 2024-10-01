@@ -8,5 +8,5 @@ test_that("getContour works", {
     expect_true("breast_cancer_contour" %in% names(spe1@metadata))
 
     expect_error(getContour(spe, coi = "xyz"))
-    expect_silent(getContour(spe, coi = coi, bins = 50))
+    expect_silent(getContour(spe, coi = coi, bins = 50, equal.cell=FALSE))
 })

@@ -2,7 +2,7 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
-#' All types are chosen if NULL or `overall`.
+#' All cell types are chosen if NULL or `overall`.
 #' @param equal.cell Logical. Whether to use produce contour levels so that
 #' there are roughly the same number of cells of the COI at each level. 
 #' Default to TRUE.

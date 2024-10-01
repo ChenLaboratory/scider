@@ -7,7 +7,7 @@
 getContour(
   spe,
   coi = NULL,
-  equal.cell = FALSE,
+  equal.cell = TRUE,
   bins = NULL,
   binwidth = NULL,
   breaks = NULL,
@@ -17,10 +17,12 @@ getContour(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).}
+\item{coi}{A character vector of cell types of interest (COIs).
+All cell types are chosen if NULL or \code{overall}.}
 
 \item{equal.cell}{Logical. Whether to use produce contour levels so that
-there are roughly the same number of cells of the COI at each level.}
+there are roughly the same number of cells of the COI at each level.
+Default to TRUE.}
 
 \item{bins}{An integer. Number of contour levels.}
 

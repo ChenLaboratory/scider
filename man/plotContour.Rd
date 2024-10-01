@@ -6,8 +6,8 @@
 \usage{
 plotContour(
   spe,
-  coi,
-  overlay = c("cell", "density"),
+  coi = NULL,
+  overlay = c("cell", "density", "none"),
   id = "cell_type",
   sub.level = NULL,
   ...
@@ -16,13 +16,14 @@ plotContour(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of length 1 of the cell type of interest.}
+\item{coi}{A character vector of cell types of interest (COIs).
+All cell types are chosen if NULL or 'overall'.}
 
-\item{overlay}{Character vector. Either plot overlay on density or cell.
-By default is cell.}
+\item{overlay}{Character vector. Options are 'cell' (plot overlay on cells),
+'density' (overlay on density), or 'none'. Default to 'cell'.}
 
 \item{id}{A character. The name of the column of colData(spe) containing
-the cell type identifiers. Set to cell_type by default.}
+the cell type identifiers. Set to 'cell_type' by default.}
 
 \item{sub.level}{Character vector. Subset on specific level.}
 

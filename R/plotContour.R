@@ -2,7 +2,7 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs). 
-#' All types are chosen if NULL or 'overall'.
+#' All cell types are chosen if NULL or 'overall'.
 #' @param overlay Character vector. Options are 'cell' (plot overlay on cells),
 #' 'density' (overlay on density), or 'none'. Default to 'cell'.
 #' @param id A character. The name of the column of colData(spe) containing
