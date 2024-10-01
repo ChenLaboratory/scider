@@ -43,7 +43,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotDensity</span><span class="op">(</span><span class="va">spe</span>, <span class="va">coi</span>, probs <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotDensity</span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="cn">NULL</span>, probs <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,12 +55,13 @@
 
 
 <dt id="arg-coi">coi<a class="anchor" aria-label="anchor" href="#arg-coi"></a></dt>
-<dd><p>A character vector of cell types of interest (COIs).</p></dd>
+<dd><p>A character vector of cell types of interest (COIs) to be plotted.
+Default to all cell types.</p></dd>
 
 
 <dt id="arg-probs">probs<a class="anchor" aria-label="anchor" href="#arg-probs"></a></dt>
 <dd><p>Numeric value between 0 and 1, used for filtering
-uninformative grid, default is 0.8.</p></dd>
+uninformative grid, default is 0.5.</p></dd>
 
 </dl></div>
     <div class="section level2">
