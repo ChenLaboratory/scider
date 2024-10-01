@@ -2,8 +2,10 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param coi A character vector of cell types of interest (COIs).
+#' All types are chosen if NULL or `overall`.
 #' @param equal.cell Logical. Whether to use produce contour levels so that
 #' there are roughly the same number of cells of the COI at each level. 
+#' Default to TRUE.
 #' @param bins An integer. Number of contour levels.
 #' @param binwidth A numeric scale of the smoothing bandwidth.
 #' @param breaks A numeric scale referring to the breaks in
@@ -27,7 +29,7 @@
 #'
 #' spe <- getContour(spe, coi = coi)
 #'
-getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
+getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
                        binwidth = NULL, breaks = NULL, id = "cell_type") {
     
     if (is.null(spe@metadata$grid_density)) {
@@ -38,17 +40,15 @@ getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
         stop(paste(id, "is not a column of the colData."))
     }
 
-    if (is.null(coi)) {
-        coi <- names(table(colData(spe)[[id]]))
-    }
-
-    if (length(which(!coi %in% names(table(colData(spe)[[id]])))) > 0L) {
-        stop(paste(paste0(
-            coi[which(!coi %in%
-                names(table(colData(spe)[[id]])))],
-            collapse = ", "
-        ), "not found in data!", sep = " "))
-    }
+    if ( !is.null(coi) & !("overall" %in% coi) ){
+        if (length(which(!coi %in% names(table(colData(spe)[[id]])))) > 0L) {
+            stop(paste(paste0(
+                coi[which(!coi %in%
+                    names(table(colData(spe)[[id]])))],
+                collapse = ", "
+            ), "not found in data!", sep = " "))
+        }
+    } else coi <- "overall"
 
     coi_clean <- janitor::make_clean_names(coi)
     dens_cols <- paste("density", coi_clean, sep = "_")
@@ -66,7 +66,7 @@ getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
     }
 
     if (length(dens_cols) > 1L) {
-        message("Plotting contour of total density of input COIs. ")
+        message("Finding contour using total density of input COIs. ")
         dens$density_coi <- rowSums(dens[, which(colnames(dens) %in%
             dens_cols),
         drop = FALSE
@@ -100,7 +100,10 @@ getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
         }
         ## count no of cells of coi in each grid
         ## note this no can be very different from the expected no
-        coi_coords <- as.data.frame(spatialCoords(spe)[rownames(colData(spe))[colData(spe)[[id]] %in% coi], ])
+        coi_coords <- as.data.frame(spatialCoords(spe))
+        if(!"overall" %in% coi){
+            coi_coords <- coi_coords[colData(spe)[[id]] %in% coi, ]
+        }
         coi_coords$x_node <- vapply(coi_coords$x_centroid, function(xx) {
             which.min(abs(spe@metadata$grid_info$xcol - xx))
         }, numeric(1))
@@ -131,7 +134,7 @@ getContour <- function(spe, coi = NULL, equal.cell = FALSE, bins = NULL,
 
     contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
 
-    coi_clean_output <- ifelse(length(coi_clean) == 1L, coi_clean, paste(coi_clean, collapse="_"))
+    coi_clean_output <- ifelse(length(coi_clean) == 1L, coi_clean, paste(sort(coi_clean), collapse="_"))
     spe@metadata[[paste(coi_clean_output,
         "contour",
         sep = "_"

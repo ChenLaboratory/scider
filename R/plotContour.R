@@ -1,11 +1,12 @@
 #' Plot contour lines.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param coi A character vector of length 1 of the cell type of interest.
-#' @param overlay Character vector. Either plot overlay on density or cell.
-#' By default is cell.
+#' @param coi A character vector of cell types of interest (COIs). 
+#' All types are chosen if NULL or 'overall'.
+#' @param overlay Character vector. Options are 'cell' (plot overlay on cells),
+#' 'density' (overlay on density), or 'none'. Default to 'cell'.
 #' @param id A character. The name of the column of colData(spe) containing
-#' the cell type identifiers. Set to cell_type by default.
+#' the cell type identifiers. Set to 'cell_type' by default.
 #' @param sub.level Character vector. Subset on specific level.
 #' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
@@ -25,40 +26,39 @@
 #' plotContour(spe, coi = coi, size = 0.3, alpha = 0.2)
 #'
 plotContour <- function(spe,
-                        coi,
-                        overlay = c("cell", "density"),
+                        coi = NULL,
+                        overlay = c("cell", "density", "none"),
                         id = "cell_type",
                         sub.level = NULL, ...) {
-    if (length(coi) > 1L) {
-        stop("coi must be of length 1!")
-    }
 
-    if (!(coi %in% colData(spe)[[id]])) {
-        stop("coi not in colData(spe)[[id]]!")
-    }
+    if ( !is.null(coi) & !("overall" %in% coi) ){
+        if ( ! all(coi %in% names(table(colData(spe)[[id]]))) ) {
+            stop("coi not in colData(spe)[[id]]!")
+        }
+    } else coi <- "overall"
 
     coi_clean <- janitor::make_clean_names(coi)
+    if (length(coi_clean) > 1L) coi_clean <- paste(sort(coi_clean), collapse="_")
     coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
 
     if (!coi_clean_contour %in% names(spe@metadata)) {
-        stop("Contour of coi doesn't exist. Please run getContour() first!")
+        stop("Contour of interest doesn't exist. Please run getContour() first!")
     }
 
     contour_data <- as.data.frame(spe@metadata[[coi_clean_contour]])
     levs <- unique(contour_data$level)
     nlevs <- length(levs)
 
-    if (length(overlay) == 2) {
-        overlay <- "cell"
-    }
-    
+    overlay <- overlay[1]
     if (overlay == "cell") {
-        sub <- (colData(spe)[[id]] == coi)
+        sub <- ifelse(coi == "overall", TRUE, colData(spe)[[id]] %in% coi)
         p <- plotSpatial(spe[, sub], ...)
     } else if (overlay == "density") {
         p <- plotDensity(spe, coi = coi, ...)
+    } else if (overlay == "none") {
+        p <- plotSpatial(spe[, FALSE], ...)
     } else {
-        stop("Overlay should either be cell or density.")
+        stop("Invalid 'overlay'.")
     }
 
     col.p <- grDevices::colorRampPalette(col.spec)(
@@ -97,7 +97,8 @@ plotContour <- function(spe,
     p <- p +
         theme_classic() +
         labs(x = "x", y = "y") +
-        ggtitle(coi)
+        coord_fixed() +
+        ggtitle(paste(coi, collapse=", "))
     return(p)
 }
 
