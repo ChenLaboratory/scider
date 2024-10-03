@@ -188,19 +188,19 @@ of the SpatialExperiment object.
 
 
 ```{r}
-model_result <- corDensity(spe)
+results <- corDensity(spe)
 ```
 
 We can see the correlation between breast cancer and fibroblasts in each ROI.
 
 ```{r}
-model_result$ROI
+results$ROI
 ```
 
 Or the correlation between breast cancer and fibroblasts across the whole slide:
 
 ```{r}
-model_result$overall
+results$overall
 ```
 
 
@@ -215,13 +215,13 @@ function `plotCorHeatmap` in the ROIs:
 
 
 ```{r, fig.width=7, fig.height=4}
-plotCorHeatmap(model_result$ROI)
+plotCorHeatmap(results$ROI)
 ```
 
 Or the correlation between cell type pairs across the whole slide:
 
 ```{r, fig.width=7, fig.height=4}
-plotCorHeatmap(model_result$overall)
+plotCorHeatmap(results$overall)
 ```
 
 

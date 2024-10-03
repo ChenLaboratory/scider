@@ -3,7 +3,10 @@
 #' @param spe A SpatialExperiment object.
 #' @param celltype1 Cell type 1 to compare.
 #' @param celltype2 Cell type 2 to compare.
-#' @param by.roi Logical. Plot facet by ROIs or not.
+#' @param by.roi Logical. Plot facet by ROIs or not. Default to TRUE.
+#' @param probs A numeric scalar. The threshold of proportion that used to
+#' filter grids by density when ROIs have not been identified previously.
+#' Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.
 #' @param fit Character. Options are "spline" and "linear".
 #' @param df Integer. Degrees of freedom of the spline fit.
 #' Default to 3 (i.e., a cubic spline fit).
@@ -25,22 +28,34 @@
 #' plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 #'
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                        by.roi = TRUE,
+                        by.roi = TRUE, probs = 0.85, 
                         fit = c("spline", "linear"), df = 3, ...) {
     if (!("grid_density" %in% names(spe@metadata))) {
         stop("Please run gridDensity before using this function.")
     }
 
-    if (!("roi" %in% names(spe@metadata))) {
-        stop("Please run findROI before using this function.")
-    }
-
     dens_dat <- as.data.frame(spe@metadata$grid_density)
-    rois <- as.data.frame(spe@metadata$roi)
-
     # clean names
     ct1 <- paste0("density_", janitor::make_clean_names(celltype1))
     ct2 <- paste0("density_", janitor::make_clean_names(celltype2))
+
+    if(! ct1 %in% colnames(dens_dat))
+        stop(paste0(ct1, " is not found in the data, or its density has not been computed."))
+    if(! ct2 %in% colnames(dens_dat))
+        stop(paste0(ct2, " is not found in the data, or its density has not been computed."))
+
+    is.ROI <- "roi" %in% names(spe@metadata)
+    if (!is.ROI) {
+        dens_dat$density_coi_average <- rowMeans(as.matrix(dens_dat[, which(colnames(dens_dat) %in% c(ct1, ct2)), drop = FALSE]))
+        kp <- dens_dat$density_coi_average >= quantile(dens_dat$density_coi_average, probs = probs)
+        dens_dat_filter <- dens_dat[kp, ]
+        rois <- data.frame(component=gl(1,sum(kp)), 
+                           members=dens_dat_filter$node, 
+                           x=dens_dat_filter$node_x, 
+                           y=dens_dat_filter$node_y)
+    } else {
+        rois <- as.data.frame(spe@metadata$roi)
+    }
 
     plotdf <- merge(rois, dens_dat,
         by.x = "members", by.y = "node",
