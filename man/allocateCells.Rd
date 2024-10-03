@@ -4,7 +4,7 @@
 \alias{allocateCells}
 \title{Annotate all cells with contour level of cell type-specific density.}
 \usage{
-allocateCells(spe, to.roi = TRUE, to.contour = TRUE)
+allocateCells(spe, to.roi = TRUE, to.contour = TRUE, contour = NULL)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -12,6 +12,10 @@ allocateCells(spe, to.roi = TRUE, to.contour = TRUE)
 \item{to.roi}{Logical. Whether to allocate cells to ROIs.}
 
 \item{to.contour}{Logical. Whether to allocate cells to contour levels.}
+
+\item{contour}{Character. The name of the group or cell type on which
+the contour level is computed. If NULL, then the cell allocation will
+be performed for all detected contours. Default to NULL.}
 }
 \value{
 A SpatialExperiment object. An extra column is added to the colData.

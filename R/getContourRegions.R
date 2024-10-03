@@ -8,6 +8,8 @@
 #'
 getContourRegions <- function(spe, coi) {
     coi_clean <- janitor::make_clean_names(coi)
+    if(length(coi_clean)>1) 
+        coi_clean <- paste(sort(coi_clean), collapse="_")
     coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
 
     contour_data <- spe@metadata[[coi_clean_contour]]
