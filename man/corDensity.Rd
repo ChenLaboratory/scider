@@ -4,7 +4,7 @@
 \alias{corDensity}
 \title{Test for density correlation between two cell types.}
 \usage{
-corDensity(spe, coi = NULL, trace = FALSE)
+corDensity(spe, coi = NULL, probs = 0.85, trace = FALSE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -12,6 +12,10 @@ corDensity(spe, coi = NULL, trace = FALSE)
 \item{coi}{Character vector for cell types of interest for density
 correlation analysis. Default is NULL, which is to consider all cell types
 previously calculated in the gridDensity() step.}
+
+\item{probs}{A numeric scalar. The threshold of proportion that used to
+filter grids by density when ROIs have not been identified previously.
+Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.}
 
 \item{trace}{Logical. If TRUE, print the process of testing. Default to FALSE.}
 }

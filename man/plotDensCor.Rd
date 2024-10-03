@@ -9,6 +9,7 @@ plotDensCor(
   celltype1 = NULL,
   celltype2 = NULL,
   by.roi = TRUE,
+  probs = 0.85,
   fit = c("spline", "linear"),
   df = 3,
   ...
@@ -21,7 +22,11 @@ plotDensCor(
 
 \item{celltype2}{Cell type 2 to compare.}
 
-\item{by.roi}{Logical. Plot facet by ROIs or not.}
+\item{by.roi}{Logical. Plot facet by ROIs or not. Default to TRUE.}
+
+\item{probs}{A numeric scalar. The threshold of proportion that used to
+filter grids by density when ROIs have not been identified previously.
+Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.}
 
 \item{fit}{Character. Options are "spline" and "linear".}
 
