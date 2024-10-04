@@ -106,8 +106,13 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
         if (trace) cat(paste("i =", i, ", j =", j, ", ROI", k, "\n"))
         data <- model_data[model_data$component == cpnts[k], c(ct1, ct2, "x", "y")]
 
-        res <- modified.ttest(x=data[,1], y=data[,2], 
+        res <- modified.ttest(x=data[,1], y=data[,2],
                               coords=data[,c("x","y")], nclass=7)
+        if(res$dof < 0) {
+          res <- modified.ttest(x=data[,1], y=data[,2],
+                              coords=data[,c("x","y")], nclass=1)
+          res$dof <- 1
+        }
         tstat <- sqrt( res$Fstat * res$dof ) * sign(res$corr)
 
         ind <- (m - 1) * nCpnts + k
