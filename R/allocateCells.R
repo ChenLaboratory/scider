@@ -68,20 +68,19 @@ allocateCells <- function(
                 coi <- janitor::make_clean_names(names(spe@metadata)[i],
                     case = "sentence", replace = c("contour" = ""))
                 if(!is.null(coi_2)) coi <- contour
-                message(paste(
-                    "Assigning cells to contour levels of",
-                    paste(coi, collapse=", "), "\n"
-                ))
 
-                all_areas <- getContourRegions(spe, coi = coi)
+                if(all(paste0("density_", janitor::make_clean_names(coi)) %in% colnames(spe@metadata$grid_density))){
+                    message(paste(
+                        "Assigning cells to contour levels of",
+                        paste(coi, collapse=", "), "\n"
+                    ))
+                    all_areas <- getContourRegions(spe, coi = coi)
+                    name_to <- names(spe@metadata)[i]
+                    NA_level <- 0
 
-                name_to <- names(spe@metadata)[i]
-                NA_level <- 0
-
-                spe <- cellsInRegion(spe, all_areas,
-                    name_to = name_to,
-                    NA_level = NA_level, levels = NULL
-                )
+                    spe <- cellsInRegion(spe, all_areas, name_to = name_to,
+                        NA_level = NA_level, levels = NULL)
+                }
             }
         }
     }
