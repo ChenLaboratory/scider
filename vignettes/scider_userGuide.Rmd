@@ -266,16 +266,13 @@ plotSpatial(spe, color = fibroblasts_contour, alpha = 0.5)
 We can visualise cell type composition per level.
 
 ```{r, fig.width=6, fig.height=4}
-plotCellCompo(spe, coi = "Fibroblasts")
+plotCellCompo(spe, contour = "Fibroblasts")
 ```
 
 
 ```{r, fig.width=7, fig.height=5}
-plotCellCompo(spe, coi = "Fibroblasts", by.roi = TRUE)
+plotCellCompo(spe, contour = "Fibroblasts", by.roi = TRUE)
 ```
-
-
-
 
 
 ```{r}
