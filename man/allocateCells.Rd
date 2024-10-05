@@ -26,13 +26,10 @@ Annotate all cells with contour level of cell type-specific density.
 \examples{
 
 data("xenium_bc_spe")
-
 spe <- gridDensity(spe)
-
 coi <- "Breast cancer"
-
 spe <- findROI(spe, coi = coi)
-
-spe <- allocateCells(spe)
+spe <- getContour(spe, coi=coi)
+spe <- allocateCells(spe, contour)
 
 }
