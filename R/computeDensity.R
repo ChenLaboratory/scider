@@ -21,20 +21,14 @@
 #' @return Output from spatstat.explore::density.ppp.
 #'
 #'
-computeDensity <- function(spe, mode = "pixels",
-                           kernel = "gaussian",
+computeDensity <- function(spe, mode = c("pixels","points"),
+                           kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
                            bandwidth = NULL, weights = NULL,
                            ngrid.x = 100, ngrid.y = NULL,
                            grid.length.x = NULL, grid.length.y = NULL,
                            xlim = NULL, ylim = NULL, diggle = FALSE) {
-    if (!mode %in% c("points", "pixels")) {
-        stop("mode must be either pixels or points.")
-    }
-
-    if (!kernel %in% c("gaussian", "epanechnikov", "quartic", "disc")) {
-        stop("kernel must be one of the followings: gaussian, epanechnikov,
-         quartic or disc.")
-    }
+    mode = match.arg(mode)
+    kernel = match.arg(kernel)
 
     sc <- SpatialExperiment::spatialCoords(spe)
 

@@ -31,7 +31,6 @@ plotCellCompo <- function(spe,
                           id = "cell_type",
                           by.roi = FALSE, 
                           self.included = TRUE) {
-
     dat <- as.data.frame(colData(spe))
 
 #    if (!(id %in% colnames(dat)) | !(level.name %in% colnames(dat))) {

@@ -28,13 +28,12 @@
 #' result <- corDensity(spe)
 #'
 corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
-
   if (!("grid_density" %in% names(spe@metadata))) {
     stop("Please run gridDensity before using this function.")
   }
 
   dens_dat <- as.data.frame(spe@metadata$grid_density)
-
+  
   # get cell type info
   den_cols <- colnames(dens_dat)[grepl("density_", colnames(dens_dat))]
   den_cols <- den_cols[den_cols != "density_overall"]
@@ -63,7 +62,7 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
   } else {
     rois <- as.data.frame(spe@metadata$roi)
   }
-
+  
   model_data <- merge(rois, dens_dat,
                       by.x = "members",
                       by.y = "node", all.x = TRUE, sort = FALSE
@@ -72,7 +71,7 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
   nGrids <- table(component)
   cpnts <- names(nGrids)
   nCpnts <- length(cpnts)
-
+  
   nRows <- choose(nCT, 2) * nCpnts
   result.ROI <- data.frame(
     "celltype1" = rep("", nRows),
@@ -85,7 +84,7 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
     "p.Pos" = 0,
     "p.Neg" = 0
   )
-    
+  
   result.overall <- result.ROI[seq_len(choose(nCT, 2)), c(1, 2, 5, 8, 9)]
   
   for (i in seq_len((nCT - 1))) {
@@ -101,11 +100,11 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
                                       replace = c("density" = "")
       )
       m <- choose(nCT, 2) - (choose(nCT - j, 1) + choose(nCT - i, 2))
-
+      
       for (k in seq_len(nCpnts)) {
         if (trace) cat(paste("i =", i, ", j =", j, ", ROI", k, "\n"))
         data <- model_data[model_data$component == cpnts[k], c(ct1, ct2, "x", "y")]
-
+        
         res <- modified.ttest(x=data[,1], y=data[,2],
                               coords=data[,c("x","y")], nclass=7)
         if(res$dof < 0) {
@@ -114,7 +113,7 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
           res$dof <- 1
         }
         tstat <- sqrt( res$Fstat * res$dof ) * sign(res$corr)
-
+        
         ind <- (m - 1) * nCpnts + k
         result.ROI[ind, "celltype1"] <- n1
         result.ROI[ind, "celltype2"] <- n2
@@ -126,23 +125,23 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
         result.ROI[ind, "p.Pos"] <- pt(tstat, df=res$dof, lower.tail = FALSE)
         result.ROI[ind, "p.Neg"] <- pt(tstat, df=res$dof, lower.tail = TRUE)
       }
-
+      
       # summarize test results across ROIs
       sel <- (m - 1) * nCpnts + seq_len(nCpnts)
       out.cor.coef <- result.ROI$cor.coef[sel]
       out.p.Pos <- result.ROI$p.Pos[sel]
       out.p.Neg <- result.ROI$p.Neg[sel]
-
+      
       result.overall[m, "celltype1"] <- n1
       result.overall[m, "celltype2"] <- n2
       result.overall[m, "cor.coef"] <- tanh(mean(atanh(out.cor.coef)))
       result.overall[m, "p.Pos"] <- pchisq(-2 * sum(log(out.p.Pos)),
-                                          df = 2 * nCpnts, lower.tail = FALSE)
+                                           df = 2 * nCpnts, lower.tail = FALSE)
       result.overall[m, "p.Neg"] <- pchisq(-2 * sum(log(out.p.Neg)),
-                                          df = 2 * nCpnts, lower.tail = FALSE)
+                                           df = 2 * nCpnts, lower.tail = FALSE)
     }
   }
-
+  
   result.ROI <- S4Vectors::DataFrame(result.ROI)
   result.overall <- S4Vectors::DataFrame(result.overall)
   
