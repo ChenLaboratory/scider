@@ -159,7 +159,6 @@ gridDensity <- function(spe,
       #Filter grid_density to same as Visium spot.
       #TODO: Clean up this condition. Maybe make a variable called gridLevelAnalysis
       if (filterToVisiumSpot==TRUE && isVisium == TRUE && ngrid.x%%NGRID.VISIUM==0) {
-        print("hi")
         # sub = colData(spe)$in_tissue==1
         hcellsInTissue = hexDensity::xy2hcell(x=spatialCoords(spe),
                                               # y=spatialCoords(spe)[,2],
