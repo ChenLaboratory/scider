@@ -46,13 +46,16 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30,
     toplot[, "y"] <- final_y
   }
 
-  n_colour = length(unique(toplot[[colour.by]]))
-  if (is.null(pt.colour)) {
-    col.p <- selectColor(n_colour)
-  } else if (is.function(pt.colour)) {
-    col.p <- pt.colour(n_colour)
-  } else {
-    col.p <- rep_len(pt.colour, n_colour)
+  col.p = NULL
+  if (!is.null(colour.by)) {
+    n_colour = length(unique(toplot[[colour.by]]))
+    if (is.null(pt.colour)) {
+      col.p <- selectColor(n_colour)
+    } else if (is.function(pt.colour)) {
+      col.p <- pt.colour(n_colour)
+    } else {
+      col.p <- rep_len(pt.colour, n_colour)
+    }
   }
 
   #This stop "Coordinate system already present..." warning by coord_fixed()
