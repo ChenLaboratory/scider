@@ -2,7 +2,7 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param cell.count Logical. Whether to obtain the number of cells within 
-#' each group identified by colData(spe)[[id]]. Default to FALSE.
+#' each group identified by the 'id' column in colData(spe). Default to FALSE.
 #' @param id A character. The name of the column of colData(spe) containing
 #' the cell type identifiers. Set to cell_type by default.
 #' 

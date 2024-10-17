@@ -1,10 +1,12 @@
 #' Subset for grid level analysis
 #'
 #' Overwrite the default SpatialExperiment subsetting method to ensure 
-#' grid_density is also subsetted if gridLevelAnalysis is TRUE (1 polygon 1 spot)
+#' 'grid_density' is also subsetted if 'gridLevelAnalysis' is TRUE (1 polygon 1 spot)
 #' @param x A SpatialExperiment object.
 #' @param i row indices for subsetting.
 #' @param j col indices for subsetting.
+#' @param ... further arguments to be passed to or from other methods.
+#' @param drop passed on to [ indexing operator.
 #' 
 #' @return A SpatialExperiment object.
 #'

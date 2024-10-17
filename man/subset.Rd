@@ -12,11 +12,15 @@
 \item{i}{row indices for subsetting.}
 
 \item{j}{col indices for subsetting.}
+
+\item{...}{further arguments to be passed to or from other methods.}
+
+\item{drop}{passed on to [ indexing operator.}
 }
 \value{
 A SpatialExperiment object.
 }
 \description{
 Overwrite the default SpatialExperiment subsetting method to ensure
-grid_density is also subsetted if gridLevelAnalysis is TRUE (1 polygon 1 spot)
+'grid_density' is also subsetted if 'gridLevelAnalysis' is TRUE (1 polygon 1 spot)
 }
