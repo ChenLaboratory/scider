@@ -28,13 +28,15 @@
 #' plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 #'
 plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
-                        by.roi = TRUE, probs = 0.85, 
+                        by.roi = TRUE, probs = 0.85,
                         fit = c("spline", "linear"), df = 3, ...) {
     if (!("grid_density" %in% names(spe@metadata))) {
         stop("Please run gridDensity before using this function.")
     }
 
+
     dens_dat <- as.data.frame(spe@metadata$grid_density)
+
     # clean names
     ct1 <- paste0("density_", janitor::make_clean_names(celltype1))
     ct2 <- paste0("density_", janitor::make_clean_names(celltype2))

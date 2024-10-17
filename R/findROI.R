@@ -42,13 +42,14 @@
 findROI <- function(spe, coi = NULL,
                     probs = 0.85,
                     ngrid.min = 20,
-                    method = "greedy",
+                    method = c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"),
                     diag.nodes = FALSE,
                     sequential.roi.name = TRUE, 
                     directed = FALSE, 
                     zoom.in = FALSE, zoom.in.size = 500L, ...) {
 
   grid_data <- spe@metadata$grid_density
+  grid_type <- spe@metadata$grid_info$grid_type
 
   if (is.null(coi)) coi <- "overall"
   if (length(coi) >= 2) coi <- coi[coi!="overall"]
@@ -59,11 +60,8 @@ findROI <- function(spe, coi = NULL,
     stop("Density of COI is not yet computed.")
   }
   
-  method <- match.arg(method, c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"))
-  if (!(method %in% c("walktrap", "connected", "hdbscan", "eigen", "greedy", "dbscan"))) {
-    stop("The method chosen is not supported, please choose from walktrap, connected, hdbscan, eigen, greedy, dbscan. ")
-  }
-  
+  method <- match.arg(method)
+
   grid_data$density_coi_average <- rowMeans(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop = FALSE]))
   kp <- grid_data$density_coi_average >= quantile(grid_data$density_coi_average, 
                                                   probs = probs)
@@ -73,25 +71,44 @@ findROI <- function(spe, coi = NULL,
   if (identical(method, "hdbscan")) {
     message(paste("For hdbscan, using minPts = ", ngrid.min, sep = ""))
     cl <- dbscan::hdbscan(grid_data_filter[, c("x_grid", "y_grid")], minPts = ngrid.min) #, ...)
+    
+    if(max(cl$cluster)==0) {
+      stop("No clusters detected. Try a different method.")
+    }
+    
     cls <- setdiff(sort(unique(cl$cluster)), 0)
     g_community <- lapply(cls, function(cc) { grid_data_filter$node[cl$cluster == cc] })
   } else if (identical(method, "dbscan")) {
     message(paste("For dbscan, using minPts = ", ngrid.min, sep = ""))
+
+    eps = `if` (grid_type=="hex",
+                2*diff(spe@metadata$grid_info$xlim)/spe@metadata$grid_info$xbins,
+                sum(spe@metadata$grid_info$xstep, spe@metadata$grid_info$ystep))
     cl <- dbscan::dbscan(grid_data_filter[, c("x_grid", "y_grid")], 
-                         eps = sum(spe@metadata$grid_info$xstep, spe@metadata$grid_info$ystep), 
+                         eps = eps, 
                          weights = grid_data_filter[["density_coi_average"]],
                          minPts = ngrid.min)
+    
+    if(max(cl$cluster)==0) {
+      stop("No clusters detected. Try a different method.")
+    }
+    
     cls <- setdiff(sort(unique(cl$cluster)), 0)
     g_community <- lapply(cls, function(cc) { grid_data_filter$node[cl$cluster == cc] })
   } else {
     # network approaches
-    if (diag.nodes) {
+    if (grid_type=="hex") {
       adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
-        adjacent_grids_with_corner(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
+        adjacent_grids_hex(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
     } else {
-      adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
-        adjacent_grids(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
-    }
+      if (diag.nodes) {
+        adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
+          adjacent_grids_with_corner(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
+        } else {
+          adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
+            adjacent_grids(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
+        }
+      }
     keep <- (adj_edges$node1 %in% grid_data_filter$node) & (adj_edges$node2 %in% grid_data_filter$node)
     adj_edges <- adj_edges[keep, ]
     # not allowing self-connected nodes
@@ -101,7 +118,7 @@ findROI <- function(spe, coi = NULL,
     adj_edges$node2_wt <- grid_data_filter$density_coi_average[match(adj_edges$node2, grid_data_filter$node)]
     adj_edges$weight <- (adj_edges$node1_wt + adj_edges$node2_wt) * 0.5
     
-    if (diag.nodes) {
+    if (diag.nodes && grid_type=="square") {
       adj_edges$weight[adj_edges$class == "corner"] <- adj_edges$weight[adj_edges$class == "corner"] / sqrt(2)
     }
     
@@ -156,12 +173,24 @@ findROI <- function(spe, coi = NULL,
     do.call(rbind, strsplit(component_list$members, split = "-"))
   )
   colnames(component_list)[3:4] <- c("x", "y")
-  component_list$xcoord <- spe@metadata$grid_info$xcol[
-    as.numeric(component_list$x)
-  ]
-  component_list$ycoord <- spe@metadata$grid_info$yrow[
-    as.numeric(component_list$y)
-  ]
+  if (grid_type=="hex") {
+    temp=sort(unique00(spe@metadata$grid_density$x_grid))
+    temp=temp[seq.int(1,length(temp),2)]
+    
+    component_list$xcoord <- temp[
+      as.numeric(component_list$x)
+    ] + (diff(temp[1:2])/2)*(!as.numeric(component_list$y)%%2)
+    component_list$ycoord <- sort(unique00(spe@metadata$grid_density$y_grid))[
+      as.numeric(component_list$y)
+    ]
+  } else {
+    component_list$xcoord <- spe@metadata$grid_info$xcol[
+      as.numeric(component_list$x)
+    ]
+    component_list$ycoord <- spe@metadata$grid_info$yrow[
+      as.numeric(component_list$y)
+    ]
+  }
   component_list$component <- as.factor(component_list$component)
   
   # filtering ROIs based on ngrid.min
@@ -241,6 +270,23 @@ adjacent_grids_with_corner <- function(spe, node_xx, node_yy) {
     class = c(
       "center", rep("immediate", length(immediate_cells)),
       rep("corner", length(corner_cells))
+    )
+  )
+}
+
+# Get all neighbouring hexs, even those with negative or out-of-bound index
+adjacent_grids_hex = function(spe, node_xx, node_yy) {
+  center_cell <- paste(node_xx, node_yy, sep = "-")
+  is_odd = node_yy%%2
+  cells <- paste(
+    c(node_xx-1,node_xx+1,node_xx-is_odd,node_xx+1-is_odd,node_xx-is_odd,node_xx+1-is_odd),
+    c(node_yy,node_yy,node_yy+1,node_yy+1,node_yy-1,node_yy-1),
+    sep="-"
+  )
+  return(
+    data.frame(
+      node1 = rep(center_cell,6),
+      node2 = cells
     )
   )
 }

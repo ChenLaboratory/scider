@@ -1,7 +1,7 @@
 Package: scider
 Type: Package
 Title: Spatial cell-type inter-correlation by density in R
-Version: 1.3.7
+Version: 1.3.8
 Authors@R: 
     c(person(given = "Ning", 
             family = "Liu",
@@ -13,6 +13,11 @@ Authors@R:
              role = c("aut"),
              email = "li.me@wehi.edu.au",
              comment = c(ORCID = "0000-0002-9666-5810")),
+      person(given = "Quoc Hoang",
+             family = "Nguyen",
+             role = c("aut"),
+             email = "nguyen.q@wehi.edu.au",
+             comment = c(ORCID = "0009-0007-2828-7567")),
       person(given = "Yunshun",
              family = "Chen",
              role = c("aut", "cre"),
@@ -37,6 +42,7 @@ RoxygenNote: 7.3.2
 Imports:
     SpatialExperiment,
     SummarizedExperiment,
+    SingleCellExperiment,
     spatstat.geom,
     spatstat.explore,
     sf,
@@ -56,7 +62,9 @@ Imports:
     isoband,
     S4Vectors,
     grDevices,
-    dbscan
+    dbscan,
+    hexDensity,
+    hexbin
 Suggests:
     edgeR,
     testthat (>= 3.0.0)

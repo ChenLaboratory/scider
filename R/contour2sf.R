@@ -17,18 +17,17 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                                              contours first!")
 
     clines <- as.data.frame(spe@metadata[[contour]])
-    xlim <- c(min(clines$x), max(clines$x))
-    ylim <- c(min(clines$y), max(clines$y))
+    xlim <- range(clines$x)
+    ylim <- range(clines$y)
     lims <- c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2])
     canvas_sf <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(lims)))
     levs <- sort(unique(clines$cutoff))
     lev_code <- findInterval(cutoff, levs, rightmost.closed = FALSE)
     clines_lev <- clines[clines$cutoff == cutoff, c("x", "y", "piece")]
-    grid_area <- spe@metadata$grid_info$xstep * spe@metadata$grid_info$ystep
+    # grid_area <- spe@metadata$grid_info$xstep * spe@metadata$grid_info$ystep
 
     coi_clean <- janitor::make_clean_names(coi)
     dens_cols <- paste("density", coi_clean, sep = "_")
-
     dens <- as.data.frame(spe@metadata$grid_density)
     dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in%
         dens_cols),
@@ -118,10 +117,10 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                 regions_tmp <- regions
                 regions_tmp[ind_buffer, ] <- sf::st_buffer(
                     regions_tmp[ind_buffer, ],
-                    dist = mean(
-                        spe@metadata$grid_info$xstep,
-                        spe@metadata$grid_info$ystep
-                    ) / 2
+                    dist = `if`(spe@metadata$grid_info$grid_type == "hex",
+                         diff(spe@metadata$grid_info$xlim)/spe@metadata$grid_info$xbins/2,
+                         spe@metadata$grid_info$xstep/2
+                    )
                 )
                 inds <- sf::st_intersects(regions_tmp, grids_pts_sf)
             }
@@ -380,10 +379,10 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                     if (length(unlist(inds)) == 0L) {
                         inds <- sf::st_intersects(
                             sf::st_buffer(xx,
-                                dist = mean(
-                                    spe@metadata$grid_info$xstep,
-                                    spe@metadata$grid_info$ystep
-                                ) / 2
+                                dist = `if`(spe@metadata$grid_info$grid_type == "hex",
+                                            diff(spe@metadata$grid_info$xlim)/spe@metadata$grid_info$xbins/2,
+                                            spe@metadata$grid_info$xstep/2
+                                )
                             ),
                             grids_pts_sf
                         )

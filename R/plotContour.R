@@ -8,7 +8,11 @@
 #' @param id A character. The name of the column of colData(spe) containing
 #' the cell type identifiers. Set to 'cell_type' by default.
 #' @param sub.level Character vector. Subset on specific level.
-#' @param ... Aesthetic mappings to pass to `ggplot2::aes_string()`.
+#' @param line.type shape of contour. See 'ggplot2::geom_path()'.
+#' @param line.width size of contour.
+#' @param line.alpha alpha of contour between 0 and 1.
+#' @param ... Aesthetic mappings to pass to 'plotSpatial()' or 
+#' 'plotDensity()', depending on the overlay.
 #'
 #' @return A ggplot object.
 #' @export
@@ -23,14 +27,18 @@
 #'
 #' spe <- getContour(spe, coi = coi)
 #'
-#' plotContour(spe, coi = coi, size = 0.3, alpha = 0.2)
+#' plotContour(spe, coi = coi, line.width = 0.3, pt.alpha = 0.2)
 #'
 plotContour <- function(spe,
                         coi = NULL,
                         overlay = c("cell", "density", "none"),
                         id = "cell_type",
-                        sub.level = NULL, ...) {
-
+                        sub.level = NULL, 
+                        line.type = 1,
+                        line.width = 0.5,
+                        line.alpha = 1,
+                        
+                        ...) {
     if ( !is.null(coi) & !("overall" %in% coi) ){
         if ( ! all(coi %in% names(table(colData(spe)[[id]]))) ) {
             stop("coi not in colData(spe)[[id]]!")
@@ -73,7 +81,10 @@ plotContour <- function(spe,
                 ggplot2::aes(
                     x = x, y = y, group = group,
                     color = level
-                )
+                ),
+                linewidth=line.width,
+                linetype=line.type,
+                alpha=line.alpha
             ) +
             scale_color_manual(name = "Density level", values = rev(col.p)))
     } else {
@@ -84,7 +95,10 @@ plotContour <- function(spe,
                     ggplot2::aes(
                         x = x, y = y, group = group,
                         color = level == sub.level
-                    )
+                    ),
+                    linewidth=line.width,
+                    linetype=line.type,
+                    alpha=line.alpha
                 ) +
                 scale_color_manual(
                     name = paste0("level", sub.level, " density"),
@@ -99,7 +113,6 @@ plotContour <- function(spe,
     p <- p +
         theme_classic() +
         labs(x = "x", y = "y") +
-        coord_fixed() +
         ggtitle(paste(coi, collapse=", "))
     return(p)
 }
