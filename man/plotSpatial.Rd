@@ -4,17 +4,35 @@
 \alias{plotSpatial}
 \title{Plot cells based on spatial coordinates.}
 \usage{
-plotSpatial(spe, reverseY = FALSE, n = 30, ...)
+plotSpatial(
+  spe,
+  reverseY = FALSE,
+  n = 30,
+  colour.by = NULL,
+  pt.colour = NULL,
+  pt.shape = 16,
+  pt.size = 0.3,
+  pt.alpha = 0.2
+)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{reverseY}{Reverse y coordinates.}
 
-\item{n}{Integer value. The number of distinct color to be generated,
+\item{n}{Integer value. The number of distinct colour to be generated,
 default is 30.}
 
-\item{...}{Aesthetic mappings to pass to \code{ggplot2::aes_string()}.}
+\item{colour.by}{values to colour points by. Must be in colData of spe.}
+
+\item{pt.colour}{Colour palette. Can be a vector of colours or a function
+that accepts an integer n and return n colours.}
+
+\item{pt.shape}{shape of points.}
+
+\item{pt.size}{size of points.}
+
+\item{pt.alpha}{alpha of points between 0 and 1.}
 }
 \value{
 A ggplot object.
@@ -26,6 +44,6 @@ Plot cells based on spatial coordinates.
 
 data("xenium_bc_spe")
 
-plotSpatial(spe, shape = ".", color = cell_type, size = 0.3, alpha = 0.2)
+plotSpatial(spe, colour.by = "cell_type", pt.size = 0.3, pt.alpha = 0.2)
 
 }

@@ -11,7 +11,7 @@ getContour(
   bins = NULL,
   binwidth = NULL,
   breaks = NULL,
-  id = "cell_type"
+  id = NULL
 )
 }
 \arguments{
@@ -32,8 +32,8 @@ Default to TRUE.}
 \code{ggplot2:::contour_breaks}.}
 
 \item{id}{A character. The name of the column of colData(spe) containing
-the cell type identifiers. Set to cell_type by default. Only needed when
-\code{equal.cell = TRUE}.}
+the cell type identifiers. Set to cell_type by default or in_tissue if spe
+is Visium. Only needed when \code{equal.cell = TRUE}.}
 }
 \value{
 A SpatialExperiment object. An sf object of the contour region of

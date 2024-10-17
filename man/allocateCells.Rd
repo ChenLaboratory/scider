@@ -29,7 +29,7 @@ data("xenium_bc_spe")
 spe <- gridDensity(spe)
 coi <- "Breast cancer"
 spe <- findROI(spe, coi = coi)
-spe <- getContour(spe, coi=coi)
-spe <- allocateCells(spe, contour)
+spe <- getContour(spe, coi = coi)
+spe <- allocateCells(spe, contour = coi)
 
 }

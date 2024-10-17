@@ -9,7 +9,7 @@ findROI(
   coi = NULL,
   probs = 0.85,
   ngrid.min = 20,
-  method = "greedy",
+  method = c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"),
   diag.nodes = FALSE,
   sequential.roi.name = TRUE,
   directed = FALSE,

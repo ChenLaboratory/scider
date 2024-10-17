@@ -32,6 +32,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap", steps = 5)
 
-plotROI(spe, size = 0.3, alpha = 0.2)
+plotROI(spe, pt.size = 0.3, pt.alpha = 0.2)
 
 }

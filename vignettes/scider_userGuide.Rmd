@@ -85,7 +85,7 @@ We can use the function `plotSpatial` to visualise the cell position and
 color the cells by cell types.
 
 ```{r, fig.width=5, fig.height=4}
-plotSpatial(spe, color = cell_type, alpha = 0.8)
+plotSpatial(spe, colour.by = "cell_type", alpha = 0.8)
 ```
 
 
@@ -260,7 +260,7 @@ spe <- allocateCells(spe)
 
 
 ```{r, fig.width=6, fig.height=4}
-plotSpatial(spe, color = fibroblasts_contour, alpha = 0.5)
+plotSpatial(spe, colour.by = "fibroblasts_contour", alpha = 0.5)
 ```
 
 We can visualise cell type composition per level.

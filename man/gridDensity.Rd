@@ -7,15 +7,16 @@ cell types of interest}
 \usage{
 gridDensity(
   spe,
-  id = "cell_type",
+  id = if (isVisium) "in_tissue" else "cell_type",
   coi = NULL,
   kernel = "gaussian",
   bandwidth = NULL,
-  ngrid.x = 100,
-  ngrid.y = NULL,
+  ngrid.x = if (isVisium) NGRID.VISIUM else 100,
   grid.length.x = NULL,
-  grid.length.y = NULL,
-  diggle = FALSE
+  diggle = FALSE,
+  grid.type = c("hex", "square"),
+  isVisium = FALSE,
+  filterToVisiumSpot = isVisium
 )
 }
 \arguments{
@@ -28,22 +29,27 @@ the cell type identifiers. Set to cell_type by default.}
 Default to all cell types.}
 
 \item{kernel}{The smoothing kernel. Options are "gaussian",
-"epanechnikov", "quartic" or "disc".}
+"epanechnikov", "quartic" or "disc". For hexagonal grid, only Gaussian is implemented}
 
 \item{bandwidth}{The smoothing bandwidth. By default performing
 automatic bandwidth selection using cross-validation using
 function spatstat.explore::bw.diggle.}
 
-\item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
-
-\item{ngrid.y}{Number of grids in the y-direction.}
+\item{ngrid.x}{Number of grids in the x-direction. Default to 100 or
+63.5 for Visium (1 Visium spot per hexagon).}
 
 \item{grid.length.x}{Grid length in the x-direction.}
 
-\item{grid.length.y}{Grid length in the y-direction.}
-
 \item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
 correction. See spatstat.explore::density.ppp() for details.}
+
+\item{grid.type}{Type of grid can be either hexagon or square.}
+
+\item{isVisium}{Logical. If TRUE, fit hexagonal grids to Visium spots by
+replacing spatial coords with array rows & array cols.}
+
+\item{filterToVisiumSpot}{Logical. If TRUE, filter grid polygons to only
+those with a Visium spot underneath.}
 }
 \value{
 A SpatialExperiment object. Grid density estimates for

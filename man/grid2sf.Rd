@@ -2,16 +2,29 @@
 % Please edit documentation in R/grid2sf.R
 \name{grid2sf}
 \alias{grid2sf}
-\title{Combine grids in each ROI to a sf region}
+\title{Convert x,y nodes to sf polygons}
 \usage{
-grid2sf(spe)
+grid2sf(
+  spe,
+  x = spe@metadata$grid_density$node_x,
+  y = spe@metadata$grid_density$node_y
+)
 }
 \arguments{
-\item{spe}{A SpatialExperiment object.}
+\item{spe}{A SpatialExperiment object with grid density calculated}
+
+\item{x}{vector of x nodes of the polygons}
+
+\item{y}{vector of y nodes of the polygons}
 }
 \value{
-List of ROIs saved as sf objects.
+List of sf polygons
 }
 \description{
-Combine grids in each ROI to a sf region
+Convert x,y nodes to sf polygons
+}
+\details{
+Default is to generate sf polygons for all grid.
+For plotting, use sf::st_as_sfc(grid2sf2(spe)) to convert list into Geometry
+Set.
 }
