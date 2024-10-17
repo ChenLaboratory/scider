@@ -11,8 +11,8 @@
 #' @param breaks A numeric scale referring to the breaks in
 #' `ggplot2:::contour_breaks`.
 #' @param id A character. The name of the column of colData(spe) containing
-#' the cell type identifiers. Set to cell_type by default. Only needed when
-#' \code{equal.cell = TRUE}. 
+#' the cell type identifiers. Set to cell_type by default or in_tissue if spe 
+#' is Visium. Only needed when \code{equal.cell = TRUE}. 
 #'
 #' @return A SpatialExperiment object. An sf object of the contour region of
 #' the specified level is stored in the metadata of the
@@ -30,12 +30,19 @@
 #' spe <- getContour(spe, coi = coi)
 #'
 getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
-                       binwidth = NULL, breaks = NULL, id = "cell_type") {
+                       binwidth = NULL, breaks = NULL, 
+                       id = NULL) {
     
     if (is.null(spe@metadata$grid_density)) {
         stop("Have to calculate grid density, run gridDensity() first!")
     }
-
+  
+    if (is.null(id)) {
+      id = `if`(!is.null(spe@metadata$grid_info$isVisium),
+                "in_tissue",
+                "cell_type")
+    }
+  
     if (equal.cell && !id %in% colnames(colData(spe))) {
         stop(paste(id, "is not a column of the colData."))
     }
@@ -192,7 +199,8 @@ xyz_to_isolines_hex = function(data, breaks) {
   nrow=diff(range(data$node_y))+1
   z = matrix(NA_real_, nrow = nrow, ncol = ncol)
   z[cbind(data$node_y, data$node_x)] <- data$density_coi
-  isolines=meandering_triangles(x.coords.left,x.coords.right,y.coords,z,breaks)
+  isolines=hexDensity::meanderingTriangles(x.coords.left,x.coords.right,
+                                           y.coords,z,breaks)
 
   return(isolines)
 }

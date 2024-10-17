@@ -3,9 +3,9 @@ test_that("plotSpatial works", {
 
 
     expect_silent(plotSpatial(spe,
-        shape = ".",
-        color = cell_type,
-        size = 0.3, alpha = 0.2
+        colour.by = "cell_type",
+        pt.shape = ".",
+        pt.size = 0.3, pt.alpha = 0.2
     ))
     expect_silent(plotSpatial(spe))
 

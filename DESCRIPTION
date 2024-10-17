@@ -42,7 +42,6 @@ RoxygenNote: 7.3.2
 Imports:
     SpatialExperiment,
     SummarizedExperiment,
-    SingleCellExperiment,
     spatstat.geom,
     spatstat.explore,
     sf,

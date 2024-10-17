@@ -2,10 +2,12 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param reverseY Reverse y coordinates.
-#' @param n Integer value. The number of distinct color to be generated,
+#' @param n Integer value. The number of distinct colour to be generated,
 #' default is 30.
-#' @param pt.color color of points. Must be in colData of spe.
+#' @param colour.by values to colour points by. Must be in colData of spe.
 #' @param pt.shape shape of points.
+#' @param pt.colour Colour palette. Can be a vector of colours or a function 
+#' that accepts an integer n and return n colours.
 #' @param pt.size size of points.
 #' @param pt.alpha alpha of points between 0 and 1.
 #'
@@ -16,10 +18,11 @@
 #'
 #' data("xenium_bc_spe")
 #'
-#' plotSpatial(spe, pt.color = "cell_type", pt.size = 0.3, pt.alpha = 0.2)
+#' plotSpatial(spe, colour.by = "cell_type", pt.size = 0.3, pt.alpha = 0.2)
 #'
 plotSpatial <- function(spe, reverseY = FALSE, n = 30, 
-                         pt.color = NULL,
+                         colour.by = NULL,
+                         pt.colour = NULL,
                          pt.shape = 16, 
                          pt.size = 0.3, 
                          pt.alpha = 0.2) {
@@ -43,14 +46,21 @@ plotSpatial <- function(spe, reverseY = FALSE, n = 30,
     toplot[, "y"] <- final_y
   }
 
-  col.p <- selectColor(n)
+  n_colour = length(unique(toplot[[colour.by]]))
+  if (is.null(pt.colour)) {
+    col.p <- selectColor(n_colour)
+  } else if (is.function(pt.colour)) {
+    col.p <- pt.colour(n_colour)
+  } else {
+    col.p <- rep_len(pt.colour, n_colour)
+  }
 
   #This stop "Coordinate system already present..." warning by coord_fixed()
   cf = coord_fixed()
   cf$default = TRUE
 
-  if (!is.null(pt.color)) {
-    p = ggplot2::ggplot(toplot,aes(x=x, y=y,color=.data[[pt.color]]))
+  if (!is.null(colour.by)) {
+    p = ggplot2::ggplot(toplot,aes(x=x, y=y,color=.data[[colour.by]]))
   } else {
     p = ggplot2::ggplot(toplot,aes(x=x, y=y))
   }

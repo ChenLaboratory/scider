@@ -6,7 +6,7 @@ test_that("plotROI works", {
 
     spe <- findROI(spe, coi = coi, method = "walktrap", steps = 5)
 
-    expect_silent(plotROI(spe, size = 0.3, alpha = 0.2))
+    expect_silent(plotROI(spe, pt.size = 0.3, pt.alpha = 0.2))
     expect_silent(plotROI(spe))
     expect_silent(plotROI(spe, show.legend = TRUE))
     expect_error(plotROI(spe, id = "xyz"))
