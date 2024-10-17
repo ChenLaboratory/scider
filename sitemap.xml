@@ -9,6 +9,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/allocateCells.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/cellsInRegion.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/computeDensity.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/computeDensityHex.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/contour2sf.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/corDensity.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/findROI.html</loc></url>
@@ -16,6 +17,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/getContourRegions.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/grid2sf.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/gridDensity.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/gridSPE.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/index.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/mergeROI.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotCellCompo.html</loc></url>
@@ -30,6 +32,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/scider-package.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/selectRegion.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/spe2PB.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/subset.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/xenium_bc_spe.html</loc></url>
 </urlset>
 
