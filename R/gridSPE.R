@@ -22,7 +22,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type') {
         stop("Please run gridDensity before using this function.")
     }
 
-    grid_data <- spe@metadata$grid_density
+    grid_data <- spe@metadata$grid_density[,(1:2)]
 
     grids = sf::st_sfc(grid2sf(spe))
     # Assign cells to grids
@@ -53,7 +53,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type') {
     }
 
     spe_out <- SpatialExperiment::SpatialExperiment(assays = assays, 
-                                                    colData = grid_data[,(1:2)], 
+                                                    colData = grid_data, 
                                                     rowData = SummarizedExperiment::rowData(spe),
                                                     spatialCoordsNames = c("x_grid", "y_grid"))
     
