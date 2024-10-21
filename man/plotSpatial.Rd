@@ -7,7 +7,6 @@
 plotSpatial(
   spe,
   reverseY = FALSE,
-  n = 30,
   colour.by = NULL,
   pt.colour = NULL,
   pt.shape = 16,
@@ -19,9 +18,6 @@ plotSpatial(
 \item{spe}{A SpatialExperiment object.}
 
 \item{reverseY}{Reverse y coordinates.}
-
-\item{n}{Integer value. The number of distinct colour to be generated,
-default is 30.}
 
 \item{colour.by}{values to colour points by. Must be in colData of spe.}
 
@@ -44,6 +40,6 @@ Plot cells based on spatial coordinates.
 
 data("xenium_bc_spe")
 
-plotSpatial(spe, colour.by = "cell_type", pt.size = 0.3, pt.alpha = 0.2)
+plotSpatial(spe, colour.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 
 }

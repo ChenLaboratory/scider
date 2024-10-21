@@ -2,8 +2,6 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param reverseY Reverse y coordinates.
-#' @param n Integer value. The number of distinct colour to be generated,
-#' default is 30.
 #' @param colour.by values to colour points by. Must be in colData of spe.
 #' @param pt.shape shape of points.
 #' @param pt.colour Colour palette. Can be a vector of colours or a function 
@@ -20,7 +18,7 @@
 #'
 #' plotSpatial(spe, colour.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 #'
-plotSpatial <- function(spe, reverseY = FALSE, n = 30, 
+plotSpatial <- function(spe, reverseY = FALSE, 
                          colour.by = NULL,
                          pt.colour = NULL,
                          pt.shape = 16, 
