@@ -18,14 +18,14 @@
 #'
 #' data("xenium_bc_spe")
 #'
-#' plotSpatial(spe, colour.by = "cell_type", pt.size = 0.3, pt.alpha = 0.2)
+#' plotSpatial(spe, colour.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 #'
 plotSpatial <- function(spe, reverseY = FALSE, n = 30, 
                          colour.by = NULL,
                          pt.colour = NULL,
                          pt.shape = 16, 
                          pt.size = 0.3, 
-                         pt.alpha = 0.2) {
+                         pt.alpha = 0.8) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
 
   colnames(toplot) <- c("x", "y")
