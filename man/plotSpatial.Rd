@@ -11,7 +11,7 @@ plotSpatial(
   pt.colour = NULL,
   pt.shape = 16,
   pt.size = 0.3,
-  pt.alpha = 0.2
+  pt.alpha = 0.8
 )
 }
 \arguments{

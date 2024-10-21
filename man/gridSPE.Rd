@@ -4,7 +4,7 @@
 \alias{gridSPE}
 \title{Summarize a SpatialExperiment object at grid-level}
 \usage{
-gridSPE(spe, cell.count = FALSE, id = "cell_type")
+gridSPE(spe, cell.count = FALSE, id = "cell_type", split.count.by = id)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,7 +13,12 @@ gridSPE(spe, cell.count = FALSE, id = "cell_type")
 each group identified by the 'id' column in colData(spe). Default to FALSE.}
 
 \item{id}{A character. The name of the column of colData(spe) containing
-the cell type identifiers. Set to cell_type by default.}
+the cell type identifiers. Set to 'cell_type' by default.}
+
+\item{split.count.by}{A character. The name of the column of colData(spe).
+When it is not NULL, a grid-level count matrix is calculated for each member
+specified in that column of colData(spe) and stored in the assays(spe).
+Set to 'cell_type' by default.}
 }
 \value{
 A SpatialExperiment object.
