@@ -12,7 +12,7 @@ gridDensity(
   kernel = "gaussian",
   bandwidth = NULL,
   ngrid.x = NULL,
-  grid.length.x = 100,
+  grid.length.x = NULL,
   diggle = FALSE,
   grid.type = c("hex", "square"),
   isVisium = FALSE,
@@ -35,10 +35,12 @@ Default to all cell types.}
 automatic bandwidth selection using cross-validation using
 function spatstat.explore::bw.diggle.}
 
-\item{ngrid.x}{Number of grids in the x-direction.}
+\item{ngrid.x}{Number of grids in the x-direction. Ignored when
+'grid.length.x' is specified. Default to NULL.}
 
-\item{grid.length.x}{Grid length in the x-direction.
-Default to 100 (micron).}
+\item{grid.length.x}{Grid length in the x-direction. If both
+'ngrid.x' and 'grid.length.x' are NULL, then 'grid.length.x'
+is set to 100 (micron) by default.}
 
 \item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
 correction. See spatstat.explore::density.ppp() for details.}

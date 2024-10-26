@@ -11,9 +11,11 @@
 #' @param bandwidth The smoothing bandwidth. By default performing
 #' automatic bandwidth selection using cross-validation using
 #' function spatstat.explore::bw.diggle.
-#' @param ngrid.x Number of grids in the x-direction.
-#' @param grid.length.x Grid length in the x-direction. 
-#' Default to 100 (micron).
+#' @param ngrid.x Number of grids in the x-direction. Ignored when
+#' 'grid.length.x' is specified. Default to NULL.
+#' @param grid.length.x Grid length in the x-direction. If both 
+#' 'ngrid.x' and 'grid.length.x' are NULL, then 'grid.length.x'
+#' is set to 100 (micron) by default.
 #' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge
 #' correction. See spatstat.explore::density.ppp() for details.
 #' @param grid.type Type of grid can be either hexagon or square.
@@ -40,7 +42,7 @@ gridDensity <- function(spe,
                         kernel = "gaussian",
                         bandwidth = NULL,
                         ngrid.x = NULL,
-                        grid.length.x = 100,
+                        grid.length.x = NULL,
                         diggle = FALSE,
                         grid.type = c("hex", "square"),
                         isVisium = FALSE,
@@ -98,7 +100,10 @@ gridDensity <- function(spe,
   }
   
   if (is.null(spe@metadata)) spe@metadata <- list()
-  
+
+  if(is.null(ngrid.x) & is.null(grid.length.x)) 
+    grid.length.x <- 100
+
   # Reset when the function is rerun again
   spe@metadata$grid_density <- spe@metadata$grid_info <- NULL
   
