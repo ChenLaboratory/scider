@@ -50,10 +50,6 @@ selectColor <- function(n) {
     }
 }
 
-# Visium has 64 columns. 
-# 63.5 (or its multiples) is needed to properly bin each spot into 1 hexagon.
-NGRID.VISIUM = 63.5
-
 contour_brks <- getFromNamespace("contour_breaks", "ggplot2")
 unique00 <- getFromNamespace("unique0", "ggplot2")
 data_frame00 <- getFromNamespace("data_frame0", "ggplot2")

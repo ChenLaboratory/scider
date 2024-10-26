@@ -9,9 +9,10 @@
 #' bandwidth selection using cross-validation using function
 #' spatstat.explore::bw.diggle.
 #' @param weights Optional weights to be attached to the points.
-#' @param ngrid.x Number of grids in the x-direction. Default to 100.
+#' @param ngrid.x Number of grids in the x-direction.
 #' @param ngrid.y Number of grids in the y-direction.
 #' @param grid.length.x Grid length in the x-direction.
+#' Default to 100 (micron).
 #' @param grid.length.y Grid length in the y-direction.
 #' @param xlim The range of the x-coordinates of the image.
 #' @param ylim The range of the y-coordinates of the image.
@@ -24,8 +25,8 @@
 computeDensity <- function(spe, mode = c("pixels","points"),
                            kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
                            bandwidth = NULL, weights = NULL,
-                           ngrid.x = 100, ngrid.y = NULL,
-                           grid.length.x = NULL, grid.length.y = NULL,
+                           ngrid.x = NULL, ngrid.y = NULL,
+                           grid.length.x = 100, grid.length.y = NULL,
                            xlim = NULL, ylim = NULL, diggle = FALSE) {
     mode = match.arg(mode)
     kernel = match.arg(kernel)

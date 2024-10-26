@@ -11,8 +11,8 @@ gridDensity(
   coi = NULL,
   kernel = "gaussian",
   bandwidth = NULL,
-  ngrid.x = if (isVisium) NGRID.VISIUM else 100,
-  grid.length.x = NULL,
+  ngrid.x = NULL,
+  grid.length.x = 100,
   diggle = FALSE,
   grid.type = c("hex", "square"),
   isVisium = FALSE,
@@ -35,10 +35,10 @@ Default to all cell types.}
 automatic bandwidth selection using cross-validation using
 function spatstat.explore::bw.diggle.}
 
-\item{ngrid.x}{Number of grids in the x-direction. Default to 100 or
-63.5 for Visium (1 Visium spot per hexagon).}
+\item{ngrid.x}{Number of grids in the x-direction.}
 
-\item{grid.length.x}{Grid length in the x-direction.}
+\item{grid.length.x}{Grid length in the x-direction.
+Default to 100 (micron).}
 
 \item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
 correction. See spatstat.explore::density.ppp() for details.}

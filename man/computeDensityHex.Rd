@@ -9,8 +9,8 @@ computeDensityHex(
   kernel = c("gaussian"),
   bandwidth = NULL,
   weights = NULL,
-  ngrid.x = if (isVisium) NGRID.VISIUM else 100,
-  grid.length.x = NULL,
+  ngrid.x = NULL,
+  grid.length.x = 100,
   xlim = NULL,
   ylim = NULL,
   diggle = FALSE,
@@ -29,9 +29,10 @@ spatstat.explore::bw.diggle.}
 
 \item{weights}{Optional weights to be attached to the points.}
 
-\item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
+\item{ngrid.x}{Number of grids in the x-direction.}
 
-\item{grid.length.x}{Grid length in the x-direction.}
+\item{grid.length.x}{Grid length in the x-direction.
+Default to 100 (micron).}
 
 \item{xlim}{The range of the x-coordinates of the image.}
 

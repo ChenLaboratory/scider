@@ -7,11 +7,11 @@
 plotSpatial(
   spe,
   reverseY = FALSE,
-  colour.by = NULL,
-  pt.colour = NULL,
+  group.by = NULL,
+  cols = NULL,
   pt.shape = 16,
   pt.size = 0.3,
-  pt.alpha = 0.8
+  pt.alpha = 0.5
 )
 }
 \arguments{
@@ -19,9 +19,10 @@ plotSpatial(
 
 \item{reverseY}{Reverse y coordinates.}
 
-\item{colour.by}{values to colour points by. Must be in colData of spe.}
+\item{group.by}{values to group points by. Must be in colData of spe.
+If NULL, will try with 'cols' if available.}
 
-\item{pt.colour}{Colour palette. Can be a vector of colours or a function
+\item{cols}{Colour palette. Can be a vector of colours or a function
 that accepts an integer n and return n colours.}
 
 \item{pt.shape}{shape of points.}
@@ -40,6 +41,6 @@ Plot cells based on spatial coordinates.
 
 data("xenium_bc_spe")
 
-plotSpatial(spe, colour.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
+plotSpatial(spe, group.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 
 }

@@ -10,9 +10,9 @@ computeDensity(
   kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
   bandwidth = NULL,
   weights = NULL,
-  ngrid.x = 100,
+  ngrid.x = NULL,
   ngrid.y = NULL,
-  grid.length.x = NULL,
+  grid.length.x = 100,
   grid.length.y = NULL,
   xlim = NULL,
   ylim = NULL,
@@ -34,11 +34,12 @@ spatstat.explore::bw.diggle.}
 
 \item{weights}{Optional weights to be attached to the points.}
 
-\item{ngrid.x}{Number of grids in the x-direction. Default to 100.}
+\item{ngrid.x}{Number of grids in the x-direction.}
 
 \item{ngrid.y}{Number of grids in the y-direction.}
 
-\item{grid.length.x}{Grid length in the x-direction.}
+\item{grid.length.x}{Grid length in the x-direction.
+Default to 100 (micron).}
 
 \item{grid.length.y}{Grid length in the y-direction.}
 

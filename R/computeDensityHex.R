@@ -7,8 +7,9 @@
 #' bandwidth selection using cross-validation using function
 #' spatstat.explore::bw.diggle.
 #' @param weights Optional weights to be attached to the points.
-#' @param ngrid.x Number of grids in the x-direction. Default to 100.
-#' @param grid.length.x Grid length in the x-direction.
+#' @param ngrid.x Number of grids in the x-direction. 
+#' @param grid.length.x Grid length in the x-direction. 
+#' Default to 100 (micron).
 #' @param xlim The range of the x-coordinates of the image.
 #' @param ylim The range of the y-coordinates of the image.
 #' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge
@@ -21,8 +22,8 @@
 computeDensityHex <- function(spe,
                            kernel = c("gaussian"),
                            bandwidth = NULL, weights = NULL,
-                           ngrid.x = if (isVisium) NGRID.VISIUM else 100,
-                           grid.length.x = NULL,
+                           ngrid.x = NULL,
+                           grid.length.x = 100,
                            xlim = NULL, ylim = NULL, diggle = FALSE,
                            isVisium=F) {
   kernel = match.arg(kernel)
@@ -47,9 +48,9 @@ computeDensityHex <- function(spe,
     ngrid.x <- diff(xlim) / grid.length.x
   }
   
-  if (isVisium && ngrid.x%%NGRID.VISIUM!=0) {
-    warning("For Visium, ngrid.x should be a multiple 
-            of 63.5 to exactly align each spot to a hexagon")
+  if (isVisium && grid.length.x%%100!=0) {
+    warning("For Visium, grid.length.x should be a multiple 
+            of 100 to exactly align each spot to a hexagon")
   }
   
   

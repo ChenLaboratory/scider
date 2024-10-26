@@ -11,9 +11,9 @@
 #' @param bandwidth The smoothing bandwidth. By default performing
 #' automatic bandwidth selection using cross-validation using
 #' function spatstat.explore::bw.diggle.
-#' @param ngrid.x Number of grids in the x-direction. Default to 100 or 
-#' 63.5 for Visium (1 Visium spot per hexagon).
-#' @param grid.length.x Grid length in the x-direction.
+#' @param ngrid.x Number of grids in the x-direction.
+#' @param grid.length.x Grid length in the x-direction. 
+#' Default to 100 (micron).
 #' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge
 #' correction. See spatstat.explore::density.ppp() for details.
 #' @param grid.type Type of grid can be either hexagon or square.
@@ -39,8 +39,8 @@ gridDensity <- function(spe,
                         coi = NULL,
                         kernel = "gaussian",
                         bandwidth = NULL,
-                        ngrid.x = if (isVisium) NGRID.VISIUM else 100,
-                        grid.length.x = NULL,
+                        ngrid.x = NULL,
+                        grid.length.x = 100,
                         diggle = FALSE,
                         grid.type = c("hex", "square"),
                         isVisium = FALSE,
@@ -158,7 +158,7 @@ gridDensity <- function(spe,
       
       #Filter grid_density to same as Visium spot.
       #TODO: Clean up this condition. Maybe make a variable called gridLevelAnalysis
-      if (filterToVisiumSpot==TRUE && isVisium == TRUE && ngrid.x%%NGRID.VISIUM==0) {
+      if (filterToVisiumSpot==TRUE && isVisium == TRUE && grid.length.x==100) {
         # sub = colData(spe)$in_tissue==1
         hcellsInTissue = hexDensity::xy2hcell(x=spatialCoords(spe),
                                               # y=spatialCoords(spe)[,2],
