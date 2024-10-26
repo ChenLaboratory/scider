@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,9 @@
 <span>  kernel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span>, <span class="st">"epanechnikov"</span>, <span class="st">"quartic"</span>, <span class="st">"disc"</span><span class="op">)</span>,</span>
 <span>  bandwidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ngrid.x <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  ngrid.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ngrid.y <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  grid.length.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  grid.length.x <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  grid.length.y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -88,7 +88,7 @@ spatstat.explore::bw.diggle.</p></dd>
 
 
 <dt id="arg-ngrid-x">ngrid.x<a class="anchor" aria-label="anchor" href="#arg-ngrid-x"></a></dt>
-<dd><p>Number of grids in the x-direction. Default to 100.</p></dd>
+<dd><p>Number of grids in the x-direction.</p></dd>
 
 
 <dt id="arg-ngrid-y">ngrid.y<a class="anchor" aria-label="anchor" href="#arg-ngrid-y"></a></dt>
@@ -96,7 +96,8 @@ spatstat.explore::bw.diggle.</p></dd>
 
 
 <dt id="arg-grid-length-x">grid.length.x<a class="anchor" aria-label="anchor" href="#arg-grid-length-x"></a></dt>
-<dd><p>Grid length in the x-direction.</p></dd>
+<dd><p>Grid length in the x-direction.
+Default to 100 (micron).</p></dd>
 
 
 <dt id="arg-grid-length-y">grid.length.y<a class="anchor" aria-label="anchor" href="#arg-grid-length-y"></a></dt>
