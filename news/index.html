@@ -37,7 +37,40 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.1" id="scider-111">scider 1.1.1<a class="anchor" aria-label="anchor" href="#scider-111"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.4.0" id="scider-140-2024-10-30">scider 1.4.0 (2024-10-30)<a class="anchor" aria-label="anchor" href="#scider-140-2024-10-30"></a></h2>
+<ul><li>gridDensity() now supports hexagonal grids.</li>
+<li>Make ‘grid.length.x’ = 100 by default in gridDensity() and remove the default value for ‘ngrid.x’.</li>
+<li>New functions plotGrid() and gridSPE()</li>
+<li>gridSPE() has an option to calculate grid-level count matrix for each cell type</li>
+<li>Remove redundant argument ‘n’ in plotSpatial()</li>
+<li>Rename ‘coi’ to ‘contour’, ‘all’ to ‘self.included’ in plotCellCompo()</li>
+<li>Fixed a bug in plotContour() where ‘overlay’ is not working properly</li>
+<li>Fixed a bug in corDensity() that produced NaN values</li>
+<li>New argument ‘contour’ in allocateCells() allowing user to specify the contour levels for cell allocation. Default to all detected contours.</li>
+<li>corDensity() can be run without running findROI(), and it returns a DataFrame instead of a list of DataFrames if no ROI detected.</li>
+<li>New argument ‘probs’ added to plotDensity() for grid filtering when ROIs are not identified previously.</li>
+<li>‘equal.cell’ is set to TRUE by default in getContour().</li>
+<li>plotContour() now plots contour for all the cells when ‘coi’ is NULL (by default).</li>
+<li>When ‘coi’ contains multiple cell types, plotContour() looks for the corresponding contour in <a href="mailto:spe@metadata" class="email">spe@metadata</a> for plotting.</li>
+<li>Added another option ‘none’ for ‘overlay’ in plotContour().</li>
+<li>For multiple ‘coi’, getContour() now includes all coi in the contour labelling.</li>
+<li>gridDensity() returns an extra column ‘density_overall’ in <a href="mailto:spe@metadata" class="email">spe@metadata</a>$grid_density.</li>
+<li>plotDensity() plots overall cell density by default.</li>
+<li>The default value of ‘probs’ in plotDensity() is now 0.5.</li>
+<li>For multiple ‘coi’, plotDensity() now plots the total instead of average.</li>
+<li>Fixed a ggtitle() bug in plotDensity() when ‘coi’ contains more than one cell type.</li>
+<li>findROI() now use all cells (overall) by default.</li>
+<li>coord_fixed for both plotDensity() and plotROI().</li>
+<li>plotROI() now plots all the cells in the background when ‘roi’ is ‘overall’.</li>
+<li>In corDensity(), ‘trace’ is now set to FALSE by default.</li>
+<li>Fixed a bug in cellsInRegion() when there is only one ROI.</li>
+<li>Fixed bugs in contour2sf() when no ‘areas_up’.</li>
+<li>Converted cell numbers as a vector in spe2PB().</li>
+<li>Fixed a bug in spe2PB() when the count table from spe is not matrix.</li>
+<li>Fixed a bug in plotContour() to ensure exact match for cell types to avoid similar cell type names.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="scider-120-2023-10-30">scider 1.2.0 (2023-10-30)<a class="anchor" aria-label="anchor" href="#scider-120-2023-10-30"></a></h2>
 <ul><li>Bioconductor release.</li>
 </ul></div>
     <div class="section level2">
