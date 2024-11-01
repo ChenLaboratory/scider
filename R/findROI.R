@@ -41,6 +41,7 @@
 #'
 findROI <- function(spe, coi = NULL,
                     probs = 0.85,
+                    min.density = NULL, 
                     ngrid.min = 20,
                     method = c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"),
                     diag.nodes = FALSE,
@@ -63,8 +64,13 @@ findROI <- function(spe, coi = NULL,
   method <- match.arg(method)
 
   grid_data$density_coi_average <- rowMeans(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop = FALSE]))
-  kp <- grid_data$density_coi_average >= quantile(grid_data$density_coi_average, 
-                                                  probs = probs)
+  
+  if (!is.null(min.density)) {
+    message("Overwriting the probs argument. Grids are filtered by the min.density value. ")
+    kp <- grid_data$density_coi_average >= min.density
+  } else {
+    kp <- grid_data$density_coi_average >= quantile(grid_data$density_coi_average, probs = probs)
+  }
   grid_data_filter <- grid_data[kp, ]
   
   # clustering approach
