@@ -4,7 +4,9 @@
 #' @param coi A character vector of cell types of interest (COIs).
 #' Default to all cell types.
 #' @param probs A numeric scalar. The threshold of proportion that used to
-#'  filter grid by density. Default to 0.85.
+#'  filter grids by density. Default to 0.85.
+#' @param min.density A numeric value. The cut-off value used to filter grids
+#' by density. Default is NULL and overwrites probs.
 #' @param ngrid.min An integer. The minimum number of grids required for
 #' defining a ROI. Default to 20.
 #' @param method The community dectection method to be used, possible options

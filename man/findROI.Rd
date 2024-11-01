@@ -8,6 +8,7 @@ findROI(
   spe,
   coi = NULL,
   probs = 0.85,
+  min.density = NULL,
   ngrid.min = 20,
   method = c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"),
   diag.nodes = FALSE,
@@ -25,7 +26,10 @@ findROI(
 Default to all cell types.}
 
 \item{probs}{A numeric scalar. The threshold of proportion that used to
-filter grid by density. Default to 0.85.}
+filter grids by density. Default to 0.85.}
+
+\item{min.density}{A numeric value. The cut-off value used to filter grids
+by density. Default is NULL and overwrites probs.}
 
 \item{ngrid.min}{An integer. The minimum number of grids required for
 defining a ROI. Default to 20.}
