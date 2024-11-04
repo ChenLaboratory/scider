@@ -4,7 +4,7 @@
 \alias{mergeROI}
 \title{Manually merge ROIs}
 \usage{
-mergeROI(spe, merge.list, id = "component", rename = FALSE)
+mergeROI(spe, merge.list, remove.ids = NULL, id = "component", rename = FALSE)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -13,6 +13,8 @@ mergeROI(spe, merge.list, id = "component", rename = FALSE)
 Each vector in the list should be of length greater than or
 equal to 2. If no name is specified, the merged ROI will be
 named by concatenating ROIs being merged.}
+
+\item{remove.ids}{Optional. A vector of ROI ids to be removed.}
 
 \item{id}{Character. The name of the column in \code{spe@metadata$roi}
 that stores the ROIs to be merged. Default is "component".}
