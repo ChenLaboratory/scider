@@ -141,6 +141,18 @@ contour2sf <- function(spe, contour, coi, cutoff) {
             area <- sf::st_cast(line_piece_sf, "POLYGON")
             area <- sf::st_sf(area)
             inds <- sf::st_intersects(area, grids_pts_sf)
+            if (any(sapply(inds, length) == 0L)) {
+              ind_buffer <- which(sapply(inds, length) == 0L)
+              area_tmp <- area
+              area_tmp[ind_buffer, ] <- sf::st_buffer(
+                area_tmp[ind_buffer, ],
+                dist = `if`(spe@metadata$grid_info$grid_type == "hex",
+                            diff(spe@metadata$grid_info$xlim)/spe@metadata$grid_info$xbins/2,
+                            spe@metadata$grid_info$xstep/2
+                )
+              )
+              inds <- sf::st_intersects(area_tmp, grids_pts_sf)
+            }
             avglevel <- mean(grids_pts_sf$density_coi_average[unlist(inds)])
             avglevel <- findInterval(avglevel, levs,
                 rightmost.closed = FALSE
