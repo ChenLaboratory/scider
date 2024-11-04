@@ -415,11 +415,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                 areas <- sf::st_union(areas, canvas_minus_areas_still_up)
             }
         }
-
-        # check if there are any other down regions
-        areas_split <- sf::st_union(areas) |>
-            sf::st_cast(to = "POLYGON") |>
-            sf::st_sf()
+        
     }
 
     areas <- sf::st_as_sf(sf::st_union(areas))
