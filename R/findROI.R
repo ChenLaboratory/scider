@@ -65,7 +65,7 @@ findROI <- function(spe, coi = NULL,
   
   method <- match.arg(method)
 
-  grid_data$density_coi_average <- rowMeans(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop = FALSE]))
+  grid_data$density_coi_average <- rowSums(as.matrix(grid_data[, which(colnames(grid_data) %in% dens_cols), drop = FALSE]))
   
   if (!is.null(min.density)) {
     message("Overwriting the probs argument. Grids are filtered by the min.density value. ")
