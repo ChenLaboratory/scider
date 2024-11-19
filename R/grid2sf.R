@@ -3,6 +3,7 @@
 #' @param spe A SpatialExperiment object with grid density calculated
 #' @param x vector of x nodes of the polygons
 #' @param y vector of y nodes of the polygons
+#' @param reverseY Reverse y coordinates.
 #' 
 #' @return List of sf polygons
 #' 
@@ -10,7 +11,10 @@
 #' Default is to generate sf polygons for all grid.
 #' For plotting, use sf::st_as_sfc(grid2sf2(spe)) to convert list into Geometry 
 #' Set.
-grid2sf <- function(spe,x=spe@metadata$grid_density$node_x,y=spe@metadata$grid_density$node_y) {
+grid2sf <- function(spe,
+                    x=spe@metadata$grid_density$node_x,
+                    y=spe@metadata$grid_density$node_y,
+                    reverseY = FALSE) {
   if (is.null(spe@metadata$grid_info)) stop("Missing grid. Compute Density first")
   if (is.null(x) || is.null(y)) stop("Missing x or y")
   if (length(x) != length(x)) stop("x, y must be of equal length")
@@ -30,10 +34,10 @@ grid2sf <- function(spe,x=spe@metadata$grid_density$node_x,y=spe@metadata$grid_d
          
          xc = offset[1] + (0:(nx*2+1)) * dx
          yc = offset[2] + (0:(ny*3+1)) * dy
+         is_right = rep_len(c(0,1),ny)
          
          make_poly = function(col,row) {
-           is_right = !(row%%2)
-           x_index = 2*col+c(0,1,1,0,-1,-1,0)+is_right
+           x_index = 2*col+c(0,1,1,0,-1,-1,0)+is_right[row]
            y_index = 3*row+c(2,1,-1,-2,-1,1,2)
            sf::st_polygon(list(matrix(c(xc[x_index],yc[y_index]),7)))
          }
@@ -52,6 +56,9 @@ grid2sf <- function(spe,x=spe@metadata$grid_density$node_x,y=spe@metadata$grid_d
          }
        }
   )
+  if (reverseY) {
+      yc <- sum(range(yc)) - yc
+  }
   return(lapply(1:length(x), function(ii) {
     make_poly(x[ii],y[ii])
   }))

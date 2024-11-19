@@ -4,6 +4,11 @@
 #' @param reverseY Reverse y coordinates.
 #' @param group.by values to group points by. Must be in colData of spe. 
 #' If NULL, will try with 'cols' if available.
+#' @param feature Feature to group polygons by. Must be in rownames(spe).
+#' @param assay Name of assay to use for plotting feature.
+#' @param type Transformation to apply for the group/feature. Options are "raw"
+#' , "log", "cpm", "logcpm", or a function that accepts and returns a vector of 
+#' the same length.
 #' @param pt.shape shape of points.
 #' @param cols Colour palette. Can be a vector of colours or a function 
 #' that accepts an integer n and return n colours.
@@ -21,6 +26,9 @@
 #'
 plotSpatial <- function(spe, reverseY = FALSE,
                          group.by = NULL,
+                         feature = NULL,
+                         assay = "counts",
+                         type = c("raw","log","cpm","logcpm"),
                          cols = NULL,
                          pt.shape = 16, 
                          pt.size = 0.3, 
@@ -39,34 +47,53 @@ plotSpatial <- function(spe, reverseY = FALSE,
     rownames2col("cell_id")
 
   if (reverseY) {
-    y_tmp <- toplot[, "y"]
-    mid_y <- (max(y_tmp) + min(y_tmp)) / 2
-    final_y <- 2 * mid_y - y_tmp
-    toplot[, "y"] <- final_y
-  }
-
-  # Groups
-  if (!is.null(group.by)) {
-    group = toplot[[group.by]]
-  } else if (!is.null(cols)) {
-    group = factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
-  } else {
-    group = NULL
+    toplot[, "y"] <- sum(range(toplot[, "y"])) - toplot[, "y"]
   }
   
-  isContinuous = !is.null(group.by) && is.numeric(toplot[[group.by]])
-  n_colour = length(unique(group))
-  if (is.null(cols)&&is.null(group.by)) {
-    col.p = NULL
-  } else if (is.null(cols)) {
-    if (isContinuous) col.p <- col.spec
-    else col.p <- selectColor(n_colour)
-  } else if (is.function(cols)) {
-    col.p <- as.character(cols(n_colour))
-  } else {
-    col.p <- as.character(cols)
-    if (!is.null(group.by) && !isContinuous) col.p <- rep_len(col.p,n_colour)
-    else if (!isContinuous) col.p <- rep_len(unique(col.p), n_colour)
+  group = col.p = label = NULL
+  
+  # Groups. Order is: colData -> assays -> cols
+  if (!is.null(group.by) && group.by %in% colnames(toplot)) {
+    group = toplot[[group.by]]
+    label = group.by
+  } else if (!is.null(feature) && feature %in% rownames(spe)) {
+    group = SummarizedExperiment::assays(spe)[[assay]][feature,]
+    label = feature
+  } else if (!is.null(cols) && !is.function(cols)) {
+    group = factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
+    col.p = rep_len(unique(cols), length(unique(cols)))
+  }
+
+  # Type
+  if (is.character(type)) {
+    type = switch(match.arg(type),
+                  raw = NULL,
+                  log = function(x) {log2(x+1)},
+                  cpm = function(x) {
+                    (x+0.5)/SparseArray::colSums(spe@assays@data[[assay]])*1e6
+                  },
+                  logcpm = function(x) {
+                    log2((x+0.5)/SparseArray::colSums(spe@assays@data[[assay]])*1e6)
+                  })
+  }
+  if(is.function(type)) {
+    tryCatch({group = type(group)},
+             error = function(e){
+               message("Error when applying 'type'. Skipping 'type'.")
+             })
+  }
+  isContinuous = is.numeric(group)
+  
+  # Colours
+  if (!is.null(group) && is.null(col.p)) {
+    n_colour = length(unique(group))
+    if (is.null(cols)) { # Default palette
+      col.p = `if`(isContinuous, col.spec, selectColor(n_colour))
+    } else if (is.function(cols)) { # cols is function
+      col.p = cols(n_colour)
+    } else { # cols is vector
+      col.p = `if`(isContinuous, cols, rep_len(cols,n_colour))
+    }
   }
   
   #This stop "Coordinate system already present..." warning by coord_fixed()
@@ -79,7 +106,7 @@ plotSpatial <- function(spe, reverseY = FALSE,
       size = pt.size,
       alpha = pt.alpha,
       ) +
-    labs(x = "x", y = "y", color = group.by) +
+    labs(x = "x", y = "y", color = label) +
     theme_classic() +
     cf
   if (isContinuous) {
