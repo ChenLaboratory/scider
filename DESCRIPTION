@@ -63,7 +63,8 @@ Imports:
     grDevices,
     dbscan,
     hexDensity,
-    hexbin
+    hexbin,
+    SparseArray
 Suggests:
     edgeR,
     testthat (>= 3.0.0)
