@@ -22,80 +22,79 @@
 #' spe_grid <- gridSPE(spe)
 #'
 gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = id) {
-    if (!("grid_density" %in% names(spe@metadata))) {
-        stop("Please run gridDensity before using this function.")
-    }
-
-    grid_data <- spe@metadata$grid_density[,(1:2)]
-    assay_matrix = as.matrix(SummarizedExperiment::assay(spe,"counts"))
-
-    #Get vector of which polygon each cell belong to
-    xy_allcells = SpatialExperiment::spatialCoords(spe)
-    if(spe@metadata$grid_info$grid_type=="hex") {
-        poly_index=hexDensity::xy2hcell(x=xy_allcells[,1],y=xy_allcells[,2],
-                                        xbins=spe@metadata$grid_info$xbins,
-                                        xbnds=spe@metadata$grid_info$xlim,
-                                        ybnds=spe@metadata$grid_info$ylim,
-                                        shape=spe@metadata$grid_info$shape)
-    } else {
-        rr = (xy_allcells[,1]-spe@metadata$grid_info$xlim[1])%/%spe@metadata$grid_info$xstep
-        rr = pmin.int(rr,spe@metadata$grid_info$dim[1]-1)
-        cc = (xy_allcells[,2]-spe@metadata$grid_info$ylim[1])%/%spe@metadata$grid_info$ystep
-        cc = pmin.int(cc,spe@metadata$grid_info$dim[2]-1)
-        poly_index = (rr*spe@metadata$grid_info$dims[2]+cc+1)
-    }
-
-    # Obtain gene counts at the grid level
-    assays <- list()
-    if(is.null(split.count.by)){
-        assays$counts = matrix(data=0,
-                               nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
-                               dimnames = list(rownames(spe)))
-        for (i in seq_along(poly_index)) {
-            assays$counts[,poly_index[i]] = assays$counts[,poly_index[i]] + assay_matrix[,i]
-        }
-    } else {
-        split_names <- names(table(spe@colData[[split.count.by]]))
-        split_names_clean <- janitor::make_clean_names(split_names)
-        for(i in seq_along(split_names)){
-            sub <- spe@colData[[split.count.by]] == split_names[i]
-            assays[[i+1]] = matrix(data=0,
-                                   nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
-                                   dimnames = list(rownames(spe)))
-            for (j in (seq_along(sub))[sub]) {
-                assays[[i+1]][,poly_index[j]] <- assays[[i+1]][,poly_index[j]] + assay_matrix[,j]
-            }
-        }
-        assays[[1]] <- Reduce(`+`, assays[-1])
-        names(assays) <- c("counts", paste0("counts_", split_names_clean))
-    }
-
-    # Obtain cell type counts at the grid level
-    if(cell.count){
-        cell_type_names <- names(table(spe@colData[[id]]))
-        cell_counts <- matrix(0, length(cell_type_names), ncol(spe))
-        for(i in seq_along(cell_type_names)){
-            cell_counts[i,] <- spe@colData[[id]] == cell_type_names[i]
-        }
-
-        poly_counts = matrix(0,nrow(spe@metadata$grid_density),length(cell_type_names),
-                             dimnames=list(NULL,cell_type_names))
-        for (i in seq_along(poly_index)) {
-            poly_counts[poly_index[i],] = poly_counts[poly_index[i],] + cell_counts[,i]
-        }
-        poly_counts <- cbind(poly_counts, overall=rowSums(poly_counts))
-        poly_counts_names <- colnames(poly_counts) <- paste0("cell_counts_",
-                                                             janitor::make_clean_names(colnames(poly_counts)))
-        grid_data[, poly_counts_names] <- poly_counts
-    }
+  if (!("grid_density" %in% names(spe@metadata))) {
+    stop("Please run gridDensity before using this function.")
+  }
+  
+  grid_data <- spe@metadata$grid_density[,(1:2)]
+  assay_matrix = t(as.matrix(SummarizedExperiment::assay(spe,"counts")))
+  
+  #Get vector of which polygon each cell belong to
+  xy_allcells = SpatialExperiment::spatialCoords(spe)
+  if(spe@metadata$grid_info$grid_type=="hex") {
+    poly_index=hexDensity::xy2hcell(x=xy_allcells[,1],y=xy_allcells[,2],
+                                    xbins=spe@metadata$grid_info$xbins,
+                                    xbnds=spe@metadata$grid_info$xlim,
+                                    ybnds=spe@metadata$grid_info$ylim,
+                                    shape=spe@metadata$grid_info$shape)
+  } else {
+    rr = (xy_allcells[,1]-spe@metadata$grid_info$xlim[1])%/%spe@metadata$grid_info$xstep
+    rr = pmin.int(rr,spe@metadata$grid_info$dim[1]-1)
+    cc = (xy_allcells[,2]-spe@metadata$grid_info$ylim[1])%/%spe@metadata$grid_info$ystep
+    cc = pmin.int(cc,spe@metadata$grid_info$dim[2]-1)
+    poly_index = (rr*spe@metadata$grid_info$dims[2]+cc+1)
+  }
+  
+  # Obtain gene counts at the grid level
+  assays <- list()
+  if(is.null(split.count.by)){
+    assays$counts = matrix(data=0,
+                           nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
+                           dimnames = list(rownames(spe)))
     
-    spe_out <- SpatialExperiment::SpatialExperiment(assays = assays,
-                                                    colData = grid_data,
-                                                    rowData = SummarizedExperiment::rowData(spe),
-                                                    spatialCoordsNames = c("x_grid", "y_grid"))
+    aggCounts = rowsum(assay_matrix,group=poly_index,reorder=FALSE)
+    assays$counts[,unique(poly_index)] = t(aggCounts)
+  } else {
+    split_names <- names(table(spe@colData[[split.count.by]]))
+    split_names_clean <- janitor::make_clean_names(split_names)
+    for(i in seq_along(split_names)){
+      sub <- spe@colData[[split.count.by]] == split_names[i]
+      assays[[i+1]] = matrix(data=0,
+                             nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
+                             dimnames = list(rownames(spe)))
+      
+      aggCounts = rowsum(assay_matrix[sub,],group=poly_index[sub],reorder=FALSE)
+      assays[[i+1]][,unique(poly_index[sub])] = t(aggCounts)
+    }
+    assays[[1]] <- Reduce(`+`, assays[-1])
+    names(assays) <- c("counts", paste0("counts_", split_names_clean))
+  }
+  
+  # Obtain cell type counts at the grid level
+  if(cell.count){
+    # Sorting is to keep it backward consistent
+    cell_type_names <- sort(unique(spe@colData[[id]]))
 
-    spe_out@metadata <- spe@metadata
-    spe_out@metadata$grid_info$gridLevelAnalysis <- TRUE
+    poly_counts = matrix(0,nrow(spe@metadata$grid_density),length(cell_type_names),
+                         dimnames=list(NULL,cell_type_names))
+    cell_types = as.numeric(factor(spe@colData[[id]]))
 
-    return(spe_out)
+    for (i in 1:ncol(spe)) {
+      poly_counts[poly_index[i],cell_types[i]] = poly_counts[poly_index[i],cell_types[i]] + 1
+    }
+    poly_counts <- cbind(poly_counts, overall=rowSums(poly_counts))
+    poly_counts_names <- colnames(poly_counts) <- paste0("cell_counts_",
+                                                         janitor::make_clean_names(colnames(poly_counts)))
+    grid_data[, poly_counts_names] <- poly_counts
+  }
+  
+  spe_out <- SpatialExperiment::SpatialExperiment(assays = assays,
+                                                  colData = grid_data,
+                                                  rowData = SummarizedExperiment::rowData(spe),
+                                                  spatialCoordsNames = c("x_grid", "y_grid"))
+  
+  spe_out@metadata <- spe@metadata
+  spe_out@metadata$grid_info$gridLevelAnalysis <- TRUE
+  
+  return(spe_out)
 }
