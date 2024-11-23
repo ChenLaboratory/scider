@@ -3,6 +3,7 @@
 #' @param spe A SpatialExperiment object.
 #' @param id Character. The name of the column of colData(spe) containing
 #' the cell type identifiers. Set to cell_type by default.
+#' @param label Logical. Show ROI label or not.
 #' @param show.legend Logical. Show legend or not.
 #' @param ... Aesthetic mappings pass for point.
 #'
@@ -23,6 +24,7 @@
 #'
 plotROI <- function(spe,
                      id = "cell_type",
+                     label = TRUE,
                      show.legend = FALSE, ...) {
   if (is.null(spe@metadata$roi)) {
     stop("ROI not yet computed!")
@@ -31,7 +33,7 @@ plotROI <- function(spe,
   rois <- as.data.frame(spe@metadata$roi)
   
   coi <- spe@metadata$coi
-  coi_clean <- janitor::make_clean_names(coi)
+  #coi_clean <- janitor::make_clean_names(coi)
   
   dat <- as.data.frame(spe@colData)
   
@@ -85,10 +87,6 @@ plotROI <- function(spe,
       ),color=NA,
       inherit.aes = F) +
     # scale_fill_manual(values = col.p) +
-    annotate("text",
-             x = rois_center$X, y = rois_center$Y,
-             label = rois_center$component, color = "black", fontface = 2
-    ) +
     scale_fill_manual(values = col.p) +
     scale_x_continuous(limits = plot.xlim) +
     scale_y_continuous(limits = plot.ylim) +
@@ -98,7 +96,15 @@ plotROI <- function(spe,
     roi_plot <- roi_plot +
       theme(legend.position = "none")
   }
-  
+
+  if (label) {
+    roi_plot <- roi_plot +
+    annotate("text",
+             x = rois_center$X, y = rois_center$Y,
+             label = rois_center$component, color = "black", fontface = 2
+    )
+  }
+
   return(roi_plot)
 }
 
