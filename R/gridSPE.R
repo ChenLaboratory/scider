@@ -27,7 +27,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
   }
   
   grid_data <- spe@metadata$grid_density[,(1:2)]
-  assay_matrix = t(as.matrix(SummarizedExperiment::assay(spe,"counts")))
+  assay_matrix = as.matrix(SummarizedExperiment::assay(spe,"counts"))
   
   #Get vector of which polygon each cell belong to
   xy_allcells = SpatialExperiment::spatialCoords(spe)
@@ -52,8 +52,8 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
                            nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
                            dimnames = list(rownames(spe)))
     
-    aggCounts = rowsum(assay_matrix,group=poly_index,reorder=FALSE)
-    assays$counts[,unique(poly_index)] = t(aggCounts)
+    aggCounts = colsum(assay_matrix, poly_index, reorder = FALSE)
+    assays$counts[,unique(poly_index)] = aggCounts
   } else {
     split_names <- names(table(spe@colData[[split.count.by]]))
     split_names_clean <- janitor::make_clean_names(split_names)
@@ -62,9 +62,8 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
       assays[[i+1]] = matrix(data=0,
                              nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
                              dimnames = list(rownames(spe)))
-      
-      aggCounts = rowsum(assay_matrix[sub,],group=poly_index[sub],reorder=FALSE)
-      assays[[i+1]][,unique(poly_index[sub])] = t(aggCounts)
+      aggCounts = colsum(assay_matrix[,sub], poly_index[sub], reorder = FALSE)
+      assays[[i+1]][,unique(poly_index[sub])] = aggCounts
     }
     assays[[1]] <- Reduce(`+`, assays[-1])
     names(assays) <- c("counts", paste0("counts_", split_names_clean))
@@ -72,7 +71,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
   
   # Obtain cell type counts at the grid level
   if(cell.count){
-    # Sorting is to keep it backward consistent
+    # Sorting is just for backward consistency
     cell_type_names <- sort(unique(spe@colData[[id]]))
 
     poly_counts = matrix(0,nrow(spe@metadata$grid_density),length(cell_type_names),
