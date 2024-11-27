@@ -25,6 +25,8 @@
 #' to zoom in. Default is 500L. 
 #' @param ... Other parameters that passed to walktrap.community when method =
 #' "walktrap".
+#' @param fast Whether to create graph using the newer method. May give 
+#' different clustering to stochastic methods like walktrap and greedy 
 #'
 #' @return A SpatialExperiment object.
 #' @export
@@ -49,7 +51,8 @@ findROI <- function(spe, coi = NULL,
                     diag.nodes = FALSE,
                     sequential.roi.name = TRUE, 
                     directed = FALSE, 
-                    zoom.in = FALSE, zoom.in.size = 500L, ...) {
+                    zoom.in = FALSE, zoom.in.size = 500L, 
+                    fast = FALSE, ...) {
 
   grid_data <- spe@metadata$grid_density
   grid_type <- spe@metadata$grid_info$grid_type
@@ -105,6 +108,7 @@ findROI <- function(spe, coi = NULL,
     g_community <- lapply(cls, function(cc) { grid_data_filter$node[cl$cluster == cc] })
   } else {
     # network approaches
+    if (!fast) {
     if (grid_type=="hex") {
       adj_edges <- do.call(rbind, lapply(seq_len(nrow(grid_data_filter)), function(ii) {
         adjacent_grids_hex(spe, grid_data_filter$node_x[ii], grid_data_filter$node_y[ii])}))
@@ -131,10 +135,32 @@ findROI <- function(spe, coi = NULL,
     }
     
     df_edges <- adj_edges[, c("node1", "node2", "weight")]
-    
-    
+
     g <- igraph::graph_from_data_frame(df_edges, directed = directed)
-    
+    } else {
+      g = make_graph_new(grid_data_filter$node_x,
+                         grid_data_filter$node_y,
+                         graph_type = {
+                           if(grid_type=="hex") "hex"
+                           else if (diag.nodes) "diag"
+                           else "square"
+                         })
+      
+      # sorted order for grid_data_filter to match g
+      order = order(grid_data_filter$node_y, grid_data_filter$node_x)
+      
+      w = grid_data_filter[order, "density_coi_average"]
+      igraph::E(g)$weight = (w[igraph::tail_of(g,igraph::E(g))] + 
+                             w[igraph::head_of(g,igraph::E(g))])/2
+      
+      if (diag.nodes) {
+        is_diag = !is.na(igraph::E(g)$diag)
+        igraph::E(g)$weight[is_diag] = igraph::E(g)$weight[is_diag]/sqrt(2)
+      }
+      igraph::V(g)$name = grid_data_filter[order, "node"]
+    }
+
+
     if (method == "walktrap") {
       g_community <- igraph::cluster_walktrap(g, ...)
     }
@@ -145,8 +171,10 @@ findROI <- function(spe, coi = NULL,
       g_community <- igraph::cluster_leading_eigen(g)
     }
     if (method == "greedy") {
-      df_edges <- adj_edges[adj_edges$node1_wt < adj_edges$node2_wt, c("node1", "node2", "weight")]
-      g <- igraph::graph_from_data_frame(df_edges, directed = directed)
+      if (!fast) {
+        df_edges <- adj_edges[adj_edges$node1_wt < adj_edges$node2_wt, c("node1", "node2", "weight")]
+        g <- igraph::graph_from_data_frame(df_edges, directed = directed)
+      }
       g_community <- igraph::cluster_fast_greedy(g)
     }
     if (zoom.in) {
@@ -184,7 +212,6 @@ findROI <- function(spe, coi = NULL,
   if (grid_type=="hex") {
     temp=sort(unique00(spe@metadata$grid_density$x_grid))
     temp=temp[seq.int(1,length(temp),2)]
-    
     component_list$xcoord <- temp[
       as.numeric(component_list$x)
     ] + (diff(temp[1:2])/2)*(!as.numeric(component_list$y)%%2)
@@ -297,4 +324,54 @@ adjacent_grids_hex = function(spe, node_xx, node_yy) {
       node2 = cells
     )
   )
+}
+
+# Faster graph maker
+#
+# @param node_x integer vector of node column
+# @param node_y integer vector of node row. Must be same length as node_x
+# @param grid_type options of 'square' for square lattice, 'diag' for square lattice 
+# with diagonal, and 'hex' for hexagonal lattice.
+# 
+# Names of vertices are sequential, going row by row:
+#     4| 13  14  15  16
+#     3| 9   10  11  12
+# row 2| 5   6   7   8
+#     1| 1   2   3   4
+#      ---------------
+#        1   2   3   4
+#             col 
+make_graph_new = function(node_x,node_y,graph_type = c("square","diag","hex")) {
+  range_x = range(node_x)
+  range_y = range(node_y)
+  nx = diff(range_x)+1
+  ny = diff(range_y)+1
+  g = igraph::make_lattice(dimvector=c(nx,ny))
+  
+  switch(match.arg(graph_type),
+         hex = {
+           new_edges = rep(seq_len(nx*(ny-1))[-(nx*seq_len(ny-1))],each = 2)
+           if(range_y[1]%%2==1){
+             new_edges = new_edges + rep_len(c(rep.int(c(1,nx),nx-1),
+                                               rep.int(c(0,nx+1),nx-1)),
+                                             length(new_edges))
+           } else{
+             new_edges = new_edges + rep_len(c(rep.int(c(0,nx+1),nx-1),
+                                               rep.int(c(1,nx),nx-1)),
+                                             length(new_edges))
+           }
+           g = igraph::add_edges(g, new_edges)
+         },
+         diag.nodes = {
+           new_edges = rep(seq_len(nx*(ny-1))[-(nx*seq_len(ny-1))],each = 4)
+           new_edges = new_edges + c(0, nx+1, 1, nx)
+           g = igraph::add_edges(g, new_edges, attr = list(diag = TRUE))
+         })
+  
+  ## Remove filtered vertices 
+  # This change the row/col into index compatible with vertices in g
+  keep_vertices = node_x - range_x[1] + 1 + (
+    node_y - range_y[1])*g$dimvector[1]
+  g = g - seq_len(length(g))[-keep_vertices]
+  return(g)
 }
