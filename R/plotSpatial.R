@@ -70,10 +70,10 @@ plotSpatial <- function(spe, reverseY = FALSE,
                   raw = NULL,
                   log = function(x) {log2(x+1)},
                   cpm = function(x) {
-                    (x+0.5)/SparseArray::colSums(spe@assays@data[[assay]])*1e6
+                    (x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6
                   },
                   logcpm = function(x) {
-                    log2((x+0.5)/SparseArray::colSums(spe@assays@data[[assay]])*1e6)
+                    log2((x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6)
                   })
   }
   if(is.function(type)) {
