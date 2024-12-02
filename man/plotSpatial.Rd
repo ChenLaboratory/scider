@@ -8,6 +8,9 @@ plotSpatial(
   spe,
   reverseY = FALSE,
   group.by = NULL,
+  feature = NULL,
+  assay = "counts",
+  type = c("raw", "log", "cpm", "logcpm"),
   cols = NULL,
   pt.shape = 16,
   pt.size = 0.3,
@@ -21,6 +24,14 @@ plotSpatial(
 
 \item{group.by}{values to group points by. Must be in colData of spe.
 If NULL, will try with 'cols' if available.}
+
+\item{feature}{Feature to group polygons by. Must be in rownames(spe).}
+
+\item{assay}{Name of assay to use for plotting feature.}
+
+\item{type}{Transformation to apply for the group/feature. Options are "raw"
+, "log", "cpm", "logcpm", or a function that accepts and returns a vector of
+the same length.}
 
 \item{cols}{Colour palette. Can be a vector of colours or a function
 that accepts an integer n and return n colours.}

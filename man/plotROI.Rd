@@ -4,13 +4,15 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", show.legend = FALSE, ...)
+plotROI(spe, id = "cell_type", label = TRUE, show.legend = FALSE, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{id}{Character. The name of the column of colData(spe) containing
 the cell type identifiers. Set to cell_type by default.}
+
+\item{label}{Logical. Show ROI label or not.}
 
 \item{show.legend}{Logical. Show legend or not.}
 

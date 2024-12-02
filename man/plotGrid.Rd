@@ -6,18 +6,34 @@
 \usage{
 plotGrid(
   spe,
+  reverseY = FALSE,
   group.by = NULL,
+  feature = NULL,
+  assay = "counts",
+  type = c("raw", "log", "cpm", "logcpm"),
   cols = NULL,
   pol.border = FALSE,
   pol.alpha = 1,
-  probs = 0
+  probs = 0,
+  label = NULL
 )
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{group.by}{values to group polygons by. Must be in colData of spe.
-If NULL, will try with col if available.}
+\item{reverseY}{Reverse y coordinates.}
+
+\item{group.by}{values to group polygons by. Must be in
+spe@metadata$grid_density, or colData(spe) if gridLevelAnalysis is TRUE.
+If NULL, will try with cols if available.}
+
+\item{feature}{Feature to group polygons by. Must be in rownames(spe).}
+
+\item{assay}{Name of assay to use for plotting feature.}
+
+\item{type}{Transformation to apply for the group/feature. Options are "raw"
+, "log", "cpm", "logcpm", or a function that accepts and returns a vector of
+the same length.}
 
 \item{cols}{Colour palette. Can be a vector of colours or a function
 that accepts an integer n and return n colours.}
@@ -28,6 +44,8 @@ that accepts an integer n and return n colours.}
 
 \item{probs}{Numeric value between 0 and 1, used for filtering
 uninformative grid. Only applicable for continuous values.}
+
+\item{label}{label for the legend}
 }
 \value{
 A ggplot object.

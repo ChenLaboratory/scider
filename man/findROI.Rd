@@ -16,6 +16,7 @@ findROI(
   directed = FALSE,
   zoom.in = FALSE,
   zoom.in.size = 500L,
+  fast = FALSE,
   ...
 )
 }
@@ -53,6 +54,9 @@ to get more refined ROIs.}
 
 \item{zoom.in.size}{A numeric scaler. Smallest size of an ROI to be able
 to zoom in. Default is 500L.}
+
+\item{fast}{Whether to create graph using the newer method. May give
+different clustering to stochastic methods like walktrap and greedy}
 
 \item{...}{Other parameters that passed to walktrap.community when method =
 "walktrap".}

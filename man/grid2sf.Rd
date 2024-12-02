@@ -7,7 +7,8 @@
 grid2sf(
   spe,
   x = spe@metadata$grid_density$node_x,
-  y = spe@metadata$grid_density$node_y
+  y = spe@metadata$grid_density$node_y,
+  reverseY = FALSE
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ grid2sf(
 \item{x}{vector of x nodes of the polygons}
 
 \item{y}{vector of y nodes of the polygons}
+
+\item{reverseY}{Reverse y coordinates.}
 }
 \value{
 List of sf polygons

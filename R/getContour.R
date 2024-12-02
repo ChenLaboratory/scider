@@ -135,14 +135,17 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
         dens$n <- ifelse(is.na(dens$n), 0L, dens$n)
         dens_expanded <- rep(dens$density_coi, times = dens$n)
         dens_expanded <- dens_expanded[dens_expanded > 0L]
-        qq <- seq(0, 1, round(1 / bins, 1))[-1]
+        qq <- seq(0, 1, length.out = bins + 1)[-1]
         if (qq[length(qq)] == 1L) qq <- qq[-length(qq)]
         breaks <- as.vector(quantile(dens_expanded, probs = qq))
         binwidth <- bins <- NULL
     }
+    
+    browser()
 
     # note that when calculating contours, density is not filtered at any
     # quantile cutoff!
+
     contour <- compute_group0(dens,
         z.range = range(dens$density_coi, na.rm = TRUE, finite = TRUE),
         bins = bins,
