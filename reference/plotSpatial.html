@@ -47,6 +47,9 @@
 <span>  <span class="va">spe</span>,</span>
 <span>  reverseY <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"log"</span>, <span class="st">"cpm"</span>, <span class="st">"logcpm"</span><span class="op">)</span>,</span>
 <span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.shape <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -69,6 +72,20 @@
 <dt id="arg-group-by">group.by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
 <dd><p>values to group points by. Must be in colData of spe.
 If NULL, will try with 'cols' if available.</p></dd>
+
+
+<dt id="arg-feature">feature<a class="anchor" aria-label="anchor" href="#arg-feature"></a></dt>
+<dd><p>Feature to group polygons by. Must be in rownames(spe).</p></dd>
+
+
+<dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
+<dd><p>Name of assay to use for plotting feature.</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>Transformation to apply for the group/feature. Options are "raw"
+, "log", "cpm", "logcpm", or a function that accepts and returns a vector of
+the same length.</p></dd>
 
 
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>

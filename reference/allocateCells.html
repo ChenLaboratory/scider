@@ -82,6 +82,15 @@ be performed for all detected contours. Default to NULL.</p></dd>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="getContour.html">getContour</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using bins = 10 to draw contours with equal cell numbers.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Called from: getContour(spe, coi = coi)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> debug: contour &lt;- compute_group0(dens, z.range = range(dens$density_coi, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     na.rm = TRUE, finite = TRUE), bins = bins, binwidth = binwidth, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     breaks = breaks, na.rm = FALSE, grid_type = spe@metadata$grid_info$grid_type)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> debug: contour$level &lt;- as.factor(as.numeric(as.factor(contour$cutoff)))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> debug: coi_clean_output &lt;- ifelse(length(coi_clean) == 1L, coi_clean, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     paste(sort(coi_clean), collapse = "_"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> debug: spe@metadata[[paste(coi_clean_output, "contour", sep = "_")]] &lt;- S4Vectors::DataFrame(contour)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> debug: return(spe)</span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">allocateCells</span><span class="op">(</span><span class="va">spe</span>, contour <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assigning cells to ROIs defined by Breast cancer </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assigning cells to contour levels of Breast cancer </span>

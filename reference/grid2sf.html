@@ -46,7 +46,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">grid2sf</span><span class="op">(</span></span>
 <span>  <span class="va">spe</span>,</span>
 <span>  x <span class="op">=</span> <span class="va">spe</span><span class="op">@</span><span class="va">metadata</span><span class="op">$</span><span class="va">grid_density</span><span class="op">$</span><span class="va">node_x</span>,</span>
-<span>  y <span class="op">=</span> <span class="va">spe</span><span class="op">@</span><span class="va">metadata</span><span class="op">$</span><span class="va">grid_density</span><span class="op">$</span><span class="va">node_y</span></span>
+<span>  y <span class="op">=</span> <span class="va">spe</span><span class="op">@</span><span class="va">metadata</span><span class="op">$</span><span class="va">grid_density</span><span class="op">$</span><span class="va">node_y</span>,</span>
+<span>  reverseY <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,6 +65,10 @@
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
 <dd><p>vector of y nodes of the polygons</p></dd>
+
+
+<dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
+<dd><p>Reverse y coordinates.</p></dd>
 
 </dl></div>
     <div class="section level2">

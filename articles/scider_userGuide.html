@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Mengbo Li, Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2024-11-29</h4>
+            <h4 data-toc-skip class="date">2024-12-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/devel/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -347,26 +347,35 @@ different levels of grid density. This can be done using a contour
 identification strategy with function <code>getContour</code>.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getContour.html">getContour</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="st">"Fibroblasts"</span>, equal.cell <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Called from: getContour(spe, coi = "Fibroblasts", equal.cell = TRUE)</span></span>
+<span><span class="co">## debug: contour &lt;- compute_group0(dens, z.range = range(dens$density_coi, </span></span>
+<span><span class="co">##     na.rm = TRUE, finite = TRUE), bins = bins, binwidth = binwidth, </span></span>
+<span><span class="co">##     breaks = breaks, na.rm = FALSE, grid_type = spe@metadata$grid_info$grid_type)</span></span>
+<span><span class="co">## debug: contour$level &lt;- as.factor(as.numeric(as.factor(contour$cutoff)))</span></span>
+<span><span class="co">## debug: coi_clean_output &lt;- ifelse(length(coi_clean) == 1L, coi_clean, </span></span>
+<span><span class="co">##     paste(sort(coi_clean), collapse = "_"))</span></span>
+<span><span class="co">## debug: spe@metadata[[paste(coi_clean_output, "contour", sep = "_")]] &lt;- S4Vectors::DataFrame(contour)</span></span>
+<span><span class="co">## debug: return(spe)</span></span></code></pre>
 <p>Different level of contour can be visualised with cells using
 <code>plotContour</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotContour.html">plotContour</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scider_userGuide_files/figure-html/unnamed-chunk-26-1.png" width="360"></p>
 <p>We can then annotate cells by their locations within each contour
 using function <code>allocateCells</code>.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/allocateCells.html">allocateCells</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/allocateCells.html">allocateCells</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">spe</span>, group.by <span class="op">=</span> <span class="st">"fibroblasts_contour"</span>, pt.alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scider_userGuide_files/figure-html/unnamed-chunk-28-1.png" width="432"></p>
 <p>We can visualise cell type composition per level.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCellCompo.html">plotCellCompo</a></span><span class="op">(</span><span class="va">spe</span>, contour <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scider_userGuide_files/figure-html/unnamed-chunk-29-1.png" width="432"></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCellCompo.html">plotCellCompo</a></span><span class="op">(</span><span class="va">spe</span>, contour <span class="op">=</span> <span class="st">"Fibroblasts"</span>, by.roi <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scider_userGuide_files/figure-html/unnamed-chunk-30-1.png" width="504"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
