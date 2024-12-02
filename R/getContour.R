@@ -141,7 +141,6 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
         binwidth <- bins <- NULL
     }
     
-    browser()
 
     # note that when calculating contours, density is not filtered at any
     # quantile cutoff!
