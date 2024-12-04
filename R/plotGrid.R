@@ -16,6 +16,9 @@
 #' @param pol.border Boolean. Whether to draw border for each polygon.
 #' @param probs Numeric value between 0 and 1, used for filtering
 #' uninformative grid. Only applicable for continuous values.
+#' @param cutoff Numeric. Either a vector of length 2 for the lower & upper 
+#' bounds of data to be included, or length 1 for the lower bound. Override 
+#' probs if specified. Only applicable for continuous values.
 #' @param label label for the legend
 #' @return A ggplot object.
 #' @export
@@ -37,6 +40,7 @@ plotGrid <- function(spe, reverseY = FALSE,
                      pol.border = FALSE,
                      pol.alpha = 1,
                      probs = 0,
+                     cutoff = NULL,
                      label = NULL) {
   grid_data <- spe@metadata$grid_density
   if(!is.null(spe@metadata$grid_info$gridLevelAnalysis)) {
@@ -81,7 +85,12 @@ plotGrid <- function(spe, reverseY = FALSE,
   
   # Filter
   if (isContinuous) {
-    kp <- group >= quantile(group, probs = probs)
+    if (!is.null(cutoff)) {
+      if (length(cutoff)==1) cutoff = c(cutoff,max(group))
+      kp <- group >= cutoff[1] & group <= cutoff[2]
+    } else {
+      kp <- group >= quantile(group, probs = probs)
+    }
     group <- group[kp]
     grid_data <- grid_data[kp,]
   }
@@ -117,7 +126,7 @@ plotGrid <- function(spe, reverseY = FALSE,
     )
   
   if (isContinuous) {
-    p = p + scale_fill_gradientn(colours = rev(col.p))
+    p = p + scale_fill_gradientn(colours = rev(col.p),limits=cutoff)
   } else {
     p = p + scale_fill_manual(values = col.p)
   }

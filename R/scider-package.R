@@ -1,3 +1,4 @@
+#' @useDynLib scider, .registration=TRUE
 #' @import ggplot2
 #' @importFrom methods is
 #' @import shiny
