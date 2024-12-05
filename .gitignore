@@ -48,3 +48,7 @@ scider.Rproj
 /doc/
 /Meta/
 docs
+
+# Compiled C in src
+/src/*.o
+/src/*.dll

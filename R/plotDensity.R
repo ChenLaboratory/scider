@@ -30,10 +30,8 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5,...) {
     stop("Density of COI is not yet computed.")
   }
   spe@metadata$grid_density$density_coi_average <- rowSums(as.matrix(
-    spe@metadata$grid_density[, which(colnames(spe@metadata$grid_density) %in% dens_cols),
-                              drop = FALSE]
+    spe@metadata$grid_density[, dens_cols, drop = FALSE]
   ))
-  
   plotGrid(spe,
            group.by="density_coi_average",
            probs=probs,
