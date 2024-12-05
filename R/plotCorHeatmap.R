@@ -93,15 +93,12 @@ plotCorHeatmap <- function(model.result,
         "#F1F4FFFF", "#97B3D0FF",
         "#011936FF"
     ))(paletteLength))
-
-    myBreaks <- c(
-        seq(min(filled_data), 0,
-            length.out = ceiling(paletteLength / 2) + 1
-        ),
-        seq(max(filled_data) / paletteLength, max(filled_data),
-            length.out = floor(paletteLength / 2)
-        )
-    )
+    
+    max_val <- max(abs(filled_data))
+    
+    myBreaks <- seq(-max_val, 
+                    max_val, 
+                    length.out = paletteLength + 1)
 
     if (nrow(filled_data) == 1L) {
         pheatmap::pheatmap(filled_data,
