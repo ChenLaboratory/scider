@@ -362,7 +362,7 @@ make_graph_new = function(node_x,node_y,graph_type = c("square","diag","hex")) {
            }
            g = igraph::add_edges(g, new_edges)
          },
-         diag.nodes = {
+         diag = {
            new_edges = rep(seq_len(nx*(ny-1))[-(nx*seq_len(ny-1))],each = 4)
            new_edges = new_edges + c(0, nx+1, 1, nx)
            g = igraph::add_edges(g, new_edges, attr = list(diag = TRUE))
