@@ -54,6 +54,7 @@
 <span>  pol.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pol.alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  probs <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -106,6 +107,12 @@ that accepts an integer n and return n colours.</p></dd>
 <dt id="arg-probs">probs<a class="anchor" aria-label="anchor" href="#arg-probs"></a></dt>
 <dd><p>Numeric value between 0 and 1, used for filtering
 uninformative grid. Only applicable for continuous values.</p></dd>
+
+
+<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
+<dd><p>Numeric. Either a vector of length 2 for the lower &amp; upper
+bounds of data to be included, or length 1 for the lower bound. Override
+probs if specified. Only applicable for continuous values.</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
