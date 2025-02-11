@@ -15,6 +15,7 @@ plotGrid(
   pol.border = FALSE,
   pol.alpha = 1,
   probs = 0,
+  cutoff = NULL,
   label = NULL
 )
 }
@@ -44,6 +45,10 @@ that accepts an integer n and return n colours.}
 
 \item{probs}{Numeric value between 0 and 1, used for filtering
 uninformative grid. Only applicable for continuous values.}
+
+\item{cutoff}{Numeric. Either a vector of length 2 for the lower & upper
+bounds of data to be included, or length 1 for the lower bound. Override
+probs if specified. Only applicable for continuous values.}
 
 \item{label}{label for the legend}
 }

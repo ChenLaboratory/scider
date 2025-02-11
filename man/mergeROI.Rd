@@ -4,7 +4,13 @@
 \alias{mergeROI}
 \title{Manually merge ROIs}
 \usage{
-mergeROI(spe, merge.list, remove.ids = NULL, id = "component", rename = FALSE)
+mergeROI(
+  spe,
+  merge.list = NULL,
+  remove.ids = NULL,
+  id = "component",
+  rename = FALSE
+)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
