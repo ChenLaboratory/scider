@@ -23,9 +23,10 @@
 #' plotROI(spe, pt.size = 0.3, pt.alpha = 0.2)
 #'
 plotROI <- function(spe,
-                     id = "cell_type",
-                     label = TRUE,
-                     show.legend = FALSE, ...) {
+                    id = "cell_type",
+                    label = TRUE,
+                    show.legend = FALSE, ...) {
+                      
   if (is.null(spe@metadata$roi)) {
     stop("ROI not yet computed!")
   }
@@ -35,17 +36,13 @@ plotROI <- function(spe,
   coi <- spe@metadata$coi
   #coi_clean <- janitor::make_clean_names(coi)
   
-  dat <- as.data.frame(spe@colData)
-  
-  if (!is.null(coi) && !("overall" %in% coi) && 
-      (is.null(id) ||id %in% colnames(dat))) {
-    spe <- spe[, dat[, id] %in% coi]
+  # subset spe to only coi of interest
+  if (!id %in% colnames(colData(spe))) {
+    stop(paste(id, "is not a column of the colData."))
   }
-  
-  posdat <- as.data.frame(spatialCoords(spe))
-  
-  dat <- as.data.frame(spe@colData) |>
-    cbind(posdat)
+  if (!is.null(coi) && !("overall" %in% coi)) {
+    spe <- spe[, colData(spe)[[id]] %in% coi]
+  }
   
   nROIs <- nlevels(rois$component)
   col.p <- selectColor(nROIs)
@@ -55,28 +52,20 @@ plotROI <- function(spe,
   plot.xlim <- xlim + c(-1e-10, 1e-10)
   plot.ylim <- ylim + c(-1e-10, 1e-10)
   
-  # filtered <- names(which(table(rois$component) >= ngrid))
-  # rois_filtered <- as.data.frame(rois[rois$component %in% filtered, ])
-  
-  # for(n in colnames(colData(spe))){
-  #  if (!(n %in% colnames(rois_filtered))){
-  #    rois_filtered[, n] <- "dummy"
-  #  }
-  # }
-  
   # Label ROI numbers at the center
   sf <- grid2sf(spe, rois$x,rois$y)
-  sf = lapply(unique(rois$component), function(xx) {
+  sf <- lapply(unique(rois$component), function(xx) {
     sf::st_union(sf::st_sfc(sf[rois$component == xx]))
   })
+  names(sf) <- as.character(unique(rois$component))
   
   rois_center <- do.call(rbind, lapply(sf, function(rr) {
     center <- sf::st_point_on_surface(rr)
     as.data.frame(sf::st_coordinates(center))
   }))
   
-  rois_center <- as.data.frame(rois_center) |>
-    rownames2col("component")
+  rois_center <- as.data.frame(rois_center)
+  rois_center$component <- names(sf)
   
   # Plotting
   roi_plot = plotSpatial(spe, ...) + 
