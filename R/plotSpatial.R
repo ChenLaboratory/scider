@@ -100,8 +100,10 @@ plotSpatial <- function(spe, reverseY = FALSE,
   cf = coord_fixed()
   cf$default = TRUE
 
-  p = ggplot2::ggplot(toplot,aes(x=x, y=y, color=group)) +
+  p = ggplot2::ggplot() +
     ggplot2::geom_point(
+      data = toplot,
+      aes(x=x, y=y, color=group),
       shape = pt.shape,
       size = pt.size,
       alpha = pt.alpha,
