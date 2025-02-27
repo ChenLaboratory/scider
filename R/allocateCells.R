@@ -32,13 +32,13 @@ allocateCells <- function(
                 "Assigning cells to ROIs defined by",
                 paste(spe@metadata$coi, collapse = ", "), "\n"
             ))
-            rois = spe@metadata$roi
+            rois <- spe@metadata$roi
             sf <- grid2sf(spe, rois$x,rois$y)
             # Unioning sf polygons with same ROIs
-            all_areas = lapply(unique(rois$component), function(xx) {
+            all_areas <- lapply(unique(rois$component), function(xx) {
               sf::st_as_sf(sf::st_union(sf::st_sfc(sf[rois$component == xx])))
             })
-            names(all_areas) = unique(spe@metadata$roi$component)
+            names(all_areas) <- unique(spe@metadata$roi$component)
             
             name_to <- "roi"
             NA_level <- "None"
