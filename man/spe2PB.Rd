@@ -9,6 +9,7 @@ spe2PB(
   spe,
   by.group = TRUE,
   group.id = "cell_type",
+  keep.groups = NULL,
   by.roi = TRUE,
   roi.only = TRUE,
   contour = NULL
@@ -22,6 +23,9 @@ TRUE by default.}
 
 \item{group.id}{Character. The column name of the colData(spe) that
 contains the group information. Default to 'cell_type'.}
+
+\item{keep.groups}{Vector. Values from group.id to include in pseudo-
+bulking. Default is NULL, where all cells are included in pseudo-bulking.}
 
 \item{by.roi}{Logical. Whether to perform pseudo-bulking by ROI.
 TRUE by default.}

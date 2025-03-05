@@ -6,6 +6,8 @@
 #' TRUE by default.
 #' @param group.id Character. The column name of the colData(spe) that
 #' contains the group information. Default to 'cell_type'.
+#' @param keep.groups Vector. Values from group.id to include in pseudo-
+#' bulking. Default is NULL, where all cells are included in pseudo-bulking.
 #' @param by.roi Logical. Whether to perform pseudo-bulking by ROI.
 #' TRUE by default.
 #' @param roi.only Logical. Whether to filter out pseudo-bulk samples formed
@@ -36,6 +38,7 @@
 spe2PB <- function(spe,
                    by.group = TRUE,
                    group.id = "cell_type",
+                   keep.groups = NULL, 
                    by.roi = TRUE,
                    roi.only = TRUE,
                    contour = NULL) {
@@ -52,6 +55,21 @@ spe2PB <- function(spe,
         stop("spe is not of the SpatialExperiment class")
     }
 
+    if (by.group | !is.null(keep.groups)) {
+        if (!group.id %in% names(spe@colData)) {
+            stop(paste(group.id, "is not found in colData of spe."))
+        }
+    }
+
+    # subset to only groups we want to keep
+    if (!is.null(keep.groups)) {
+        if (length(setdiff(keep.groups, spe@colData[, group.id])) > 0.5) {
+            stop(paste("Some values in keep.groups do not exist in", group.id))
+        }
+        kp <- spe@colData[, group.id] %in% keep.groups
+        spe <- spe[, kp]
+    }
+
     # Check 'counts'
     counts <- as.matrix(spe@assays@data$counts)
     if (is.null(counts)) stop("spe doesn't contain raw RNA counts")
@@ -62,9 +80,6 @@ spe2PB <- function(spe,
     grp <- rois <- clvl <- c()
 
     if (by.group) {
-        if (!group.id %in% names(cData)) {
-            stop(paste(group.id, "is not found in colData of spe."))
-        }
         grp <- cData[, group.id]
     }
 
