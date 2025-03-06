@@ -30,7 +30,7 @@ allocateCells <- function(
         } else {
             message(paste(
                 "Assigning cells to ROIs defined by",
-                paste(spe@metadata$coi, collapse = ", "), "\n"
+                paste(spe@metadata$coi, collapse = ", ")
             ))
             rois <- spe@metadata$roi
             sf <- grid2sf(spe, rois$x,rois$y)
@@ -76,7 +76,7 @@ allocateCells <- function(
                 if(all(paste0("density_", janitor::make_clean_names(coi)) %in% colnames(spe@metadata$grid_density))){
                     message(paste(
                         "Assigning cells to contour levels of",
-                        paste(coi, collapse=", "), "\n"
+                        paste(coi, collapse=", ")
                     ))
                     all_areas <- getContourRegions(spe, coi = coi)
                     name_to <- names(spe@metadata)[i]
