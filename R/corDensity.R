@@ -4,9 +4,12 @@
 #' @param coi Character vector for cell types of interest for density 
 #' correlation analysis. Default is NULL, which is to consider all cell types
 #' previously calculated in the gridDensity() step. 
+#' @param whole.slide Logical. Whether to compute correlation on all grids
+#' across the whole slide. 
 #' @param probs A numeric scalar. The threshold of proportion that used to
 #' filter grids by density when ROIs have not been identified previously.
-#' Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.
+#' Ignored if whole.slide is FALSE and 'roi' is present in the 'metadata' 
+#' component of spe. Default to 0.85.
 #' @param trace Logical. If TRUE, print the process of testing. Default to FALSE.
 #'
 #' @return A DataFrame containing the testing results.
@@ -27,7 +30,7 @@
 #'
 #' result <- corDensity(spe)
 #'
-corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
+corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace = FALSE) {
   if (!("grid_density" %in% names(spe@metadata))) {
     stop("Please run gridDensity before using this function.")
   }
@@ -50,8 +53,14 @@ corDensity <- function(spe, coi = NULL, probs = 0.85, trace = FALSE) {
   if (nCT < 2) stop("Please run gridDensity for at least two of the cell types specified in 'coi'.")
 
   # construct data table
-  is.ROI <- "roi" %in% names(spe@metadata)
+  if (whole.slide) {
+    is.ROI <- !whole.slide
+  } else {
+    message("No ROI detected. Calculating correlations acorss the whole slide.")
+    is.ROI <- "roi" %in% names(spe@metadata)
+  }
   if (!is.ROI) {
+    # whole slide
     dens_dat$density_coi_average <- rowMeans(as.matrix(dens_dat[, which(colnames(dens_dat) %in% den_cols), drop = FALSE]))
     kp <- dens_dat$density_coi_average >= quantile(dens_dat$density_coi_average, probs = probs)
     dens_dat_filter <- dens_dat[kp, ]
