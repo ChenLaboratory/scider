@@ -56,8 +56,8 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
   if (whole.slide) {
     is.ROI <- !whole.slide
   } else {
-    message("No ROI detected. Calculating correlations acorss the whole slide.")
     is.ROI <- "roi" %in% names(spe@metadata)
+    if (!is.ROI) message("No ROI detected. Calculating correlations acorss the whole slide.")
   }
   if (!is.ROI) {
     # whole slide
