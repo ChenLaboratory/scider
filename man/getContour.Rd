@@ -11,7 +11,6 @@ getContour(
   bins = NULL,
   binwidth = NULL,
   breaks = NULL,
-  min.density = 0L,
   id = NULL
 )
 }
@@ -31,9 +30,6 @@ Default to TRUE.}
 
 \item{breaks}{A numeric scale referring to the breaks in
 \code{ggplot2:::contour_breaks}.}
-
-\item{min.density}{A numeric value. The cut-off value used to filter grids
-by density. Default is 0L.}
 
 \item{id}{A character. The name of the column of colData(spe) containing
 the cell type identifiers. Set to cell_type by default or in_tissue if spe
