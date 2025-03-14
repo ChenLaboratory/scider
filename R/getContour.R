@@ -10,6 +10,8 @@
 #' @param binwidth A numeric scale of the smoothing bandwidth.
 #' @param breaks A numeric scale referring to the breaks in
 #' `ggplot2:::contour_breaks`.
+#' @param min.density A numeric value. The cut-off value used to filter grids
+#' by density. Default is 0L.
 #' @param id A character. The name of the column of colData(spe) containing
 #' the cell type identifiers. Set to cell_type by default or in_tissue if spe 
 #' is Visium. Only needed when \code{equal.cell = TRUE}. 
@@ -30,7 +32,7 @@
 #' spe <- getContour(spe, coi = coi)
 #'
 getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
-                       binwidth = NULL, breaks = NULL, 
+                       binwidth = NULL, breaks = NULL, min.density = 0L, 
                        id = NULL) {
     
     if (is.null(spe@metadata$grid_density)) {
@@ -85,8 +87,8 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
     dens <- dens[, c(seq_len(5), which(colnames(dens) ==
         "density_coi"))]
 
-    # filter out negative densities when calculating contours
-    dens <- dens[dens$density_coi > 0L, ]
+    # filter out negative/low densities when calculating contours
+    dens <- dens[dens$density_coi > min.density, ]
 
     # levels for contour
     if (!equal.cell) {
