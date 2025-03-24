@@ -234,7 +234,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
             areas_down_out <- areas_down_out[areas_down_out_code < lev_code, ]
             areas_down_out <- sf::st_combine(areas_down_out)
             if (!is.null(areas_up)){
-                areas <- sf::st_difference(areas_up_union, areas_down_out)
+                areas <- sf::st_difference(areas_up_union, sf::st_make_valid(areas_down_out))
                 # check if there is any missed area
                 missed_up <- !sf::st_intersects(areas_up, areas, sparse = FALSE)
                 if (any(missed_up)) {
