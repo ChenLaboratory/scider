@@ -199,7 +199,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
 
     if (!is.null(areas_down)) {
         if (!is.null(areas_up)){
-            areas_up_union <- sf::st_union(areas_up)
+            areas_up_union <- sf::st_union(sf::st_make_valid(areas_up))
             out <- sf::st_covered_by(areas_down, areas_up_union, sparse = FALSE)
         } else {
             out <- sf::st_covered_by(areas_down, sparse = FALSE)
@@ -341,7 +341,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
         # check if there are any other up regions
         canvas_minus_areas <- sf::st_difference(
             canvas_sf,
-            sf::st_union(areas)
+            sf::st_union(sf::st_make_valid(areas))
         )
         if (!is.null(areas_down)) {
             canvas_minus_areas <- sf::st_difference(
