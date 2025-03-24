@@ -346,7 +346,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
         if (!is.null(areas_down)) {
             canvas_minus_areas <- sf::st_difference(
                 canvas_minus_areas,
-                sf::st_union(areas_down)
+                sf::st_union(sf::st_make_valid(areas_down))
             )
         }
         if (nrow(canvas_minus_areas) > 0L) {
