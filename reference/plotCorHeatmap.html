@@ -47,7 +47,8 @@
 <span>  <span class="va">model.result</span>,</span>
 <span>  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cor.coef"</span>, <span class="st">"t"</span>, <span class="st">"p.Pos"</span>, <span class="st">"p.Neg"</span><span class="op">)</span>,</span>
 <span>  roi <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  cell.type <span class="op">=</span> <span class="st">"all"</span></span>
+<span>  cell.type <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  silent <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,6 +73,11 @@ ROIs to be plotted.</p></dd>
 <dt id="arg-cell-type">cell.type<a class="anchor" aria-label="anchor" href="#arg-cell-type"></a></dt>
 <dd><p>Character value. By default is all. The cell types
 to be plotted.</p></dd>
+
+
+<dt id="arg-silent">silent<a class="anchor" aria-label="anchor" href="#arg-silent"></a></dt>
+<dd><p>Do not draw the plot
+(useful when using the gtable output).</p></dd>
 
 </dl></div>
     <div class="section level2">
