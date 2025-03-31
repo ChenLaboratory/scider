@@ -8,7 +8,8 @@ plotCorHeatmap(
   model.result,
   stats = c("cor.coef", "t", "p.Pos", "p.Neg"),
   roi = "all",
-  cell.type = "all"
+  cell.type = "all",
+  silent = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ ROIs to be plotted.}
 
 \item{cell.type}{Character value. By default is all. The cell types
 to be plotted.}
+
+\item{silent}{Do not draw the plot
+(useful when using the gtable output).}
 }
 \value{
 A pheatmap object.

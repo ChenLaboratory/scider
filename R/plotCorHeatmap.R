@@ -7,6 +7,8 @@
 #' ROIs to be plotted.
 #' @param cell.type Character value. By default is all. The cell types
 #' to be plotted.
+#' @param silent Do not draw the plot
+#' (useful when using the gtable output). 
 #' @return A pheatmap object.
 #' @export
 #'
@@ -27,7 +29,8 @@
 plotCorHeatmap <- function(model.result,
                            stats = c("cor.coef", "t", "p.Pos", "p.Neg"),
                            roi = "all",
-                           cell.type = "all") {
+                           cell.type = "all", 
+                           silent = FALSE) {
     if (!all(c("cor.coef", "p.Pos", "p.Neg") %in%
         colnames(model.result))) {
         stop("Please run corDensity before using this function.")
@@ -104,12 +107,14 @@ plotCorHeatmap <- function(model.result,
         pheatmap::pheatmap(filled_data,
             angle_col = 45, border_color = "white",
             color = hmColor, breaks = myBreaks,
-            main = title, cluster_rows = FALSE
+            main = title, cluster_rows = FALSE, 
+            silent = silent
         )
     } else {
         pheatmap::pheatmap(filled_data,
             angle_col = 45, border_color = "white",
             color = hmColor, breaks = myBreaks,
+            silent = silent, 
             main = title
         )
     }
