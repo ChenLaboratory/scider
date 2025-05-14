@@ -13,6 +13,7 @@ plotContour(
   line.type = 1,
   line.width = 0.5,
   line.alpha = 1,
+  reverseY = FALSE,
   ...
 )
 }
@@ -35,6 +36,8 @@ the cell type identifiers. Set to 'cell_type' by default.}
 \item{line.width}{size of contour.}
 
 \item{line.alpha}{alpha of contour between 0 and 1.}
+
+\item{reverseY}{Reverse y coordinates.}
 
 \item{...}{Aesthetic mappings to pass to 'plotSpatial()' or
 'plotDensity()', depending on the overlay.}

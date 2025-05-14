@@ -11,6 +11,7 @@
 #' @param line.type shape of contour. See 'ggplot2::geom_path()'.
 #' @param line.width size of contour.
 #' @param line.alpha alpha of contour between 0 and 1.
+#' @param reverseY Reverse y coordinates.
 #' @param ... Aesthetic mappings to pass to 'plotSpatial()' or 
 #' 'plotDensity()', depending on the overlay.
 #'
@@ -37,8 +38,16 @@ plotContour <- function(spe,
                         line.type = 1,
                         line.width = 0.5,
                         line.alpha = 1,
-                        
+                        reverseY = FALSE,
                         ...) {
+  
+    y_all   <- SpatialExperiment::spatialCoords(spe)[, 2]
+    x_all   <- SpatialExperiment::spatialCoords(spe)[, 1]
+    ymin_g  <- min(y_all, na.rm = TRUE)
+    ymax_g  <- max(y_all, na.rm = TRUE)
+    xmin_g  <- min(x_all, na.rm = TRUE)
+    xmax_g  <- max(x_all, na.rm = TRUE)
+    
     if ( !is.null(coi) & !("overall" %in% coi) ){
         if ( ! all(coi %in% names(table(colData(spe)[[id]]))) ) {
             stop("coi not in colData(spe)[[id]]!")
@@ -54,25 +63,27 @@ plotContour <- function(spe,
     }
 
     contour_data <- as.data.frame(spe@metadata[[coi_clean_contour]])
-    levs <- unique(contour_data$level)
-    nlevs <- length(levs)
+    levs_drawn <- sort(unique(contour_data$level))
+    levs_legend <- if (0 %in% levs_drawn) levs_drawn else c(0, levs_drawn)
 
     overlay <- overlay[1]
     if (overlay == "cell") {
         sub <- TRUE
         if(all(coi != "overall"))
             sub <- colData(spe)[[id]] %in% coi
-        p <- plotSpatial(spe[, sub], ...)
+        p <- plotSpatial(spe[, sub], reverseY = FALSE, ...)
     } else if (overlay == "density") {
-        p <- plotDensity(spe, coi = coi, ...)
+        p <- plotDensity(spe, coi = coi, reverseY = FALSE, ...)
     } else if (overlay == "none") {
-        p <- plotSpatial(spe[, FALSE], ...)
+        p <- plotSpatial(spe[, FALSE], reverseY = FALSE, ...)
     } else {
         stop("Invalid 'overlay'.")
     }
-
+    
     col.p <- grDevices::colorRampPalette(col.spec)(
-        length(unique(contour_data$level)))
+      length(levs_legend)) |>
+      rev()
+    names(col.p) <- levs_legend
 
     if (is.null(sub.level)) {
         suppressMessages(p <- p +
@@ -80,13 +91,15 @@ plotContour <- function(spe,
                 data = contour_data,
                 ggplot2::aes(
                     x = x, y = y, group = group,
-                    color = level
+                    color = factor(level,
+                                   levels = levs_legend)
                 ),
                 linewidth=line.width,
                 linetype=line.type,
                 alpha=line.alpha
             ) +
-            scale_color_manual(name = "Density level", values = rev(col.p)))
+            scale_color_manual(name = "Density level", values = col.p,
+                               breaks = levs_legend, drop = FALSE))
     } else {
         if (length(sub.level) == 1L & sub.level %in% contour_data$level) {
             suppressMessages(p <- p +
@@ -109,9 +122,15 @@ plotContour <- function(spe,
            should be included in contour_data$level.")
         }
     }
+    
+    if (reverseY) {
+      p <- p + ggplot2::scale_y_reverse(limits = c(ymax_g, ymin_g), expand = c(0, 0))
+    }
+    p <- p + ggplot2::scale_x_continuous(limits = c(xmin_g, xmax_g), expand = c(0, 0))
 
     p <- p +
-        theme_classic() +
+        ggplot2::theme_classic() +
+        ggplot2::coord_fixed() +
         labs(x = "x", y = "y") +
         ggtitle(paste(coi, collapse=", "))
     return(p)
