@@ -26,6 +26,8 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72)
 suppressWarnings(library(ggplot2))
 suppressMessages(library(scider))
 suppressMessages(library(SpatialExperiment))
+
+setClassUnion("ExpData", c("matrix", "SummarizedExperiment"))
 ```
 
 scider is an user-friendly R package providing functions to model 
