@@ -24,97 +24,98 @@
 #'
 #' plotSpatial(spe, group.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 #'
-plotSpatial <- function(spe, reverseY = FALSE,
-                         group.by = NULL,
-                         feature = NULL,
-                         assay = "counts",
-                         type = c("raw","log","cpm","logcpm"),
-                         cols = NULL,
-                         pt.shape = 16, 
-                         pt.size = 0.3, 
-                         pt.alpha = 0.5) {
+plotSpatial <- function(spe, 
+                        reverseY = FALSE,
+                        group.by = NULL,
+                        feature = NULL,
+                        assay = "counts",
+                        type = c("raw","log","cpm","logcpm"),
+                        cols = NULL,
+                        pt.shape = 16, 
+                        pt.size = 0.3, 
+                        pt.alpha = 0.5) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
-
+  
   colnames(toplot) <- c("x", "y")
-
+  
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
-
+  
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
-
+  
   toplot <- cbind(toplot, cdata) |>
     rownames2col("cell_id")
-
+  
   if (reverseY) {
     toplot[, "y"] <- sum(range(toplot[, "y"])) - toplot[, "y"]
   }
   
-  group = col.p = label = NULL
+  group <- col.p <- label <- NULL
   
   # Groups. Order is: colData -> assays -> cols
   if (!is.null(group.by) && group.by %in% colnames(toplot)) {
-    group = toplot[[group.by]]
-    label = group.by
+    group <- toplot[[group.by]]
+    label <- group.by
   } else if (!is.null(feature) && feature %in% rownames(spe)) {
-    group = SummarizedExperiment::assays(spe)[[assay]][feature,]
-    label = feature
+    group <- SummarizedExperiment::assays(spe)[[assay]][feature,]
+    label <- feature
   } else if (!is.null(cols) && !is.function(cols)) {
-    group = factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
-    col.p = rep_len(unique(cols), length(unique(cols)))
+    group <- factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
+    col.p <- rep_len(unique(cols), length(unique(cols)))
   }
-
+  
   # Type
   if (is.character(type)) {
-    type = switch(match.arg(type),
-                  raw = NULL,
-                  log = function(x) {log2(x+1)},
-                  cpm = function(x) {
-                    (x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6
-                  },
-                  logcpm = function(x) {
-                    log2((x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6)
-                  })
+    type <- switch(match.arg(type),
+                   raw = NULL,
+                   log = function(x) {log2(x+1)},
+                   cpm = function(x) {
+                     (x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6
+                   },
+                   logcpm = function(x) {
+                     log2((x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6)
+                   })
   }
   if(is.function(type)) {
-    tryCatch({group = type(group)},
+    tryCatch({group = type(group)}, 
              error = function(e){
                message("Error when applying 'type'. Skipping 'type'.")
              })
   }
-  isContinuous = is.numeric(group)
+  isContinuous <- is.numeric(group)
   
   # Colours
   if (!is.null(group) && is.null(col.p)) {
-    n_colour = length(unique(group))
+    n_colour <- length(unique(group))
     if (is.null(cols)) { # Default palette
-      col.p = `if`(isContinuous, col.spec, selectColor(n_colour))
+      col.p <- `if`(isContinuous, col.spec, selectColor(n_colour))
     } else if (is.function(cols)) { # cols is function
-      col.p = cols(n_colour)
+      col.p <- cols(n_colour)
     } else { # cols is vector
-      col.p = `if`(isContinuous, cols, rep_len(cols,n_colour))
+      col.p <- `if`(isContinuous, cols, rep_len(cols,n_colour))
     }
   }
   
   #This stop "Coordinate system already present..." warning by coord_fixed()
-  cf = coord_fixed()
-  cf$default = TRUE
-
-  p = ggplot2::ggplot() +
+  cf <- coord_fixed()
+  cf$default <- TRUE
+  
+  p <- ggplot2::ggplot() +
     ggplot2::geom_point(
       data = toplot,
       aes(x=x, y=y, color=group),
       shape = pt.shape,
       size = pt.size,
-      alpha = pt.alpha,
-      ) +
+      alpha = pt.alpha
+    ) +
     labs(x = "x", y = "y", color = label) +
     theme_classic() +
     cf
   if (isContinuous) {
-    p = p + scale_color_gradientn(colours = rev(col.p))
+    p <- p + scale_color_gradientn(colours = rev(col.p))
   } else {
-    p = p + scale_color_manual(values = col.p) +
+    p <- p + scale_color_manual(values = col.p) +
       guides(colour = guide_legend(override.aes = list(
         shape = 16,
         size = 5

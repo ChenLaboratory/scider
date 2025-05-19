@@ -1,6 +1,6 @@
 ---
 title: "A quick start guide to the scider package"
-author: "Ning Liu, Mengbo Li, Yunshun Chen"
+author: "Mengbo Li, Ning Liu, Quoc Hoang Nguyen and Yunshun Chen"
 date: "`r Sys.Date()`"
 output: 
   html_document:
