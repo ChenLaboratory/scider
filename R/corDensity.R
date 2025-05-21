@@ -4,12 +4,11 @@
 #' @param coi Character vector for cell types of interest for density 
 #' correlation analysis. Default is NULL, which is to consider all cell types
 #' previously calculated in the gridDensity() step. 
-#' @param whole.slide Logical. Whether to compute correlation on all grids
-#' across the whole slide. 
+#' @param roi Character. The name of the group or cell type on which
+#' the roi is computed. Default is NULL for no subsetting cell types by ROI
 #' @param probs A numeric scalar. The threshold of proportion that used to
 #' filter grids by density when ROIs have not been identified previously.
-#' Ignored if whole.slide is FALSE and 'roi' is present in the 'metadata' 
-#' component of spe. Default to 0.85.
+#' Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.
 #' @param trace Logical. If TRUE, print the process of testing. Default to FALSE.
 #'
 #' @return A DataFrame containing the testing results.
@@ -28,15 +27,15 @@
 #'
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #'
-#' result <- corDensity(spe)
+#' result <- corDensity(spe, roi = coi)
 #'
-corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace = FALSE) {
+corDensity <- function(spe, coi = NULL, roi = NULL, probs = 0.85, trace = FALSE) {
   if (!("grid_density" %in% names(spe@metadata))) {
     stop("Please run gridDensity before using this function.")
   }
 
   dens_dat <- as.data.frame(spe@metadata$grid_density)
-  
+
   # get cell type info
   den_cols <- colnames(dens_dat)[grepl("density_", colnames(dens_dat))]
   den_cols <- den_cols[den_cols != "density_overall"]
@@ -44,34 +43,35 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
   if(any(!is.null(coi))){
     coi_clean <- paste0("density_", janitor::make_clean_names(coi))
     coi.exist <- coi_clean %in% den_cols
-    if(any(!coi.exist)) 
+    if(any(!coi.exist))
       stop(paste0(paste(coi[!coi.exist], collapse=", "), " not found in the data."))
     den_cols <- den_cols[den_cols %in% coi_clean]
   }
-  
+
   nCT <- length(den_cols)
   if (nCT < 2) stop("Please run gridDensity for at least two of the cell types specified in 'coi'.")
 
   # construct data table
-  if (whole.slide) {
-    is.ROI <- !whole.slide
-  } else {
-    is.ROI <- "roi" %in% names(spe@metadata)
-    if (!is.ROI) message("No ROI detected. Calculating correlations acorss the whole slide.")
-  }
-  if (!is.ROI) {
-    # whole slide
+  if (is.null(roi)) {
     dens_dat$density_coi_average <- rowMeans(as.matrix(dens_dat[, which(colnames(dens_dat) %in% den_cols), drop = FALSE]))
     kp <- dens_dat$density_coi_average >= quantile(dens_dat$density_coi_average, probs = probs)
     dens_dat_filter <- dens_dat[kp, ]
-    rois <- data.frame(component=gl(1,sum(kp)), 
-                       members=dens_dat_filter$node, 
-                       x=dens_dat_filter$node_x, 
+    rois <- data.frame(component=gl(1,sum(kp)),
+                       members=dens_dat_filter$node,
+                       x=dens_dat_filter$node_x,
                        y=dens_dat_filter$node_y)
   } else {
-    rois <- as.data.frame(spe@metadata$roi)
+    roi <- gsub("_roi$", "", roi)
+    roi <- janitor::make_clean_names(roi)
+    roi <- paste(c(sort(roi),"roi"), collapse="_")
+    if (is.null(spe@metadata[[roi]])) {
+      stop(paste(
+        roi, " is not found in metadata of spe. Please run findROI() first."
+      ))
+    }
+    rois <- as.data.frame(spe@metadata[[roi]])
   }
-  
+
   model_data <- merge(rois, dens_dat,
                       by.x = "members",
                       by.y = "node", all.x = TRUE, sort = FALSE
@@ -80,7 +80,7 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
   nGrids <- table(component)
   cpnts <- names(nGrids)
   nCpnts <- length(cpnts)
-  
+
   nRows <- choose(nCT, 2) * nCpnts
   result.ROI <- data.frame(
     "celltype1" = rep("", nRows),
@@ -93,9 +93,9 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
     "p.Pos" = 0,
     "p.Neg" = 0
   )
-  
+
   result.overall <- result.ROI[seq_len(choose(nCT, 2)), c(1, 2, 5, 8, 9)]
-  
+
   for (i in seq_len((nCT - 1))) {
     for (j in (i + 1):nCT) {
       ct1 <- den_cols[i]
@@ -103,22 +103,22 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
       n1 <- janitor::make_clean_names(ct1,
                                       case = "sentence",
                                       replace = c("density" = "")
-      )
+                                      )
       n2 <- janitor::make_clean_names(ct2,
                                       case = "sentence",
                                       replace = c("density" = "")
-      )
+                                      )
       m <- choose(nCT, 2) - (choose(nCT - j, 1) + choose(nCT - i, 2))
       
       for (k in seq_len(nCpnts)) {
         if (trace) cat(paste("i =", i, ", j =", j, ", ROI", k, "\n"))
         data <- model_data[model_data$component == cpnts[k], c(ct1, ct2, "x", "y")]
-        
+
         res <- modified.ttest(x=data[,1], y=data[,2],
                               coords=data[,c("x","y")], nclass=7)
         if(res$dof < 0) {
           res <- modified.ttest(x=data[,1], y=data[,2],
-                              coords=data[,c("x","y")], nclass=1)
+                                coords=data[,c("x","y")], nclass=1)
           res$dof <- 1
         }
         tstat <- sqrt( res$Fstat * res$dof ) * sign(res$corr)
@@ -153,11 +153,11 @@ corDensity <- function(spe, coi = NULL, whole.slide = FALSE, probs = 0.85, trace
   
   result.ROI <- S4Vectors::DataFrame(result.ROI)
   result.overall <- S4Vectors::DataFrame(result.overall)
-  
-  if(is.ROI)
-    output <- list(ROI = result.ROI, overall = result.overall)
-  else  
-    output <- result.ROI[,-3]
 
+  if(!is.null(roi))
+    output <- list(ROI = result.ROI, overall = result.overall)
+  else
+    output <- result.ROI[,-3]
+    
   return(output)
 }

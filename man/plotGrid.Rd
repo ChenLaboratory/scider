@@ -16,7 +16,8 @@ plotGrid(
   pol.alpha = 1,
   probs = 0,
   cutoff = NULL,
-  label = NULL
+  label = NULL,
+  cols.scale = NULL
 )
 }
 \arguments{
@@ -51,6 +52,9 @@ bounds of data to be included, or length 1 for the lower bound. Override
 probs if specified. Only applicable for continuous values.}
 
 \item{label}{label for the legend}
+
+\item{cols.scale}{vector of position for color if colors should not be
+evenly positioned. See \link[ggplot2]{scale_fill_gradientn}. Only applicable for continuous values.}
 }
 \value{
 A ggplot object.

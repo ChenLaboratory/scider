@@ -8,7 +8,7 @@ plotCellCompo(
   spe,
   contour = NULL,
   id = "cell_type",
-  by.roi = FALSE,
+  roi = NULL,
   self.included = TRUE
 )
 }
@@ -22,8 +22,8 @@ contour density level is calculated. If NULL, it looks for
 \item{id}{A character. The name of the column of colData(spe)
 containing the cell type identifiers. Set to 'cell_type' by default.}
 
-\item{by.roi}{Logical. Default is FALSE, set to TRUE to allow
-plotting by ROI.}
+\item{roi}{Character. The name of the group or cell type on which
+the roi is computed. Default is NULL for no plotting by ROI}
 
 \item{self.included}{Logical. Whether to include all the cell types in the plot.
 Default to TRUE. If FALSE, the cell types specified in 'contour' will not
@@ -44,6 +44,6 @@ spe <- findROI(spe, coi = coi)
 spe <- getContour(spe, coi = coi)
 spe <- allocateCells(spe, contour = coi)
 plotCellCompo(spe, contour = "Breast cancer")
-plotCellCompo(spe, contour = "Breast cancer", by.roi = TRUE)
+plotCellCompo(spe, contour = "Breast cancer", roi = coi)
 
 }

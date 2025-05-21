@@ -23,7 +23,7 @@ setMethod("[",
             }
             
             if (!is.null(x@metadata$grid_info$gridLevelAnalysis)) {
-              x@metadata$grid_density = x@metadata$grid_density[j,]
+              x@metadata$grid_density <- x@metadata$grid_density[j,]
             }
             return(x)
           }

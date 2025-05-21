@@ -4,10 +4,20 @@
 \alias{plotROI}
 \title{Plot ROIs on spatial.}
 \usage{
-plotROI(spe, id = "cell_type", label = TRUE, show.legend = FALSE, ...)
+plotROI(
+  spe,
+  roi = NULL,
+  id = "cell_type",
+  label = TRUE,
+  show.legend = FALSE,
+  ...
+)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
+
+\item{roi}{Character. The name of the group or cell type on which
+the roi is computed. All cell types are chosen if NULL or 'overall'.}
 
 \item{id}{Character. The name of the column of colData(spe) containing
 the cell type identifiers. Set to cell_type by default.}
@@ -34,6 +44,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap", steps = 5)
 
-plotROI(spe, pt.size = 0.3, pt.alpha = 0.2)
+plotROI(spe, roi = coi, pt.size = 0.3, pt.alpha = 0.2)
 
 }

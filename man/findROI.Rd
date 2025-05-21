@@ -13,10 +13,8 @@ findROI(
   method = c("greedy", "walktrap", "connected", "hdbscan", "eigen", "dbscan"),
   diag.nodes = FALSE,
   sequential.roi.name = TRUE,
-  directed = FALSE,
   zoom.in = FALSE,
   zoom.in.size = 500L,
-  fast = FALSE,
   ...
 )
 }
@@ -46,17 +44,11 @@ to be adjacent nodes.}
 original ROI name before
 filtering are retained.}
 
-\item{directed}{Logical. For graph-based approaches, whether to build a
-directed graph.}
-
 \item{zoom.in}{Logical. For very large ROIs, whether to zoom in and try
 to get more refined ROIs.}
 
 \item{zoom.in.size}{A numeric scaler. Smallest size of an ROI to be able
 to zoom in. Default is 500L.}
-
-\item{fast}{Whether to create graph using the newer method. May give
-different clustering to stochastic methods like walktrap and greedy}
 
 \item{...}{Other parameters that passed to walktrap.community when method =
 "walktrap".}

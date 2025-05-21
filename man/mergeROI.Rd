@@ -6,6 +6,7 @@
 \usage{
 mergeROI(
   spe,
+  roi = NULL,
   merge.list = NULL,
   remove.ids = NULL,
   id = "component",
@@ -14,6 +15,9 @@ mergeROI(
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
+
+\item{roi}{Character. The name of the group or cell type on which
+the roi is computed. All cell types are chosen if NULL or 'overall'.}
 
 \item{merge.list}{A (named) list of vectors of ROI ids to be merged.
 Each vector in the list should be of length greater than or
@@ -45,6 +49,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-spe <- mergeROI(spe, list("1-2" = 1:2))
+spe <- mergeROI(spe, roi = coi, list("1-2" = 1:2))
 
 }

@@ -20,9 +20,9 @@
 #'
 #' spe <- gridDensity(spe, coi = coi)
 #'
-#' spe <- findROI(spe, coi = coi, method = "walktrap")
+#' spe <- findROI(spe, coi = coi)
 #'
-#' model_result <- corDensity(spe)
+#' model_result <- corDensity(spe, roi = coi)
 #'
 #' plotCorHeatmap(model_result$ROI)
 #'
@@ -38,11 +38,12 @@ plotCorHeatmap <- function(model.result,
 
     fit_dat <- model.result
 
-    if (length(stats) != 1) {
-        stats <- "cor.coef"
-    } else if (!(stats %in% c("cor.coef", "t", "p.Pos", "p.Neg"))) {
-        stop("stats can only allow either cor.coef, t, p.Pos and p.Neg.")
-    }
+    stats <- match.arg(stats)
+    # if (length(stats) != 1) {
+    #     stats <- "cor.coef"
+    # } else if (!(stats %in% c("cor.coef", "t", "p.Pos", "p.Neg"))) {
+    #     stop("stats can only allow either cor.coef, t, p.Pos and p.Neg.")
+    # }
 
     if (all(cell.type != "all")) {
         cell.type <- janitor::make_clean_names(cell.type, case = "sentence")

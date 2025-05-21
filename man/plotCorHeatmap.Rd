@@ -41,9 +41,9 @@ coi <- c("Breast cancer", "Fibroblasts", "B cells", "T cells")
 
 spe <- gridDensity(spe, coi = coi)
 
-spe <- findROI(spe, coi = coi, method = "walktrap")
+spe <- findROI(spe, coi = coi)
 
-model_result <- corDensity(spe)
+model_result <- corDensity(spe, roi = coi)
 
 plotCorHeatmap(model_result$ROI)
 

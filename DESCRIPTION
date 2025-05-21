@@ -1,7 +1,7 @@
 Package: scider
 Type: Package
 Title: Spatial cell-type inter-correlation by density in R
-Version: 1.5.6
+Version: 1.5.7
 Authors@R: 
     c(person(given = "Mengbo",family = "Li", 
              role = c("aut"),
@@ -56,13 +56,15 @@ Imports:
     knitr,
     methods,
     utils,
-    rlang,
     isoband,
     S4Vectors,
     grDevices,
     dbscan,
     hexDensity,
-    hexbin
+    hexbin,
+    uwot,
+    SingleCellExperiment,
+    BiocNeighbors
 Suggests:
     edgeR,
     testthat (>= 3.0.0)

@@ -19,39 +19,39 @@ grid2sf <- function(spe,
   if (is.null(x) || is.null(y)) stop("Missing x or y")
   if (length(x) != length(x)) stop("x, y must be of equal length")
   
-  x = as.numeric(x)
-  y = as.numeric(y)
+  x <- as.numeric(x)
+  y <- as.numeric(y)
   
-  nx = spe@metadata$grid_info$dims[1]
-  ny = spe@metadata$grid_info$dims[2]
+  nx <- spe@metadata$grid_info$dims[1]
+  ny <- spe@metadata$grid_info$dims[2]
   
   `if`(spe@metadata$grid_info$grid_type=="hex",
        {# hexagon
-         dx = spe@metadata$grid_info$xstep/2
-         dy = spe@metadata$grid_info$ystep/3
-         offset = c(spe@metadata$grid_info$xlim[1] - dx,
-                    spe@metadata$grid_info$ylim[1] - dy * 2)
+         dx <- spe@metadata$grid_info$xstep/2
+         dy <- spe@metadata$grid_info$ystep/3
+         offset <- c(spe@metadata$grid_info$xlim[1] - dx,
+                     spe@metadata$grid_info$ylim[1] - dy * 2)
          
-         xc = offset[1] + (0:(nx*2+1)) * dx
-         yc = offset[2] + (0:(ny*3+1)) * dy
-         is_right = rep_len(c(0,1),ny)
+         xc <- offset[1] + (0:(nx*2+1)) * dx
+         yc <- offset[2] + (0:(ny*3+1)) * dy
+         is_right <- rep_len(c(0,1),ny)
          
-         make_poly = function(col,row) {
-           x_index = 2*col+c(0,1,1,0,-1,-1,0)+is_right[row]
-           y_index = 3*row+c(2,1,-1,-2,-1,1,2)
+         make_poly <- function(col,row) {
+           x_index <- 2*col+c(0,1,1,0,-1,-1,0)+is_right[row]
+           y_index <- 3*row+c(2,1,-1,-2,-1,1,2)
            sf::st_polygon(list(matrix(c(xc[x_index],yc[y_index]),7)))
          }
        },
        {# square
-         cellsize = c(spe@metadata$grid_info$xstep,spe@metadata$grid_info$ystep)
-         offset = c(spe@metadata$grid_info$xlim[1],spe@metadata$grid_info$ylim[1])
+         cellsize <- c(spe@metadata$grid_info$xstep,spe@metadata$grid_info$ystep)
+         offset <- c(spe@metadata$grid_info$xlim[1],spe@metadata$grid_info$ylim[1])
          
-         xc = offset[1] + (0:nx) * cellsize[1]
-         yc = offset[2] + (0:ny) * cellsize[2]
+         xc <- offset[1] + (0:nx) * cellsize[1]
+         yc <- offset[2] + (0:ny) * cellsize[2]
          
-         make_poly = function(col,row) {
-           x_index = col + c(0,1,1,0,0)
-           y_index = row + c(0,0,1,1,0)
+         make_poly <- function(col,row) {
+           x_index <- col + c(0,1,1,0,0)
+           y_index <- row + c(0,0,1,1,0)
            sf::st_polygon(list(matrix(c(xc[x_index],yc[y_index]), 5)))
          }
        }
@@ -59,7 +59,7 @@ grid2sf <- function(spe,
   if (reverseY) {
       yc <- sum(range(yc)) - yc
   }
-  return(lapply(1:length(x), function(ii) {
+  return(lapply(seq_along(x), function(ii) {
     make_poly(x[ii],y[ii])
   }))
 }

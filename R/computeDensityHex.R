@@ -26,7 +26,7 @@ computeDensityHex <- function(spe,
                            grid.length.x = 100,
                            xlim = NULL, ylim = NULL, diggle = FALSE,
                            isVisium=F) {
-  kernel = match.arg(kernel)
+  kernel <- match.arg(kernel)
   
   sc <- SpatialExperiment::spatialCoords(spe)
   
@@ -54,7 +54,7 @@ computeDensityHex <- function(spe,
   }
   
   
-  density_est = hexDensity::hexDensity(y,
+  density_est <- hexDensity::hexDensity(y,
                            bandwidth=bandwidth,
                            weight = weights,
                            xbins=ngrid.x,
@@ -63,10 +63,10 @@ computeDensityHex <- function(spe,
                            ybnds=ylim
   )
   # Multiply by area 
-  density = density_est@count*((diff(density_est@xbnds)/ngrid.x)**2*sqrt(3)/2)
-  coords = hexbin::hcell2xy(density_est)
-  node_x = (density_est@cell-1)%%density_est@dimen[2]+1
-  node_y = (density_est@cell-1)%/%density_est@dimen[2]+1
+  density <- density_est@count*((diff(density_est@xbnds)/ngrid.x)**2*sqrt(3)/2)
+  coords <- hexbin::hcell2xy(density_est)
+  node_x <- (density_est@cell-1)%%density_est@dimen[2]+1
+  node_y <- (density_est@cell-1)%/%density_est@dimen[2]+1
   
   return(list(
     grid_density = S4Vectors::DataFrame(x_grid=coords$x,

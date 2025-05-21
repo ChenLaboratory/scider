@@ -9,11 +9,14 @@
 #' @param type Transformation to apply for the group/feature. Options are "raw"
 #' , "log", "cpm", "logcpm", or a function that accepts and returns a vector of 
 #' the same length.
-#' @param pt.shape shape of points.
 #' @param cols Colour palette. Can be a vector of colours or a function 
 #' that accepts an integer n and return n colours.
+#' @param pt.shape shape of points.
 #' @param pt.size size of points.
 #' @param pt.alpha alpha of points between 0 and 1.
+#' @param label label for the legend
+#' @param cols.scale vector of position for color if colors should not be 
+#' evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.
 #'
 #' @return A ggplot object.
 #' @export
@@ -33,38 +36,40 @@ plotSpatial <- function(spe,
                         cols = NULL,
                         pt.shape = 16, 
                         pt.size = 0.3, 
-                        pt.alpha = 0.5) {
+                        pt.alpha = 0.5,
+                        label = NULL,
+                        cols.scale = NULL) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
-  
+
   colnames(toplot) <- c("x", "y")
-  
+
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
-  
+
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
-  
+
   toplot <- cbind(toplot, cdata) |>
     rownames2col("cell_id")
-  
+
   if (reverseY) {
     toplot[, "y"] <- sum(range(toplot[, "y"])) - toplot[, "y"]
   }
   
-  group <- col.p <- label <- NULL
+  group <- col.p <- NULL
   
   # Groups. Order is: colData -> assays -> cols
   if (!is.null(group.by) && group.by %in% colnames(toplot)) {
     group <- toplot[[group.by]]
-    label <- group.by
+    if (is.null(label)) label <- group.by
   } else if (!is.null(feature) && feature %in% rownames(spe)) {
-    group <- SummarizedExperiment::assays(spe)[[assay]][feature,]
-    label <- feature
+    group <- spe@assays@data[[assay]][feature,]
+    if (is.null(label)) label <- feature
   } else if (!is.null(cols) && !is.function(cols)) {
     group <- factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
     col.p <- rep_len(unique(cols), length(unique(cols)))
   }
-  
+
   # Type
   if (is.character(type)) {
     type <- switch(match.arg(type),
@@ -78,7 +83,7 @@ plotSpatial <- function(spe,
                    })
   }
   if(is.function(type)) {
-    tryCatch({group = type(group)}, 
+    tryCatch({group <- type(group)},
              error = function(e){
                message("Error when applying 'type'. Skipping 'type'.")
              })
@@ -100,20 +105,18 @@ plotSpatial <- function(spe,
   #This stop "Coordinate system already present..." warning by coord_fixed()
   cf <- coord_fixed()
   cf$default <- TRUE
-  
-  p <- ggplot2::ggplot() +
+  # !!group prevents name-clashing in case toplot also has a 'group' column
+  p <- ggplot2::ggplot(toplot,aes(x=x, y=y, color=!!group)) +
     ggplot2::geom_point(
-      data = toplot,
-      aes(x=x, y=y, color=group),
       shape = pt.shape,
       size = pt.size,
-      alpha = pt.alpha
-    ) +
+      alpha = pt.alpha,
+      ) +
     labs(x = "x", y = "y", color = label) +
     theme_classic() +
     cf
   if (isContinuous) {
-    p <- p + scale_color_gradientn(colours = rev(col.p))
+    p <- p + scale_color_gradientn(colours = rev(col.p), values = cols.scale)
   } else {
     p <- p + scale_color_manual(values = col.p) +
       guides(colour = guide_legend(override.aes = list(

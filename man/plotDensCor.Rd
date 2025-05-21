@@ -8,11 +8,16 @@ plotDensCor(
   spe,
   celltype1 = NULL,
   celltype2 = NULL,
-  by.roi = TRUE,
+  roi = NULL,
   probs = 0.85,
   fit = c("spline", "linear"),
   df = 3,
-  ...
+  pt.shape = 21,
+  pt.size = 1.5,
+  pt.alpha = 1,
+  line.type = 1,
+  line.width = 1,
+  line.alpha = 1
 )
 }
 \arguments{
@@ -22,7 +27,8 @@ plotDensCor(
 
 \item{celltype2}{Cell type 2 to compare.}
 
-\item{by.roi}{Logical. Plot facet by ROIs or not. Default to TRUE.}
+\item{roi}{Character. The name of the group or cell type on which
+the roi is computed. Default is NULL for no facetting by ROI}
 
 \item{probs}{A numeric scalar. The threshold of proportion that used to
 filter grids by density when ROIs have not been identified previously.
@@ -33,7 +39,17 @@ Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.
 \item{df}{Integer. Degrees of freedom of the spline fit.
 Default to 3 (i.e., a cubic spline fit).}
 
-\item{...}{aesthetic mappings to pass to \code{ggplot2::aes()}.}
+\item{pt.shape}{shape of points.}
+
+\item{pt.size}{size of points.}
+
+\item{pt.alpha}{alpha of points between 0 and 1.}
+
+\item{line.type}{shape of line.}
+
+\item{line.width}{size of line.}
+
+\item{line.alpha}{alpha of line between 0 and 1.}
 }
 \value{
 A ggplot object.
@@ -51,6 +67,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
+plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts", roi = coi)
 
 }

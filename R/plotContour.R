@@ -79,7 +79,7 @@ plotContour <- function(spe,
     } else {
         stop("Invalid 'overlay'.")
     }
-    
+
     col.p <- grDevices::colorRampPalette(col.spec)(
       length(levs_legend)) |>
       rev()

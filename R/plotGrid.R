@@ -20,6 +20,8 @@
 #' bounds of data to be included, or length 1 for the lower bound. Override 
 #' probs if specified. Only applicable for continuous values.
 #' @param label label for the legend
+#' @param cols.scale vector of position for color if colors should not be 
+#' evenly positioned. See \link[ggplot2]{scale_fill_gradientn}. Only applicable for continuous values.
 #' @return A ggplot object.
 #' @export
 #'
@@ -41,52 +43,53 @@ plotGrid <- function(spe, reverseY = FALSE,
                      pol.alpha = 1,
                      probs = 0,
                      cutoff = NULL,
-                     label = NULL) {
+                     label = NULL,
+                     cols.scale = NULL) {
   grid_data <- spe@metadata$grid_density
   if(!is.null(spe@metadata$grid_info$gridLevelAnalysis)) {
-    grid_data = c(grid_data,colData(spe))
+    grid_data <- c(grid_data,colData(spe))
   }
   
-  xlim <- range(grid_data[, "x_grid"]) + c(-1,1)*spe@metadata$grid_info$xstep/2
-  ylim <- range(grid_data[, "y_grid"]) + c(-1,1)*spe@metadata$grid_info$ystep/2
+  xlim <- spe@metadata$grid_info$xlim + c(-1,1)*spe@metadata$grid_info$xstep/2
+  ylim <- spe@metadata$grid_info$ylim + c(-1,1)*spe@metadata$grid_info$ystep/2
   
-  group = col.p = NULL
+  group <- col.p <- NULL
   # Groups. Order is: grid_density -> colData -> assays -> cols
   if (!is.null(group.by) && group.by %in% colnames(grid_data)) {
-    group = grid_data[[group.by]]
-    if (is.null(label)) label = group.by
+    group <- grid_data[[group.by]]
+    if (is.null(label)) label <- group.by
   } else if (!is.null(feature) && feature %in% rownames(spe)) {
-    group = SummarizedExperiment::assays(spe)[[assay]][feature,]
-    if (is.null(label)) label = feature
+    group <- spe@assays@data[[assay]][feature,]
+    if (is.null(label)) label <- feature
   } else if (!is.null(cols) && !is.function(cols)) {
-    group = factor(rep_len(cols,nrow(grid_data)),levels=unique(cols))
-    col.p = rep_len(unique(cols), length(unique(cols)))
+    group <- factor(rep_len(cols,nrow(grid_data)),levels=unique(cols))
+    col.p <- rep_len(unique(cols), length(unique(cols)))
   }
   
   # Type
   if (is.character(type)) {
-    type = switch(match.arg(type),
-                  raw = NULL,
-                  log = function(x) {log2(x+1)},
-                  cpm = function(x) {
-                    (x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6
-                  },
-                  logcpm = function(x) {
-                    log2((x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6)
-                  })
+    type <- switch(match.arg(type),
+                   raw = NULL,
+                   log = function(x) {log2(x+1)},
+                   cpm = function(x) {
+                     (x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6
+                   },
+                   logcpm = function(x) {
+                     log2((x+0.5)/colSums(as.matrix(spe@assays@data[[assay]]))*1e6)
+                   })
   }
   if(is.function(type)) {
-    tryCatch({group = type(group)},
+    tryCatch({group <- type(group)},
              error = function(e){
                message("Error when applying 'type'. Skipping 'type'.")
              })
   }
-  isContinuous = is.numeric(group)
+  isContinuous <- is.numeric(group)
   
   # Filter
   if (isContinuous) {
     if (!is.null(cutoff)) {
-      if (length(cutoff)==1) cutoff = c(cutoff,max(group))
+      if (length(cutoff)==1) cutoff <- c(cutoff,max(group))
       kp <- group >= cutoff[1] & group <= cutoff[2]
     } else {
       kp <- group >= quantile(group, probs = probs)
@@ -97,13 +100,13 @@ plotGrid <- function(spe, reverseY = FALSE,
   
   # Colours
   if (!is.null(group) && is.null(col.p)) {
-      n_colour = length(unique(group))
+      n_colour <- length(unique(group))
       if (is.null(cols)) { # Default palette
-          col.p = `if`(isContinuous, col.spec, selectColor(n_colour))
+          col.p <- `if`(isContinuous, col.spec, selectColor(n_colour))
       } else if (is.function(cols)) { # cols is function
-          col.p = cols(n_colour)
+          col.p <- cols(n_colour)
       } else { # cols is vector
-          col.p = `if`(isContinuous, cols, rep_len(cols,n_colour))
+          col.p <- `if`(isContinuous, cols, rep_len(cols,n_colour))
       }
   }
   # Plotting
@@ -126,9 +129,9 @@ plotGrid <- function(spe, reverseY = FALSE,
     )
   
   if (isContinuous) {
-    p = p + scale_fill_gradientn(colours = rev(col.p),limits=cutoff)
+    p <- p + scale_fill_gradientn(colours = rev(col.p), limits=cutoff, values = cols.scale)
   } else {
-    p = p + scale_fill_manual(values = col.p)
+    p <- p + scale_fill_manual(values = col.p)
   }
   return(p)
 }

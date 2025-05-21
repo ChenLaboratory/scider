@@ -41,6 +41,7 @@ Authors:
 
 Ning Liu \email{liu.n@wehi.edu.au},
 Mengbo Li \email{li.me@wehi.edu.au},
-Yunshun Chen \email{yuchen@wehi.edu.au}
+Yunshun Chen \email{yuchen@wehi.edu.au},
+Quoc Hoang Nguyen \email{nguyen.q@wehi.edu.au}
 }
 \keyword{internal}

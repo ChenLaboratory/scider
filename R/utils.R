@@ -50,6 +50,10 @@ selectColor <- function(n) {
     }
 }
 
+col.lisa <- c("#eeeeee", "#FF0000", "#0000FF", "#a7adf9",
+              "#f4ada8", "#464646", "#999999")
+col.pval <- c("blue","white","red")
+
 contour_brks <- getFromNamespace("contour_breaks", "ggplot2")
 unique00 <- getFromNamespace("unique0", "ggplot2")
 data_frame00 <- getFromNamespace("data_frame0", "ggplot2")

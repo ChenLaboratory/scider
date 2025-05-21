@@ -13,58 +13,29 @@
 #'
 cellsInRegion <- function(spe, region, name_to,
                           NA_level = "0", levels = NULL) {
-    if (length(region) > 1L) {
-        sf_classes <- vapply(region, class, character(2))[1, ]
-    }
-    if (length(region) == 1L) {
-        sf_classes <- class(region[[1]])[1]
-    }
-    if (any(sf_classes != "sf")) {
-        stop("One or more regions not converted to the sf class!")
-    }
-
     if (is.null(names(region))) {
         warning("The region input is unnamed! We recommend a named list of
             region object(s) as input!")
     }
+    if (is.null(NA_level)) {
+        stop("Need to specify `NA_level` as labels for cells not
+             in any of the regions!")
+    }
 
     # all cells
-    xy_allcells <- sf::st_as_sf(as.data.frame(spatialCoords(spe)),
+    xy_allcells <- sf::st_as_sf(as.data.frame(SpatialExperiment::spatialCoords(spe)),
         coords = c("x_centroid", "y_centroid")
     )
 
     # calculate overlaps
-    isIn <- list()
-    for (aa in seq_len(length(region))) {
-        # contour region
-        this_area <- region[[aa]]
-        # calculate intersection
-        overlap_ind <- sf::st_intersects(xy_allcells,
-            this_area,
-            sparse = FALSE
-        )
-        overlap_ind <- which(overlap_ind == 1)
-        isIn[[aa]] <- overlap_ind
-    }
-
-    if (!is.null(names(region))) {
-        names(isIn) <- names(region)
-    } else {
-        names(isIn) <- as.character(seq_len(length(region)))
-    }
+    region_names <- names(region) %||% as.character(seq_along(region))
+    region <- do.call(rbind,region)
+    isIn <- sf::st_intersects(region,xy_allcells)
 
     # annotate colData
-    to_append <- rep(NA_character_, nrow(colData(spe)))
-    for (aa in names(isIn)) {
-        to_append[isIn[[aa]]] <- aa
-    }
-
-    if (anyNA(to_append)) {
-        if (is.null(NA_level)) {
-            stop("Need to specify `NA_level` as labels for cells not
-           in any of the regions!")
-        }
-        to_append[is.na(to_append)] <- NA_level
+    to_append <- rep_len(NA_level, nrow(colData(spe)))
+    for (i in seq_along(region_names)) {
+        to_append[isIn[[i]]] <- region_names[i]
     }
 
     if (is.null(levels)) {

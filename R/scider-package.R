@@ -1,3 +1,4 @@
+#' @useDynLib scider, .registration=TRUE
 #' @import ggplot2
 #' @importFrom methods is
 #' @import shiny
@@ -39,7 +40,8 @@ NULL
 #'
 #' @author Ning Liu \email{liu.n@@wehi.edu.au},
 #' Mengbo Li \email{li.me@@wehi.edu.au},
-#' Yunshun Chen \email{yuchen@@wehi.edu.au}
+#' Yunshun Chen \email{yuchen@@wehi.edu.au},
+#' Quoc Hoang Nguyen \email{nguyen.q@@wehi.edu.au}
 #' @name scider-package
 #' @aliases scider scider-package
 #' @keywords internal

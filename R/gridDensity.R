@@ -81,8 +81,8 @@ gridDensity <- function(spe,
         is.null(colData(spe)$in_tissue)) {
       stop("Visium must have array_col, array_row, and in_tissue in colData")
     }
-    spatialCoords(spe) = cbind((colData(spe)$array_col)*50,
-                               (colData(spe)$array_row)*50*sqrt(3))
+    spatialCoords(spe) <- cbind((colData(spe)$array_col)*50,
+                                (colData(spe)$array_row)*50*sqrt(3))
   }
   spatialCoordsNames(spe) <- c("x_centroid", "y_centroid")
   coord <- spatialCoords(spe)
@@ -101,7 +101,7 @@ gridDensity <- function(spe,
   
   if (is.null(spe@metadata)) spe@metadata <- list()
 
-  if(is.null(ngrid.x) & is.null(grid.length.x)) 
+  if(is.null(ngrid.x) && is.null(grid.length.x)) 
     grid.length.x <- 100
 
   # Reset when the function is rerun again
@@ -110,13 +110,12 @@ gridDensity <- function(spe,
   # compute density for each cell type and then, filter
   if (grid.type=="hex") {
     for (ii in seq_len(length(coi))) {
-
         if(coi[ii] != "overall"){
             # subset data to this COI
             sub <- which(colData(spe)[[id]] == coi[ii])
             obj <- spe[, sub]
         } else if (isVisium) {
-          obj = spe[, which(colData(spe)$in_tissue == 1)]
+          obj <- spe[, which(colData(spe)$in_tissue == 1)]
         } else 
             obj <- spe
 
@@ -165,16 +164,16 @@ gridDensity <- function(spe,
       #TODO: Clean up this condition. Maybe make a variable called gridLevelAnalysis
       if (filterToVisiumSpot==TRUE && isVisium == TRUE && grid.length.x==100) {
         # sub = colData(spe)$in_tissue==1
-        hcellsInTissue = hexDensity::xy2hcell(x=spatialCoords(spe),
-                                              # y=spatialCoords(spe)[,2],
-                                              xbins=out$density_est@xbins,
-                                              xbnds=xlim,
-                                              ybnds=ylim,
-                                              shape=out$density_est@shape)
-        spe@metadata$grid_density = spe@metadata$grid_density[hcellsInTissue,]
-        spe@metadata$grid_info$gridLevelAnalysis = TRUE
+        hcellsInTissue <- hexDensity::xy2hcell(x=spatialCoords(spe),
+                                               # y=spatialCoords(spe)[,2],
+                                               xbins=out$density_est@xbins,
+                                               xbnds=xlim,
+                                               ybnds=ylim,
+                                               shape=out$density_est@shape)
+        spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
+        spe@metadata$grid_info$gridLevelAnalysis <- TRUE
       }
-      if (isVisium==T) spe@metadata$grid_info$isVisium=TRUE
+      if (isVisium==TRUE) spe@metadata$grid_info$isVisium <- TRUE
     }
   } else {
     for (ii in seq_len(length(coi))) {

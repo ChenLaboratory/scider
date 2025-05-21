@@ -8,8 +8,10 @@
 #' contains the group information. Default to 'cell_type'.
 #' @param keep.groups Vector. Values from group.id to include in pseudo-
 #' bulking. Default is NULL, where all cells are included in pseudo-bulking.
-#' @param by.roi Logical. Whether to perform pseudo-bulking by ROI.
-#' TRUE by default.
+#' @param roi Character. The name of the group or cell type on which
+#' the roi is computed.
+#' If NULL, then no pseudo-bulking will be performed based on roi.
+#' Default to NULL.
 #' @param roi.only Logical. Whether to filter out pseudo-bulk samples formed
 #' by cells not in any ROIs. TRUE by default.
 #' @param contour Character. The name of the group or cell type on which
@@ -31,26 +33,26 @@
 #'
 #' spe <- findROI(spe, coi = coi)
 #'
-#' spe <- allocateCells(spe)
+#' spe <- allocateCells(spe, to.contour=FALSE)
 #'
-#' y <- spe2PB(spe)
+#' y <- spe2PB(spe, roi = coi)
 #'
 spe2PB <- function(spe,
                    by.group = TRUE,
                    group.id = "cell_type",
-                   keep.groups = NULL, 
-                   by.roi = TRUE,
+		   keep.groups = NULL, 
+                   roi = NULL,
                    roi.only = TRUE,
                    contour = NULL) {
     if (!requireNamespace("SpatialExperiment", quietly = TRUE)) {
         stop("SpatialExperiment is required but is not installed
          (or can't be loaded)")
     }
-
+    
     if (!requireNamespace("edgeR", quietly = TRUE)) {
         stop("edgeR is required but is not installed (or can't be loaded)")
     }
-
+    
     if (!is(spe, "SpatialExperiment")) {
         stop("spe is not of the SpatialExperiment class")
     }
@@ -73,31 +75,40 @@ spe2PB <- function(spe,
     # Check 'counts'
     counts <- as.matrix(spe@assays@data$counts)
     if (is.null(counts)) stop("spe doesn't contain raw RNA counts")
-
+    
     # Check 'colData'
     cData <- spe@colData
-
+    
     grp <- rois <- clvl <- c()
-
+    
     if (by.group) {
-        grp <- cData[, group.id]
-    }
-
-    if (by.roi) {
-        if (!"roi" %in% names(cData)) {
-            message(paste("ROIs are not defined. Proceed without ROIs."))
+        if (!group.id %in% names(cData)) {
+            message(paste(group.id, "is not found in colData of spe. Proceed without group.id."))
         } else {
-            rois <- paste0("ROI", cData[, "roi"])
+            grp <- cData[, group.id]
         }
     }
-
+    
+    if (!is.null(roi)) {
+        roi <- gsub("_roi$", "", roi)
+        roi <- janitor::make_clean_names(roi)
+        roi <- paste(c(sort(roi),"roi"), collapse="_")
+        if (!roi %in% names(cData)) {
+            message(paste(
+                roi, " is not found in colData of spe. Proceed without ROIs."
+            ))
+        } else {
+            rois <- paste0("ROI", cData[, roi])
+        }
+    }
+    
     if (!is.null(contour)) {
         contour <- gsub("_contour$", "", contour)
-        cont <- paste0(janitor::make_clean_names(contour), "_contour")
+        cont <- paste(c(sort(janitor::make_clean_names(contour)),"contour"), collapse="_")
         if (!cont %in% names(cData)) {
-            stop(paste(
+            message(paste(
                 contour,
-                " contour level is not found in colData of spe."
+                " contour level is not found in colData of spe. Proceed without contour."
             ))
         } else {
             clvl <- paste0("Lv", cData[, cont])
@@ -107,19 +118,19 @@ spe2PB <- function(spe,
             }
         }
     }
-
-    if (is.null(grp) & is.null(rois) & is.null(clvl)) {
+    
+    if (is.null(grp) && is.null(rois) && is.null(clvl)) {
         stop("At least one of the following is required:
         group, ROI, or contour information.")
     }
-
+    
     # Check gene information
     if (ncol(SummarizedExperiment::rowData(spe)) == 0) {
         genes <- data.frame(genes = rownames(spe))
     } else {
         genes <- as.data.frame(SummarizedExperiment::rowData(spe))
     }
-
+    
     # Pseudo-bulk counts
     combo <- c(if (!is.null(grp)) "grp", 
                if (!is.null(rois)) "rois", 
@@ -130,11 +141,11 @@ spe2PB <- function(spe,
     group_mat <- stats::model.matrix(~ 0 + group)
     colnames(group_mat) <- gsub("^group", "", colnames(group_mat))
     counts.pb <- counts %*% group_mat
-
+    
     # Pseudo-bulk sample information
     sample.pb <- data.frame()[seq_len(ncol(counts.pb)), ]
     sample.pb$n.cells <- as.vector(table(group))
-
+    
     if (!is.null(grp)) {
         grp.pb <- gsub("_ROI.*$", "", levels(group))
         grp.pb <- gsub("_Lv.*$", "", grp.pb)
@@ -150,15 +161,15 @@ spe2PB <- function(spe,
         clvl.pb <- gsub("^.*Lv", "", levels(group))
         sample.pb$contour.level <- clvl.pb
     }
-
+    
     names(sample.pb) <- gsub("group", group.id, names(sample.pb))
-
+    
     # DGEList
     dge <- edgeR::DGEList(
         counts = as.matrix(counts.pb),
         samples = sample.pb, genes = genes
     )
-    if (!is.null(rois) & roi.only) dge <- dge[, keep]
-
+    if (!is.null(rois) && roi.only) dge <- dge[, keep]
+    
     return(dge)
 }

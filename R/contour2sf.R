@@ -83,8 +83,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                         sf::st_sf
                     )
                 )
-                # whether_cross <- c(sf::st_crosses(other_clines_sf,
-                #        bbox_sf, sparse = FALSE))
+
                 whether_cross <- c(sf::st_crosses(other_clines_sf,
                     bbox_sf,
                     sparse = FALSE

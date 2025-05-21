@@ -28,8 +28,8 @@ computeDensity <- function(spe, mode = c("pixels","points"),
                            ngrid.x = NULL, ngrid.y = NULL,
                            grid.length.x = 100, grid.length.y = NULL,
                            xlim = NULL, ylim = NULL, diggle = FALSE) {
-    mode = match.arg(mode)
-    kernel = match.arg(kernel)
+    mode <- match.arg(mode)
+    kernel <- match.arg(kernel)
 
     sc <- SpatialExperiment::spatialCoords(spe)
 
@@ -47,7 +47,7 @@ computeDensity <- function(spe, mode = c("pixels","points"),
         bandwidth <- bw.diggle(y)
     }
 
-    if (!is.null(grid.length.x) | !is.null(grid.length.y)) {
+    if (!is.null(grid.length.x) || !is.null(grid.length.y)) {
         if (is.null(grid.length.y)) {
             grid.length.y <- grid.length.x
         }

@@ -1,6 +1,8 @@
 #' Manually merge ROIs
 #'
 #' @param spe A SpatialExperiment object.
+#' @param roi Character. The name of the group or cell type on which
+#' the roi is computed. All cell types are chosen if NULL or 'overall'.
 #' @param merge.list A (named) list of vectors of ROI ids to be merged.
 #' Each vector in the list should be of length greater than or
 #' equal to 2. If no name is specified, the merged ROI will be
@@ -25,89 +27,95 @@
 #'
 #' spe <- findROI(spe, coi = coi, method = "walktrap")
 #'
-#' spe <- mergeROI(spe, list("1-2" = 1:2))
+#' spe <- mergeROI(spe, roi = coi, list("1-2" = 1:2))
 #'
 mergeROI <- function(spe, 
+                     roi = NULL,
                      merge.list = NULL, 
                      remove.ids = NULL, 
                      id = "component",
                      rename = FALSE) {
+  if (is.null(roi) || "overall" %in% roi) roi <- "overall"
+  roi_clean <- gsub("_roi$", "", roi)
+  roi_clean <- janitor::make_clean_names(roi_clean)
+  roi_clean <- paste(c(sort(roi_clean),"roi"), collapse="_")
   # check ROI exists
-  if (is.null(spe@metadata$roi)) {
+  if (is.null(spe@metadata[[roi_clean]])) {
     stop("ROI not yet computed!")
   }
-  
+
   # check input
-  to_be_merged <- spe@metadata$roi[[id]]
-  
+  to_be_merged <- spe@metadata[[roi_clean]][[id]]
+
   # remove ROIs first
   if (!is.null(remove.ids)) {
     remove.ids <- as.character(remove.ids)
     to_be_removed <- to_be_merged
     if (sum(!(remove.ids %in% to_be_removed)) > 0.5) {
-      stop("Some ROIs are not present in spe@metadata$roi$component. Check remove.ids")
+      stop(paste0("Some ROIs are not present in spe@metadata$",roi_clean,"$component. Check remove.ids"))
     }
     message(paste("Removing ROIs: ", paste0(remove.ids, collapse = ", "), sep = ""))
-    remove_ind <- as.character(spe@metadata$roi[[id]]) %in% remove.ids
-    spe@metadata$roi <- spe@metadata$roi[!remove_ind, ]
-    to_be_merged <- spe@metadata$roi[[id]]
+    remove_ind <- as.character(spe@metadata[[roi_clean]][[id]]) %in% remove.ids
+    spe@metadata[[roi_clean]] <- spe@metadata[[roi_clean]][!remove_ind, ]
+    to_be_merged <- spe@metadata[[roi_clean]][[id]]
   }
-
+  
   if (is.null(merge.list)) {
-
     message("No ROIs are merged. ")
     ROI_merged <- spe@metadata$roi[[id]]
-  
-  } else {
+  }
 
-    if (any(!(unlist(merge.list) %in% to_be_merged))) {
-      stop("Some ROIs are not present in spe@metadata$roi$component or have been removed. 
-          Check merge.list and remove.ids!")
-    }
-    if (any(table(unlist(merge.list)) > 1L)) {
-      stop("Each ROI can only be merged once. Check input list!")
-    }
-    
-    list_sizes <- vapply(merge.list, function(rr) {
-      length(unique(rr))
-    }, numeric(length = 1L))
-    if (any(list_sizes < 2L)) {
-      stop("Each vector in the list must have at least 2 unique ROI IDs to merge!")
-    }
-    
-    # give names to the list if not input
-    if (length(names(merge.list)) < length(merge.list)) {
-      names(merge.list) <- vapply(merge.list, function(rr) {
-        paste0(sort(rr), collapse = "-")
-      }, character(length = 1L))
-    }
-    
-    # merge ROIs
-    ROI_merged <- as.character(spe@metadata$roi[[id]])
-    for (mm in names(merge.list)) {
-      ROI_merged[ROI_merged %in% as.character(merge.list[[mm]])] <- mm
-    }
-  
+  if (any(!(unlist(merge.list) %in% to_be_merged))) {
+    stop(paste0("Some ROIs are not present in spe@metadata$",roi_clean,"$component or have been removed.
+         Check merge.list and remove.ids!"))
+  }
+  if (any(table(unlist(merge.list)) > 1L)) {
+    stop("Each ROI can only be merged once. Check input list!")
+  }
+  list_sizes <- vapply(merge.list, function(rr) {
+    length(unique(rr))
+  }, numeric(length = 1L))
+  if (any(list_sizes < 2L)) {
+    stop("Each vector in the list must have at least 2 unique ROI IDs to merge!")
+  }
+
+  # give names to the list if not input
+  if (length(names(merge.list)) < length(merge.list)) {
+    names(merge.list) <- vapply(merge.list, function(rr) {
+      paste0(sort(rr), collapse = "-")
+    }, character(length = 1L))
+  }
+
+  # keep a copy of the original ROI list
+  if (id == "component") {
+    ROI_merged <-
+      spe@metadata[[roi_clean]][["component_before_merge"]] <-
+      spe@metadata[[roi_clean]]$component
+  } else {
+    ROI_merged <- spe@metadata[[roi_clean]][[id]]
   }
   
+  # merge ROIs
+  ROI_merged <- as.character(ROI_merged)
+  for (mm in names(merge.list)) {
+    ROI_merged[ROI_merged %in% as.character(merge.list[[mm]])] <- mm
+  }
   if (!rename) {
     # re-order by merged ROI then individual ROIs
     roi_levels <- unique(ROI_merged)
     roi_levels <- c(
       sort(names(merge.list)),
       as.character(sort(
-        as.numeric(roi_levels[!(
-          roi_levels %in% names(merge.list))])
+        as.numeric(roi_levels[!(roi_levels %in% names(merge.list))])
       ))
     )
     ROI_merged <- factor(ROI_merged, levels = roi_levels)
   } else {
     ROI_merged <- factor(rank(ROI_merged),
                          labels = seq(length(unique(ROI_merged)))
-    )
+                         )
   }
-  spe@metadata$roi$component <- ROI_merged
-  
+  spe@metadata[[roi_clean]]$component <- ROI_merged
   return(spe)
 }
 

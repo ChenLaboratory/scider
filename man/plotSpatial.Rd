@@ -14,7 +14,9 @@ plotSpatial(
   cols = NULL,
   pt.shape = 16,
   pt.size = 0.3,
-  pt.alpha = 0.5
+  pt.alpha = 0.5,
+  label = NULL,
+  cols.scale = NULL
 )
 }
 \arguments{
@@ -41,6 +43,11 @@ that accepts an integer n and return n colours.}
 \item{pt.size}{size of points.}
 
 \item{pt.alpha}{alpha of points between 0 and 1.}
+
+\item{label}{label for the legend}
+
+\item{cols.scale}{vector of position for color if colors should not be
+evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.}
 }
 \value{
 A ggplot object.

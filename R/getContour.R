@@ -30,16 +30,17 @@
 #' spe <- getContour(spe, coi = coi)
 #'
 getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
-                       binwidth = NULL, breaks = NULL, id = NULL) {
+                       binwidth = NULL, breaks = NULL, 
+                       id = NULL) {
     
     if (is.null(spe@metadata$grid_density)) {
         stop("Have to calculate grid density, run gridDensity() first!")
     }
   
     if (is.null(id)) {
-      id = `if`(!is.null(spe@metadata$grid_info$isVisium),
-                "in_tissue",
-                "cell_type")
+      id <- `if`(!is.null(spe@metadata$grid_info$isVisium),
+                 "in_tissue",
+                 "cell_type")
     }
   
     if (equal.cell && !id %in% colnames(colData(spe))) {
@@ -84,7 +85,7 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
     dens <- dens[, c(seq_len(5), which(colnames(dens) ==
         "density_coi"))]
 
-    # filter out negative/low densities when calculating contours
+    # filter out negative densities when calculating contours
     dens <- dens[dens$density_coi > 0L, ]
 
     # levels for contour
@@ -112,14 +113,14 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
         }
 
         if (spe@metadata$grid_info$grid_type == "hex") {
-          hcellsID = hexDensity::xy2hcell(x=coi_coords$x_centroid,y=coi_coords$y_centroid,
-                                          xbins=spe@metadata$grid_info$xbins,
-                                          xbnds=spe@metadata$grid_info$xlim,
-                                          ybnds=spe@metadata$grid_info$ylim,
-                                          shape=spe@metadata$grid_info$shape)
-          coi_coords$hcellsID=hcellsID
-          coi_coords$x_node = (hcellsID-1)%%spe@metadata$grid_info$dims[1]+1
-          coi_coords$y_node = (hcellsID-1)%/%spe@metadata$grid_info$dims[1]+1
+          hcellsID <- hexDensity::xy2hcell(x=coi_coords$x_centroid,y=coi_coords$y_centroid,
+                                           xbins=spe@metadata$grid_info$xbins,
+                                           xbnds=spe@metadata$grid_info$xlim,
+                                           ybnds=spe@metadata$grid_info$ylim,
+                                           shape=spe@metadata$grid_info$shape)
+          coi_coords$hcellsID <- hcellsID
+          coi_coords$x_node <- (hcellsID-1)%%spe@metadata$grid_info$dims[1]+1
+          coi_coords$y_node <- (hcellsID-1)%/%spe@metadata$grid_info$dims[1]+1
         } else {
           coi_coords$x_node <- vapply(coi_coords$x_centroid, function(xx) {
               which.min(abs(spe@metadata$grid_info$xcol - xx))
@@ -190,18 +191,18 @@ xyz_to_isolines_square <- function(data, breaks) {
         levels = breaks
     )
 }
-xyz_to_isolines_hex = function(data, breaks) {
-  x.coords=sort(unique00(data$x_grid))
-  x.coords.left=x.coords[seq.int(1,length(x.coords),2)]
-  x.coords.right=x.coords[seq.int(2,length(x.coords),2)]
-  y.coords=sort(unique00(data$y_grid))
+xyz_to_isolines_hex <- function(data, breaks) {
+  x.coords <- sort(unique00(data$x_grid))
+  x.coords.left <- x.coords[seq.int(1,length(x.coords),2)]
+  x.coords.right <- x.coords[seq.int(2,length(x.coords),2)]
+  y.coords <- sort(unique00(data$y_grid))
   # Convert vector of data to raster
-  ncol=diff(range(data$node_x))+1
-  nrow=diff(range(data$node_y))+1
-  z = matrix(NA_real_, nrow = nrow, ncol = ncol)
+  ncol <- diff(range(data$node_x))+1
+  nrow <- diff(range(data$node_y))+1
+  z <- matrix(NA_real_, nrow = nrow, ncol = ncol)
   z[cbind(data$node_y, data$node_x)] <- data$density_coi
-  isolines=hexDensity::meanderingTriangles(x.coords.left,x.coords.right,
-                                           y.coords,z,breaks)
+  isolines <- hexDensity::meanderingTriangles(x.coords.left,x.coords.right,
+                                              y.coords,z,breaks)
 
   return(isolines)
 }
