@@ -317,12 +317,13 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                 ]
                 return(this_stripe_still_up)
             })
-            any_still_up <- sapply(stripes_up, function(ii) {
-                is_empty <- sapply(1:nrow(ii), function(rr) {
-                    sf::st_is_empty(ii[rr, ]) + 0L
-                    })
-                nrow(ii) - sum(is_empty)
-                })
+            any_still_up <- sapply(stripes_up, nrow)
+            #any_still_up <- sapply(stripes_up, function(ii) {
+            #    is_empty <- sapply(1:nrow(ii), function(rr) {
+            #        sf::st_is_empty(ii[rr, ]) + 0L
+            #        })
+            #    nrow(ii) - sum(is_empty)
+            #    })
             if (any(any_still_up > 0L)) {
                 stripes_up <- do.call(rbind, stripes_up)
                 stripes_up <- sf::st_difference(
