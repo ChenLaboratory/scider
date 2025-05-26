@@ -49,7 +49,7 @@ plotContour <- function(spe,
     xmax_g  <- max(x_all, na.rm = TRUE)
     
     if ( !is.null(coi) & !("overall" %in% coi) ){
-        if ( ! all(coi %in% names(table(colData(spe)[[id]]))) ) {
+        if ( ! all(coi %in% names(table(spe@colData[[id]]))) ) {
             stop("coi not in colData(spe)[[id]]!")
         }
     } else coi <- "overall"
@@ -70,7 +70,7 @@ plotContour <- function(spe,
     if (overlay == "cell") {
         sub <- TRUE
         if(all(coi != "overall"))
-            sub <- colData(spe)[[id]] %in% coi
+            sub <- spe@colData[[id]] %in% coi
         p <- plotSpatial(spe[, sub], reverseY = FALSE, ...)
     } else if (overlay == "density") {
         p <- plotDensity(spe, coi = coi, reverseY = FALSE, ...)
@@ -80,9 +80,8 @@ plotContour <- function(spe,
         stop("Invalid 'overlay'.")
     }
 
-    col.p <- grDevices::colorRampPalette(col.spec)(
-      length(levs_legend)) |>
-      rev()
+    col.p <- grDevices::colorRampPalette(col.spec)(length(levs_legend))
+    col.p <- rev(col.p)
     names(col.p) <- levs_legend
 
     if (is.null(sub.level)) {
@@ -98,7 +97,7 @@ plotContour <- function(spe,
                 linetype=line.type,
                 alpha=line.alpha
             ) +
-            scale_color_manual(name = "Density level", values = col.p,
+            ggplot2::scale_color_manual(name = "Density level", values = col.p,
                                breaks = levs_legend, drop = FALSE))
     } else {
         if (length(sub.level) == 1L & sub.level %in% contour_data$level) {
@@ -113,7 +112,7 @@ plotContour <- function(spe,
                     linetype=line.type,
                     alpha=line.alpha
                 ) +
-                scale_color_manual(
+                ggplot2::scale_color_manual(
                     name = paste0("level", sub.level, " density"),
                     values = c("royalblue", "tomato2")
                 ))
@@ -130,9 +129,8 @@ plotContour <- function(spe,
 
     p <- p +
         ggplot2::theme_classic() +
-        ggplot2::coord_fixed() +
-        labs(x = "x", y = "y") +
-        ggtitle(paste(coi, collapse=", "))
+        ggplot2::labs(x = "x", y = "y") +
+        ggplot2::ggtitle(paste(coi, collapse=", "))
     return(p)
 }
 
