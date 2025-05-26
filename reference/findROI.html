@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,10 +52,8 @@
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"greedy"</span>, <span class="st">"walktrap"</span>, <span class="st">"connected"</span>, <span class="st">"hdbscan"</span>, <span class="st">"eigen"</span>, <span class="st">"dbscan"</span><span class="op">)</span>,</span>
 <span>  diag.nodes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sequential.roi.name <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  zoom.in <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  zoom.in.size <span class="op">=</span> <span class="fl">500L</span>,</span>
-<span>  fast <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -105,11 +103,6 @@ original ROI name before
 filtering are retained.</p></dd>
 
 
-<dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
-<dd><p>Logical. For graph-based approaches, whether to build a
-directed graph.</p></dd>
-
-
 <dt id="arg-zoom-in">zoom.in<a class="anchor" aria-label="anchor" href="#arg-zoom-in"></a></dt>
 <dd><p>Logical. For very large ROIs, whether to zoom in and try
 to get more refined ROIs.</p></dd>
@@ -118,11 +111,6 @@ to get more refined ROIs.</p></dd>
 <dt id="arg-zoom-in-size">zoom.in.size<a class="anchor" aria-label="anchor" href="#arg-zoom-in-size"></a></dt>
 <dd><p>A numeric scaler. Smallest size of an ROI to be able
 to zoom in. Default is 500L.</p></dd>
-
-
-<dt id="arg-fast">fast<a class="anchor" aria-label="anchor" href="#arg-fast"></a></dt>
-<dd><p>Whether to create graph using the newer method. May give
-different clustering to stochastic methods like walktrap and greedy</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -157,7 +145,7 @@ different clustering to stochastic methods like walktrap and greedy</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

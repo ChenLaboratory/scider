@@ -9,7 +9,7 @@ samples using the colData information and return a DGEList object"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ samples using the colData information and return a DGEList object</p>
 <span>  by.group <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  group.id <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
 <span>  keep.groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by.roi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  roi <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  roi.only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  contour <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -80,9 +80,11 @@ contains the group information. Default to 'cell_type'.</p></dd>
 bulking. Default is NULL, where all cells are included in pseudo-bulking.</p></dd>
 
 
-<dt id="arg-by-roi">by.roi<a class="anchor" aria-label="anchor" href="#arg-by-roi"></a></dt>
-<dd><p>Logical. Whether to perform pseudo-bulking by ROI.
-TRUE by default.</p></dd>
+<dt id="arg-roi">roi<a class="anchor" aria-label="anchor" href="#arg-roi"></a></dt>
+<dd><p>Character. The name of the group or cell type on which
+the roi is computed.
+If NULL, then no pseudo-bulking will be performed based on roi.
+Default to NULL.</p></dd>
 
 
 <dt id="arg-roi-only">roi.only<a class="anchor" aria-label="anchor" href="#arg-roi-only"></a></dt>
@@ -114,11 +116,10 @@ pseudo-bulk sample.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="allocateCells.html">allocateCells</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Assigning cells to ROIs defined by Breast cancer</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No contour detected.</span>
+<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="allocateCells.html">allocateCells</a></span><span class="op">(</span><span class="va">spe</span>, to.contour<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Assigning cells to ROIs defined by Breast cancer </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">spe2PB</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">spe2PB</span><span class="op">(</span><span class="va">spe</span>, roi <span class="op">=</span> <span class="va">coi</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -131,7 +132,7 @@ pseudo-bulk sample.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
