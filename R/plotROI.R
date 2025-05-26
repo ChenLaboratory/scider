@@ -36,11 +36,11 @@ plotROI <- function(spe,
   roi_clean <- paste(c(sort(roi_clean),"roi"), collapse="_")
 
   if (is.null(spe@metadata[[roi_clean]])) {
-    stop("ROI of interest doesn't exist. Please run findROI() first!")
+    stop("ROI of interest doesn't exist. Please run findROI(), or specify 'roi'.")
   }
-    
+
   rois <- as.data.frame(spe@metadata[[roi_clean]])
-    
+
   # Filter background points to roi only.
   if (roi[1] != "overall" &&
       (is.null(id) || id %in% colnames(spe@colData))) {

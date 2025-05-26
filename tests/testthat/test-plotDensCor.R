@@ -14,7 +14,7 @@ test_that("plotDensCor works", {
     ))
     expect_silent(plotDensCor(spe,
         celltype1 = "Breast cancer",
-        celltype2 = "Fibroblasts", by.roi = FALSE
+        celltype2 = "Fibroblasts", roi = coi
     ))
     expect_silent(plotDensCor(spe,
         celltype1 = "Breast cancer",

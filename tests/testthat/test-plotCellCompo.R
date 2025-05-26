@@ -7,7 +7,7 @@ test_that("multiplication works", {
 
     expect_silent(plotCellCompo(spe, contour = "Breast cancer"))
 
-    expect_silent(plotCellCompo(spe, contour = "Breast cancer", by.roi = TRUE))
+    expect_silent(plotCellCompo(spe, contour = "Breast cancer", roi = c("Breast cancer", "Fibroblasts")))
 
     expect_error(plotCellCompo(spe, contour = "xyz"))
 

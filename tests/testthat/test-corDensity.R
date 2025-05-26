@@ -7,7 +7,7 @@ test_that("corDensity works", {
 
     spe <- findROI(spe, coi = coi)
 
-    result <- corDensity(spe)
+    result <- corDensity(spe, roi = coi)
     
     expect_true(is(result, "list"))
     

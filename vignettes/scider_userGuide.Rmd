@@ -139,7 +139,7 @@ metadata(spe)$roi
 
 We can visualise the ROIs with function `plotROI`.
 ```{r, fig.width=5, fig.height=5}
-plotROI(spe)
+plotROI(spe, roi = "Fibroblasts")
 ```
 
 ### Select ROI by user
@@ -182,24 +182,19 @@ plotROI(spe1)
 
 After defining ROIs, we can then test the relationship between any two 
 cell types within each ROI or overall but account for ROI variation using 
-a cubic spline or a linear fit.
-
-This can be done with function `corrDensity`, by setting the `celltype1` and 
-`celltype2` parameters, the modelling results are saved in the metadata 
-of the SpatialExperiment object.
-
+a cubic spline or a linear fit. This can be done with function `corrDensity`.
 
 ```{r}
-results <- corDensity(spe)
+results <- corDensity(spe, roi = "Fibroblasts")
 ```
 
-We can see the correlation between breast cancer and fibroblasts in each ROI.
+We can see the correlation between each pair of cell types in each fibroblasts ROI.
 
 ```{r}
 results$ROI
 ```
 
-Or the correlation between breast cancer and fibroblasts across the whole slide:
+Or the correlation between each pair of cell types across all fibroblasts ROI:
 
 ```{r}
 results$overall
@@ -273,7 +268,7 @@ plotCellCompo(spe, contour = "Fibroblasts")
 
 
 ```{r, fig.width=7, fig.height=5}
-plotCellCompo(spe, contour = "Fibroblasts", by.roi = TRUE)
+plotCellCompo(spe, contour = "Fibroblasts", roi = "Fibroblasts")
 ```
 
 
