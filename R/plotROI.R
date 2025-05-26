@@ -83,7 +83,7 @@ plotROI <- function(spe,
       data = sf::st_as_sfc(unlist(sf,recursive=F)),
       aes(
         fill = unique(rois$component),
-        alpha = 0.6,
+        alpha = 0.6
       ),color=NA,
       inherit.aes = F) +
     scale_fill_manual(values = col.p) +
