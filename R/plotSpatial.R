@@ -106,11 +106,13 @@ plotSpatial <- function(spe,
   cf <- coord_fixed()
   cf$default <- TRUE
   # !!group prevents name-clashing in case toplot also has a 'group' column
-  p <- ggplot2::ggplot(toplot,aes(x=x, y=y, color=!!group)) +
+  p <- ggplot2::ggplot() +
     ggplot2::geom_point(
+      data = toplot,
+      aes(x=x, y=y, color=!!group), 
       shape = pt.shape,
       size = pt.size,
-      alpha = pt.alpha,
+      alpha = pt.alpha
       ) +
     labs(x = "x", y = "y", color = label) +
     theme_classic() +
