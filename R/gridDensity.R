@@ -159,22 +159,18 @@ gridDensity <- function(spe,
           grid_type = "hex"
         )
       }
-      
-      #Filter grid_density to same as Visium spot.
-      #TODO: Clean up this condition. Maybe make a variable called gridLevelAnalysis
-      if (filterToVisiumSpot==TRUE && isVisium == TRUE && grid.length.x==100) {
-        # sub = colData(spe)$in_tissue==1
-        hcellsInTissue <- hexDensity::xy2hcell(x=spatialCoords(spe),
-                                               # y=spatialCoords(spe)[,2],
-                                               xbins=out$density_est@xbins,
-                                               xbnds=xlim,
-                                               ybnds=ylim,
-                                               shape=out$density_est@shape)
-        spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
-        spe@metadata$grid_info$gridLevelAnalysis <- TRUE
-      }
-      if (isVisium==TRUE) spe@metadata$grid_info$isVisium <- TRUE
     }
+    #Filter grid_density to same as Visium spot.
+    if (filterToVisiumSpot==TRUE && isVisium == TRUE && grid.length.x==100) {
+      hcellsInTissue <- hexDensity::xy2hcell(x=spatialCoords(spe),
+                                             xbins=out$density_est@xbins,
+                                             xbnds=xlim,
+                                             ybnds=ylim,
+                                             shape=out$density_est@shape)
+      spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
+      spe@metadata$grid_info$gridLevelAnalysis <- TRUE
+    }
+    if (isVisium==TRUE) spe@metadata$grid_info$isVisium <- TRUE
   } else {
     for (ii in seq_len(length(coi))) {
 
