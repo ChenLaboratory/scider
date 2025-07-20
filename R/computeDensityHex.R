@@ -48,9 +48,9 @@ computeDensityHex <- function(spe,
     ngrid.x <- diff(xlim) / grid.length.x
   }
   
-  if (isVisium && grid.length.x%%100!=0) {
-    warning("For Visium, grid.length.x should be a multiple 
-            of 100 to exactly align each spot to a hexagon")
+  if (isVisium && (ngrid.x%%63.5)!=0) {
+    warning("For Visium, grid.length.x should be divisible by 100 to exactly 
+            align each spot to a hexagon")
   }
   
   

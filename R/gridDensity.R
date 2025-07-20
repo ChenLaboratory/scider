@@ -161,16 +161,18 @@ gridDensity <- function(spe,
       }
     }
     #Filter grid_density to same as Visium spot.
-    if (filterToVisiumSpot==TRUE && isVisium == TRUE && grid.length.x==100) {
+    grid.length.x <- grid.length.x %||% (diff(spe@metadata$grid_info$xlim)/ngrid.x)
+    if (filterToVisiumSpot && isVisium && grid.length.x==100) {
       hcellsInTissue <- hexDensity::xy2hcell(x=spatialCoords(spe),
                                              xbins=out$density_est@xbins,
                                              xbnds=xlim,
                                              ybnds=ylim,
                                              shape=out$density_est@shape)
+      hcellsInTissue <- sort(unique(hcellsInTissue))
       spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
       spe@metadata$grid_info$gridLevelAnalysis <- TRUE
     }
-    if (isVisium==TRUE) spe@metadata$grid_info$isVisium <- TRUE
+    if (isVisium) spe@metadata$grid_info$isVisium <- TRUE
   } else {
     for (ii in seq_len(length(coi))) {
 
