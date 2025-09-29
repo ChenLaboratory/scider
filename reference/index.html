@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,16 +78,46 @@
         <dd>Draw a contour region on some density level</dd>
       </dl><dl><dt>
 
+          <code><a href="coord_hash.html">coord_hash()</a></code>
+
+        </dt>
+        <dd>Hash two 15-bytes signed integers into one 32-bytes integer.</dd>
+      </dl><dl><dt>
+
           <code><a href="corDensity.html">corDensity()</a></code>
 
         </dt>
         <dd>Test for density correlation between two cell types.</dd>
       </dl><dl><dt>
 
+          <code><a href="findNbrsGrid.html">findNbrsGrid()</a></code>
+
+        </dt>
+        <dd>Construct a neighbour list from grid coordinates.</dd>
+      </dl><dl><dt>
+
+          <code><a href="findNbrsSNN.html">findNbrsSNN()</a></code>
+
+        </dt>
+        <dd>Construct a SNN neighbour list from assay.</dd>
+      </dl><dl><dt>
+
+          <code><a href="findNbrsSpatial.html">findNbrsSpatial()</a></code>
+
+        </dt>
+        <dd>Construct a distance-based neighbour list from cell coordinates.</dd>
+      </dl><dl><dt>
+
           <code><a href="findROI.html">findROI()</a></code>
 
         </dt>
         <dd>Find ROIs based on cell type-specific densities via graph-based method.</dd>
+      </dl><dl><dt>
+
+          <code><a href="getClusters.html">getClusters()</a></code>
+
+        </dt>
+        <dd>Cluster cells in spe using graph methods.</dd>
       </dl><dl><dt>
 
           <code><a href="getContour.html">getContour()</a></code>
@@ -100,6 +130,24 @@
 
         </dt>
         <dd>Calculate areas between every two density levels</dd>
+      </dl><dl><dt>
+
+          <code><a href="getNiche.html">getNiche()</a></code>
+
+        </dt>
+        <dd>Build a niche assay based on the profile of neighbouring cells</dd>
+      </dl><dl><dt>
+
+          <code><a href="globalMoran.html">globalMoran()</a></code>
+
+        </dt>
+        <dd>Calculate global Moran for 1 to 2 variables.</dd>
+      </dl><dl><dt>
+
+          <code><a href="grid2df.html">grid2df()</a></code>
+
+        </dt>
+        <dd>Convert x,y nodes to data.frame of polygons</dd>
       </dl><dl><dt>
 
           <code><a href="grid2sf.html">grid2sf()</a></code>
@@ -120,10 +168,28 @@
         <dd>Summarize a SpatialExperiment object at grid-level</dd>
       </dl><dl><dt>
 
+          <code><a href="localMoran.html">localMoran()</a></code>
+
+        </dt>
+        <dd>Calculate local Moran for 1 to 2 variables.</dd>
+      </dl><dl><dt>
+
           <code><a href="mergeROI.html">mergeROI()</a></code>
 
         </dt>
         <dd>Manually merge ROIs</dd>
+      </dl><dl><dt>
+
+          <code><a href="nbrs2igraph.html">nbrs2igraph()</a></code>
+
+        </dt>
+        <dd>Convert nbrs (in spe@metadata$nbrs) into igraph's graph</dd>
+      </dl><dl><dt>
+
+          <code><a href="normalizeAssay.html">normalizeAssay()</a></code>
+
+        </dt>
+        <dd>Perform log normalization for counts</dd>
       </dl><dl><dt>
 
           <code><a href="plotCellCompo.html">plotCellCompo()</a></code>
@@ -150,6 +216,12 @@
         <dd>Plot model statistics using heatmap.</dd>
       </dl><dl><dt>
 
+          <code><a href="plotDR.html">plotDR()</a></code> <code><a href="plotDR.html">plotUMAP()</a></code> <code><a href="plotDR.html">plotPCA()</a></code>
+
+        </dt>
+        <dd>Plot reduced dimensions.</dd>
+      </dl><dl><dt>
+
           <code><a href="plotDensCor.html">plotDensCor()</a></code>
 
         </dt>
@@ -166,6 +238,18 @@
 
         </dt>
         <dd>Plot grid from metadata.</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotImage.html">plotImage()</a></code>
+
+        </dt>
+        <dd>Plot background image of spe</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotLISA.html">plotLISA()</a></code>
+
+        </dt>
+        <dd>Plotting LISA (e.g. moran)</dd>
       </dl><dl><dt>
 
           <code><a href="plotROI.html">plotROI()</a></code>
@@ -186,6 +270,30 @@
         <dd>Merge sel_region from the selectRegion function to SpatialExperiment.</dd>
       </dl><dl><dt>
 
+          <code><a href="realignVisium.html">realignVisium()</a></code>
+
+        </dt>
+        <dd>Scale and straighten out Visium coordinates</dd>
+      </dl><dl><dt>
+
+          <code><a href="realignVisiumHD.html">realignVisiumHD()</a></code>
+
+        </dt>
+        <dd>Scale and straighten out VisiumHD coordinates</dd>
+      </dl><dl><dt>
+
+          <code><a href="runPCA.html">runPCA()</a></code>
+
+        </dt>
+        <dd>Fast PCA using irlba.</dd>
+      </dl><dl><dt>
+
+          <code><a href="runUMAP.html">runUMAP()</a></code>
+
+        </dt>
+        <dd>UMAP using uwot. Parameters are set to be similar to Seurat's</dd>
+      </dl><dl><dt>
+
           <code><a href="selectRegion.html">selectRegion()</a></code>
 
         </dt>
@@ -202,6 +310,12 @@
 
         </dt>
         <dd>Subset for grid level analysis</dd>
+      </dl><dl><dt>
+
+          <code><a href="update_bound.html">update_bound()</a></code>
+
+        </dt>
+        <dd>Update the x,y limits of a plot</dd>
       </dl></div>
   </main></div>
 

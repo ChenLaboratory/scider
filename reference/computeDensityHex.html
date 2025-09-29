@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,16 +44,15 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">computeDensityHex</span><span class="op">(</span></span>
-<span>  <span class="va">spe</span>,</span>
+<span>  <span class="va">xy</span>,</span>
 <span>  kernel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span><span class="op">)</span>,</span>
 <span>  bandwidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ngrid.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  grid.length.x <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  diggle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  isVisium <span class="op">=</span> <span class="cn">F</span></span>
+<span>  gridInfo <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -61,8 +60,8 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-spe">spe<a class="anchor" aria-label="anchor" href="#arg-spe"></a></dt>
-<dd><p>A SpatialExperiment object.</p></dd>
+<dl><dt id="arg-xy">xy<a class="anchor" aria-label="anchor" href="#arg-xy"></a></dt>
+<dd><p>A numeric matrix of spatial coordinates.</p></dd>
 
 
 <dt id="arg-kernel">kernel<a class="anchor" aria-label="anchor" href="#arg-kernel"></a></dt>
@@ -84,11 +83,6 @@ spatstat.explore::bw.diggle.</p></dd>
 <dd><p>Number of grids in the x-direction.</p></dd>
 
 
-<dt id="arg-grid-length-x">grid.length.x<a class="anchor" aria-label="anchor" href="#arg-grid-length-x"></a></dt>
-<dd><p>Grid length in the x-direction.
-Default to 100 (micron).</p></dd>
-
-
 <dt id="arg-xlim">xlim<a class="anchor" aria-label="anchor" href="#arg-xlim"></a></dt>
 <dd><p>The range of the x-coordinates of the image.</p></dd>
 
@@ -98,12 +92,12 @@ Default to 100 (micron).</p></dd>
 
 
 <dt id="arg-diggle">diggle<a class="anchor" aria-label="anchor" href="#arg-diggle"></a></dt>
-<dd><p>Logical. If TRUE, use the Jones-Diggle improved edge</p></dd>
-
-
-<dt id="arg-isvisium">isVisium<a class="anchor" aria-label="anchor" href="#arg-isvisium"></a></dt>
-<dd><p>Logical. If TRUE, fit hexagonal grids to Visium spots.
+<dd><p>Logical. If TRUE, use the Jones-Diggle improved edge
 correction. See spatstat.explore::density.ppp() for details.</p></dd>
+
+
+<dt id="arg-gridinfo">gridInfo<a class="anchor" aria-label="anchor" href="#arg-gridinfo"></a></dt>
+<dd><p>Logical. If TRUE, then the grid information is also returned.</p></dd>
 
 </dl></div>
     <div class="section level2">

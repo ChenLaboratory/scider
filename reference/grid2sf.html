@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,8 @@
 
 
 <dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
-<dd><p>Reverse y coordinates.</p></dd>
+<dd><p>Reverse y coordinates. Can be numeric to specify the value to
+subtract y coordinates from (reverseY - y coords).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,8 +79,8 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Default is to generate sf polygons for all grid.
-For plotting, use sf::st_as_sfc(grid2sf2(spe)) to convert list into Geometry
-Set.</p>
+For plotting with geom_sf, use sf::st_as_sfc(grid2sf2(spe)) to convert list
+into Geometry Set.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
