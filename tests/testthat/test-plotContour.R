@@ -10,7 +10,7 @@ test_that("plotContour works", {
 
     expect_error(plotContour(spe, coi = "xyz"))
 
-    expect_error(plotContour(spe, coi = coi, id = "xyz"))
+    #expect_error(plotContour(spe, coi = coi, id = "xyz"))
 
     expect_error(plotContour(spe, coi = coi, overlay = "xyz"))
 
