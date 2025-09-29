@@ -99,12 +99,12 @@ nothing, and "row" for dividing weights by number of neighbours.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A SpatialExperiment object with neighbour list stored in
-spe@metadata$nbrs$cell[nbrs_name]</p>
+<code>spe@metadata$nbrs$cell[[nbrs_name]]</code></p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>if only k is provided, neighbours are found using
-<a href="https://rdrr.io/pkg/BiocNeighbors/man/findKNN.html" class="external-link">findKNN</a>. If only radius is provided, neighbours are
+    <p>if only <code>k</code> is provided, neighbours are found using
+<a href="https://rdrr.io/pkg/BiocNeighbors/man/findKNN.html" class="external-link">findKNN</a>. If only <code>radius</code> is provided, neighbours are
 found using <a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors.html" class="external-link">findNeighbors</a>. If both are provided, then
 knn is done first then neighbours are filtered to only those within radius.</p>
     </div>
