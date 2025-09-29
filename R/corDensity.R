@@ -5,8 +5,7 @@
 #' correlation analysis. Default is NULL, which is to consider all cell types
 #' previously calculated in the gridDensity() step. 
 #' @param roi Character. The name of the group or cell type on which
-#' the roi is computed. Default is NULL, which means the function will
-#' compute the correlation using all grids across the whole slide. 
+#' the roi is computed. Default is NULL for no subsetting cell types by ROI
 #' @param probs A numeric scalar. The threshold of proportion that used to
 #' filter grids by density when ROIs have not been identified previously.
 #' Ignored if 'roi' is present in the 'metadata' component of spe. Default to 0.85.

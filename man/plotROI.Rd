@@ -26,7 +26,7 @@ the cell type identifiers. Set to cell_type by default.}
 
 \item{show.legend}{Logical. Show legend or not.}
 
-\item{...}{Aesthetic mappings pass for point.}
+\item{...}{Parameters pass to \link[scider]{plotSpatial}}
 }
 \value{
 A ggplot object.

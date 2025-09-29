@@ -6,7 +6,6 @@
 \usage{
 plotSpatial(
   spe,
-  reverseY = FALSE,
   group.by = NULL,
   feature = NULL,
   assay = "counts",
@@ -16,13 +15,12 @@ plotSpatial(
   pt.size = 0.3,
   pt.alpha = 0.5,
   label = NULL,
-  cols.scale = NULL
+  cols.scale = NULL,
+  ...
 )
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
-
-\item{reverseY}{Reverse y coordinates.}
 
 \item{group.by}{values to group points by. Must be in colData of spe.
 If NULL, will try with 'cols' if available.}
@@ -48,6 +46,8 @@ that accepts an integer n and return n colours.}
 
 \item{cols.scale}{vector of position for color if colors should not be
 evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.}
+
+\item{...}{Parameters pass to plotImage}
 }
 \value{
 A ggplot object.

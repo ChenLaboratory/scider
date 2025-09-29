@@ -52,9 +52,7 @@ findROI <- function(spe, coi = NULL,
   grid_data <- spe@metadata$grid_density
   grid_type <- spe@metadata$grid_info$grid_type
 
-  if (is.null(coi)) coi <- "overall"
-  if (length(coi) >= 2) coi <- coi[coi!="overall"]
-  coi_clean <- janitor::make_clean_names(coi)
+  coi_clean <- `if`(is.null(coi),"overall",cleanName(coi))
   dens_cols <- paste("density", coi_clean, sep = "_")
 
   if (!all(dens_cols %in% colnames(grid_data))) {
@@ -185,10 +183,12 @@ findROI <- function(spe, coi = NULL,
     )
   }
   
-  coi_clean_output <- paste(c(sort(coi_clean),"roi"), collapse="_")
+  coi_clean_output <- paste(c(coi_clean,"roi"), collapse="_")
   # spe@metadata$coi <- coi
   # spe@metadata$ngrid.min <- ngrid.min
-  spe@metadata[[coi_clean_output]] <- S4Vectors::DataFrame(rois_filtered)
+  rois_filtered <- S4Vectors::DataFrame(rois_filtered)
+  S4Vectors::metadata(rois_filtered) <- list(densities = dens_cols)
+  spe@metadata[[coi_clean_output]] <- rois_filtered
 
   return(spe)
 }

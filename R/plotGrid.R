@@ -1,7 +1,6 @@
 #' Plot grid from metadata. 
 #'
 #' @param spe A SpatialExperiment object.
-#' @param reverseY Reverse y coordinates.
 #' @param group.by values to group polygons by. Must be in 
 #' spe@metadata$grid_density, or colData(spe) if gridLevelAnalysis is TRUE. 
 #' If NULL, will try with cols if available.
@@ -22,6 +21,7 @@
 #' @param label label for the legend
 #' @param cols.scale vector of position for color if colors should not be 
 #' evenly positioned. See \link[ggplot2]{scale_fill_gradientn}. Only applicable for continuous values.
+#' @param ... Parameters pass to \link[scider]{plotImage}
 #' @return A ggplot object.
 #' @export
 #'
@@ -31,9 +31,9 @@
 #'
 #' spe <- gridDensity(spe)
 #'
-#' plotGrid(spe, group.by = "x_grid")
+#' plotGrid(spe, group.by = "density_overall")
 #'
-plotGrid <- function(spe, reverseY = FALSE,
+plotGrid <- function(spe,
                      group.by = NULL,
                      feature = NULL,
                      assay = "counts",
@@ -44,14 +44,13 @@ plotGrid <- function(spe, reverseY = FALSE,
                      probs = 0,
                      cutoff = NULL,
                      label = NULL,
-                     cols.scale = NULL) {
+                     cols.scale = NULL,
+                     ...) {
   grid_data <- spe@metadata$grid_density
   if(!is.null(spe@metadata$grid_info$gridLevelAnalysis)) {
     grid_data <- c(grid_data,colData(spe))
   }
   
-  xlim <- spe@metadata$grid_info$xlim + c(-1,1)*spe@metadata$grid_info$xstep/2
-  ylim <- spe@metadata$grid_info$ylim + c(-1,1)*spe@metadata$grid_info$ystep/2
   
   group <- col.p <- NULL
   # Groups. Order is: grid_density -> colData -> assays -> cols
@@ -59,7 +58,7 @@ plotGrid <- function(spe, reverseY = FALSE,
     group <- grid_data[[group.by]]
     if (is.null(label)) label <- group.by
   } else if (!is.null(feature) && feature %in% rownames(spe)) {
-    group <- spe@assays@data[[assay]][feature,]
+    group <- SummarizedExperiment::assay(spe,assay)[feature,]
     if (is.null(label)) label <- feature
   } else if (!is.null(cols) && !is.function(cols)) {
     group <- factor(rep_len(cols,nrow(grid_data)),levels=unique(cols))
@@ -100,33 +99,34 @@ plotGrid <- function(spe, reverseY = FALSE,
   
   # Colours
   if (!is.null(group) && is.null(col.p)) {
-      n_colour <- length(unique(group))
-      if (is.null(cols)) { # Default palette
-          col.p <- `if`(isContinuous, col.spec, selectColor(n_colour))
-      } else if (is.function(cols)) { # cols is function
-          col.p <- cols(n_colour)
-      } else { # cols is vector
-          col.p <- `if`(isContinuous, cols, rep_len(cols,n_colour))
-      }
+    n_colour <- length(unique(group))
+    if (is.null(cols)) { # Default palette
+      col.p <- `if`(isContinuous, col.spec, selectColor(n_colour))
+    } else if (is.function(cols)) { # cols is function
+      col.p <- cols(n_colour)
+    } else { # cols is vector
+      col.p <- `if`(isContinuous, cols, rep_len(cols,n_colour))
+    }
   }
+
   # Plotting
-  p <- ggplot() + 
-    geom_sf(
-      data = sf::st_as_sfc(grid2sf(spe,
-                                   grid_data$node_x,
-                                   grid_data$node_y,
-                                   reverseY=reverseY)),
+  poly <- grid2df(spe, grid_data$node_x, grid_data$node_y,group = group)
+  p <- plotImage(spe,...) + 
+    geom_polygon(
+      data = poly,
       aes(
+        x=X,
+        y=Y,
+        group = L2,
         fill = group
       ),alpha=pol.alpha,
       color = if (pol.border) "black" else NA
     ) +
     theme_classic() +
-    labs(x = "x", y = "y", fill = label) +
-    lims(
-      x = xlim,
-      y = ylim
-    )
+    labs(x = "x", y = "y", fill = label)
+  p <- update_bound(p,
+                    x = spe@metadata$grid_info$xlim + c(-1,1)*spe@metadata$grid_info$xstep/2,
+                    y = spe@metadata$grid_info$ylim + c(-1,1)*spe@metadata$grid_info$ystep/2)
   
   if (isContinuous) {
     p <- p + scale_fill_gradientn(colours = rev(col.p), limits=cutoff, values = cols.scale)

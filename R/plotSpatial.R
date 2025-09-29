@@ -1,7 +1,6 @@
 #' Plot cells based on spatial coordinates.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param reverseY Reverse y coordinates.
 #' @param group.by values to group points by. Must be in colData of spe. 
 #' If NULL, will try with 'cols' if available.
 #' @param feature Feature to group polygons by. Must be in rownames(spe).
@@ -17,7 +16,7 @@
 #' @param label label for the legend
 #' @param cols.scale vector of position for color if colors should not be 
 #' evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.
-#'
+#' @param ... Parameters pass to plotImage
 #' @return A ggplot object.
 #' @export
 #'
@@ -28,7 +27,6 @@
 #' plotSpatial(spe, group.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)
 #'
 plotSpatial <- function(spe, 
-                        reverseY = FALSE,
                         group.by = NULL,
                         feature = NULL,
                         assay = "counts",
@@ -38,23 +36,19 @@ plotSpatial <- function(spe,
                         pt.size = 0.3, 
                         pt.alpha = 0.5,
                         label = NULL,
-                        cols.scale = NULL) {
+                        cols.scale = NULL,
+                        ...) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
-
   colnames(toplot) <- c("x", "y")
 
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
-
+  
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
-
+  
   toplot <- cbind(toplot, cdata) |>
     rownames2col("cell_id")
-
-  if (reverseY) {
-    toplot[, "y"] <- sum(range(toplot[, "y"])) - toplot[, "y"]
-  }
   
   group <- col.p <- NULL
   
@@ -63,13 +57,13 @@ plotSpatial <- function(spe,
     group <- toplot[[group.by]]
     if (is.null(label)) label <- group.by
   } else if (!is.null(feature) && feature %in% rownames(spe)) {
-    group <- spe@assays@data[[assay]][feature,]
+    group <- SummarizedExperiment::assay(spe,assay)[feature,]
     if (is.null(label)) label <- feature
   } else if (!is.null(cols) && !is.function(cols)) {
     group <- factor(rep_len(cols,nrow(toplot)),levels=unique(cols))
     col.p <- rep_len(unique(cols), length(unique(cols)))
   }
-
+  
   # Type
   if (is.character(type)) {
     type <- switch(match.arg(type),
@@ -102,21 +96,21 @@ plotSpatial <- function(spe,
     }
   }
   
-  #This stop "Coordinate system already present..." warning by coord_fixed()
-  cf <- coord_fixed()
-  cf$default <- TRUE
-  # !!group prevents name-clashing in case toplot also has a 'group' column
-  p <- ggplot2::ggplot() +
+  # Plotting
+  p <- plotImage(spe,...) +
     ggplot2::geom_point(
       data = toplot,
-      aes(x=x, y=y, color=!!group), 
+      aes(x=x, y=y, color=!!group), # !! prevent name-clashing if toplot$group exists
       shape = pt.shape,
       size = pt.size,
-      alpha = pt.alpha
-      ) +
+      alpha = pt.alpha,
+    ) +
     labs(x = "x", y = "y", color = label) +
-    theme_classic() +
-    cf
+    theme_classic()
+  p <- update_bound(p,
+                    x = toplot[,"x"],
+                    y = toplot[,"y"])
+  
   if (isContinuous) {
     p <- p + scale_color_gradientn(colours = rev(col.p), values = cols.scale)
   } else {
@@ -126,7 +120,6 @@ plotSpatial <- function(spe,
         size = 5
       )))
   }
-  
   return(p)
 }
 

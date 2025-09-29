@@ -4,12 +4,12 @@
 \alias{getContourRegions}
 \title{Calculate areas between every two density levels}
 \usage{
-getContourRegions(spe, coi)
+getContourRegions(spe, contour_name)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{coi}{A character vector of cell types of interest (COIs).}
+\item{contour_name}{Name of contour in spe@metadata}
 }
 \value{
 A list of sf objects, each representing the region between

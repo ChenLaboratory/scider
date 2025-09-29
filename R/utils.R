@@ -52,7 +52,7 @@ selectColor <- function(n) {
 
 col.lisa <- c("#eeeeee", "#FF0000", "#0000FF", "#a7adf9",
               "#f4ada8", "#464646", "#999999")
-col.pval <- c("blue","white","red")
+col.pval <- c("#3644E5", "#FFFFBF", "#FF5D53")
 
 contour_brks <- getFromNamespace("contour_breaks", "ggplot2")
 unique00 <- getFromNamespace("unique0", "ggplot2")
@@ -60,4 +60,14 @@ data_frame00 <- getFromNamespace("data_frame0", "ggplot2")
 
 colsum <- function(x, group, reorder = TRUE,...){
   return(t(rowsum(t(x), group, reorder = reorder, ...)))
+}
+
+# Clean up vector of names. If "overall" is in names (after cleaning up) then 
+# also removes "overall" from it if more than 1 names.
+cleanName <- function(names) {
+  names <- janitor::make_clean_names(names)
+  names <- gsub("^density_|_contour$|_roi$","",names)
+  if ("overall" %in% names && length(names)>1) names <- names[names!="overall"]
+  names <- sort(names)
+  return(names)
 }

@@ -35,10 +35,8 @@ mergeROI <- function(spe,
                      remove.ids = NULL, 
                      id = "component",
                      rename = FALSE) {
-  if (is.null(roi) || "overall" %in% roi) roi <- "overall"
-  roi_clean <- gsub("_roi$", "", roi)
-  roi_clean <- janitor::make_clean_names(roi_clean)
-  roi_clean <- paste(c(sort(roi_clean),"roi"), collapse="_")
+  roi_clean <- `if`(is.null(roi),"overall",cleanName(roi))
+  roi_clean <- paste(c(roi_clean,"roi"), collapse="_")
   # check ROI exists
   if (is.null(spe@metadata[[roi_clean]])) {
     stop("ROI not yet computed!")

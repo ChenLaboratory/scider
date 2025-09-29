@@ -32,34 +32,18 @@
 getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
                        binwidth = NULL, breaks = NULL, 
                        id = NULL) {
-    
     if (is.null(spe@metadata$grid_density)) {
         stop("Have to calculate grid density, run gridDensity() first!")
     }
-  
-    if (is.null(id)) {
-      id <- `if`(!is.null(spe@metadata$grid_info$isVisium),
-                 "in_tissue",
-                 "cell_type")
-    }
-  
-    if (equal.cell && !id %in% colnames(colData(spe))) {
-        stop(paste(id, "is not a column of the colData."))
-    }
+    grid_info <- spe@metadata$grid_info
+    
 
-    if ( !is.null(coi) & !("overall" %in% coi) ){
-        if (length(which(!coi %in% names(table(colData(spe)[[id]])))) > 0L) {
-            stop(paste(paste0(
-                coi[which(!coi %in%
-                    names(table(colData(spe)[[id]])))],
-                collapse = ", "
-            ), "not found in data!", sep = " "))
-        }
-    } else coi <- "overall"
-
-    coi_clean <- janitor::make_clean_names(coi)
+    coi_clean <- `if`(is.null(coi),"overall",cleanName(coi))
     dens_cols <- paste("density", coi_clean, sep = "_")
-
+    if (!all(dens_cols %in% colnames(spe@metadata$grid_density))) {
+      stop("Density of COI not computed yet.")
+    }
+    
     # grid level density data
     dens <- spe@metadata$grid_density
     dups <- duplicated(dens[, c("y_grid", "x_grid"), drop = FALSE],
@@ -108,25 +92,36 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
         ## count no of cells of coi in each grid
         ## note this no can be very different from the expected no
         coi_coords <- as.data.frame(spatialCoords(spe))
-        if(!"overall" %in% coi){
+        
+        # Filter for relevant cells belonging to id if coi is a factor of id.
+        if (!is.null(coi)) {
+          if (!is.null(id) && !(id %in% colnames(colData(spe)))) {
+            stop(paste(id,"is not a column of colData(spe)."))
+          }
+          id_missing <- is.null(id)
+          id <- id %||% "cell_type"
+          if (all(coi %in% colData(spe)[[id]])) {
             coi_coords <- coi_coords[colData(spe)[[id]] %in% coi, ]
+          } else if (!id_missing) {
+            stop(paste0(coi," not found in colData(spe)$",id))
+          }
         }
 
         if (spe@metadata$grid_info$grid_type == "hex") {
           hcellsID <- hexDensity::xy2hcell(x=coi_coords$x_centroid,y=coi_coords$y_centroid,
-                                           xbins=spe@metadata$grid_info$xbins,
-                                           xbnds=spe@metadata$grid_info$xlim,
-                                           ybnds=spe@metadata$grid_info$ylim,
-                                           shape=spe@metadata$grid_info$shape)
+                                           xbins=grid_info$xbins,
+                                           xbnds=grid_info$xlim,
+                                           ybnds=grid_info$ylim,
+                                           shape=grid_info$shape)
           coi_coords$hcellsID <- hcellsID
-          coi_coords$x_node <- (hcellsID-1)%%spe@metadata$grid_info$dims[1]+1
-          coi_coords$y_node <- (hcellsID-1)%/%spe@metadata$grid_info$dims[1]+1
+          coi_coords$x_node <- (hcellsID-1)%%grid_info$dims[1]+1
+          coi_coords$y_node <- (hcellsID-1)%/%grid_info$dims[1]+1
         } else {
           coi_coords$x_node <- vapply(coi_coords$x_centroid, function(xx) {
-              which.min(abs(spe@metadata$grid_info$xcol - xx))
+              which.min(abs(grid_info$xcol - xx))
           }, numeric(1))
           coi_coords$y_node <- vapply(coi_coords$y_centroid, function(yy) {
-              which.min(abs(spe@metadata$grid_info$yrow - yy))
+              which.min(abs(grid_info$yrow - yy))
           }, numeric(1))
         }
         coi_coords$node <- paste(coi_coords$x_node, coi_coords$y_node, sep = "-")
@@ -151,16 +146,15 @@ getContour <- function(spe, coi = NULL, equal.cell = TRUE, bins = NULL,
         binwidth = binwidth,
         breaks = breaks,
         na.rm = FALSE,
-        grid_type = spe@metadata$grid_info$grid_type
+        grid_type = grid_info$grid_type
     )
 
     contour$level <- as.factor(as.numeric(as.factor(contour$cutoff)))
-
-    coi_clean_output <- ifelse(length(coi_clean) == 1L, coi_clean, paste(sort(coi_clean), collapse="_"))
-    spe@metadata[[paste(coi_clean_output,
-        "contour",
-        sep = "_"
-    )]] <- S4Vectors::DataFrame(contour)
+    
+    coi_clean <- paste(c(coi_clean,"contour"), collapse="_")
+    contour <- S4Vectors::DataFrame(contour)
+    S4Vectors::metadata(contour) <- list(densities = dens_cols)
+    spe@metadata[[coi_clean]] <- contour
 
     return(spe)
 }

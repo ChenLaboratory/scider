@@ -65,9 +65,10 @@ plotDensCor <- function(spe, celltype1 = NULL, celltype2 = NULL,
         rois <- data.frame(component=gl(1,sum(kp)), 
                            members=dens_dat_filter$node)
     } else {
-        roi <- gsub("_roi$", "", roi)
-        roi <- janitor::make_clean_names(roi)
-        roi <- paste(c(sort(roi),"roi"), collapse="_")
+        roi <- cleanName(roi)
+        # roi <- gsub("_roi$", "", roi)
+        # roi <- janitor::make_clean_names(roi)
+        roi <- paste(c(roi,"roi"), collapse="_")
         if (is.null(spe@metadata[[roi]])) {
             stop(paste(
                 roi, " is not found in metadata of spe. Please run

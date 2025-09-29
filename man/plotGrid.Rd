@@ -6,7 +6,6 @@
 \usage{
 plotGrid(
   spe,
-  reverseY = FALSE,
   group.by = NULL,
   feature = NULL,
   assay = "counts",
@@ -17,13 +16,12 @@ plotGrid(
   probs = 0,
   cutoff = NULL,
   label = NULL,
-  cols.scale = NULL
+  cols.scale = NULL,
+  ...
 )
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
-
-\item{reverseY}{Reverse y coordinates.}
 
 \item{group.by}{values to group polygons by. Must be in
 spe@metadata$grid_density, or colData(spe) if gridLevelAnalysis is TRUE.
@@ -55,6 +53,8 @@ probs if specified. Only applicable for continuous values.}
 
 \item{cols.scale}{vector of position for color if colors should not be
 evenly positioned. See \link[ggplot2]{scale_fill_gradientn}. Only applicable for continuous values.}
+
+\item{...}{Parameters pass to \link[scider]{plotImage}}
 }
 \value{
 A ggplot object.
@@ -68,6 +68,6 @@ data("xenium_bc_spe")
 
 spe <- gridDensity(spe)
 
-plotGrid(spe, group.by = "x_grid")
+plotGrid(spe, group.by = "density_overall")
 
 }

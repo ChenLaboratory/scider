@@ -5,25 +5,19 @@
 \title{Perform kernel density estimation on SpatialExperiment}
 \usage{
 computeDensity(
-  spe,
-  mode = c("pixels", "points"),
+  xy,
   kernel = c("gaussian", "epanechnikov", "quartic", "disc"),
   bandwidth = NULL,
   weights = NULL,
   ngrid.x = NULL,
-  ngrid.y = NULL,
-  grid.length.x = 100,
-  grid.length.y = NULL,
   xlim = NULL,
   ylim = NULL,
-  diggle = FALSE
+  diggle = FALSE,
+  gridInfo = FALSE
 )
 }
 \arguments{
-\item{spe}{A SpatialExperiment object.}
-
-\item{mode}{Choose either points or pixels. Specifying
-whether to compute the density at a grid pixel location or at at point.}
+\item{xy}{A numeric matrix of spatial coordinates.}
 
 \item{kernel}{The smoothing kernel. Options are gaussian, epanechnikov,
 quartic or disc.}
@@ -36,19 +30,14 @@ spatstat.explore::bw.diggle.}
 
 \item{ngrid.x}{Number of grids in the x-direction.}
 
-\item{ngrid.y}{Number of grids in the y-direction.}
-
-\item{grid.length.x}{Grid length in the x-direction.
-Default to 100 (micron).}
-
-\item{grid.length.y}{Grid length in the y-direction.}
-
 \item{xlim}{The range of the x-coordinates of the image.}
 
 \item{ylim}{The range of the y-coordinates of the image.}
 
 \item{diggle}{Logical. If TRUE, use the Jones-Diggle improved edge
 correction. See spatstat.explore::density.ppp() for details.}
+
+\item{gridInfo}{Logical. If TRUE, then the grid information is also returned.}
 }
 \value{
 Output from spatstat.explore::density.ppp.

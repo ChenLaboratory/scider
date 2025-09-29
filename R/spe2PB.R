@@ -90,9 +90,8 @@ spe2PB <- function(spe,
     }
     
     if (!is.null(roi)) {
-        roi <- gsub("_roi$", "", roi)
-        roi <- janitor::make_clean_names(roi)
-        roi <- paste(c(sort(roi),"roi"), collapse="_")
+        roi <- cleanName(roi)
+        roi <- paste(c(roi,"roi"), collapse="_")
         if (!roi %in% names(cData)) {
             message(paste(
                 roi, " is not found in colData of spe. Proceed without ROIs."
@@ -103,8 +102,9 @@ spe2PB <- function(spe,
     }
     
     if (!is.null(contour)) {
-        contour <- gsub("_contour$", "", contour)
-        cont <- paste(c(sort(janitor::make_clean_names(contour)),"contour"), collapse="_")
+        
+        cont <- cleanName(contour)
+        cont <- paste(c(cont,"contour"), collapse="_")
         if (!cont %in% names(cData)) {
             message(paste(
                 contour,

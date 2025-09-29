@@ -5,7 +5,7 @@
 #' Default to all cell types.
 #' @param probs Numeric value between 0 and 1, used for filtering
 #' uninformative grid, default is 0.5.
-#' @param ... Parameters pass to plotGrid
+#' @param ... Parameters pass to \link[scider]{plotGrid}
 #' @return A ggplot object.
 #' @export
 #'
@@ -20,10 +20,7 @@
 #' plotDensity(spe, coi = "Fibroblasts")
 #'
 plotDensity <- function(spe, coi = NULL, probs = 0.5,...) {
-  if (is.null(coi)) coi <- "overall"
-  if (length(coi) >= 2) coi <- coi[coi!="overall"]
-  coi_clean <- janitor::make_clean_names(coi)
-  
+  coi_clean <- `if`(is.null(coi),"overall",cleanName(coi))
   dens_cols <- paste("density", coi_clean, sep = "_")
   
   if (!all(dens_cols %in% colnames(spe@metadata$grid_density))) {
@@ -37,7 +34,7 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5,...) {
            probs=probs,
            label="Density",
            ...) +
-    ggtitle(paste(coi, collapse=", "))
+    ggtitle(paste(coi_clean, collapse=", "))
 }
 
 utils::globalVariables(c("x_grid", "y_grid", "density_coi_average"))

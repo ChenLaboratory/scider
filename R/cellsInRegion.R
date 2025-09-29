@@ -24,7 +24,7 @@ cellsInRegion <- function(spe, region, name_to,
 
     # all cells
     xy_allcells <- sf::st_as_sf(as.data.frame(SpatialExperiment::spatialCoords(spe)),
-        coords = c("x_centroid", "y_centroid")
+        coords = c(1,2) #c("x_centroid", "y_centroid")
     )
 
     # calculate overlaps

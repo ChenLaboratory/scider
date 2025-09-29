@@ -2,12 +2,11 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param contour Name in metadata.
-#' @param coi A character vector of cell types of interest (COIs).
 #' @param cutoff A numeric scalar specifying the density cutoff.
 #'
 #' @return An sf object of the contour region of the specified level.
 #'
-contour2sf <- function(spe, contour, coi, cutoff) {
+contour2sf <- function(spe, contour, cutoff) {
     if (!requireNamespace("sf", quietly = TRUE)) stop("sf required but is not
                                                     available")
     if (!requireNamespace("lwgeom", quietly = TRUE)) stop("lwgeom required but
@@ -26,8 +25,7 @@ contour2sf <- function(spe, contour, coi, cutoff) {
     clines_lev <- clines[clines$cutoff == cutoff, c("x", "y", "piece")]
     # grid_area <- spe@metadata$grid_info$xstep * spe@metadata$grid_info$ystep
 
-    coi_clean <- janitor::make_clean_names(coi)
-    dens_cols <- paste("density", coi_clean, sep = "_")
+    dens_cols <- S4Vectors::metadata(spe@metadata[[contour]])$densities
     dens <- as.data.frame(spe@metadata$grid_density)
     dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in%
         dens_cols),
@@ -317,17 +315,13 @@ contour2sf <- function(spe, contour, coi, cutoff) {
                 ]
                 return(this_stripe_still_up)
             })
-            # any_still_up <- sapply(stripes_up, nrow)
-            any_still_up <- sapply(stripes_up, function(ii) {
-                if (nrow(ii) > 0L) {
-                    is_empty <- sapply(1:nrow(ii), function(rr) {
-                        sf::st_is_empty(ii[rr, ]) + 0L
-                    })
-                    return(nrow(ii) - sum(is_empty))
-                } else {
-                    return(0L)
-                }
-            })
+            any_still_up <- sapply(stripes_up, nrow)
+            #any_still_up <- sapply(stripes_up, function(ii) {
+            #    is_empty <- sapply(1:nrow(ii), function(rr) {
+            #        sf::st_is_empty(ii[rr, ]) + 0L
+            #        })
+            #    nrow(ii) - sum(is_empty)
+            #    })
             if (any(any_still_up > 0L)) {
                 stripes_up <- do.call(rbind, stripes_up)
                 stripes_up <- sf::st_difference(

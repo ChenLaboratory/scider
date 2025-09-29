@@ -31,71 +31,59 @@ allocateCells <- function(spe,
         if (is.null(roi)) {
             roi_clean <- grep("_roi$", names(spe@metadata),value = TRUE)
         } else {
-            roi_clean <- gsub("_roi$", "", roi)
-            roi_clean <- janitor::make_clean_names(roi_clean)
-            roi_clean <- paste(c(sort(roi_clean),"roi"), collapse="_")
+            roi_clean <- cleanName(roi)
+            roi_clean <- paste(c(roi_clean,"roi"), collapse="_")
+            if (!roi_clean %in% names(spe@metadata)) roi_clean <- NULL
         }
         
-        if(length(roi_clean) == 0 || !roi_clean %in% names(spe@metadata)){
+        if(length(roi_clean) == 0){
             message("No roi detected. Proceed without roi.")
-            roi_clean <- integer(0)
-        }
-        
-        for (r in roi_clean) {
-            message(paste(
-                "Assigning cells to ROIs defined by",
-                janitor::make_clean_names(r,case="sentence",replace = c("roi"="")), 
-                "\n"
-            ))
-            rois <- spe@metadata[[r]]
-            sf <- grid2sf(spe, rois$x,rois$y)
-            # Unioning sf polygons with same ROIs
-            all_areas <- lapply(unique(rois$component), function(xx) {
-                sf::st_as_sf(sf::st_union(sf::st_sfc(sf[rois$component == xx]),is_coverage = TRUE))
-            })
-            names(all_areas) <- unique(rois$component)
-            
-            spe <- cellsInRegion(spe, all_areas,
-                                 name_to = r,
-                                 NA_level = "None", levels = NULL
-            )
+        } else {
+            for (r in roi_clean) {
+                message(paste(
+                    "Assigning cells to ROIs defined by",
+                    janitor::make_clean_names(r,case="sentence",replace = c("_roi$"="")), 
+                    "\n"
+                ))
+                rois <- spe@metadata[[r]]
+                sf <- grid2sf(spe, rois$x,rois$y)
+                # Unioning sf polygons with same ROIs
+                all_areas <- lapply(unique(rois$component), function(xx) {
+                    sf::st_as_sf(sf::st_union(sf::st_sfc(sf[rois$component == xx]),is_coverage = TRUE))
+                })
+                names(all_areas) <- unique(rois$component)
+                
+                spe <- cellsInRegion(spe, all_areas,
+                                     name_to = r,
+                                     NA_level = "None", levels = NULL
+                )
+            }
         }
     }
     
     if (to.contour) {
-        ind <- grep("_contour", names(spe@metadata))
-        coi_2 <- NULL
-        if (length(ind) == 0) {
-            message("No contour detected.")
+        if (is.null(contour)) {
+            contour_clean <- grep("_contour$", names(spe@metadata),value = TRUE)
         } else {
-            if (!is.null(contour)){
-                contour_clean <- janitor::make_clean_names(contour)
-                contour_clean <- paste(c(sort(contour_clean),"contour"), collapse="_")
-                if(! contour_clean %in% names(spe@metadata)){
-                    message("Specified contour not detected. Proceed without contour.")
-                    ind <- integer(0)
-                } else {
-                    ind <- grep(contour_clean, names(spe@metadata))
-                    coi_2 <- paste(contour, collapse=", ")
-                }
-            }
+            contour_clean <- cleanName(contour)
+            contour_clean <- paste(c(contour_clean,"contour"), collapse="_")
+            if (!contour_clean %in% names(spe@metadata)) contour_clean <- NULL
+        }
+      
+        if (length(contour_clean)==0) {
+            message("No contour detected. Proceed without contour.")
+        } else {
+            for (cc in contour_clean) {
+                message(paste(
+                    "Assigning cells to contour levels of",
+                    janitor::make_clean_names(cc,case="sentence",replace = c("_contour$"="")), 
+                    "\n"
+                ))
             
-            for (i in ind) {
-                coi <- janitor::make_clean_names(names(spe@metadata)[i],
-                                                 case = "sentence", replace = c("contour" = ""))
-                if(!is.null(coi_2)) coi <- contour
-                
-                if(all(paste0("density_", janitor::make_clean_names(coi)) %in% colnames(spe@metadata$grid_density))){
-                    message(paste(
-                        "Assigning cells to contour levels of",
-                        paste(coi, collapse=", "), "\n"
-                    ))
-                    all_areas <- getContourRegions(spe, coi = coi)
-                    name_to <- names(spe@metadata)[i]
-                    
-                    spe <- cellsInRegion(spe, all_areas, name_to = name_to,
-                                         NA_level = 0, levels = NULL)
-                }
+            all_areas <- getContourRegions(spe, contour_name = cc)
+            
+            spe <- cellsInRegion(spe, all_areas, name_to = cc,
+                                 NA_level = 0, levels = NULL)
             }
         }
     }

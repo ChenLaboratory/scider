@@ -4,14 +4,12 @@
 \alias{contour2sf}
 \title{Draw a contour region on some density level}
 \usage{
-contour2sf(spe, contour, coi, cutoff)
+contour2sf(spe, contour, cutoff)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{contour}{Name in metadata.}
-
-\item{coi}{A character vector of cell types of interest (COIs).}
 
 \item{cutoff}{A numeric scalar specifying the density cutoff.}
 }

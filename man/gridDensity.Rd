@@ -7,8 +7,10 @@ cell types of interest}
 \usage{
 gridDensity(
   spe,
-  id = if (isVisium) "in_tissue" else "cell_type",
+  id = if (isVisium) NULL else "cell_type",
   coi = NULL,
+  feature = NULL,
+  assay = "counts",
   kernel = "gaussian",
   bandwidth = NULL,
   ngrid.x = NULL,
@@ -23,10 +25,14 @@ gridDensity(
 \item{spe}{A SpatialExperiment object.}
 
 \item{id}{A character. The name of the column of colData(spe) containing
-the cell type identifiers. Set to cell_type by default.}
+the cell type identifiers. Set to cell_type by default. Set to NULL for overall density.}
 
 \item{coi}{A character vector of cell types of interest (COIs).
 Default to all cell types.}
+
+\item{feature}{Feature(s) to calculate density with. Must be in rownames(spe).}
+
+\item{assay}{Name of assay to use for finding feature(s).}
 
 \item{kernel}{The smoothing kernel. Options are "gaussian",
 "epanechnikov", "quartic" or "disc". For hexagonal grid, only Gaussian is implemented}

@@ -18,7 +18,8 @@ grid2sf(
 
 \item{y}{vector of y nodes of the polygons}
 
-\item{reverseY}{Reverse y coordinates.}
+\item{reverseY}{Reverse y coordinates. Can be numeric to specify the value to
+subtract y coordinates from (reverseY - y coords).}
 }
 \value{
 List of sf polygons
@@ -28,6 +29,6 @@ Convert x,y nodes to sf polygons
 }
 \details{
 Default is to generate sf polygons for all grid.
-For plotting, use sf::st_as_sfc(grid2sf2(spe)) to convert list into Geometry
-Set.
+For plotting with geom_sf, use sf::st_as_sfc(grid2sf2(spe)) to convert list
+into Geometry Set.
 }

@@ -3,9 +3,11 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param id A character. The name of the column of colData(spe) containing
-#' the cell type identifiers. Set to cell_type by default.
+#' the cell type identifiers. Set to cell_type by default. Set to NULL for overall density.
 #' @param coi A character vector of cell types of interest (COIs).
 #' Default to all cell types.
+#' @param feature Feature(s) to calculate density with. Must be in rownames(spe).
+#' @param assay Name of assay to use for finding feature(s).
 #' @param kernel The smoothing kernel. Options are "gaussian",
 #' "epanechnikov", "quartic" or "disc". For hexagonal grid, only Gaussian is implemented
 #' @param bandwidth The smoothing bandwidth. By default performing
@@ -37,8 +39,10 @@
 #' spe <- gridDensity(spe)
 #'
 gridDensity <- function(spe,
-                        id = if (isVisium) "in_tissue" else "cell_type",
+                        id = if (isVisium) NULL else "cell_type",
                         coi = NULL,
+                        feature = NULL,
+                        assay = "counts",
                         kernel = "gaussian",
                         bandwidth = NULL,
                         ngrid.x = NULL,
@@ -48,194 +52,147 @@ gridDensity <- function(spe,
                         isVisium = FALSE,
                         filterToVisiumSpot = isVisium) {
   grid.type <- match.arg(grid.type)
-  if (isVisium && grid.type == "square") {
-    grid.type <- "hex"
-    message("Switching grid.type to hex for Visium")
-  }
   
-  if (!id %in% colnames(colData(spe))) {
-    stop(paste(id, "is not a column of the colData."))
-  }
-  
-  # (Default COI for non-visium) OR (visium without default id)
-  if ((is.null(coi) && !isVisium) || (isVisium && id != "in_tissue")) {
-    coi <- names(table(colData(spe)[[id]]))
-  }
-  
-  if (length(which(!coi %in% names(table(colData(spe)[[id]])))) > 0L) {
-    stop(paste(paste0(
-      coi[which(!coi %in%
-                  names(table(colData(spe)[[id]])))],
-      collapse = ", "
-    ), "not found in data!", sep = " "))
-  }
-
-  coi <- c(coi, "overall")
-  coi_clean <- janitor::make_clean_names(coi)
-  
-  # define canvas
+  # Checks for Visium
   if (isVisium) {
-
-    if (is.null(colData(spe)$array_col) || 
-        is.null(colData(spe)$array_row) ||
-        is.null(colData(spe)$in_tissue)) {
+    if (grid.type == "square") {
+      grid.type <- "hex"
+      message("Switching grid.type to hex for Visium")
+    }
+    if (is.null(spe$array_col) || 
+        is.null(spe$array_row) ||
+        is.null(spe$in_tissue)) {
       stop("Visium must have array_col, array_row, and in_tissue in colData")
     }
-    spatialCoords(spe) <- cbind((colData(spe)$array_col)*50,
-                                (colData(spe)$array_row)*50*sqrt(3))
+    
+    # Scale the distances between points to 100 units and straighten the row/col
+    spe <- realignVisium(spe)
   }
+  
+  weights <- matrix(ncol=0,nrow=ncol(spe))
+  # id weight
+  if (!is.null(id)) {
+    if (!id %in% colnames(colData(spe))) { 
+      message(paste(id, "is not a column of the colData. Skipping",id))
+    }
+    if (!all(coi %in% unique(spe@colData[[id]]))) {
+      stop(paste(
+        paste0(coi[!coi %in% unique(spe@colData[[id]])],collapse = ", "), 
+        "not found in data!"))
+    }
+    
+    if (is.numeric(spe[[id]])) {
+      w <- matrix(spe[[id]],ncol=1,dimnames=list(NULL,id))
+      w[is.na(w)] <- 0
+    } else { # One-hot matrix
+      f <- as.factor(spe[[id]])
+      w <- matrix(0,nrow=ncol(spe),ncol=nlevels(f),dimnames=list(NULL,levels(f)))
+      for (i in seq_along(f)) {
+        w[i,f[i]] = 1
+      }
+      if (!is.null(coi)) w <- w[,coi,drop=FALSE]
+    }
+    weights <- cbind(weights,w)
+  }
+  # features weight
+  f_not <- !(feature %in% rownames(spe))
+  if (any(f_not)) {
+    message(paste(paste0(feature[f_not],collapse = ", "),
+                  "not found in rownames. Skipping them"))
+    feature <- feature[!f_not]
+  }
+  if (!is.null(feature)) {
+    w <- t(as.matrix(SummarizedExperiment::assay(spe,assay)[feature,,drop=FALSE]))
+    # w <- t(as.matrix(spe@assays@data[[assay]][feature,,drop=FALSE]))
+    weights <- cbind(weights,w)
+  }
+  # overall weight
+  if (isVisium) {
+    weights <- cbind(weights,overall=spe$in_tissue)
+  } else {
+    weights <- cbind(weights,overall=rep.int(1,nrow(weights)))
+  }
+  clean_names <- paste("density",
+                       janitor::make_clean_names(colnames(weights)),
+                       sep="_")
+  
+  # Cells' coords
   spatialCoordsNames(spe) <- c("x_centroid", "y_centroid")
   coord <- spatialCoords(spe)
   xlim <- range(coord[,"x_centroid"])
   ylim <- range(coord[,"y_centroid"])
   
-  # Calculate bandwidth
-  pts <- ppp(coord[, 1], coord[, 2], xlim, ylim)
-  if (is.null(bandwidth) & !is.null(spe@metadata$grid_info$bandwidth)) {
-    bandwidth <- spe@metadata$grid_info$bandwidth
-    message("Reusing existing bandwidth for kernel smoothing!")
+  # Grid size. If both are provided, use grid.length.x
+  if (!is.null(ngrid.x) && !is.null(grid.length.x)) {
+    ngrid.x <- NULL
   }
-  if (is.null(bandwidth)) {
-    bandwidth <- bw.diggle(pts) * 4
-  }
+  ngrid.x <- ngrid.x %||% (diff(xlim)/(grid.length.x %||% 100))
   
-  if (is.null(spe@metadata)) spe@metadata <- list()
-
-  if(is.null(ngrid.x) && is.null(grid.length.x)) 
-    grid.length.x <- 100
-
-  # Reset when the function is rerun again
-  spe@metadata$grid_density <- spe@metadata$grid_info <- NULL
   
-  # compute density for each cell type and then, filter
-  if (grid.type=="hex") {
-    for (ii in seq_len(length(coi))) {
-        if(coi[ii] != "overall"){
-            # subset data to this COI
-            sub <- which(colData(spe)[[id]] == coi[ii])
-            obj <- spe[, sub]
-        } else if (isVisium) {
-          obj <- spe[, which(colData(spe)$in_tissue == 1)]
-        } else 
-            obj <- spe
-
-      # compute density
-      out <- computeDensityHex(obj,
-                            kernel = kernel,
-                            bandwidth = bandwidth,
-                            ngrid.x = ngrid.x,
-                            grid.length.x = grid.length.x,
-                            xlim = xlim, ylim = ylim, diggle = diggle,
-                            isVisium = isVisium
-      )
-      RES <- out$grid_density
-      
-      if (is.null(spe@metadata$grid_density)) {
-        spe@metadata <- list("grid_density" = RES[, seq_len(4)])
-        spe@metadata$grid_density$node <- paste(
-          spe@metadata$grid_density$node_x,
-          spe@metadata$grid_density$node_y,
-          sep = "-"
-        )
-      }
-  
-      spe@metadata$grid_density <- cbind(spe@metadata$grid_density,RES$density)
-      colnames(spe@metadata$grid_density)[5 + ii] <- paste("density",
-                                                           coi_clean[ii],
-                                                           sep = "_"
-      )
-      
-      # grid info
-      if (is.null(spe@metadata$grid_info)) {
-        spe@metadata$grid_info <- list(
-          dims = out$density_est@dimen[2:1],
-          xlim=xlim,
-          ylim=ylim,
-          xstep=diff(xlim)/out$density_est@xbins,
-          ystep=(diff(ylim)*sqrt(3))/(2*out$density_est@shape*out$density_est@xbins),
-          xbins=out$density_est@xbins,
-          shape=out$density_est@shape,
-          bandwidth=bandwidth,
-          grid_type = "hex"
-        )
-      }
+  if (isVisium) {
+    one_to_one <- isTRUE(all.equal(ngrid.x,diff(range(spe$array_col))/2))
+    if (!one_to_one) {
+      message("For Visium, grid.length.x should be a divisible by 100 to exactly align each spot to a hexagon")
     }
-    #Filter grid_density to same as Visium spot.
-    grid.length.x <- grid.length.x %||% (diff(spe@metadata$grid_info$xlim)/ngrid.x)
-    if (filterToVisiumSpot && isVisium && grid.length.x==100) {
-      hcellsInTissue <- hexDensity::xy2hcell(x=spatialCoords(spe),
-                                             xbins=out$density_est@xbins,
+  }
+    
+    
+  
+  # Calculate bandwidth
+  if (is.null(bandwidth)) {
+    if (!is.null(spe@metadata$grid_info$bandwidth)) {
+      bandwidth <- spe@metadata$grid_info$bandwidth
+      message("Reusing existing bandwidth for kernel smoothing!")
+    } else {
+      pts <- ppp(coord[, 1], coord[, 2], xlim, ylim)
+      bandwidth <- bw.diggle(pts) * 4
+    }
+  }
+  
+  # Reset when the function is rerun again
+  # spe@metadata$grid_density <- spe@metadata$grid_info <- NULL
+  densFunc <- `if`(grid.type=="hex",computeDensityHex,computeDensity)
+  # Set up info about the grid
+  res <- densFunc(x = coord,
+                  kernel = kernel,
+                  bandwidth = bandwidth,
+                  ngrid.x = ngrid.x,
+                  xlim = xlim,
+                  ylim = ylim,
+                  gridInfo = TRUE)
+  spe@metadata$grid_density <- res$grid_density
+  spe@metadata$grid_info <- res$grid_info
+  # Add densities
+  for (ii in seq_len(ncol(weights))) {
+    spe@metadata$grid_density <- cbind(
+      spe@metadata$grid_density,
+      densFunc(x = coord,
+               kernel = kernel,
+               bandwidth = bandwidth,
+               weights = weights[,ii],
+               ngrid.x = ngrid.x,
+               xlim = xlim,
+               ylim = ylim,
+               diggle = diggle))
+    colnames(spe@metadata$grid_density)[ncol(spe@metadata$grid_density)] = clean_names[[ii]]
+  }
+  
+  if (grid.type=="hex") {
+    # Filter grid_density to same as Visium spot.
+    if (filterToVisiumSpot && isVisium && one_to_one) {
+      hcellsInTissue <- hexDensity::xy2hcell(x=coord,
+                                             xbins=spe@metadata$grid_info$xbins,
                                              xbnds=xlim,
                                              ybnds=ylim,
-                                             shape=out$density_est@shape)
+                                             shape=spe@metadata$grid_info$shape)
       hcellsInTissue <- sort(unique(hcellsInTissue))
       spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
       spe@metadata$grid_info$gridLevelAnalysis <- TRUE
     }
+    
     if (isVisium) spe@metadata$grid_info$isVisium <- TRUE
-  } else {
-    for (ii in seq_len(length(coi))) {
-
-        if(coi[ii] != "overall"){
-            # subset data to this COI
-            sub <- which(colData(spe)[[id]] == coi[ii])
-            obj <- spe[, sub]
-        } else 
-            obj <- spe
-
-      # compute density
-      out <- computeDensity(obj,
-                               mode = "pixels", kernel = kernel,
-                               bandwidth = bandwidth,
-                               ngrid.x = ngrid.x,
-                               grid.length.x = grid.length.x,
-                               xlim = xlim, ylim = ylim, diggle = diggle
-      )
-      RES <- out$grid_density
-      
-      ngrid.x <- out$density_est$dim[2]
-      ngrid.y <- out$density_est$dim[1]
-      
-      if (is.null(spe@metadata$grid_density)) {
-        spe@metadata <- list("grid_density" = RES[, seq_len(2)])
-        # horizontal ind
-        spe@metadata$grid_density$node_x <- rep(seq_len(ngrid.x),
-                                                each = ngrid.y
-        )
-        # vertical ind
-        spe@metadata$grid_density$node_y <- rep(
-          seq_len(ngrid.y),
-          ngrid.x
-        )
-        spe@metadata$grid_density$node <- paste(
-          spe@metadata$grid_density$node_x,
-          spe@metadata$grid_density$node_y,
-          sep = "-"
-        )
-      }
-      
-      spe@metadata$grid_density <- cbind(spe@metadata$grid_density,RES$density)
-      colnames(spe@metadata$grid_density)[5 + ii] <- paste("density",
-                                                           coi_clean[ii],
-                                                           sep = "_"
-      )
-      
-      # grid info
-      if (is.null(spe@metadata$grid_info)) {
-        spe@metadata$grid_info <- list(
-          dims = c(ngrid.x, ngrid.y),
-          xlim = xlim,
-          ylim = ylim,
-          xcol = out$density_est$xcol,
-          yrow = out$density_est$yrow,
-          xstep = out$density_est$xstep,
-          ystep = out$density_est$ystep,
-          bandwidth = bandwidth,
-          grid_type = "square"
-        )
-      }
-    }
   }
-
+  
   return(spe)
 }
+

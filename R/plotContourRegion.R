@@ -29,7 +29,7 @@ plotContourRegion <- function(spe,
         stop("sub.level must be of either length 1 or 2!")
     }
 
-    coi_clean <- janitor::make_clean_names(coi)
+    coi_clean <- cleanName(coi)
     coi_clean_contour <- paste(coi_clean, "contour", sep = "_")
     coi_clean_density <- paste("density", coi_clean, sep = "_")
 
@@ -111,7 +111,7 @@ plotContourRegion <- function(spe,
     # overlay the sf region
     if (length(sub.level) == 1L) {
         area <- contour2sf(spe,
-            contour = coi_clean_contour, coi = coi,
+            contour = coi_clean_contour,
             cutoff = density_at_level
         )
         p <- p + geom_sf(
@@ -122,11 +122,11 @@ plotContourRegion <- function(spe,
     if (length(sub.level) == 2L) {
         area_low <- contour2sf(spe,
             contour = coi_clean_contour,
-            coi = coi, cutoff = density_at_level[1]
+            cutoff = density_at_level[1]
         )
         area_high <- contour2sf(spe,
             contour = coi_clean_contour,
-            coi = coi, cutoff = density_at_level[2]
+            cutoff = density_at_level[2]
         )
         area_diff <- sf::st_difference(area_low, area_high)
         if (overlay == "cell") {

@@ -15,7 +15,7 @@ Default to all cell types.}
 \item{probs}{Numeric value between 0 and 1, used for filtering
 uninformative grid, default is 0.5.}
 
-\item{...}{Parameters pass to plotGrid}
+\item{...}{Parameters pass to \link[scider]{plotGrid}}
 }
 \value{
 A ggplot object.
