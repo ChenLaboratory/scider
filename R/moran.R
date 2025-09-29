@@ -5,7 +5,7 @@
 #' or cells, depending on 'at'.
 #' @param data2 Numeric vector 2 for bivariate local Moran. Must be same length as data1.
 #' @param at Option of grid or cell for where to look for neighbour list
-#' @param nbrs_name Name of the neighbour list in spe@metadata$grid[[at]] 
+#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$grid[[at]]}
 #' for Moran's I. If NULL, will use the newest neighbour list.
 #' @param hhonly Only high-high clusters, which is more interpretable. Other 
 #' clusters (e.g. "Low-Low","High-Low",...) will be assigned as undefined.
@@ -75,7 +75,7 @@ localMoran <- function(spe, data1, data2=data1[],
 #' nrow(spe@metadata$grid_density) or spatialCoords(spe), depending on 'at'.
 #' @param data2 Numeric vector 2 for bivariate local Moran. Must be same length as data1.
 #' @param at Option of grid or cell for where to look for neighbour list
-#' @param nbrs_name Name of the neighbour list in spe@metadata$grid[[at]] 
+#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$grid[[at]]}
 #' for Moran's I
 #' @param permutations Number of permutations for p-value.
 #' @param seed Integer. For random permutations.

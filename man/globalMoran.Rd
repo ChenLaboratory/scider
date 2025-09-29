@@ -25,7 +25,7 @@ nrow(spe@metadata$grid_density) or spatialCoords(spe), depending on 'at'.}
 
 \item{at}{Option of grid or cell for where to look for neighbour list}
 
-\item{nbrs_name}{Name of the neighbour list in spe@metadata$grid[\link{at}]
+\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$grid[[at]]}
 for Moran's I}
 
 \item{permutations}{Number of permutations for p-value.}

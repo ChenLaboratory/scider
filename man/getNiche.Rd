@@ -17,7 +17,7 @@ getNiche(
 
 \item{at}{Option of cell or grid neighbourhood}
 
-\item{nbrs_name}{Name of the neighbour list in spe@metadata$grid[\link{at}]}
+\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$grid[[at]]}}
 
 \item{group.by}{Character vector to group neighbours cell by. Should be in
 either colData(spe) or spe@metadata$grid_density, depending

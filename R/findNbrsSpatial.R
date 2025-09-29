@@ -14,10 +14,10 @@
 #' @param nbrs_name Name of the neighbour list to be stored. Default to be "spatial".
 #' @param cpu_threads Number of cpu threads for parallel computation.
 #' @return A SpatialExperiment object with neighbour list stored in 
-#' spe@metadata$nbrs$cell[[nbrs_name]]
+#' \code{spe@metadata$nbrs$cell[[nbrs_name]]}
 #' @details
-#' if only [k] is provided, neighbours are found using 
-#' \link[BiocNeighbors]{findKNN}. If only [radius] is provided, neighbours are 
+#' if only \code{k} is provided, neighbours are found using 
+#' \link[BiocNeighbors]{findKNN}. If only \code{radius} is provided, neighbours are 
 #' found using \link[BiocNeighbors]{findNeighbors}. If both are provided, then 
 #' knn is done first then neighbours are filtered to only those within radius.
 #' 

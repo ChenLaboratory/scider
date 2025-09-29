@@ -20,8 +20,8 @@ findNbrsGrid(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{n}{Integer. Search for neighbours within (...) Either n or radius #TODO: description
-should be used}
+\item{n}{Integer. Search for neighbours within (...). Either the number of
+neighbors or radius}
 
 \item{radius}{Numeric. Search for neighbours within the radius.}
 
@@ -44,7 +44,7 @@ nothing, and "row" for dividing weights by number of neighbours.}
 }
 \value{
 A SpatialExperiment object with neighbour list stored in
-spe@metadata$nbrs$grid[\link{nbrs_name}]
+\code{spe@metadata$nbrs$grid[[nbrs_name]]}
 }
 \description{
 Construct a neighbour list from grid coordinates.

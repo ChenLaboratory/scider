@@ -1,8 +1,8 @@
 #' Construct a neighbour list from grid coordinates.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param n Integer. Search for neighbours within (...) Either n or radius #TODO: description 
-#' should be used
+#' @param n Integer. Search for neighbours within (...). Either the number of 
+#' neighbors or radius
 #' @param radius Numeric. Search for neighbours within the radius.
 #' @param diagonal Whether to consider diagonal connection if using square grid
 #' @param dist_func Options for distance-based weight. "idw" for inverse 
@@ -15,7 +15,7 @@
 #' @param nbrs_name Name of the neighbour list to be stored. Default to be "grid".
 #' @param cpu_threads Number of cpu threads for parallel computation.
 #' @return A SpatialExperiment object with neighbour list stored in 
-#' spe@metadata$nbrs$grid[[nbrs_name]]
+#' \code{spe@metadata$nbrs$grid[[nbrs_name]]}
 #' 
 #' @details
 #' If n is used, distance is scaled to unit distance

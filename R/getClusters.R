@@ -42,7 +42,7 @@ getClusters <- function(spe,
   } else {
     g <- spe@metadata$nbrs$cell[[nbrs_name]]
   }
-  g <- nbrs2igraph(g)
+  g <- .nbrs2igraph(g)
   
   method <- match.arg(method)
   method.args <- list(...)
@@ -59,5 +59,19 @@ getClusters <- function(spe,
   
   spe[[cluster_name]] <- factor(cluster$membership)
   return(spe)
+}
+
+
+# Convert nbrs (in spe@metadata$nbrs) into igraph's graph 
+# nbrs should be a list containing index & weight
+.nbrs2igraph <- function(nbrs, directed=FALSE){
+  interleaves <- as.vector(
+    rbind(rep.int(seq_along(nbrs$index),times=lengths(nbrs$index)),
+          unlist(nbrs$index)))
+  g <- igraph::make_graph(interleaves,directed=directed) #TODO: check direction
+  igraph::E(g)$weight = unlist(nbrs$weight)
+
+  g <- igraph::simplify(g,edge.attr.comb = "first")
+  return(g)
 }
 

@@ -39,14 +39,14 @@ nothing, and "row" for dividing weights by number of neighbours.}
 }
 \value{
 A SpatialExperiment object with neighbour list stored in
-spe@metadata$nbrs$cell[\link{nbrs_name}]
+\code{spe@metadata$nbrs$cell[[nbrs_name]]}
 }
 \description{
 Construct a distance-based neighbour list from cell coordinates.
 }
 \details{
-if only \link{k} is provided, neighbours are found using
-\link[BiocNeighbors]{findKNN}. If only \link{radius} is provided, neighbours are
+if only \code{k} is provided, neighbours are found using
+\link[BiocNeighbors]{findKNN}. If only \code{radius} is provided, neighbours are
 found using \link[BiocNeighbors]{findNeighbors}. If both are provided, then
 knn is done first then neighbours are filtered to only those within radius.
 }
