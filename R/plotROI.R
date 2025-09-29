@@ -55,12 +55,10 @@ plotROI <- function(spe,
     sf::st_union(sf::st_sfc(sf[rois$component == xx]))
   })
   names(sf) <- as.character(unique(rois$component))
-  
   rois_center <- do.call(rbind, lapply(sf, function(rr) {
     center <- sf::st_point_on_surface(rr)
     as.data.frame(sf::st_coordinates(center))
   }))
-  
   rois_center <- as.data.frame(rois_center)
   rois_center$component <- names(sf)
   
