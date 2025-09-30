@@ -210,8 +210,21 @@ object.</p>
 <p>Here we identify ROIs based on the fibroblasts cell density.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findROI.html">findROI</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span>
-<span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">roi</span></span></code></pre></div>
-<pre><code><span><span class="co">## NULL</span></span></code></pre>
+<span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe</span><span class="op">)</span><span class="op">$</span><span class="va">fibroblasts_roi</span></span></code></pre></div>
+<pre><code><span><span class="co">## DataFrame with 1833 rows and 6 columns</span></span>
+<span><span class="co">##      component     members           x           y    xcoord    ycoord</span></span>
+<span><span class="co">##       &lt;factor&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1            1       38-34          38          34   4030.94   3013.76</span></span>
+<span><span class="co">## 2            1       39-34          39          34   4130.94   3013.76</span></span>
+<span><span class="co">## 3            1       40-34          40          34   4230.94   3013.76</span></span>
+<span><span class="co">## 4            1       41-34          41          34   4330.94   3013.76</span></span>
+<span><span class="co">## 5            1       42-34          42          34   4430.94   3013.76</span></span>
+<span><span class="co">## ...        ...         ...         ...         ...       ...       ...</span></span>
+<span><span class="co">## 1829         8      66-124          66         124   6830.94     10808</span></span>
+<span><span class="co">## 1830         8      67-124          67         124   6930.94     10808</span></span>
+<span><span class="co">## 1831         8      68-124          68         124   7030.94     10808</span></span>
+<span><span class="co">## 1832         8      69-124          69         124   7130.94     10808</span></span>
+<span><span class="co">## 1833         8      70-124          70         124   7230.94     10808</span></span></code></pre>
 <p>We can visualise the ROIs with function <code>plotROI</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotROI.html">plotROI</a></span><span class="op">(</span><span class="va">spe</span>, roi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
@@ -238,7 +251,6 @@ environment.</p>
 metadata of the SpatialExperiment object.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/postSelRegion.html">postSelRegion</a></span><span class="op">(</span><span class="va">spe</span>, sel_region <span class="op">=</span> <span class="va">sel_region</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">spe1</span><span class="op">)</span><span class="op">$</span><span class="va">roi</span></span></code></pre></div>
 <p>Similarly, we can plot visualise the user-defined ROI with function
 <code>plotROI</code>.</p>
