@@ -134,7 +134,7 @@ The detected ROIs are saved in the metadata of the SpatialExperiment object.
 Here we identify ROIs based on the fibroblasts cell density.
 ```{r}
 spe <- findROI(spe, coi = "Fibroblasts")
-metadata(spe)$roi
+metadata(spe)$fibroblasts_roi
 ```
 
 We can visualise the ROIs with function `plotROI`.
@@ -168,7 +168,6 @@ the SpatialExperiment object.
 
 ```{r, eval=FALSE}
 spe1 <- postSelRegion(spe, sel_region = sel_region)
-
 metadata(spe1)$roi
 ```
 
@@ -275,20 +274,4 @@ plotCellCompo(spe, contour = "Fibroblasts", roi = "Fibroblasts")
 ```{r}
 sessionInfo()
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
