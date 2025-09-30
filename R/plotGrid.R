@@ -135,3 +135,5 @@ plotGrid <- function(spe,
   }
   return(p)
 }
+
+utils::globalVariables(c("X", "Y", "L1", "L2"))
