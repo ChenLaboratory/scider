@@ -68,7 +68,7 @@ getClusters <- function(spe,
   interleaves <- as.vector(
     rbind(rep.int(seq_along(nbrs$index),times=lengths(nbrs$index)),
           unlist(nbrs$index)))
-  g <- igraph::make_graph(interleaves,directed=directed) #TODO: check direction
+  g <- igraph::make_graph(interleaves,directed=directed)
   igraph::E(g)$weight = unlist(nbrs$weight)
 
   g <- igraph::simplify(g,edge.attr.comb = "first")
