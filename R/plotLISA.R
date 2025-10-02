@@ -5,6 +5,8 @@
 #' \link[scider]{localMoran} is calculated at grid or point.
 #' @param type Option of cluster or logpvalue for plotting lisa's cluster or 
 #' p-value, respectively.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Parameters pass to \link[scider]{plotGrid} or 
 #' \link[scider]{plotSpatial}, depending on overlay.
 #' 
@@ -21,6 +23,7 @@
 plotLISA <- function(spe, lisa,
                      overlay=c("grid","point"),
                      type=c("cluster","logpvalue"),
+                     reverseY=NULL,
                      ...) {
   # Checking if overlay is valid
   n_point <- nrow(spe@colData)
@@ -65,12 +68,12 @@ plotLISA <- function(spe, lisa,
     spe@metadata$grid_density <- spe@metadata$grid_density[keep,]
     spe@metadata$grid_density$dat <- dat
     p <- plotGrid(spe,group.by="dat",cols=cols,label=type,
-                  cols.scale = cols.scale, ...)
+                  cols.scale=cols.scale, reverseY=reverseY, ...)
   } else {
     spe <- spe[,keep]
     spe$dat <- dat
-    p <- plotSpatial(spe,group.by="dat",cols=cols,label=type,
-                     cols.scale = cols.scale, ...)
+    p <- plotSpatial(spe,group.by="dat", cols=cols, label=type,
+                     cols.scale=cols.scale, reverseY=reverseY, ...)
     p <- update_bound(p,
                       x=SpatialExperiment::spatialCoords(spe)[,1],
                       y=SpatialExperiment::spatialCoords(spe)[,2])

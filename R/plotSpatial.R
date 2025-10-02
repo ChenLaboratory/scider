@@ -16,6 +16,8 @@
 #' @param label label for the legend
 #' @param cols.scale vector of position for color if colors should not be 
 #' evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Parameters pass to plotImage
 #' @return A ggplot object.
 #' @export
@@ -37,6 +39,7 @@ plotSpatial <- function(spe,
                         pt.alpha = 0.5,
                         label = NULL,
                         cols.scale = NULL,
+                        reverseY = NULL,
                         ...) {
   toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
   colnames(toplot) <- c("x", "y")
@@ -97,7 +100,7 @@ plotSpatial <- function(spe,
   }
   
   # Plotting
-  p <- plotImage(spe,...) +
+  p <- plotImage(spe, reverseY=reverseY, ...) +
     ggplot2::geom_point(
       data = toplot,
       aes(x=x, y=y, color=!!group), # !! prevent name-clashing if toplot$group exists

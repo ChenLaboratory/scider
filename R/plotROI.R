@@ -7,6 +7,8 @@
 #' the cell type identifiers. Set to cell_type by default.
 #' @param label Logical. Show ROI label or not.
 #' @param show.legend Logical. Show legend or not.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Parameters pass to \link[scider]{plotSpatial}
 #'
 #' @return A ggplot object.
@@ -29,6 +31,7 @@ plotROI <- function(spe,
                     id = "cell_type",
                     label = TRUE,
                     show.legend = FALSE, 
+                    reverseY = NULL,
                     ...) {
   roi_clean <- `if`(is.null(roi),"overall",cleanName(roi))
   roi_clean_name <- paste(c(roi_clean,"roi"), collapse="_")
@@ -73,7 +76,7 @@ plotROI <- function(spe,
                             by=poly_groups,
                             FUN=sum)[[2]])
   # Plotting
-  p <- plotSpatial(spe,...) +
+  p <- plotSpatial(spe, reverseY=reverseY, ...) +
     geom_polygon(
       data = sf,
       aes(

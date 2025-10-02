@@ -11,6 +11,8 @@
 #' @param line.type shape of contour. See 'ggplot2::geom_path()'.
 #' @param line.width size of contour.
 #' @param line.alpha alpha of contour between 0 and 1.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Aesthetic mappings to pass to \link[scider]{plotSpatial}, 
 #' \link[scider]{plotDensity}, or \link[scider]{plotImage}, depending on 
 #' the overlay.
@@ -38,6 +40,7 @@ plotContour <- function(spe,
                         line.type = 1,
                         line.width = 0.5,
                         line.alpha = 1,
+                        reverseY = NULL,
                         ...) {
   coi_clean <- `if`(is.null(coi),"overall",cleanName(coi))
   contour_name <- paste(c(coi_clean,"contour"), collapse="_")
@@ -58,11 +61,11 @@ plotContour <- function(spe,
         any(spe@colData[,id] %in% coi)) {
       sub <- spe@colData[[id]] %in% coi
     }
-    p <- plotSpatial(spe[, sub],...)
+    p <- plotSpatial(spe[, sub],reverseY=reverseY,...)
   } else if (overlay == "density") {
-    p <- plotDensity(spe, coi = coi,...)
+    p <- plotDensity(spe, coi = coi,reverseY=reverseY,...)
   } else if (overlay == "none") {
-    p <- plotImage(spe,...)
+    p <- plotImage(spe,reverseY=reverseY,...)
   } else {
     stop("Invalid 'overlay'.")
   }

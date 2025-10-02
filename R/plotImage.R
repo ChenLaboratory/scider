@@ -6,6 +6,7 @@
 #' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
 #' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param crop Whether to crop the plot to the spots.
+#' @param image.alpha alpha of points between 0 and 1.
 #' @return a ggplot object if there is a valid image, else NULL.
 #' @export
 plotImage <- function(spe,
@@ -13,11 +14,12 @@ plotImage <- function(spe,
                       image_id = NULL,
                       sample_id = NULL,
                       reverseY = NULL,
-                      crop=TRUE) {
+                      crop=TRUE,
+                      image.alpha = 1) {
   img <- SpatialExperiment::imgRaster(spe,sample_id,image_id)
   reverseY <- reverseY %||% !is.null(img)
   # No image
-  if(is.null(img) || !image) {
+  if(is.null(img) || !image || image.alpha==0) {
     if (!(missing(image_id)&&missing(sample_id))) message("image not found")
     p <- ggplot2::ggplot()+ggplot2::coord_fixed()
     if (reverseY) p <- p + ggplot2::scale_y_reverse()
@@ -29,6 +31,11 @@ plotImage <- function(spe,
   xlim <- c(0,ncol(img)/scale)
   ylim <- c(0,nrow(img)/scale)
   p <- ggplot2::ggplot() 
+  # Image alpha
+  if (image.alpha!=1) {
+    img = as.raster(matrix(ggplot2::alpha(img,image.alpha),nrow=nrow(img),byrow=TRUE))
+  }
+  # ReverseY
   if (reverseY) {
     p <- p + 
       ggplot2::annotation_custom(grid::rasterGrob(img),
@@ -42,6 +49,7 @@ plotImage <- function(spe,
                                  ymin = ylim[1], ymax = ylim[2])
   }
   
+  # Crop to points
   if (crop) {
     xlim <- range(SpatialExperiment::spatialCoords(spe)[,1])
     ylim<-range(SpatialExperiment::spatialCoords(spe)[,2])

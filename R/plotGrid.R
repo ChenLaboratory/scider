@@ -21,6 +21,8 @@
 #' @param label label for the legend
 #' @param cols.scale vector of position for color if colors should not be 
 #' evenly positioned. See \link[ggplot2]{scale_fill_gradientn}. Only applicable for continuous values.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Parameters pass to \link[scider]{plotImage}
 #' @return A ggplot object.
 #' @export
@@ -45,6 +47,7 @@ plotGrid <- function(spe,
                      cutoff = NULL,
                      label = NULL,
                      cols.scale = NULL,
+                     reverseY = NULL,
                      ...) {
   grid_data <- spe@metadata$grid_density
   if(!is.null(spe@metadata$grid_info$gridLevelAnalysis)) {
@@ -111,7 +114,7 @@ plotGrid <- function(spe,
 
   # Plotting
   poly <- grid2df(spe, grid_data$node_x, grid_data$node_y,group = group)
-  p <- plotImage(spe,...) + 
+  p <- plotImage(spe, reverseY=reverseY,...) + 
     geom_polygon(
       data = poly,
       aes(

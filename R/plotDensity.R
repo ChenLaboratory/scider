@@ -5,6 +5,8 @@
 #' Default to all cell types.
 #' @param probs Numeric value between 0 and 1, used for filtering
 #' uninformative grid, default is 0.5.
+#' @param reverseY Logical. Whether to reverse Y coordinates. Default is TRUE 
+#' if the spe contains an image (even if not plotted) and FALSE if otherwise.
 #' @param ... Parameters pass to \link[scider]{plotGrid}
 #' @return A ggplot object.
 #' @export
@@ -19,7 +21,7 @@
 #'
 #' plotDensity(spe, coi = "Fibroblasts")
 #'
-plotDensity <- function(spe, coi = NULL, probs = 0.5,...) {
+plotDensity <- function(spe, coi = NULL, probs = 0.5, reverseY=NULL,...) {
   coi_clean <- `if`(is.null(coi),"overall",cleanName(coi))
   dens_cols <- paste("density", coi_clean, sep = "_")
   
@@ -33,6 +35,7 @@ plotDensity <- function(spe, coi = NULL, probs = 0.5,...) {
            group.by="density_coi_average",
            probs=probs,
            label="Density",
+           reverseY=reverseY,
            ...) +
     ggtitle(paste(coi_clean, collapse=", "))
 }
