@@ -33,7 +33,7 @@ plotImage <- function(spe,
   p <- ggplot2::ggplot() 
   # Image alpha
   if (image.alpha!=1) {
-    img = as.raster(matrix(ggplot2::alpha(img,image.alpha),nrow=nrow(img),byrow=TRUE))
+    img = grDevices::as.raster(matrix(ggplot2::alpha(img,image.alpha),nrow=nrow(img),byrow=TRUE))
   }
   # ReverseY
   if (reverseY) {
