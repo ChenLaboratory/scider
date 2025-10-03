@@ -4,7 +4,7 @@
 \alias{plotDensity}
 \title{Plot grid-based density.}
 \usage{
-plotDensity(spe, coi = NULL, probs = 0.5, ...)
+plotDensity(spe, coi = NULL, probs = 0.5, reverseY = NULL, ...)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -14,6 +14,9 @@ Default to all cell types.}
 
 \item{probs}{Numeric value between 0 and 1, used for filtering
 uninformative grid, default is 0.5.}
+
+\item{reverseY}{Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{...}{Parameters pass to \link[scider]{plotGrid}}
 }

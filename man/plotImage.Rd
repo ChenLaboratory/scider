@@ -10,7 +10,8 @@ plotImage(
   image_id = NULL,
   sample_id = NULL,
   reverseY = NULL,
-  crop = TRUE
+  crop = TRUE,
+  image.alpha = 1
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ See \link[SpatialExperiment]{scaleFactors} for default behavior.}
 if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{crop}{Whether to crop the plot to the spots.}
+
+\item{image.alpha}{alpha of points between 0 and 1.}
 }
 \value{
 a ggplot object if there is a valid image, else NULL.

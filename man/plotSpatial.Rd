@@ -16,6 +16,7 @@ plotSpatial(
   pt.alpha = 0.5,
   label = NULL,
   cols.scale = NULL,
+  reverseY = NULL,
   ...
 )
 }
@@ -46,6 +47,9 @@ that accepts an integer n and return n colours.}
 
 \item{cols.scale}{vector of position for color if colors should not be
 evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.}
+
+\item{reverseY}{Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{...}{Parameters pass to plotImage}
 }

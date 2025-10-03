@@ -10,6 +10,7 @@ plotROI(
   id = "cell_type",
   label = TRUE,
   show.legend = FALSE,
+  reverseY = NULL,
   ...
 )
 }
@@ -25,6 +26,9 @@ the cell type identifiers. Set to cell_type by default.}
 \item{label}{Logical. Show ROI label or not.}
 
 \item{show.legend}{Logical. Show legend or not.}
+
+\item{reverseY}{Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{...}{Parameters pass to \link[scider]{plotSpatial}}
 }

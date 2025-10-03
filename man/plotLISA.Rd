@@ -9,6 +9,7 @@ plotLISA(
   lisa,
   overlay = c("grid", "point"),
   type = c("cluster", "logpvalue"),
+  reverseY = NULL,
   ...
 )
 }
@@ -22,6 +23,9 @@ plotLISA(
 
 \item{type}{Option of cluster or logpvalue for plotting lisa's cluster or
 p-value, respectively.}
+
+\item{reverseY}{Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{...}{Parameters pass to \link[scider]{plotGrid} or
 \link[scider]{plotSpatial}, depending on overlay.}

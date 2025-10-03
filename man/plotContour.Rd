@@ -13,6 +13,7 @@ plotContour(
   line.type = 1,
   line.width = 0.5,
   line.alpha = 1,
+  reverseY = NULL,
   ...
 )
 }
@@ -35,6 +36,9 @@ the cell type identifiers. Set to 'cell_type' by default.}
 \item{line.width}{size of contour.}
 
 \item{line.alpha}{alpha of contour between 0 and 1.}
+
+\item{reverseY}{Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.}
 
 \item{...}{Aesthetic mappings to pass to \link[scider]{plotSpatial},
 \link[scider]{plotDensity}, or \link[scider]{plotImage}, depending on
