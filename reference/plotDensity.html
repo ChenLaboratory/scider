@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotDensity</span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="cn">NULL</span>, probs <span class="op">=</span> <span class="fl">0.5</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotDensity</span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="cn">NULL</span>, probs <span class="op">=</span> <span class="fl">0.5</span>, reverseY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,6 +62,11 @@ Default to all cell types.</p></dd>
 <dt id="arg-probs">probs<a class="anchor" aria-label="anchor" href="#arg-probs"></a></dt>
 <dd><p>Numeric value between 0 and 1, used for filtering
 uninformative grid, default is 0.5.</p></dd>
+
+
+<dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
+<dd><p>Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

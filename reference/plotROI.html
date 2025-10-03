@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@
 <span>  id <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show.legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reverseY <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -77,6 +78,11 @@ the cell type identifiers. Set to cell_type by default.</p></dd>
 
 <dt id="arg-show-legend">show.legend<a class="anchor" aria-label="anchor" href="#arg-show-legend"></a></dt>
 <dd><p>Logical. Show legend or not.</p></dd>
+
+
+<dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
+<dd><p>Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <span>  pt.alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cols.scale <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reverseY <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,6 +111,11 @@ that accepts an integer n and return n colours.</p></dd>
 <dt id="arg-cols-scale">cols.scale<a class="anchor" aria-label="anchor" href="#arg-cols-scale"></a></dt>
 <dd><p>vector of position for color if colors should not be
 evenly positioned. See <a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_color_gradientn</a>. Only applicable for continuous values.</p></dd>
+
+
+<dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
+<dd><p>Logical. Whether to reverse Y coordinates. Default is TRUE
+if the spe contains an image (even if not plotted) and FALSE if otherwise.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
