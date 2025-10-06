@@ -1,7 +1,7 @@
 #define R_NO_REMAP
 
 #include <Rinternals.h> //for R_xlen_t
-#include <math.h> //for sqrt
+#include <cmath> //for sqrt
 #include <cstdint> //for uint64_t
 #include <thread>
 #include <functional>

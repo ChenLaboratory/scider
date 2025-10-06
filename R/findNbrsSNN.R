@@ -26,15 +26,26 @@
 #' spe <- runPCA(spe)
 #' spe <- findNbrsSNN(spe,dimred="PCA")
 findNbrsSNN <- function(spe,
-                        assay = "counts",
-                        dimred = NULL,
-                        n_dimred = NULL,
+                        assay = NULL,
+                        dimred = "PCA",
+                        n_dimred = 10,
                         k = 20,
                         BNPARAM = BiocNeighbors::AnnoyParam(),
                         type = c("rank", "number", "jaccard"),
                         nbrs_name = NULL,
                         cpu_threads = 6) {
-  # Prep mat matrix
+  # Getting default data  
+  if (missing(assay) && missing(dimred) && 
+      (!dimred %in% SingleCellExperiment::reducedDimNames(spe))) {
+    dimred=NULL
+    if (is.null(spe@assays@data[["logcounts"]])) {
+      assay <- "counts"
+    } else {
+      assay <- "logcounts"
+    }
+    warning(paste("PCA not found. Switching to",assay,"assay instead."))
+  }
+
   if (!is.null(dimred)) {
     mat <- SingleCellExperiment::reducedDim(spe,dimred)
     if (!is.null(n_dimred)) {

@@ -6,9 +6,9 @@
 \usage{
 findNbrsSNN(
   spe,
-  assay = "counts",
-  dimred = NULL,
-  n_dimred = NULL,
+  assay = NULL,
+  dimred = "PCA",
+  n_dimred = 10,
   k = 20,
   BNPARAM = BiocNeighbors::AnnoyParam(),
   type = c("rank", "number", "jaccard"),
