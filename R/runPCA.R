@@ -41,9 +41,9 @@ runPCA <- function(spe,
       message(paste(c("Genes with 0 variance are excluded:",
                       rownames(mat)[!keep]),collapse=" "))
       }
-    sds = sds[keep]
     mat = mat[keep,]
-    mat = mat/sds
+    mat = mat/(sds[keep])
+    sds <- rep.int(1,nrow(mat))
   }
   mat = t(mat)
   out <- irlba::irlba(mat, nv=n_pcs,
