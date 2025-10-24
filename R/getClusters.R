@@ -57,7 +57,10 @@ getClusters <- function(spe,
                            louvain = igraph::cluster_louvain),
                     method.args)
   
-  spe[[cluster_name]] <- factor(cluster$membership)
+  # Rename clusters based on their sizes high to low
+  count <- tabulate(cluster$membership)
+  map <- order(order(count,decreasing=TRUE))
+  spe[[cluster_name]] <- factor(map[cluster$membership])
   return(spe)
 }
 

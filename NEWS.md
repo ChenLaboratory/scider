@@ -1,3 +1,17 @@
+# scider 1.8.0 (2025-10-30)
+* Update help pages
+* New function findNbrsGrid() to construct a neighbour list from grid coordinates
+* New function findNbrsSNN() to construct a SNN neighbour list from assay
+* New function findNbrsSpatial() to construct a distance-based neighbour list from cell coordinates
+* New function getNiche() to build a niche assay based on the profile of neighbouring cells
+* New function getClusters() to cluster cells in spe using graph methods
+* New functions globalMoran() and localMoran() to calculate Moran's I statistics
+* New function normalizeAssay() to perform spatial data normalization
+* New function plotDR() for plotting reduced dimensions
+* New functions plotImage() and plotLISA() for visualization
+* New function realignVisium() to scale and straighten out Visium coordinates
+* New functions runPCA() and runUMAP() for performing dimensionality reduction
+
 # scider 1.4.0 (2024-10-30)
 * gridDensity() now supports hexagonal grids.
 * Make 'grid.length.x' = 100 by default in gridDensity() and remove the default value for 'ngrid.x'.

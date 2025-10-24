@@ -48,13 +48,13 @@ plotDots <- function(spe,
   group <- as.factor(group)
   
   # Aggregate features by group
-  dat <- aggregate.data.frame(t(exprs), list(group),
-                              FUN=function(x){
-                                n=length(x)
-                                mean = log1p(mean(expm1(x)))
-                                percentage = sum(x>detection.limit)/n
-                                matrix(c(mean, percentage),
-                                       ncol=2)})
+  dat <- stats::aggregate.data.frame(t(exprs), list(group),
+                                     FUN=function(x){
+                                       n=length(x)
+                                       mean = log1p(mean(expm1(x)))
+                                       percentage = sum(x>detection.limit)/n
+                                       matrix(c(mean, percentage),
+                                              ncol=2)})
   if (scale) {
     for (i in 2:(length(feature)+1)) {
       dat[[i]][,1] = as.vector(scale(dat[[i]][,1]))
@@ -74,7 +74,7 @@ plotDots <- function(spe,
   
   # Plotting
   p <- ggplot(data=dat) + 
-    geom_point(aes(.data[[group.by]],feature,size=percentage,color=average)) +
+    geom_point(aes(.data[[group.by]],feature,size=.data[["percentage"]],color=.data[["average"]])) +
     theme_minimal() + 
     theme(axis.text.x=element_text(angle=-45,hjust=0)) +
     scale_radius(range=c(0,dot.scale))

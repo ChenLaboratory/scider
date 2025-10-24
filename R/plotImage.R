@@ -37,11 +37,16 @@ plotImage <- function(spe,
   }
   # ReverseY
   if (reverseY) {
-    p <- p + 
-      ggplot2::annotation_custom(grid::rasterGrob(img),
-                                 xmin = xlim[1], xmax = xlim[2],
-                                 ymin = -ylim[1], ymax = -ylim[2]) + 
-      ggplot2::scale_y_reverse()
+    if (utils::packageVersion("ggplot2") >= package_version("4.0.0")) {
+      p <- p + ggplot2::annotation_custom(grid::rasterGrob(img),
+                                          xmin = xlim[1], xmax = xlim[2],
+                                          ymin = ylim[1], ymax = ylim[2]) 
+    } else {
+      p <- p + ggplot2::annotation_custom(grid::rasterGrob(img),
+                                          xmin = xlim[1], xmax = xlim[2],
+                                          ymin = -ylim[1], ymax = -ylim[2])
+    }
+    p <- p + ggplot2::scale_y_reverse()
   } else {
     p <- p + 
       ggplot2::annotation_custom(grid::rasterGrob(img),
