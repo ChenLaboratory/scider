@@ -6,11 +6,11 @@
 \usage{
 plotViolin(
   spe,
-  y,
+  feature,
   assay = "counts",
   group.by = NULL,
   type = c("raw", "log", "cpm", "logcpm"),
-  point = TRUE,
+  point = FALSE,
   color.by = NULL,
   ncol = NULL,
   pt.size = 0.3,
@@ -22,11 +22,13 @@ plotViolin(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{y}{can be a gene name in rownames(spe) or cell data in coldata(spe)}
+\item{feature}{can be a vector of gene names in rownames(spe), or column
+names in colData(spe) if those columns are numeric.}
 
 \item{assay}{Name of assay to use for plotting feature.}
 
-\item{group.by}{values to group plot by. Must be in colData of spe.}
+\item{group.by}{values to group plot by. Must be in colData of spe and must
+be either factor or character.}
 
 \item{type}{Transformation to apply for the group/feature. Options are "raw"
 , "log", "cpm", "logcpm", or a function that accepts and returns a vector of
