@@ -1,0 +1,80 @@
+# Calculate global Moran for 1 to 2 variables.
+
+Calculate global Moran for 1 to 2 variables.
+
+## Usage
+
+``` r
+globalMoran(
+  spe,
+  data1,
+  data2 = data1[],
+  at = c("grid", "cell"),
+  nbrs_name = NULL,
+  permutations = 999,
+  seed = 123456789,
+  cpu_threads = 6
+)
+```
+
+## Arguments
+
+- spe:
+
+  A SpatialExperiment object.
+
+- data1:
+
+  Numeric vector 1. Must be same length as
+  nrow(spe@metadata\$grid_density) or spatialCoords(spe), depending on
+  'at'.
+
+- data2:
+
+  Numeric vector 2 for bivariate local Moran. Must be same length as
+  data1.
+
+- at:
+
+  Option of grid or cell for where to look for neighbour list
+
+- nbrs_name:
+
+  Name of the neighbour list in `spe@metadata$grid[[at]]` for Moran's I
+
+- permutations:
+
+  Number of permutations for p-value.
+
+- seed:
+
+  Integer. For random permutations.
+
+- cpu_threads:
+
+  (optional) The number of cpu threads used for parallel LISA
+  computation
+
+## Value
+
+List with global lisa, p.value, and vector of permuted lisa.
+
+## Examples
+
+``` r
+data("xenium_bc_spe")
+
+## At grid.
+spe <- gridDensity(spe, coi = "Breast cancer")
+dat <- spe@metadata$grid_density$density_breast_cancer
+spe <- findNbrsGrid(spe)
+res <- globalMoran(spe,data1 = dat,at="grid")
+res$lisa
+#> [1] 0.9949741
+## At cell.
+dat <- as.numeric(spe$cell_type=="Breast cancer")
+spe <- findNbrsSpatial(spe,k=10)
+res <- globalMoran(spe,data1 = dat,at="cell")
+res$lisa
+#> [1] 0.6580378
+```

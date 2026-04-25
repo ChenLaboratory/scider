@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,6 @@
 <li><a class="dropdown-item" href="../articles/scider_userGuide.html">A quick start guide to the scider package</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -60,7 +59,7 @@
                         <h4 data-toc-skip class="author">Mengbo Li, Ning
 Liu, Quoc Hoang Nguyen and Yunshun Chen</h4>
             
-            <h4 data-toc-skip class="date">2025-11-05</h4>
+            <h4 data-toc-skip class="date">2026-04-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ChenLaboratory/scider/blob/devel/vignettes/scider_userGuide.Rmd" class="external-link"><code>vignettes/scider_userGuide.Rmd</code></a></small>
       <div class="d-none name"><code>scider_userGuide.Rmd</code></div>
@@ -138,7 +137,7 @@ types.</p>
 cell position and color the cells by cell types.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">spe</span>, group.by <span class="op">=</span> <span class="st">"cell_type"</span>, pt.alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-8-1.png" width="360"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="360"></p>
 </div>
 <div class="section level2">
 <h2 id="grid-based-analysis">Grid-based analysis<a class="anchor" aria-label="anchor" href="#grid-based-analysis"></a>
@@ -188,12 +187,12 @@ are saved in the metadata of the SpatialExperimnet object.</p>
 function <code>plotDensity</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotDensity.html">plotDensity</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-11-1.png" width="360"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="360"></p>
 <p>We can also visualise the density of individual cell type, e.g.,
 fibroblast cells.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotDensity.html">plotDensity</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-12-1.png" width="360"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="360"></p>
 </div>
 <div class="section level3">
 <h3 id="find-regions-of-interest-rois">Find Regions-of-interest (ROIs)<a class="anchor" aria-label="anchor" href="#find-regions-of-interest-rois"></a>
@@ -228,7 +227,7 @@ object.</p>
 <p>We can visualise the ROIs with function <code>plotROI</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotROI.html">plotROI</a></span><span class="op">(</span><span class="va">spe</span>, roi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-14-1.png" width="360"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="360"></p>
 </div>
 <div class="section level4">
 <h4 id="select-roi-by-user">Select ROI by user<a class="anchor" aria-label="anchor" href="#select-roi-by-user"></a>
@@ -315,17 +314,17 @@ fibroblasts ROI:</p>
 <code>plotDensCor</code>.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotDensCor.html">plotDensCor</a></span><span class="op">(</span><span class="va">spe</span>, celltype1 <span class="op">=</span> <span class="st">"Breast cancer"</span>, celltype2 <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-22-1.png" width="576"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="576"></p>
 <p>Or, we can visualise the statistics between each pair of cell types
 using function <code>plotCorHeatmap</code> in the ROIs:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCorHeatmap.html">plotCorHeatmap</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">ROI</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-23-1.png" width="504"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="504"></p>
 <p>Or the correlation between cell type pairs across the whole
 slide:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCorHeatmap.html">plotCorHeatmap</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">overall</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-24-1.png" width="504"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="" width="504"></p>
 </div>
 </div>
 <div class="section level2">
@@ -347,26 +346,26 @@ identification strategy with function <code>getContour</code>.</p>
 <code>plotContour</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotContour.html">plotContour</a></span><span class="op">(</span><span class="va">spe</span>, coi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-26-1.png" width="360"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="360"></p>
 <p>We can then annotate cells by their locations within each contour
 using function <code>allocateCells</code>.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/allocateCells.html">allocateCells</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">spe</span>, group.by <span class="op">=</span> <span class="st">"fibroblasts_contour"</span>, pt.alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-28-1.png" width="432"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="432"></p>
 <p>We can visualise cell type composition per level.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCellCompo.html">plotCellCompo</a></span><span class="op">(</span><span class="va">spe</span>, contour <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-29-1.png" width="432"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="" width="432"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCellCompo.html">plotCellCompo</a></span><span class="op">(</span><span class="va">spe</span>, contour <span class="op">=</span> <span class="st">"Fibroblasts"</span>, roi <span class="op">=</span> <span class="st">"Fibroblasts"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-30-1.png" width="504"></p>
+<p><img src="scider_userGuide_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="504"></p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.5.2 (2025-10-31)</span></span>
+<pre><code><span><span class="co">## R version 4.6.0 (2026-04-24)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 24.04.3 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -386,50 +385,50 @@ using function <code>allocateCells</code>.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] sf_1.0-21                   SpatialExperiment_1.20.0   </span></span>
-<span><span class="co">##  [3] SingleCellExperiment_1.32.0 SummarizedExperiment_1.40.0</span></span>
-<span><span class="co">##  [5] Biobase_2.70.0              GenomicRanges_1.62.0       </span></span>
-<span><span class="co">##  [7] Seqinfo_1.0.0               IRanges_2.44.0             </span></span>
-<span><span class="co">##  [9] S4Vectors_0.48.0            BiocGenerics_0.56.0        </span></span>
-<span><span class="co">## [11] generics_0.1.4              MatrixGenerics_1.22.0      </span></span>
-<span><span class="co">## [13] matrixStats_1.5.0           scider_1.7.3               </span></span>
-<span><span class="co">## [15] ggplot2_4.0.0              </span></span>
+<span><span class="co">##  [1] sf_1.1-0                    SpatialExperiment_1.21.0   </span></span>
+<span><span class="co">##  [3] SingleCellExperiment_1.33.2 SummarizedExperiment_1.41.1</span></span>
+<span><span class="co">##  [5] Biobase_2.71.0              GenomicRanges_1.63.2       </span></span>
+<span><span class="co">##  [7] Seqinfo_1.1.0               IRanges_2.45.0             </span></span>
+<span><span class="co">##  [9] S4Vectors_0.49.2            BiocGenerics_0.57.1        </span></span>
+<span><span class="co">## [11] generics_0.1.4              MatrixGenerics_1.23.0      </span></span>
+<span><span class="co">## [13] matrixStats_1.5.0           scider_1.7.9               </span></span>
+<span><span class="co">## [15] ggplot2_4.0.3              </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] DBI_1.2.3              deldir_2.0-4           rlang_1.1.6           </span></span>
-<span><span class="co">##   [4] magrittr_2.0.4         snakecase_0.11.1       otel_0.2.0            </span></span>
-<span><span class="co">##   [7] e1071_1.7-16           compiler_4.5.2         spatstat.geom_3.6-0   </span></span>
-<span><span class="co">##  [10] mgcv_1.9-3             systemfonts_1.3.1      vctrs_0.6.5           </span></span>
-<span><span class="co">##  [13] stringr_1.5.2          pkgconfig_2.0.3        fastmap_1.2.0         </span></span>
-<span><span class="co">##  [16] magick_2.9.0           XVector_0.50.0         lwgeom_0.2-14         </span></span>
-<span><span class="co">##  [19] labeling_0.4.3         promises_1.5.0         rmarkdown_2.30        </span></span>
-<span><span class="co">##  [22] ragg_1.5.0             purrr_1.1.0            xfun_0.54             </span></span>
-<span><span class="co">##  [25] cachem_1.1.0           jsonlite_2.0.0         goftest_1.2-3         </span></span>
-<span><span class="co">##  [28] later_1.4.4            DelayedArray_0.36.0    spatstat.utils_3.2-0  </span></span>
-<span><span class="co">##  [31] R6_2.6.1               bslib_0.9.0            stringi_1.8.7         </span></span>
-<span><span class="co">##  [34] RColorBrewer_1.1-3     spatstat.data_3.1-9    spatstat.univar_3.1-4 </span></span>
-<span><span class="co">##  [37] lubridate_1.9.4        jquerylib_0.1.4        Rcpp_1.1.0            </span></span>
-<span><span class="co">##  [40] knitr_1.50             tensor_1.5.1           splines_4.5.2         </span></span>
-<span><span class="co">##  [43] httpuv_1.6.16          Matrix_1.7-4           igraph_2.2.1          </span></span>
-<span><span class="co">##  [46] timechange_0.3.0       tidyselect_1.2.1       abind_1.4-8           </span></span>
-<span><span class="co">##  [49] yaml_2.3.10            spatstat.random_3.4-2  spatstat.explore_3.5-3</span></span>
-<span><span class="co">##  [52] lattice_0.22-7         tibble_3.3.0           shiny_1.11.1          </span></span>
-<span><span class="co">##  [55] withr_3.0.2            S7_0.2.0               evaluate_1.0.5        </span></span>
-<span><span class="co">##  [58] desc_1.4.3             units_1.0-0            proxy_0.4-27          </span></span>
-<span><span class="co">##  [61] polyclip_1.10-7        pillar_1.11.1          KernSmooth_2.23-26    </span></span>
-<span><span class="co">##  [64] plotly_4.11.0          dbscan_1.2.3           scales_1.4.0          </span></span>
-<span><span class="co">##  [67] xtable_1.8-4           class_7.3-23           glue_1.8.0            </span></span>
-<span><span class="co">##  [70] janitor_2.2.1          pheatmap_1.0.13        lazyeval_0.2.2        </span></span>
-<span><span class="co">##  [73] tools_4.5.2            hexDensity_1.4.10      hexbin_1.28.5         </span></span>
-<span><span class="co">##  [76] data.table_1.17.8      fs_1.6.6               grid_4.5.2            </span></span>
-<span><span class="co">##  [79] tidyr_1.3.1            nlme_3.1-168           fastmatrix_0.6-4      </span></span>
-<span><span class="co">##  [82] cli_3.6.5              spatstat.sparse_3.1-0  textshaping_1.0.4     </span></span>
-<span><span class="co">##  [85] S4Arrays_1.10.0        viridisLite_0.4.2      dplyr_1.1.4           </span></span>
-<span><span class="co">##  [88] gtable_0.3.6           SpatialPack_0.4-1      sass_0.4.10           </span></span>
-<span><span class="co">##  [91] digest_0.6.37          classInt_0.4-11        SparseArray_1.10.1    </span></span>
-<span><span class="co">##  [94] rjson_0.2.23           htmlwidgets_1.6.4      farver_2.1.2          </span></span>
-<span><span class="co">##  [97] htmltools_0.5.8.1      pkgdown_2.1.3          lifecycle_1.0.4       </span></span>
-<span><span class="co">## [100] httr_1.4.7             mime_0.13</span></span></code></pre>
+<span><span class="co">##   [1] DBI_1.3.0              deldir_2.0-4           rlang_1.2.0           </span></span>
+<span><span class="co">##   [4] magrittr_2.0.5         snakecase_0.11.1       otel_0.2.0            </span></span>
+<span><span class="co">##   [7] e1071_1.7-17           compiler_4.6.0         spatstat.geom_3.7-3   </span></span>
+<span><span class="co">##  [10] mgcv_1.9-4             systemfonts_1.3.2      fftwtools_0.9-11      </span></span>
+<span><span class="co">##  [13] vctrs_0.7.3            stringr_1.6.0          pkgconfig_2.0.3       </span></span>
+<span><span class="co">##  [16] fastmap_1.2.0          magick_2.9.1           XVector_0.51.0        </span></span>
+<span><span class="co">##  [19] lwgeom_0.2-15          labeling_0.4.3         promises_1.5.0        </span></span>
+<span><span class="co">##  [22] rmarkdown_2.31         ragg_1.5.2             purrr_1.2.2           </span></span>
+<span><span class="co">##  [25] xfun_0.57              cachem_1.1.0           jsonlite_2.0.0        </span></span>
+<span><span class="co">##  [28] goftest_1.2-3          later_1.4.8            DelayedArray_0.37.1   </span></span>
+<span><span class="co">##  [31] spatstat.utils_3.2-2   R6_2.6.1               bslib_0.10.0          </span></span>
+<span><span class="co">##  [34] stringi_1.8.7          RColorBrewer_1.1-3     spatstat.data_3.1-9   </span></span>
+<span><span class="co">##  [37] spatstat.univar_3.1-7  lubridate_1.9.5        jquerylib_0.1.4       </span></span>
+<span><span class="co">##  [40] Rcpp_1.1.1-1           knitr_1.51             tensor_1.5.1          </span></span>
+<span><span class="co">##  [43] splines_4.6.0          httpuv_1.6.17          Matrix_1.7-5          </span></span>
+<span><span class="co">##  [46] igraph_2.3.0           timechange_0.4.0       tidyselect_1.2.1      </span></span>
+<span><span class="co">##  [49] abind_1.4-8            yaml_2.3.12            spatstat.random_3.4-5 </span></span>
+<span><span class="co">##  [52] spatstat.explore_3.8-0 lattice_0.22-9         tibble_3.3.1          </span></span>
+<span><span class="co">##  [55] shiny_1.13.0           withr_3.0.2            S7_0.2.2              </span></span>
+<span><span class="co">##  [58] evaluate_1.0.5         desc_1.4.3             units_1.0-1           </span></span>
+<span><span class="co">##  [61] proxy_0.4-29           polyclip_1.10-7        pillar_1.11.1         </span></span>
+<span><span class="co">##  [64] KernSmooth_2.23-26     plotly_4.12.0          dbscan_1.2.4          </span></span>
+<span><span class="co">##  [67] scales_1.4.0           xtable_1.8-8           class_7.3-23          </span></span>
+<span><span class="co">##  [70] glue_1.8.1             janitor_2.2.1          pheatmap_1.0.13       </span></span>
+<span><span class="co">##  [73] lazyeval_0.2.3         tools_4.6.0            hexDensity_1.4.10     </span></span>
+<span><span class="co">##  [76] hexbin_1.28.5          data.table_1.18.2.1    fs_2.1.0              </span></span>
+<span><span class="co">##  [79] grid_4.6.0             tidyr_1.3.2            nlme_3.1-169          </span></span>
+<span><span class="co">##  [82] fastmatrix_0.6-6       cli_3.6.6              spatstat.sparse_3.1-0 </span></span>
+<span><span class="co">##  [85] textshaping_1.0.5      S4Arrays_1.11.1        viridisLite_0.4.3     </span></span>
+<span><span class="co">##  [88] dplyr_1.2.1            gtable_0.3.6           SpatialPack_0.4-1     </span></span>
+<span><span class="co">##  [91] sass_0.4.10            digest_0.6.39          classInt_0.4-11       </span></span>
+<span><span class="co">##  [94] SparseArray_1.11.13    rjson_0.2.23           htmlwidgets_1.6.4     </span></span>
+<span><span class="co">##  [97] farver_2.1.2           htmltools_0.5.9        pkgdown_2.2.0         </span></span>
+<span><span class="co">## [100] lifecycle_1.0.5        httr_1.4.8             mime_0.13</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -443,7 +442,7 @@ using function <code>allocateCells</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

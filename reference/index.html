@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/scider_userGuide.html">A quick start guide to the scider package</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ChenLaboratory/scider/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -40,8 +39,7 @@
 
 
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -52,271 +50,316 @@
 
         </dt>
         <dd>Annotate all cells with contour level of cell type-specific density.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="cellsInRegion.html">cellsInRegion()</a></code>
 
         </dt>
         <dd>Check which cells are in which regions</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="computeDensity.html">computeDensity()</a></code>
 
         </dt>
         <dd>Perform kernel density estimation on SpatialExperiment</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="computeDensityHex.html">computeDensityHex()</a></code>
 
         </dt>
         <dd>Perform kernel density estimation on SpatialExperiment</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="contour2sf.html">contour2sf()</a></code>
 
         </dt>
         <dd>Draw a contour region on some density level</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="coord_hash.html">coord_hash()</a></code>
 
         </dt>
         <dd>Hash two 15-bytes signed integers into one 32-bytes integer.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="corDensity.html">corDensity()</a></code>
 
         </dt>
         <dd>Test for density correlation between two cell types.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="findNbrsGrid.html">findNbrsGrid()</a></code>
 
         </dt>
         <dd>Construct a neighbour list from grid coordinates.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="findNbrsSNN.html">findNbrsSNN()</a></code>
 
         </dt>
         <dd>Construct a SNN neighbour list from assay.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="findNbrsSpatial.html">findNbrsSpatial()</a></code>
 
         </dt>
         <dd>Construct a distance-based neighbour list from cell coordinates.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="findROI.html">findROI()</a></code>
 
         </dt>
         <dd>Find ROIs based on cell type-specific densities via graph-based method.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="getClusters.html">getClusters()</a></code>
 
         </dt>
         <dd>Cluster cells in spe using graph methods.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="getContour.html">getContour()</a></code>
 
         </dt>
         <dd>Get contour from density</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="getContourRegions.html">getContourRegions()</a></code>
 
         </dt>
         <dd>Calculate areas between every two density levels</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="getNiche.html">getNiche()</a></code>
 
         </dt>
         <dd>Build a niche assay based on the profile of neighbouring cells</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="globalMoran.html">globalMoran()</a></code>
 
         </dt>
         <dd>Calculate global Moran for 1 to 2 variables.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="grid2df.html">grid2df()</a></code>
 
         </dt>
         <dd>Convert x,y nodes to data.frame of polygons</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="grid2sf.html">grid2sf()</a></code>
 
         </dt>
         <dd>Convert x,y nodes to sf polygons</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gridDensity.html">gridDensity()</a></code>
 
         </dt>
         <dd>Perform kernel density estimation on SpatialExperiment for cell types of interest</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gridSPE.html">gridSPE()</a></code>
 
         </dt>
         <dd>Summarize a SpatialExperiment object at grid-level</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="localMoran.html">localMoran()</a></code>
 
         </dt>
         <dd>Calculate local Moran for 1 to 2 variables.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="mergeROI.html">mergeROI()</a></code>
 
         </dt>
         <dd>Manually merge ROIs</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="normalizeAssay.html">normalizeAssay()</a></code>
 
         </dt>
         <dd>Perform log normalization for counts</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotCellCompo.html">plotCellCompo()</a></code>
 
         </dt>
         <dd>Plot cell type composition in each density level of cell of interest.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotContour.html">plotContour()</a></code>
 
         </dt>
         <dd>Plot contour lines.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotContourRegion.html">plotContourRegion()</a></code>
 
         </dt>
         <dd>Visualising an sf object (for internal use only at the moment)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotCorHeatmap.html">plotCorHeatmap()</a></code>
 
         </dt>
         <dd>Plot model statistics using heatmap.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotDR.html">plotDR()</a></code> <code><a href="plotDR.html">plotUMAP()</a></code> <code><a href="plotDR.html">plotPCA()</a></code>
 
         </dt>
         <dd>Plot reduced dimensions.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotDensCor.html">plotDensCor()</a></code>
 
         </dt>
         <dd>Plot density correlation between two cell types</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotDensity.html">plotDensity()</a></code>
 
         </dt>
         <dd>Plot grid-based density.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotDots.html">plotDots()</a></code>
 
         </dt>
         <dd>Dot plot of gene expression by groups</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotGrid.html">plotGrid()</a></code>
 
         </dt>
         <dd>Plot grid from metadata.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotImage.html">plotImage()</a></code>
 
         </dt>
         <dd>Plot background image of spe</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotLISA.html">plotLISA()</a></code>
 
         </dt>
         <dd>Plotting LISA (e.g. moran)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotROI.html">plotROI()</a></code>
 
         </dt>
         <dd>Plot ROIs on spatial.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotSpatial.html">plotSpatial()</a></code>
 
         </dt>
         <dd>Plot cells based on spatial coordinates.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotViolin.html">plotViolin()</a></code>
 
         </dt>
         <dd>Violin plot using genes or cell data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="postSelRegion.html">postSelRegion()</a></code>
 
         </dt>
         <dd>Merge sel_region from the selectRegion function to SpatialExperiment.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="realignVisium.html">realignVisium()</a></code>
 
         </dt>
         <dd>Scale and straighten out Visium coordinates</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="realignVisiumHD.html">realignVisiumHD()</a></code>
 
         </dt>
         <dd>Scale and straighten out VisiumHD coordinates</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="runPCA.html">runPCA()</a></code>
 
         </dt>
         <dd>Fast PCA using irlba.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="runUMAP.html">runUMAP()</a></code>
 
         </dt>
         <dd>UMAP using uwot. Parameters are set to be similar to Seurat's</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="selectRegion.html">selectRegion()</a></code>
 
         </dt>
         <dd>Select region of interest from plot</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="spe2PB.html">spe2PB()</a></code>
 
         </dt>
         <dd>Given a 'SpatialExperiment' data object, create pseudo-bulk samples using the colData information and return a DGEList object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sub-SpatialExperiment-ANY-ANY-ANY-method.html">`[`(<i>&lt;SpatialExperiment&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code>
 
         </dt>
         <dd>Subset for grid level analysis</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="update_bound.html">update_bound()</a></code>
 
@@ -331,7 +374,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

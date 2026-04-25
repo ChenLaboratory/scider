@@ -9,7 +9,7 @@ wrapper functions for convenience."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,6 @@ wrapper functions for convenience."></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/scider_userGuide.html">A quick start guide to the scider package</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ChenLaboratory/scider/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -58,8 +57,8 @@ wrapper functions for convenience.</p>
 <span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  pt.alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label.y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cols.scale <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -90,7 +89,7 @@ If NULL, will try with 'cols' if available.</p></dd>
 
 
 <dt id="arg-feature">feature<a class="anchor" aria-label="anchor" href="#arg-feature"></a></dt>
-<dd><p>Feature to group polygons by. Must be in rownames(spe).</p></dd>
+<dd><p>Feature to group points by. Must be in rownames(spe).</p></dd>
 
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
@@ -118,11 +117,11 @@ that accepts an integer n and return n colours.</p></dd>
 <dd><p>label for the legend</p></dd>
 
 
-<dt id="arg-label-x">label.x<a class="anchor" aria-label="anchor" href="#arg-label-x"></a></dt>
+<dt id="arg-xlab">xlab<a class="anchor" aria-label="anchor" href="#arg-xlab"></a></dt>
 <dd><p>label for the x-axis</p></dd>
 
 
-<dt id="arg-label-y">label.y<a class="anchor" aria-label="anchor" href="#arg-label-y"></a></dt>
+<dt id="arg-ylab">ylab<a class="anchor" aria-label="anchor" href="#arg-ylab"></a></dt>
 <dd><p>label for the y-axis</p></dd>
 
 
@@ -145,7 +144,7 @@ evenly positioned. See <a href="https://ggplot2.tidyverse.org/reference/scale_gr
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"xenium_bc_spe"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">=</span> <span class="fu"><a href="runUMAP.html">runUMAP</a></span><span class="op">(</span><span class="va">spe</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PCA not found. Switching to counts assay instead.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> PCA not found. Switching to counts assay instead.</span>
 <span class="r-in"><span><span class="fu">plotDR</span><span class="op">(</span><span class="va">spe</span>, group.by <span class="op">=</span> <span class="st">"cell_type"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotDR-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -160,7 +159,7 @@ evenly positioned. See <a href="https://ggplot2.tidyverse.org/reference/scale_gr
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

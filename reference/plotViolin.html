@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/scider_userGuide.html">A quick start guide to the scider package</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ChenLaboratory/scider/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -50,12 +49,13 @@
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"log"</span>, <span class="st">"cpm"</span>, <span class="st">"logcpm"</span><span class="op">)</span>,</span>
 <span>  point <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  color.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  pt.alpha <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  pt.shape <span class="op">=</span> <span class="st">"."</span>,</span>
-<span>  label.y <span class="op">=</span> <span class="st">"Expression"</span></span>
+<span>  ylab <span class="op">=</span> <span class="st">"Expression"</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,8 +91,9 @@ the same length.</p></dd>
 <dd><p>Whether to plot points.</p></dd>
 
 
-<dt id="arg-color-by">color.by<a class="anchor" aria-label="anchor" href="#arg-color-by"></a></dt>
-<dd><p>values to color points by. Must be in colData of spe.</p></dd>
+<dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
+<dd><p>Colour palette for violins. Can be a vector of colours or a
+function that accepts an integer n and return n colours.</p></dd>
 
 
 <dt id="arg-ncol">ncol<a class="anchor" aria-label="anchor" href="#arg-ncol"></a></dt>
@@ -111,8 +112,12 @@ the same length.</p></dd>
 <dd><p>Shape of points.</p></dd>
 
 
-<dt id="arg-label-y">label.y<a class="anchor" aria-label="anchor" href="#arg-label-y"></a></dt>
+<dt id="arg-ylab">ylab<a class="anchor" aria-label="anchor" href="#arg-ylab"></a></dt>
 <dd><p>Label for the y-axis.</p></dd>
+
+
+<dt id="arg-xlab">xlab<a class="anchor" aria-label="anchor" href="#arg-xlab"></a></dt>
+<dd><p>Label for the x-axis</p></dd>
 
 </dl></div>
 
@@ -120,7 +125,7 @@ the same length.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"xenium_bc_spe"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">plotViolin</span><span class="op">(</span><span class="va">spe</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell_area"</span>,<span class="st">"nucleus_area"</span><span class="op">)</span>,group.by<span class="op">=</span><span class="st">"cell_type"</span>,label.y<span class="op">=</span><span class="st">"Area"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotViolin</span><span class="op">(</span><span class="va">spe</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell_area"</span>,<span class="st">"nucleus_area"</span><span class="op">)</span>,group.by<span class="op">=</span><span class="st">"cell_type"</span>,ylab<span class="op">=</span><span class="st">"Area"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotViolin-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -133,7 +138,7 @@ the same length.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
