@@ -1,3 +1,12 @@
+# scider 1.10.0 (2026-04-25)
+* Update help pages
+* New function getHVG() to find top HVGs
+* New function plotLISAscatter() to generate a LISA scatter plot
+* New functions readVisium(), readVisiumHD(), readXenium(), readProseg() for reading in data of different types
+* Use Matrix package for matrix operations
+* Update gridDensity() to handle different types of input
+* Speed up hexDensity computation
+
 # scider 1.8.0 (2025-10-30)
 * Update help pages
 * New function findNbrsGrid() to construct a neighbour list from grid coordinates
