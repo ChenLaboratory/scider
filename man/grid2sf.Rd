@@ -29,6 +29,6 @@ Convert x,y nodes to sf polygons
 }
 \details{
 Default is to generate sf polygons for all grid.
-For plotting with geom_sf, use sf::st_as_sfc(grid2sf2(spe)) to convert list
+For plotting with geom_sf, use sf::st_as_sfc(grid2sf(spe)) to convert list
 into Geometry Set.
 }

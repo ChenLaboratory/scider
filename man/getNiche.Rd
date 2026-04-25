@@ -41,6 +41,6 @@ category
 
 data("xenium_bc_spe")
 
-spe <- findNbrsSpatial(spe,k=30)
-niche = getNiche(spe,at="cell",group.by="cell_type")
+spe <- findNbrsSpatial(spe, k=30)
+niche <- getNiche(spe, at="cell", group.by="cell_type")
 }

@@ -9,43 +9,68 @@
 #' , "log", "cpm", "logcpm", or a function that accepts and returns a vector of 
 #' the same length.
 #' @param point Whether to plot points. 
-#' @param color.by values to color points by. Must be in colData of spe.
+#' @param cols Colour palette for violins. Can be a vector of colours or a 
+#' function that accepts an integer n and return n colours.
 #' @param ncol Number of column if group.by is used.
 #' @param pt.size Size of points.
 #' @param pt.alpha Alpha of points between 0 and 1.
 #' @param pt.shape Shape of points.
-#' @param label.y Label for the y-axis.
+#' @param ylab Label for the y-axis.
+#' @param xlab Label for the x-axis
 #' @export
 #' @examples
 #'
 #' data("xenium_bc_spe")
-#' plotViolin(spe,c("cell_area","nucleus_area"),group.by="cell_type",label.y="Area")
+#' plotViolin(spe,c("cell_area","nucleus_area"),group.by="cell_type",ylab="Area")
 plotViolin <- function(spe,
                        feature,
                        assay = "counts",
                        group.by = NULL,
                        type = c("raw","log","cpm","logcpm"),
                        point = FALSE,
-                       color.by = NULL,
+                       cols = NULL,
                        ncol = NULL,
                        pt.size = 0.3,
                        pt.alpha = 0.3,
                        pt.shape = ".",
-                       label.y = "Expression") {
+                       ylab = "Expression",
+                       xlab = NULL) {
   # Retrieve feature
-  dat <- lapply(feature, function(f) {
+  dat = list()
+  for (f in feature) {
     if (f %in% rownames(spe)) {
-      SummarizedExperiment::assay(spe,assay)[f,]
+      d <- SummarizedExperiment::assay(spe,assay)[f,]
     } else if (f %in% names(spe@colData)) {
-      spe@colData[[f]]
+      d <- spe@colData[[f]]
     } else {
       message(paste0("Couldn't find ",f,". Skipping."))
-      NULL
+      d <- NULL
     }
-  })
+    # Check for non-numeric
+    if (!is.null(d) && !is.numeric(d)) {
+      message(paste0(f," is non-numeric. Skipping."))
+      d <- NULL
+    }
+    dat[[f]] <- d
+  }
+  if (length(dat) == 0) stop("No valid feature found")
+  feature <- names(dat)
   
-  # transform dat to long matrix
-  dat <- data.frame(expression=unlist(dat), x=as.factor(rep(feature,each=ncol(spe))))
+  # Transform dat to long matrix
+  dat <- data.frame(expression=unlist(dat), x=factor(rep(feature,each=ncol(spe)),levels = feature))
+  
+  # Group to separate feature by
+  if (!is.null(group.by)) {
+    if (!group.by %in% names(spe@colData)) {
+      stop(sprintf("Couldn't find %s in colData",group.by))
+    } 
+    if (is.numeric(spe@colData[[group.by]])) {
+      stop(paste0(group.by," must be either factor or character."))
+    }
+    dat$group <- as.factor(rep(spe@colData[[group.by]],length(feature)))
+  } else {
+    dat$group <- ""
+  }
   
   # transform expression
   if (is.character(type)) {
@@ -65,36 +90,35 @@ plotViolin <- function(spe,
                message("Error when applying 'type'. Skipping 'type'.")
              })
   }
-
-  group <- ""
-  if (!is.null(group.by) && group.by %in% names(spe@colData)) {
-    group <- as.factor(rep(spe@colData[[group.by]],length(feature)))
-  }
   
+  # Colours
+  n_color <- length(unique(dat$group))
+  if (is.null(cols)) col.p <- selectColor(n_color)
+  else if (is.function(cols)) {
+    col.p <- cols(n_color)
+  } else {# cols is vector
+    col.p <- rep_len(cols,n_color)
+  }
+
   ## Plotting
-  p <- ggplot(data=dat) + geom_violin(aes(x=group,y=expression)) +
-    labs(y=label.y, x="") + 
+  p <- ggplot(data=dat, aes(x=.data[["group"]],y=.data[["expression"]])) + 
+    geom_violin(aes(fill=.data[["group"]])) +
+    labs(y=ylab, x=xlab) + 
     theme_classic() +
-    theme(axis.text.x=element_text(angle=-45,hjust=0)) + 
-    theme(plot.title = element_text(face = "bold", hjust = 0.5))
+    theme(axis.text.x=element_text(angle=-45,hjust=0),
+          plot.title = element_text(face = "bold", hjust = 0.5),
+          legend.position = "none") + 
+    scale_fill_manual(values=col.p)
 
   # Separate by feature
   p <- p + facet_wrap(dat$x, ncol=ncol)
   
-  # Separating by points/colors
+  # Separating by points/colours
   if (point) {
-    # prepping color.by
-    color <- NULL
-    if (!is.null(color.by) && color.by %in% names(spe@colData)) {
-      color <- as.factor(rep(spe@colData[[color.by]],length(feature)))
-      }
-    p <- p + geom_point(aes(x=group, y=expression, color=!!color),
-                        position = position_jitter(seed=1, width=0.2),
+    p <- p + geom_point(position = position_jitter(seed=1, width=0.2),
                         shape = pt.shape,
                         size = pt.size,
-                        alpha = pt.alpha) + 
-      guides(color = guide_legend(override.aes = list(alpha=1,shape=19,size=1)))
+                        alpha = pt.alpha)
   }
-     
   p
 }

@@ -18,8 +18,8 @@ plotDR(
   pt.size = 1,
   pt.alpha = 0.6,
   label = NULL,
-  label.x = NULL,
-  label.y = NULL,
+  xlab = NULL,
+  ylab = NULL,
   cols.scale = NULL
 )
 
@@ -37,7 +37,7 @@ plotPCA(spe, dimred = "PCA", ...)
 \item{group.by}{values to group points by. Must be in colData of spe.
 If NULL, will try with 'cols' if available.}
 
-\item{feature}{Feature to group polygons by. Must be in rownames(spe).}
+\item{feature}{Feature to group points by. Must be in rownames(spe).}
 
 \item{assay}{Name of assay to use for plotting feature.}
 
@@ -52,9 +52,9 @@ that accepts an integer n and return n colours.}
 
 \item{label}{label for the legend}
 
-\item{label.x}{label for the x-axis}
+\item{xlab}{label for the x-axis}
 
-\item{label.y}{label for the y-axis}
+\item{ylab}{label for the y-axis}
 
 \item{cols.scale}{vector of position for color if colors should not be
 evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.}

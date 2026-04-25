@@ -6,6 +6,8 @@
 #' @param centre Logical. Whether to centre the assay before PCA. 
 #' @param scale Logical. Whether to scale the variance to 1 before PCA. 
 #' @param name Name to store the PCA in the spe's \link[SingleCellExperiment]{reducedDims}
+#' @param genes Subset of features for PCA. Can be a column in rowData or a vector 
+#' of gene names, indices, or booleans. Default to hvg if \link[scider]{getHVG} was run.
 #' @param ... Other parameters to be passed to \link[irlba]{irlba}.
 #' @return A SpatialExperiment with the PCA stored in \link[SingleCellExperiment]{reducedDims}.
 #' @export
@@ -25,36 +27,57 @@ runPCA <- function(spe,
                    centre = TRUE,
                    scale = TRUE,
                    name="PCA",
+                   genes="hvg",
                    ...) {
   if (missing(assay) && is.null(spe@assays@data[[assay]])) {
     assay <- "counts"
     message("Default assay logcounts not found. Switching to counts assay instead.")
   }
   mat <- spe@assays@data[[assay]]
-  mat <- as.matrix(mat)
-  n_cells = ncol(mat)
-  sds = sqrt(rowSums((mat - rowMeans(mat))^2)/(n_cells-1))
+  
+  # Subset to only the relevant genes.
+  if (length(genes)==1 && is.character(genes)) {
+    genes <- SummarizedExperiment::rowData(spe)[[genes]]
+  }
+  if (!is.null(genes)) mat <- mat[genes,,drop=FALSE]
+    
+  n_cells <- ncol(mat)
+
+  mu  <- Matrix::rowMeans(mat)
+  ex2 <- Matrix::rowMeans(mat^2)
+
+  var_hat <- (ex2 - mu^2) * n_cells / (n_cells - 1)
+  var_hat[var_hat < 0] <- 0  # numerical guard
+  sds <- sqrt(var_hat)
   
   if (scale) {
-    keep = sds!=0
+    keep <- sds != 0 & !is.na(sds)
     if (!all(keep)) {
       message(paste(c("Genes with 0 variance are excluded:",
                       rownames(mat)[!keep]),collapse=" "))
-      }
-    mat = mat[keep,]
-    mat = mat/(sds[keep])
-    sds <- rep.int(1,nrow(mat))
+    }
+    mat <- mat[keep, , drop=FALSE]
+    sds <- sds[keep]
+
+    # Row-wise scaling; works for dense and sparse matrices
+    mat <- mat / sds
+
+    # After scaling, all kept genes have unit variance
+    sds <- rep.int(1, nrow(mat))
   }
-  mat = t(mat)
-  out <- irlba::irlba(mat, nv=n_pcs,
-                      center=centre,
-                      ...)
+
+  # irlba expects samples in rows -> transpose
+  mat <- Matrix::t(mat)
+  out <- irlba::irlba(mat, nv = n_pcs, center = centre, ...)
+
   pcs <- sweep(out$u, 2, out$d, "*")
-  
   row.names(pcs) <- row.names(mat)
   colnames(pcs) <- paste0("PC", seq_len(ncol(pcs)))
-  attr(pcs, "varExplained") <- out$d^2/(n_cells - 1)
-  attr(pcs, "percentVar") <- attr(pcs, "varExplained")/sum(sds**2)*100
-  SingleCellExperiment::reducedDim(spe,name) <- pcs
+
+  varExplained <- out$d^2 / (n_cells - 1)
+  attr(pcs, "varExplained") <- varExplained
+  attr(pcs, "percentVar")   <- varExplained / sum(sds^2) * 100
+
+  SingleCellExperiment::reducedDim(spe, name) <- pcs
   return(spe)
 }

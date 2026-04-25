@@ -11,6 +11,7 @@ runPCA(
   centre = TRUE,
   scale = TRUE,
   name = "PCA",
+  genes = "hvg",
   ...
 )
 }
@@ -26,6 +27,9 @@ runPCA(
 \item{scale}{Logical. Whether to scale the variance to 1 before PCA.}
 
 \item{name}{Name to store the PCA in the spe's \link[SingleCellExperiment]{reducedDims}}
+
+\item{genes}{Subset of features for PCA. Can be a column in rowData or a vector
+of gene names, indices, or booleans. Default to hvg if \link[sciderHex]{getHVG} was run.}
 
 \item{...}{Other parameters to be passed to \link[irlba]{irlba}.}
 }

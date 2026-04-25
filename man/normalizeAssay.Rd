@@ -7,7 +7,7 @@
 normalizeAssay(
   spe,
   transformation = c("log"),
-  scale.factor = 1e+06,
+  scale.factor = 10000,
   assay = "counts",
   name = "logcounts"
 )
@@ -18,7 +18,7 @@ normalizeAssay(
 \item{transformation}{Choice of transformation. "Log" for log1p}
 
 \item{scale.factor}{Factor to multiply the count of each cell by. A single
-value or a numeric vector equal to number of cells}
+value or a numeric vector of length equal to the number of cells.}
 
 \item{assay}{Name of assay in spe to perform the transformation on}
 

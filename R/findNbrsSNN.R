@@ -52,13 +52,17 @@ findNbrsSNN <- function(spe,
       if(length(n_dimred)==1L) {
         n_dimred <- seq_len(n_dimred)
       }
-      mat <- as.matrix(mat[,n_dimred,drop=FALSE])
+      mat <- mat[,n_dimred,drop=FALSE]
     }
   } else {
-    mat <- t(as.matrix(SummarizedExperiment::assay(spe,assay)))
+    mat <- Matrix::t(SummarizedExperiment::assay(spe,assay))
   }
   
   # KNN
+  if (k > ncol(spe)-1) {
+    message(paste("k is larger than number of points. Setting k to",ncol(spe)-1))
+    k = ncol(spe)-1
+  }
   print("Getting K-nearest neighbour")
   knn.args <- list(X=mat,
                      k=k,

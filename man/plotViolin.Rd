@@ -11,12 +11,13 @@ plotViolin(
   group.by = NULL,
   type = c("raw", "log", "cpm", "logcpm"),
   point = FALSE,
-  color.by = NULL,
+  cols = NULL,
   ncol = NULL,
   pt.size = 0.3,
   pt.alpha = 0.3,
   pt.shape = ".",
-  label.y = "Expression"
+  ylab = "Expression",
+  xlab = NULL
 )
 }
 \arguments{
@@ -36,7 +37,8 @@ the same length.}
 
 \item{point}{Whether to plot points.}
 
-\item{color.by}{values to color points by. Must be in colData of spe.}
+\item{cols}{Colour palette for violins. Can be a vector of colours or a
+function that accepts an integer n and return n colours.}
 
 \item{ncol}{Number of column if group.by is used.}
 
@@ -46,7 +48,9 @@ the same length.}
 
 \item{pt.shape}{Shape of points.}
 
-\item{label.y}{Label for the y-axis.}
+\item{ylab}{Label for the y-axis.}
+
+\item{xlab}{Label for the x-axis}
 }
 \description{
 Violin plot using genes or cell data
@@ -54,5 +58,5 @@ Violin plot using genes or cell data
 \examples{
 
 data("xenium_bc_spe")
-plotViolin(spe,c("cell_area","nucleus_area"),group.by="cell_type",label.y="Area")
+plotViolin(spe,c("cell_area","nucleus_area"),group.by="cell_type",ylab="Area")
 }

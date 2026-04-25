@@ -9,15 +9,15 @@
 #' If NULL, will try with 'cols' if available.
 #' @param cols Colour palette. Can be a vector of colours or a function 
 #' that accepts an integer n and return n colours.
-#' @param feature Feature to group polygons by. Must be in rownames(spe).
+#' @param feature Feature to group points by. Must be in rownames(spe).
 #' @param assay Name of assay to use for plotting feature.
 #' @param pt.shape shape of points.
 
 #' @param pt.size size of points.
 #' @param pt.alpha alpha of points between 0 and 1.
 #' @param label label for the legend
-#' @param label.x label for the x-axis
-#' @param label.y label for the y-axis
+#' @param xlab label for the x-axis
+#' @param ylab label for the y-axis
 #' @param cols.scale vector of position for color if colors should not be 
 #' evenly positioned. See \link[ggplot2]{scale_color_gradientn}. Only applicable for continuous values.
 #' @param ... Additional arguments pass to plotDR
@@ -42,8 +42,8 @@ plotDR <- function(spe, dimred = NULL,
                    pt.size = 1,
                    pt.alpha = 0.6,
                    label = NULL,
-                   label.x = NULL,
-                   label.y = NULL,
+                   xlab = NULL,
+                   ylab = NULL,
                    cols.scale=NULL) {
   if(!length(SingleCellExperiment::reducedDim(spe))) {
     stop("No dimensionality reduction found.")
@@ -82,8 +82,8 @@ plotDR <- function(spe, dimred = NULL,
   }
 
   #labels
-  label.x <- label.x %||% paste(dimred,dims[1])
-  label.y <- label.y %||% paste(dimred,dims[2])
+  xlab <- xlab %||% paste(dimred,dims[1])
+  ylab <- ylab %||% paste(dimred,dims[2])
   
   # !!group prevents name-clashing in case toplot also has a 'group' column
   p <- ggplot2::ggplot(toplot,aes(x=x, y=y, color=!!group)) +
@@ -92,7 +92,7 @@ plotDR <- function(spe, dimred = NULL,
       size = pt.size,
       alpha = pt.alpha,
     ) +
-    labs(x = label.x, y = label.y, color = label) +
+    labs(x = xlab, y = ylab, color = label) +
     theme_classic()
   if (isContinuous) {
     p <- p + scale_color_gradientn(colours = rev(col.p), values = cols.scale)
@@ -121,11 +121,11 @@ plotUMAP <- function (spe,dimred="UMAP",...) {
 plotPCA <- function (spe,dimred="PCA",...) {
   args <- list(...)
   args$dims = args$dims %||% c(1,2)
-  dims = attr(SingleCellExperiment::reducedDim(spe,dimred),"percentVar")[args$dims]
-  if (!is.null(dims)) {
-    dims = round(dims)
-    args$label.x <- args$label.x %||% paste0(dimred," (",dims[1],"%)")
-    args$label.y <- args$label.y %||% paste0(dimred," (",dims[2],"%)")
+  percentVar = attr(SingleCellExperiment::reducedDim(spe,dimred),"percentVar")[args$dims]
+  if (!is.null(percentVar)) {
+    percentVar = round(percentVar)
+    args$xlab <- args$xlab %||% paste0(dimred," ",args$dims[1]," (",percentVar[1],"%)")
+    args$ylab <- args$ylab %||% paste0(dimred," ",args$dims[2]," (",percentVar[2],"%)")
   }
   
   args$spe = spe

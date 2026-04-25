@@ -38,7 +38,7 @@ plotDots <- function(spe,
                    " not found. Skipping"))
     feature <- feature[!f_missing]
   }
-  exprs <- as.matrix(SummarizedExperiment::assay(spe,assay)[feature,])
+  exprs <- SummarizedExperiment::assay(spe,assay)[feature,,drop=FALSE]
   # Get group
   if (!is.null(group.by) && group.by %in% names(spe@colData)) {
     group <- spe[[group.by]]
@@ -47,8 +47,8 @@ plotDots <- function(spe,
   }
   group <- as.factor(group)
   
-  # Aggregate features by group
-  dat <- stats::aggregate.data.frame(t(exprs), list(group),
+  # Calculate mean & percentage expression of each group.
+  dat <- stats::aggregate.data.frame(as.matrix(Matrix::t(exprs)), list(group),
                                      FUN=function(x){
                                        n=length(x)
                                        mean = log1p(mean(expm1(x)))
@@ -71,6 +71,9 @@ plotDots <- function(spe,
   if (length(expression.limit)==1) {expression.limit = c(-Inf,expression.limit)}
   dat$average[dat$average<expression.limit[1]] <- expression.limit[1]
   dat$average[dat$average>expression.limit[2]] <- expression.limit[2]
+  
+  # Convert to factor to keep the specified order when plotted
+  dat$feature <- factor(dat$feature,levels = feature)
   
   # Plotting
   p <- ggplot(data=dat) + 

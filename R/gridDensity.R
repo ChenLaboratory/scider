@@ -21,11 +21,10 @@
 #' @param diggle Logical. If TRUE, use the Jones-Diggle improved edge
 #' correction. See spatstat.explore::density.ppp() for details.
 #' @param grid.type Type of grid can be either hexagon or square.
-#' @param isVisium Logical. If TRUE, fit hexagonal grids to Visium spots by 
-#' replacing spatial coords with array rows & array cols. 
-#' @param filterToVisiumSpot Logical. If TRUE, filter grid polygons to only 
-#' those with a Visium spot underneath.
-#'
+#' @param isVisium Options of 'none','visium', and 'visiumHD'. If TRUE, converts
+#' coordinates from pixel to um and fit the density grid to the same Visium spots 
+#' arrangement. visium will use hexagonal while visiumHD will use rectangular grid.
+#' 
 #' @return A SpatialExperiment object. Grid density estimates for
 #' all cell type of interest are stored in spe@metadata$grid_density.
 #' Grid information is stored in spe@metadata$grid_info
@@ -39,7 +38,7 @@
 #' spe <- gridDensity(spe)
 #'
 gridDensity <- function(spe,
-                        id = if (isVisium) NULL else "cell_type",
+                        id = if (isVisium!="none") NULL else "cell_type",
                         coi = NULL,
                         feature = NULL,
                         assay = "counts",
@@ -49,25 +48,31 @@ gridDensity <- function(spe,
                         grid.length.x = NULL,
                         diggle = FALSE,
                         grid.type = c("hex", "square"),
-                        isVisium = FALSE,
-                        filterToVisiumSpot = isVisium) {
-  grid.type <- match.arg(grid.type)
-  
+                        isVisium = c("none","visium","visiumHD")
+) {
+  if(isTRUE(isVisium)) isVisium = "visium" # Backward compatibility
+  else {isVisium <- match.arg(isVisium)}
   # Checks for Visium
-  if (isVisium) {
-    if (grid.type == "square") {
-      grid.type <- "hex"
-      message("Switching grid.type to hex for Visium")
-    }
+  if (isVisium != "none") {
     if (is.null(spe$array_col) || 
         is.null(spe$array_row) ||
         is.null(spe$in_tissue)) {
       stop("Visium must have array_col, array_row, and in_tissue in colData")
     }
-    
-    # Scale the distances between points to 100 units and straighten the row/col
-    spe <- realignVisium(spe)
+    if (isVisium == "visium") {
+      if (missing(grid.type)) grid.type <- "hex"
+      spe <- realignVisium(spe)
+    } else { # visiumHD
+      if (missing(grid.type)) grid.type <- "square"
+      spe <- realignVisiumHD(spe)
+      visium_bin_size <- .guessVisiumHDBin(spe)
+      if (is.null(ngrid.x) && is.null(grid.length.x)) {
+        grid.length.x <- 16 # visium_bin_size
+      }
+    }
   }
+  
+  grid.type <- match.arg(grid.type)
   
   weights <- matrix(ncol=0,nrow=ncol(spe))
   # id weight
@@ -102,12 +107,11 @@ gridDensity <- function(spe,
     feature <- feature[!f_not]
   }
   if (!is.null(feature)) {
-    w <- t(as.matrix(SummarizedExperiment::assay(spe,assay)[feature,,drop=FALSE]))
-    # w <- t(as.matrix(spe@assays@data[[assay]][feature,,drop=FALSE]))
+    w <- Matrix::t(SummarizedExperiment::assay(spe,assay)[feature,,drop=FALSE])
     weights <- cbind(weights,w)
   }
   # overall weight
-  if (isVisium) {
+  if (isVisium!="none") {
     weights <- cbind(weights,overall=spe$in_tissue)
   } else {
     weights <- cbind(weights,overall=rep.int(1,nrow(weights)))
@@ -117,10 +121,18 @@ gridDensity <- function(spe,
                        sep="_")
   
   # Cells' coords
-  spatialCoordsNames(spe) <- c("x_centroid", "y_centroid")
+  spatialCoordsNames(spe)[1:2] <- c("x_centroid", "y_centroid")
   coord <- spatialCoords(spe)
   xlim <- range(coord[,"x_centroid"])
   ylim <- range(coord[,"y_centroid"])
+  if (isVisium=="visium" && min(spe$array_col)%%2) {
+    # Move xlim in case first columns is odd instead of even
+    xlim[0] = xlim[0]-50
+  } else if (isVisium=="visiumHD") {
+    # Expand lims so that cells fall in the middle instead of the corner of bins
+    xlim = xlim + visium_bin_size/2*c(-1,1)
+    ylim = ylim + visium_bin_size/2*c(-1,1)
+  }
   
   # Grid size. If both are provided, use grid.length.x
   if (!is.null(ngrid.x) && !is.null(grid.length.x)) {
@@ -128,15 +140,17 @@ gridDensity <- function(spe,
   }
   ngrid.x <- ngrid.x %||% (diff(xlim)/(grid.length.x %||% 100))
   
-  
-  if (isVisium) {
-    one_to_one <- isTRUE(all.equal(ngrid.x,diff(range(spe$array_col))/2))
-    if (!one_to_one) {
-      message("For Visium, grid.length.x should be a divisible by 100 to exactly align each spot to a hexagon")
-    }
-  }
-    
-    
+  # if (isVisium != "none") {
+  # one_to_one <- FALSE
+  # if (isVisium == "visium") {
+  #   # n_col <- diff(range(spe$array_col))/`if`(isVisium=="visiumHD",1,2)
+  #   n_col <- diff(range(spe$array_col))/2
+  #   one_to_one <- isTRUE(all.equal(ngrid.x,n_col))
+  #   if (!one_to_one) {
+  #     #TODO: warning message not entirely accurate.
+  #     message("For Visium, grid.length.x should be a divisible by 100 to exactly align each spot to a hexagon")
+  #   }
+  # }
   
   # Calculate bandwidth
   if (is.null(bandwidth)) {
@@ -162,6 +176,7 @@ gridDensity <- function(spe,
                   gridInfo = TRUE)
   spe@metadata$grid_density <- res$grid_density
   spe@metadata$grid_info <- res$grid_info
+  spe@metadata$grid_info$isVisium <- isVisium
   # Add densities
   for (ii in seq_len(ncol(weights))) {
     spe@metadata$grid_density <- cbind(
@@ -177,21 +192,18 @@ gridDensity <- function(spe,
     colnames(spe@metadata$grid_density)[ncol(spe@metadata$grid_density)] = clean_names[[ii]]
   }
   
-  if (grid.type=="hex") {
-    # Filter grid_density to same as Visium spot.
-    if (filterToVisiumSpot && isVisium && one_to_one) {
-      hcellsInTissue <- hexDensity::xy2hcell(x=coord,
-                                             xbins=spe@metadata$grid_info$xbins,
-                                             xbnds=xlim,
-                                             ybnds=ylim,
-                                             shape=spe@metadata$grid_info$shape)
-      hcellsInTissue <- sort(unique(hcellsInTissue))
-      spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
-      spe@metadata$grid_info$gridLevelAnalysis <- TRUE
-    }
-    
-    if (isVisium) spe@metadata$grid_info$isVisium <- TRUE
-  }
+  # if (filterToVisiumSpot && one_to_one) {
+  #   hcellsInTissue <- hexDensity::xy2hcell(x=coord,
+  #                                          xbins=spe@metadata$grid_info$xbins,
+  #                                          xbnds=xlim,
+  #                                          ybnds=ylim,
+  #                                          shape=spe@metadata$grid_info$shape)
+  #   hcellsInTissue <- sort(unique(hcellsInTissue)) #TODO: unique may not be needed
+  #   spe@metadata$grid_density <- spe@metadata$grid_density[hcellsInTissue,]
+  #   # sort cells to same order as gridpoints for subsetting
+  #   spe=spe[,order(spe$array_row,spe$array_col)]
+  #   spe@metadata$grid_info$gridLevelAnalysis <- TRUE
+  # }
   
   return(spe)
 }

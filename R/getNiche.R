@@ -18,8 +18,8 @@
 #'
 #' data("xenium_bc_spe")
 #'
-#' spe <- findNbrsSpatial(spe,k=30)
-#' niche = getNiche(spe,at="cell",group.by="cell_type")
+#' spe <- findNbrsSpatial(spe, k=30)
+#' niche <- getNiche(spe, at="cell", group.by="cell_type")
 getNiche <- function(spe,
                      at=c("cell","grid"),
                      nbrs_name = NULL,
@@ -42,7 +42,7 @@ getNiche <- function(spe,
   groups_matrix = matrix(ncol=0,nrow=n_row,dimnames=list(rownames(groups)))
   for (i in 2:ncol(groups)) {
     if (is.numeric(groups[[i]])) {
-      groups_matrix = cbind(groups_matrix,groups[[i]])
+      groups_matrix = cbind(groups_matrix,groups[i])
     } else {
       groups_matrix = cbind(groups_matrix,+(table(groups[c(1,i)])!=0))
     }

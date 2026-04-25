@@ -7,7 +7,7 @@ cell types of interest}
 \usage{
 gridDensity(
   spe,
-  id = if (isVisium) NULL else "cell_type",
+  id = if (isVisium != "none") NULL else "cell_type",
   coi = NULL,
   feature = NULL,
   assay = "counts",
@@ -17,8 +17,7 @@ gridDensity(
   grid.length.x = NULL,
   diggle = FALSE,
   grid.type = c("hex", "square"),
-  isVisium = FALSE,
-  filterToVisiumSpot = isVisium
+  isVisium = c("none", "visium", "visiumHD")
 )
 }
 \arguments{
@@ -53,11 +52,9 @@ correction. See spatstat.explore::density.ppp() for details.}
 
 \item{grid.type}{Type of grid can be either hexagon or square.}
 
-\item{isVisium}{Logical. If TRUE, fit hexagonal grids to Visium spots by
-replacing spatial coords with array rows & array cols.}
-
-\item{filterToVisiumSpot}{Logical. If TRUE, filter grid polygons to only
-those with a Visium spot underneath.}
+\item{isVisium}{Options of 'none','visium', and 'visiumHD'. If TRUE, converts
+coordinates from pixel to um and fit the density grid to the same Visium spots
+arrangement. visium will use hexagonal while visiumHD will use rectangular grid.}
 }
 \value{
 A SpatialExperiment object. Grid density estimates for

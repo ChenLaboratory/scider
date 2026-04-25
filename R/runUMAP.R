@@ -30,16 +30,19 @@ runUMAP <- function(spe,
     # Getting default data for UMAP  
     if (missing(assay) && missing(dimred) && 
         (!dimred %in% SingleCellExperiment::reducedDimNames(spe))) {
-        dimred=NULL
         if (is.null(spe@assays@data[["logcounts"]])) {
           assay <- "counts"
         } else {
           assay <- "logcounts"
         }
-        warning(paste("PCA not found. Switching to",assay,"assay instead."))
+        message(paste("PCA not found. Switching to",assay,"assay instead."))
     }
     
-    if (!is.null(dimred)) {
+    # If both assay and dimred are provided then use dimred.
+    if (!missing(assay) && missing(dimred)) {
+        mat <- spe@assays@data[[assay]]
+        mat <- Matrix::t(mat)
+    } else {
         mat <- SingleCellExperiment::reducedDim(spe,dimred)
         if (!is.null(n_dimred)) {
             if(length(n_dimred)==1L) {
@@ -47,11 +50,8 @@ runUMAP <- function(spe,
             }
             mat <- mat[,n_dimred,drop=FALSE]
         }
-    } else {
-        mat <- spe@assays@data[[assay]]
-        mat <- t(as.matrix(mat))
     }
-    
+    mat <- as.matrix(mat)
     out <- uwot::umap(X=mat,
                       n_neighbors = n_neighbors,
                       n_components = n_components,

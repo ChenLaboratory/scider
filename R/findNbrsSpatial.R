@@ -79,7 +79,7 @@ findNbrsSpatial <- function(spe,
                         "raw" = nbrs$weight) 
   # standardization
   nbrs$weight <- switch(standardisation,
-                        "row" = lapply(nbrs$weight, function(i) i/length(i)),
+                        "row" = lapply(nbrs$weight, function(i) i/sum(i)),
                         "none" = nbrs$weight)
   
   

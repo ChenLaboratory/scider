@@ -1,6 +1,9 @@
 #define R_NO_REMAP
 #include "utils.h"
+#include "rand.h"
 
+// Bootstrap Moran's I by generating random nbrs for each points. 
+// PCG-PRNG
 void pseudoP(int start,int end,uint64_t seed_start,
              R_xlen_t n,
              int *p_n_nbrs,
@@ -11,11 +14,11 @@ void pseudoP(int start,int end,uint64_t seed_start,
              double *p_data1,
              double *lisa_vec,
              double *sig_local_vec,
-             double *cluster_vec,
+             int *cluster_vec,
              double cutoff) {
-  // possible random neighbors must has at least 1 neighbors
+  // Figure out no. of valid nbrs (points w/ at least 1 nbrs).
   int n_sample = 0; 
-  int *potential_nbrs = new int[n]; //size n but will only use the first n_sample values.
+  int *potential_nbrs = new int[n];
   int seed_offset = 0;
   for (int i=0;i<n;i++) {
     if (p_n_nbrs[i]>0) {
@@ -24,35 +27,46 @@ void pseudoP(int start,int end,uint64_t seed_start,
     }
     seed_offset += (i<start)*p_n_nbrs[i];
   }
-  seed_start += seed_offset*perms;
-  // index for sampling. Each point cannot be its own neighbors hence, n_sample--
-  n_sample--;
-  int *x = new int[n_sample];
+  n_sample--; // Point cant be its own nbrs
+  
+  // Initiate rng & figure out correct starting position for the thread
+  pcg32_random_t rng;
+  pcg32_srandom_r(&rng, seed_start);
+  rng.state = pcg_advance_lcg_64(rng.state,seed_offset*perms);
+  
+  // Start bootstrap
+  int *x = new int[n_sample]; // Index for potential_nbrs
   for (int cnt = start; cnt <= end;cnt++) {
-    if (cluster_vec[cnt] == 6 || cluster_vec[cnt] == 5) {// Skip CLUSTER_NEIGHBORLESS||CLUSTER_UNDEF
+    // Skip points w/out nbrs or with undefined Moran's I
+    if (cluster_vec[cnt] == 6 || cluster_vec[cnt] == 5) {
+      // Invalid p-value
+      sig_local_vec[cnt] = NA_REAL;
       continue;
     }
     
     for (int i=0;i<n_sample;i++) x[i]=i;
-    uint64_t countLarger = 0;
     
+    uint64_t countLarger = 0;
     for(int p=0; p<perms; p++) {
+      // Sample random nbrs
+      sample_without_replacement(x,n_sample,p_n_nbrs[cnt],&rng);
+
+      // Calculate Moran's I with the random nbrs
       double permuted_lag = 0;
-      // Calculate moran for random nbrs
-      sample_without_replacement(x,n_sample,p_n_nbrs[cnt],seed_start);
-      seed_start += p_n_nbrs[cnt];
-      for (int i=n_sample-p_n_nbrs[cnt]; i<=n_sample-1; i++) {
-        if (potential_nbrs[x[i]]==cnt) x[i] = n_sample;
+      for (int i=n_sample-p_n_nbrs[cnt]; i<n_sample; i++) {
+        if (potential_nbrs[x[i]]==cnt) x[i] = n_sample; // Point cant be its own nbrs
         permuted_lag += p_data2[potential_nbrs[x[i]]]*weight[cnt][i-(n_sample-p_n_nbrs[cnt])];
       }
-      countLarger += (permuted_lag*p_data1[cnt] > lisa_vec[cnt]);
+      
+      countLarger += LargerOrAlmostEqual((permuted_lag*p_data1[cnt]),lisa_vec[cnt]);
     }
+    
+    // Folded p-value
     if (perms-countLarger <= countLarger) {
       countLarger = perms-countLarger;
     }
-    
     sig_local_vec[cnt] = (countLarger+1.0)/(perms+1);
-
+    
     if (sig_local_vec[cnt] > cutoff) {
       cluster_vec[cnt] = 0; // CLUSTER_NOT_SIG
     }
@@ -90,26 +104,24 @@ extern "C" {
     double* p_data1 = (double*) REAL(data1);
     double* p_data2 = (double*) REAL(data2);
     int* p_n_nbrs = INTEGER(n_nbrs);
-    
     uint64_t  p_seed = (uint64_t )Rf_asInteger(seed);
     double cutoff = Rf_asReal(significance_cutoff);
     int perms = Rf_asInteger(permutations);
     int n_cpu = Rf_asInteger(cpu_threads);
     bool hhonly = Rf_asLogical(hhonly_);
     
+    // Shuffle so sequential seeds are different. Not strictly needed.
+    // Numbers taken from r-source/src/main/RNG.c
+    for(int i = 0; i < 50; i++) p_seed = (69069 * p_seed + 1);
+    
     // Standardize data
     p_data1 = standardizeData(p_data1,n);
     p_data2 = standardizeData(p_data2,n);
     
     // Calculating Moran
-    double* lag_vec = new double[n]();
+    double* lag_vec = new double[n](); // Initialize 0 so points w/out nbrs have Moran's I = 0.
     double* lisa_vec = new double[n];
-    
-    // int* nbrs_i;
     for (R_xlen_t i=0; i < n; i++) {
-      if (p_n_nbrs[i] == 0) {
-        continue;
-      }
       for (int j = 0; j < p_n_nbrs[i];j++) {
         lag_vec[i] += p_data2[p_nbrs[i][j]-1]*weight[i][j];
       }
@@ -117,7 +129,7 @@ extern "C" {
     }
     
     // Assigning clusters
-    double* cluster = new double[n];
+    int* cluster = new int[n];
     for (R_xlen_t i=0; i < n; i++) {
       if(p_n_nbrs[i] > 0) {
         if (p_data1[i] > 0  && lag_vec[i] < 0) {cluster[i] = 4;} // CLUSTER_HIGHLOW
@@ -134,7 +146,7 @@ extern "C" {
     }
     
     // Multithreading pseudo p-value
-    double* sig_local_vec = new double[n](); // store p-value output
+    double* sig_local_vec = new double[n]; // store p-value output
     int max_rand = n-1;
     parallel(n_cpu,n,[&](int start, int end) -> void {
       pseudoP(start,end,
@@ -154,7 +166,6 @@ extern "C" {
     
     // Wrangling C to R
     SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
-    
     SEXP names = PROTECT(Rf_allocVector(STRSXP,4));
     SET_STRING_ELT(names,0,Rf_mkChar("lisa"));
     SET_STRING_ELT(names,1,Rf_mkChar("cluster"));

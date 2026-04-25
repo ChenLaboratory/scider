@@ -25,7 +25,9 @@ computeDensityHex <- function(xy,
                               gridInfo=FALSE) {
   kernel <- match.arg(kernel)
   
-  density_est <- hexDensity::hexDensity(xy,
+  # explicitly providing x,y to hexDensity is faster.
+  density_est <- hexDensity::hexDensity(x=as.double(xy[,1]),
+                                        y=as.double(xy[,2]),
                                         bandwidth = bandwidth,
                                         weight = weights,
                                         xbins = ngrid.x,

@@ -1,32 +1,43 @@
 #include "utils.h"
+#include "rand.h"
 
+// Bootstrap Moran's I by shuffling all points around
+// PCG-PRNG
 void pseudoP_global(int start, int end, uint64_t seed_start,
                     R_xlen_t n,
+                    double W,
                     int *p_n_nbrs,
                     double **weight,
                     int **p_nbrs,
                     double *p_data2,
                     double *p_data1,
                     double* permuted_moran){
-  seed_start += start*n;
+  // Initiate rng & figure out correct starting position for the thread
+  pcg32_random_t rng;
+  pcg32_srandom_r(&rng, seed_start);
+  rng.state = pcg_advance_lcg_64(rng.state,start*n);
+  
+  // Start bootstrap
+  int *x = new int[n];
   for (int p=start;p<=end;p++) {
-    int* permuted_i = sample_to_n(n,n,seed_start);
-    seed_start += n;
-    // Calculating Moran
+    // Permuting all points (n chooses n).
+    for (R_xlen_t i=0;i<n;i++) x[i]=i;
+    sample_without_replacement(x,n,n,&rng);
+
+    // Calculating Moran's I
     for (R_xlen_t i=0; i < n; i++) {
       if (p_n_nbrs[i] == 0) {
         continue;
       }
       double lag = 0;
       for (int j = 0; j < p_n_nbrs[i];j++) {
-        lag += p_data2[permuted_i[p_nbrs[i][j]-1]]*weight[i][j];
+        lag += p_data2[x[p_nbrs[i][j]-1]]*weight[i][j];
       }
-      permuted_moran[p] += lag*p_data1[permuted_i[i]];
+      permuted_moran[p] += lag*p_data1[x[i]];
     }
-    permuted_moran[p] /= n;
-    
-    delete [] permuted_i;
+    permuted_moran[p] /= W;
   }
+  delete [] x;
 }
 
 extern "C" {
@@ -58,8 +69,13 @@ extern "C" {
     int* p_n_nbrs = INTEGER(n_nbrs);
     
     uint64_t  p_seed = (uint64_t )Rf_asInteger(seed);
+    
     int perms = Rf_asInteger(permutations);
     int n_cpu = Rf_asInteger(cpu_threads);
+    
+    // Shuffle so sequential seeds are different. Not strictly needed.
+    // Numbers taken from r-source/src/main/RNG.c
+    for(int i = 0; i < 50; i++) p_seed = (69069 * p_seed + 1);
     
     // Standardize data
     p_data1 = standardizeData(p_data1,n);
@@ -67,25 +83,24 @@ extern "C" {
     
     // Calculating Moran
     double lisa = 0;
+    double W = 0;
     for (R_xlen_t i=0; i < n; i++) {
-      if (p_n_nbrs[i] == 0) {
-        continue;
-      }
       double lag = 0;
       for (int j = 0; j < p_n_nbrs[i];j++) {
         lag += p_data2[p_nbrs[i][j]-1]*weight[i][j];
+        W += weight[i][j];
       }
-      // lag /= p_n_nbrs[i]; // n_nbrs[i] > 0 is guaranteed
       lisa += lag*p_data1[i];
     }
-    lisa /= n;
+    lisa /= W;
     
-    // p-value
+    // Bootstrap Moran's I
     double* permuted_moran = new double[perms](); // store permuted moran output
     parallel(n_cpu,perms,[&](int start, int end) -> void {
       pseudoP_global(start,end,
                       p_seed,
                       n,
+                      W,
                       p_n_nbrs,
                       weight,
                       p_nbrs,
@@ -94,9 +109,10 @@ extern "C" {
                       permuted_moran);
     });
     
+    // Folded p-value
     int countLarger = 0;
     for (int p=0;p<perms;p++){
-      countLarger += permuted_moran[p]>lisa;
+      countLarger += permuted_moran[p]>=lisa;
     }
     if (perms-countLarger <= countLarger) {
       countLarger = perms-countLarger;
@@ -124,7 +140,6 @@ extern "C" {
     delete [] weight;
     delete [] p_data1;
     delete [] p_data2;
-    // delete [] p_n_nbrs;
     delete [] permuted_moran;
     
     UNPROTECT(7);

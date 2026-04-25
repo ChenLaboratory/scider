@@ -58,8 +58,8 @@ contour_brks <- getFromNamespace("contour_breaks", "ggplot2")
 unique00 <- getFromNamespace("unique0", "ggplot2")
 data_frame00 <- getFromNamespace("data_frame0", "ggplot2")
 
-colsum <- function(x, group, reorder = TRUE,...){
-  return(t(rowsum(t(x), group, reorder = reorder, ...)))
+colsum <- function(x, group, reorder = TRUE,...) {
+  return(Matrix::t(rowsum(Matrix::t(x), group, reorder = reorder, ...)))
 }
 
 # Clean up vector of names. If "overall" is in names (after cleaning up) then 

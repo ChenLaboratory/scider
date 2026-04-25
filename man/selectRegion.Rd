@@ -4,7 +4,7 @@
 \alias{selectRegion}
 \title{Select region of interest from plot}
 \usage{
-selectRegion(data, x.col = "x", y.col = "y")
+selectRegion(data, x.col = "x", y.col = "y", save.region = FALSE)
 }
 \arguments{
 \item{data}{A data.frame object.}
@@ -12,9 +12,13 @@ selectRegion(data, x.col = "x", y.col = "y")
 \item{x.col}{Column name of the x coordinates.}
 
 \item{y.col}{Column name of the y coordinates.}
+
+\item{save.region}{Whether to also export the region defined by box/lasso
+select as an sf polygon.}
 }
 \value{
-A data.frame object in the global environment.
+A data.frame object in the global environment. If save.region is TRUE,
+output is a list with a data.frame of selected points and a sf polygon instead.
 }
 \description{
 Select region of interest from plot

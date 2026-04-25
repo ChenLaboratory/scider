@@ -29,7 +29,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
   grid_data <- spe@metadata$grid_density[,(1:5)]
   rownames(grid_data) <- grid_data$node
   grid_info <- spe@metadata$grid_info
-  assay_matrix <- as.matrix(spe@assays@data[["counts"]])
+  assay_matrix <- spe@assays@data[["counts"]]
 
   #Get vector of which polygon each cell belong to
   xy_allcells <- SpatialExperiment::spatialCoords(spe)
@@ -60,7 +60,7 @@ gridSPE <- function(spe, cell.count = FALSE, id = 'cell_type', split.count.by = 
     split_names <- names(table(spe@colData[[split.count.by]]))
     split_names_clean <- janitor::make_clean_names(split_names)
     for(i in seq_along(split_names)){
-      sub <- spe@colData[[split.count.by]] == split_names[i]
+      sub <- which(spe@colData[[split.count.by]] == split_names[i])
       assays[[i+1]] <- matrix(data=0,
                               nrow=nrow(spe),ncol=nrow(spe@metadata$grid_density),
                               dimnames = list(rownames(spe)))
