@@ -116,7 +116,7 @@ readXenium <- function(dir,
   }, error = function(e) {
     if (grepl("java.lang",e$message,fixed=TRUE)) {
       cat("Skipping image due to Java out of memory error. Try increasing", 
-          "maximum heap size before importing sciderHex. (e.g.: ",
+          "maximum heap size before importing scider. (e.g.: ",
           "options(java.parameters = '-Xmx4g') to increase heap size to 4gb)")
     }
     return(NULL)

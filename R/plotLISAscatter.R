@@ -1,7 +1,7 @@
 #' Scatterplot for local moran's I
 #'
 #' plot result obtained from localMoran()
-#' @param lisa A list obtained from \link[sciderHex]{localMoran}
+#' @param lisa A list obtained from \link[scider]{localMoran}
 #' @param quadrant.count Whether to count values at each quadrant (Low-Low, 
 #' Low-High, High-High, High-Low) 
 #' @param text.size Numeric for text size of quadrant.count
