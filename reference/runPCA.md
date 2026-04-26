@@ -47,7 +47,9 @@ runPCA(
 - genes:
 
   Subset of features for PCA. Can be a column in rowData or a vector of
-  gene names, indices, or booleans. Default to hvg if getHVG was run.
+  gene names, indices, or booleans. Default to hvg if
+  [getHVG](https://chenlaboratory.github.io/scider/reference/getHVG.md)
+  was run.
 
 - ...:
 

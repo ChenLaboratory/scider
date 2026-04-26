@@ -55,6 +55,8 @@ Install development version from GitHub
   : Get contour from density
 - [`getContourRegions()`](https://chenlaboratory.github.io/scider/reference/getContourRegions.md)
   : Calculate areas between every two density levels
+- [`getHVG()`](https://chenlaboratory.github.io/scider/reference/getHVG.md)
+  : Get top highly variable genes.
 - [`getNiche()`](https://chenlaboratory.github.io/scider/reference/getNiche.md)
   : Build a niche assay based on the profile of neighbouring cells
 - [`globalMoran()`](https://chenlaboratory.github.io/scider/reference/globalMoran.md)
@@ -99,6 +101,8 @@ Install development version from GitHub
   : Plot background image of spe
 - [`plotLISA()`](https://chenlaboratory.github.io/scider/reference/plotLISA.md)
   : Plotting LISA (e.g. moran)
+- [`plotLISAscatter()`](https://chenlaboratory.github.io/scider/reference/plotLISAscatter.md)
+  : Scatterplot for local moran's I
 - [`plotROI()`](https://chenlaboratory.github.io/scider/reference/plotROI.md)
   : Plot ROIs on spatial.
 - [`plotSpatial()`](https://chenlaboratory.github.io/scider/reference/plotSpatial.md)
@@ -108,6 +112,14 @@ Install development version from GitHub
 - [`postSelRegion()`](https://chenlaboratory.github.io/scider/reference/postSelRegion.md)
   : Merge sel_region from the selectRegion function to
   SpatialExperiment.
+- [`readProseg()`](https://chenlaboratory.github.io/scider/reference/readProseg.md)
+  : Read Proseg V2 output into spe
+- [`readVisium()`](https://chenlaboratory.github.io/scider/reference/readVisium.md)
+  : Read Visium output into spe
+- [`readVisiumHD()`](https://chenlaboratory.github.io/scider/reference/readVisiumHD.md)
+  : Read VisiumHD output into spe
+- [`readXenium()`](https://chenlaboratory.github.io/scider/reference/readXenium.md)
+  : Read Xenium output into spe
 - [`realignVisium()`](https://chenlaboratory.github.io/scider/reference/realignVisium.md)
   : Scale and straighten out Visium coordinates
 - [`realignVisiumHD()`](https://chenlaboratory.github.io/scider/reference/realignVisiumHD.md)
