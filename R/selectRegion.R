@@ -126,7 +126,7 @@ plotly2sfpolygon <- function(coords) {
     n <- length(coords$x)
     if(n==2) { # box select (bounding box)
         res <- sf::st_polygon(list(
-            cbind(coords$x[1,2,2,1,1],coords$y[1,1,2,2,1])
+            cbind(coords$x[c(1,2,2,1,1)],coords$y[c(1,1,2,2,1)])
         ))
     } else { # lasso select
         # Closing polygon

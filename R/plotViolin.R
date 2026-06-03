@@ -72,7 +72,7 @@ plotViolin <- function(spe,
     dat$group <- ""
   }
   
-  # transform expression
+  # Transform expression
   if (is.character(type)) {
     type <- switch(match.arg(type),
                    raw = NULL,

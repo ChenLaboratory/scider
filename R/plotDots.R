@@ -62,9 +62,9 @@ plotDots <- function(spe,
   }
   
   # Convert to long
-  dat <- data.frame(rep(dat[[1]], ncol(dat)-1),
-                    rep(colnames(dat)[-1], each = nrow(dat)),
-                    do.call(rbind,dat[,-1]))
+  dat <- data.frame(rep(dat[[1]], ncol(dat)-1), # Group
+                    rep(colnames(dat)[-1], each = nrow(dat)), # Feature
+                    do.call(rbind,dat[,-1,drop=FALSE])) # Summary stats
   colnames(dat) = c(group.by,"feature","average","percentage")
   
   # Threshold average expression

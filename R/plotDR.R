@@ -45,14 +45,14 @@ plotDR <- function(spe, dimred = NULL,
                    xlab = NULL,
                    ylab = NULL,
                    cols.scale=NULL) {
-  if(!length(SingleCellExperiment::reducedDim(spe))) {
+  if(!length(rds <- SingleCellExperiment::reducedDimNames(spe))) {
     stop("No dimensionality reduction found.")
   }
-  dimred <- dimred %||% SingleCellExperiment::reducedDimNames(spe)[[1]]
+  dimred <- dimred %||% rds[[1]]
   
-  toplot <- as.data.frame(SingleCellExperiment::reducedDim(spe,dimred)[,dims])
+  toplot <- SingleCellExperiment::reducedDim(spe,dimred)[,dims]
   colnames(toplot) <- c("x", "y")
-  cdata <- as.data.frame(SummarizedExperiment::colData(spe))
+  cdata <- SummarizedExperiment::colData(spe)
   toplot <- cbind(toplot, cdata)
   
   group <- col.p <- NULL
@@ -86,7 +86,8 @@ plotDR <- function(spe, dimred = NULL,
   ylab <- ylab %||% paste(dimred,dims[2])
   
   # !!group prevents name-clashing in case toplot also has a 'group' column
-  p <- ggplot2::ggplot(toplot,aes(x=x, y=y, color=!!group)) +
+  p <- ggplot2::ggplot(as.data.frame(toplot),
+                       aes(x=x, y=y, color=!!group)) +
     ggplot2::geom_point(
       shape = pt.shape,
       size = pt.size,

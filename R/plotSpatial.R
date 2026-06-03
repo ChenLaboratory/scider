@@ -41,17 +41,16 @@ plotSpatial <- function(spe,
                         cols.scale = NULL,
                         reverseY = NULL,
                         ...) {
-  toplot <- as.data.frame(SpatialExperiment::spatialCoords(spe))
-  colnames(toplot) <- c("x", "y")
+  toplot <- SpatialExperiment::spatialCoords(spe)
+  colnames(toplot)[1:2] <- c("x", "y")
 
-  cdata <- as.data.frame(SummarizedExperiment::colData(spe))
+  cdata <- SummarizedExperiment::colData(spe)
   
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[, -which(colnames(cdata) == "cell_id")]
   }
   
-  toplot <- cbind(toplot, cdata) |>
-    rownames2col("cell_id")
+  toplot <- cbind(toplot, cdata)
   
   group <- col.p <- NULL
   
@@ -102,7 +101,7 @@ plotSpatial <- function(spe,
   # Plotting
   p <- plotImage(spe, reverseY=reverseY, ...) +
     ggplot2::geom_point(
-      data = toplot,
+      data = as.data.frame(toplot),
       aes(x=x, y=y, color=!!group), # !! prevent name-clashing if toplot$group exists
       shape = pt.shape,
       size = pt.size,
