@@ -70,6 +70,7 @@ plotDots(
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 plotDots(spe,feature = rownames(spe)[1:5])
 ```

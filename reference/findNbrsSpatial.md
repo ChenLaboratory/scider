@@ -73,6 +73,7 @@ filtered to only those within radius.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- findNbrsSpatial(spe,k=20,radius=100)
 ```

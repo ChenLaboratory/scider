@@ -45,6 +45,7 @@ A ggplot object.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 dat <- spe$total_counts
 spe <- findNbrsSpatial(spe,k=50)

@@ -43,6 +43,7 @@ gene-wise dispersion and their trended dispersion.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- getHVG(spe, n=100)
 ```

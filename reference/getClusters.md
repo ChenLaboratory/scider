@@ -70,6 +70,7 @@ Any neighbour list in spe@metadata\$nbrs\$cell can also be used
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- normalizeAssay(spe)
 spe <- runPCA(spe)

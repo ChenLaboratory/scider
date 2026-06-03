@@ -84,6 +84,7 @@ A SpatialExperiment object.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 coi <- c("Breast cancer", "Fibroblasts")

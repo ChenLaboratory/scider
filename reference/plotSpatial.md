@@ -91,6 +91,7 @@ A ggplot object.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 plotSpatial(spe, group.by = "cell_type", pt.size = 0.5, pt.alpha = 0.6)

@@ -52,6 +52,7 @@ belonging in category
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 spe <- findNbrsSpatial(spe, k=30)

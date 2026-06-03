@@ -84,6 +84,7 @@ plotViolin(
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 plotViolin(spe,c("cell_area","nucleus_area"),group.by="cell_type",ylab="Area")
 ```

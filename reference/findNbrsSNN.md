@@ -78,6 +78,7 @@ neighbour list contain
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- runPCA(spe)
 #> Default assay logcounts not found. Switching to counts assay instead.

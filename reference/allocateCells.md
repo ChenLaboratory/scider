@@ -47,6 +47,7 @@ A SpatialExperiment object. An extra column is added to the colData.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- gridDensity(spe)
 coi <- "Breast cancer"

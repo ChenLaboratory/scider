@@ -36,6 +36,7 @@ instead.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 spe_b <- spe[, SummarizedExperiment::colData(spe)$cell_type == "B cells"]

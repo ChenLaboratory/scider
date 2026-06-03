@@ -62,6 +62,7 @@ sample.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 spe <- gridDensity(spe)

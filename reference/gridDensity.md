@@ -93,6 +93,7 @@ stored in spe@metadata\$grid_info
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 spe <- gridDensity(spe)

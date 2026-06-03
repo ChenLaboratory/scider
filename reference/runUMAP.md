@@ -67,6 +67,7 @@ If that's unavailable, it falls back to logcounts, then counts assay.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- runPCA(spe)
 #> Default assay logcounts not found. Switching to counts assay instead.

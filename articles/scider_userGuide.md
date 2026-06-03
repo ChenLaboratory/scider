@@ -12,6 +12,7 @@ density analysis.
 ## Installation
 
 ``` r
+
 if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -22,12 +23,14 @@ BiocManager::install("scider")
 The development version of `scider` can be installed from GitHub:
 
 ``` r
+
 devtools::install_github("ChenLaboratory/scider")
 ```
 
 ## Quick start
 
 ``` r
+
 library(scider)
 library(SpatialExperiment)
 ```
@@ -38,12 +41,14 @@ In this vignette, we will use a subset of a Xenium Breast Cancer
 dataset.
 
 ``` r
+
 data("xenium_bc_spe")
 ```
 
 In the data, we have quantification of 541 genes from 10000 cells.
 
 ``` r
+
 spe
 ```
 
@@ -66,6 +71,7 @@ We also have cell-type annotations of these cells, there are 4 cell
 types.
 
 ``` r
+
 table(colData(spe)$cell_type)
 ```
 
@@ -77,6 +83,7 @@ We can use the function `plotSpatial` to visualise the cell position and
 color the cells by cell types.
 
 ``` r
+
 plotSpatial(spe, group.by = "cell_type", pt.alpha = 0.8)
 ```
 
@@ -94,6 +101,7 @@ We can perform density calculation for each cell type using function
 the metadata of the SpatialExperimnet object.
 
 ``` r
+
 spe <- gridDensity(spe)
 names(metadata(spe))
 ```
@@ -101,6 +109,7 @@ names(metadata(spe))
     ## [1] "grid_density" "grid_info"
 
 ``` r
+
 metadata(spe)$grid_density
 ```
 
@@ -136,6 +145,7 @@ We can visualise the overall cell density of the whole tissue using
 function `plotDensity`.
 
 ``` r
+
 plotDensity(spe)
 ```
 
@@ -145,6 +155,7 @@ We can also visualise the density of individual cell type, e.g.,
 fibroblast cells.
 
 ``` r
+
 plotDensity(spe, coi = "Fibroblasts")
 ```
 
@@ -165,6 +176,7 @@ object.
 Here we identify ROIs based on the fibroblasts cell density.
 
 ``` r
+
 spe <- findROI(spe, coi = "Fibroblasts")
 metadata(spe)$fibroblasts_roi
 ```
@@ -187,6 +199,7 @@ metadata(spe)$fibroblasts_roi
 We can visualise the ROIs with function `plotROI`.
 
 ``` r
+
 plotROI(spe, roi = "Fibroblasts")
 ```
 
@@ -203,6 +216,7 @@ rectangular or lasso selection tool. Users can also press the
 environment.
 
 ``` r
+
 selectRegion(metadata(spe)$grid_density, x.col = "x_grid", y.col = "y_grid")
 ```
 
@@ -210,6 +224,7 @@ After closing the interactive window, the selected ROI has been saved as
 a data.frame object named `sel_region` in the R environment.
 
 ``` r
+
 sel_region
 ```
 
@@ -217,6 +232,7 @@ We can then use the `postSelRegion` to save the ROI in the metadata of
 the SpatialExperiment object.
 
 ``` r
+
 spe1 <- postSelRegion(spe, sel_region = sel_region)
 metadata(spe1)$roi
 ```
@@ -225,6 +241,7 @@ Similarly, we can plot visualise the user-defined ROI with function
 `plotROI`.
 
 ``` r
+
 plotROI(spe1)
 ```
 
@@ -236,6 +253,7 @@ using a cubic spline or a linear fit. This can be done with function
 `corrDensity`.
 
 ``` r
+
 results <- corDensity(spe, roi = "Fibroblasts")
 ```
 
@@ -243,6 +261,7 @@ We can see the correlation between each pair of cell types in each
 fibroblasts ROI.
 
 ``` r
+
 results$ROI
 ```
 
@@ -278,6 +297,7 @@ Or the correlation between each pair of cell types across all
 fibroblasts ROI:
 
 ``` r
+
 results$overall
 ```
 
@@ -294,6 +314,7 @@ results$overall
 We can also visualise the fitting using function `plotDensCor`.
 
 ``` r
+
 plotDensCor(spe, celltype1 = "Breast cancer", celltype2 = "Fibroblasts")
 ```
 
@@ -303,6 +324,7 @@ Or, we can visualise the statistics between each pair of cell types
 using function `plotCorHeatmap` in the ROIs:
 
 ``` r
+
 plotCorHeatmap(results$ROI)
 ```
 
@@ -311,6 +333,7 @@ plotCorHeatmap(results$ROI)
 Or the correlation between cell type pairs across the whole slide:
 
 ``` r
+
 plotCorHeatmap(results$overall)
 ```
 
@@ -330,6 +353,7 @@ levels of grid density. This can be done using a contour identification
 strategy with function `getContour`.
 
 ``` r
+
 spe <- getContour(spe, coi = "Fibroblasts", equal.cell = TRUE)
 ```
 
@@ -337,6 +361,7 @@ Different level of contour can be visualised with cells using
 `plotContour`.
 
 ``` r
+
 plotContour(spe, coi = "Fibroblasts")
 ```
 
@@ -346,10 +371,12 @@ We can then annotate cells by their locations within each contour using
 function `allocateCells`.
 
 ``` r
+
 spe <- allocateCells(spe)
 ```
 
 ``` r
+
 plotSpatial(spe, group.by = "fibroblasts_contour", pt.alpha = 0.5)
 ```
 
@@ -358,18 +385,21 @@ plotSpatial(spe, group.by = "fibroblasts_contour", pt.alpha = 0.5)
 We can visualise cell type composition per level.
 
 ``` r
+
 plotCellCompo(spe, contour = "Fibroblasts")
 ```
 
 ![](scider_userGuide_files/figure-html/unnamed-chunk-29-1.png)
 
 ``` r
+
 plotCellCompo(spe, contour = "Fibroblasts", roi = "Fibroblasts")
 ```
 
 ![](scider_userGuide_files/figure-html/unnamed-chunk-30-1.png)
 
 ``` r
+
 sessionInfo()
 ```
 
@@ -395,34 +425,34 @@ sessionInfo()
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] sf_1.1-0                    SpatialExperiment_1.21.0   
-    ##  [3] SingleCellExperiment_1.33.2 SummarizedExperiment_1.41.1
-    ##  [5] Biobase_2.71.0              GenomicRanges_1.63.2       
-    ##  [7] Seqinfo_1.1.0               IRanges_2.45.0             
-    ##  [9] S4Vectors_0.49.2            BiocGenerics_0.57.1        
-    ## [11] generics_0.1.4              MatrixGenerics_1.23.0      
+    ##  [1] sf_1.1-1                    SpatialExperiment_1.22.0   
+    ##  [3] SingleCellExperiment_1.34.0 SummarizedExperiment_1.42.0
+    ##  [5] Biobase_2.72.0              GenomicRanges_1.64.0       
+    ##  [7] Seqinfo_1.2.0               IRanges_2.46.0             
+    ##  [9] S4Vectors_0.50.1            BiocGenerics_0.58.1        
+    ## [11] generics_0.1.4              MatrixGenerics_1.24.0      
     ## [13] matrixStats_1.5.0           scider_1.7.9               
     ## [15] ggplot2_4.0.3              
     ## 
     ## loaded via a namespace (and not attached):
     ##   [1] DBI_1.3.0              deldir_2.0-4           rlang_1.2.0           
     ##   [4] magrittr_2.0.5         snakecase_0.11.1       otel_0.2.0            
-    ##   [7] e1071_1.7-17           compiler_4.6.0         spatstat.geom_3.7-3   
+    ##   [7] e1071_1.7-17           compiler_4.6.0         spatstat.geom_3.8-1   
     ##  [10] mgcv_1.9-4             systemfonts_1.3.2      fftwtools_0.9-11      
     ##  [13] vctrs_0.7.3            stringr_1.6.0          pkgconfig_2.0.3       
-    ##  [16] fastmap_1.2.0          magick_2.9.1           XVector_0.51.0        
-    ##  [19] lwgeom_0.2-15          labeling_0.4.3         promises_1.5.0        
+    ##  [16] fastmap_1.2.0          magick_2.9.1           XVector_0.52.0        
+    ##  [19] lwgeom_0.2-16          labeling_0.4.3         promises_1.5.0        
     ##  [22] rmarkdown_2.31         ragg_1.5.2             purrr_1.2.2           
-    ##  [25] xfun_0.57              cachem_1.1.0           jsonlite_2.0.0        
-    ##  [28] goftest_1.2-3          later_1.4.8            DelayedArray_0.37.1   
-    ##  [31] spatstat.utils_3.2-2   R6_2.6.1               bslib_0.10.0          
+    ##  [25] xfun_0.58              cachem_1.1.0           jsonlite_2.0.0        
+    ##  [28] goftest_1.2-3          later_1.4.8            DelayedArray_0.38.2   
+    ##  [31] spatstat.utils_3.2-3   R6_2.6.1               bslib_0.11.0          
     ##  [34] stringi_1.8.7          RColorBrewer_1.1-3     spatstat.data_3.1-9   
-    ##  [37] spatstat.univar_3.1-7  lubridate_1.9.5        jquerylib_0.1.4       
-    ##  [40] Rcpp_1.1.1-1           knitr_1.51             tensor_1.5.1          
+    ##  [37] spatstat.univar_3.2-0  lubridate_1.9.5        jquerylib_0.1.4       
+    ##  [40] Rcpp_1.1.1-1.1         knitr_1.51             tensor_1.5.1          
     ##  [43] splines_4.6.0          httpuv_1.6.17          Matrix_1.7-5          
-    ##  [46] igraph_2.3.0           timechange_0.4.0       tidyselect_1.2.1      
-    ##  [49] abind_1.4-8            yaml_2.3.12            spatstat.random_3.4-5 
-    ##  [52] spatstat.explore_3.8-0 lattice_0.22-9         tibble_3.3.1          
+    ##  [46] igraph_2.3.2           timechange_0.4.0       tidyselect_1.2.1      
+    ##  [49] abind_1.4-8            yaml_2.3.12            spatstat.random_3.5-0 
+    ##  [52] spatstat.explore_3.8-1 lattice_0.22-9         tibble_3.3.1          
     ##  [55] shiny_1.13.0           withr_3.0.2            S7_0.2.2              
     ##  [58] evaluate_1.0.5         desc_1.4.3             units_1.0-1           
     ##  [61] proxy_0.4-29           polyclip_1.10-7        pillar_1.11.1         
@@ -430,12 +460,12 @@ sessionInfo()
     ##  [67] scales_1.4.0           xtable_1.8-8           class_7.3-23          
     ##  [70] glue_1.8.1             janitor_2.2.1          pheatmap_1.0.13       
     ##  [73] lazyeval_0.2.3         tools_4.6.0            hexDensity_1.4.10     
-    ##  [76] hexbin_1.28.5          data.table_1.18.2.1    fs_2.1.0              
+    ##  [76] hexbin_1.28.5          data.table_1.18.4      fs_2.1.0              
     ##  [79] grid_4.6.0             tidyr_1.3.2            nlme_3.1-169          
-    ##  [82] fastmatrix_0.6-6       cli_3.6.6              spatstat.sparse_3.1-0 
-    ##  [85] textshaping_1.0.5      S4Arrays_1.11.1        viridisLite_0.4.3     
+    ##  [82] fastmatrix_0.6-6       cli_3.6.6              spatstat.sparse_3.2-0 
+    ##  [85] textshaping_1.0.5      S4Arrays_1.12.0        viridisLite_0.4.3     
     ##  [88] dplyr_1.2.1            gtable_0.3.6           SpatialPack_0.4-1     
     ##  [91] sass_0.4.10            digest_0.6.39          classInt_0.4-11       
-    ##  [94] SparseArray_1.11.13    rjson_0.2.23           htmlwidgets_1.6.4     
+    ##  [94] SparseArray_1.12.2     rjson_0.2.23           htmlwidgets_1.6.4     
     ##  [97] farver_2.1.2           htmltools_0.5.9        pkgdown_2.2.0         
     ## [100] lifecycle_1.0.5        httr_1.4.8             mime_0.13

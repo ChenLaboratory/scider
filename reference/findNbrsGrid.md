@@ -77,6 +77,7 @@ If n is used, distance is scaled to unit distance
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe <- gridDensity(spe)
 spe <- findNbrsGrid(spe,n=3)

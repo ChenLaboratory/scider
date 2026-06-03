@@ -104,6 +104,7 @@ A ggplot object.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 spe = runUMAP(spe)
 #> PCA not found. Switching to counts assay instead.

@@ -49,6 +49,7 @@ A ggplot object.
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 coi <- "Breast cancer"
 spe <- gridDensity(spe, coi = coi)

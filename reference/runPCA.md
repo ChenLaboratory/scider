@@ -70,6 +70,7 @@ If that's unavailable, it falls back to counts assay
 ## Examples
 
 ``` r
+
 data("xenium_bc_spe")
 
 spe <- runPCA(spe)
