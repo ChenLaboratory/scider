@@ -46,4 +46,8 @@ A SpatialExperiment object
 ``` r
 data("xenium_bc_spe")
 spe <- normalizeAssay(spe)
+#> Error in `assays<-`(`*tmp*`, withDimnames = withDimnames, ..., value = `*vtmp*`): please use 'assay(x, withDimnames=FALSE) <- value' or 'assays(x,
+#>   withDimnames=FALSE) <- value' when the rownames or colnames of the supplied
+#>   assay(s) are not identical to those of the receiving SpatialExperiment object
+#>   'x'
 ```

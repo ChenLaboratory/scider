@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   scider_userGuide: scider_userGuide.html
-last_built: 2026-06-03T07:18Z
+last_built: 2026-06-06T03:53Z
 urls:
   reference: https://chenlaboratory.github.io/scider/reference
   article: https://chenlaboratory.github.io/scider/articles
