@@ -78,8 +78,11 @@ runPCA <- function(spe,
   # irlba expects samples in rows -> transpose
   mat <- Matrix::t(mat)
 
-  # irlba warns when n_pcs is a large fraction of min(nrow, ncol)
   n_pcs <- min(n_pcs, min(dim(mat)) - 1L)
+  if (n_pcs > floor(ncol(mat) * 0.3))
+    message("n_pcs (", n_pcs, ") exceeds 30% of the number of genes (", ncol(mat),
+            "). irlba approximation quality may degrade for higher components.",
+            " Consider reducing n_pcs.")
 
   out <- irlba::irlba(mat, nv = n_pcs, center = centre, ...)
 
