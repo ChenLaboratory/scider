@@ -6,9 +6,8 @@
 #' @param centre Logical. Whether to centre the assay before PCA.
 #' @param scale Logical. Whether to scale the variance to 1 before PCA.
 #' @param clip Maximum absolute z-score after scaling. Values beyond this are
-#' clipped. Prevents rare-marker genes (near-zero SD) from creating extreme
-#' outliers that fragment the UMAP. Defaults to \code{sqrt(ncol(spe))}. Set to 
-#' \code{Inf} to disable.
+#' clipped. Prevents rare-marker genes (near-zero SD) from creating extreme outliers 
+#' that fragment the UMAP. Defaults to \code{10}. Set to \code{Inf} to disable.
 #' @param name Name to store the PCA in the spe's \link[SingleCellExperiment]{reducedDims}
 #' @param genes Subset of features for PCA. Can be a column in rowData or a vector 
 #' of gene names, indices, or booleans. Default to hvg if \link[scider]{getHVG} was run.
@@ -64,23 +63,26 @@ runPCA <- function(spe,
     mat <- mat[keep, , drop=FALSE]
     sds <- sds[keep]
 
-    # Row-wise scaling; works for dense and sparse matrices
-    mat <- mat / sds
+    # Row-wise scaling via left-diagonal multiply (unambiguous for sparse and dense matrices).
+    mat <- Matrix::Diagonal(x = 1/sds) %*% mat
 
     # Clip extreme z-scores.
-    if (is.null(clip)) clip <- sqrt(n_cells)
+    if (is.null(clip)) clip <- 10
+    mat <- methods::as(mat, "dgCMatrix")
     mat@x <- pmin(pmax(mat@x, -clip), clip)
 
     # After scaling, all kept genes have unit variance
     sds <- rep.int(1, nrow(mat))
   }
 
+  n_genes <- nrow(mat)
+
   # irlba expects samples in rows -> transpose
   mat <- Matrix::t(mat)
 
   n_pcs <- min(n_pcs, min(dim(mat)) - 1L)
-  if (n_pcs > floor(ncol(mat) * 0.3))
-    message("n_pcs (", n_pcs, ") exceeds 30% of the number of genes (", ncol(mat),
+  if (n_pcs > floor(n_genes * 0.3))
+    message("n_pcs (", n_pcs, ") exceeds 30% of the number of genes (", n_genes,
             "). irlba approximation quality may degrade for higher components.",
             " Consider reducing n_pcs.")
 
