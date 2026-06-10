@@ -3,8 +3,12 @@
 #' @param spe A SpatialExperiment object.
 #' @param n_pcs Number of principal components to calculate
 #' @param assay Name of assay used for PCA. See details for defaults.
-#' @param centre Logical. Whether to centre the assay before PCA. 
-#' @param scale Logical. Whether to scale the variance to 1 before PCA. 
+#' @param centre Logical. Whether to centre the assay before PCA.
+#' @param scale Logical. Whether to scale the variance to 1 before PCA.
+#' @param clip Maximum absolute z-score after scaling. Values beyond this are
+#' clipped. Prevents rare-marker genes (near-zero SD) from creating extreme
+#' outliers that fragment the UMAP. Defaults to \code{sqrt(ncol(spe))}. Set to 
+#' \code{Inf} to disable.
 #' @param name Name to store the PCA in the spe's \link[SingleCellExperiment]{reducedDims}
 #' @param genes Subset of features for PCA. Can be a column in rowData or a vector 
 #' of gene names, indices, or booleans. Default to hvg if \link[scider]{getHVG} was run.
@@ -26,6 +30,7 @@ runPCA <- function(spe,
                    assay="logcounts",
                    centre = TRUE,
                    scale = TRUE,
+                   clip = NULL,
                    name="PCA",
                    genes="hvg",
                    ...) {
@@ -62,12 +67,20 @@ runPCA <- function(spe,
     # Row-wise scaling; works for dense and sparse matrices
     mat <- mat / sds
 
+    # Clip extreme z-scores.
+    if (is.null(clip)) clip <- sqrt(n_cells)
+    mat@x <- pmin(pmax(mat@x, -clip), clip)
+
     # After scaling, all kept genes have unit variance
     sds <- rep.int(1, nrow(mat))
   }
 
   # irlba expects samples in rows -> transpose
   mat <- Matrix::t(mat)
+
+  # irlba warns when n_pcs is a large fraction of min(nrow, ncol)
+  n_pcs <- min(n_pcs, min(dim(mat)) - 1L)
+
   out <- irlba::irlba(mat, nv = n_pcs, center = centre, ...)
 
   pcs <- sweep(out$u, 2, out$d, "*")

@@ -5,17 +5,38 @@
 #' @param coord Name of the csv file with the tissue coordinates
 #' @param image Names of the image files.
 #' @param scale_factors Names of the scale factors file
+#' @param feature_type Feature type to retain. Defaults to "Gene Expression" to
+#' exclude non-gene features. Set to NULL to keep all features.
 #' @export
 readVisium <- function(dir,
                        sample_id="sample01",
                        count = NULL,
                        coord = NULL,
                        image = NULL,
-                       scale_factors = NULL) {
+                       scale_factors = NULL,
+                       feature_type = "Gene Expression") {
   # read in counts
   count <- count %||% file.path(dir,"filtered_feature_bc_matrix.h5")
   sce <- DropletUtils::read10xCounts(count, col.names = TRUE)
-  
+
+  # Filter to desired feature type and set Symbol as rownames
+  rd <- SummarizedExperiment::rowData(sce)
+  if (!is.null(feature_type)) {
+    keep <- rd$Type %in% feature_type
+    sce <- sce[keep, ]
+    rd <- rd[keep, ]
+  }
+
+  # Materialise into an in-memory sparse matrix so the SPE is self-contained
+  # and can be saved/loaded without the original .h5 file being present.
+  counts_mat <- methods::as(SummarizedExperiment::assay(sce), "dgCMatrix")
+  rownames(counts_mat) <- rd$Symbol
+  rownames(rd) <- rd$Symbol
+
+  # Per-cell QC metrics computed directly from the count matrix.
+  n_counts <- Matrix::colSums(counts_mat)
+  n_genes  <- setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
+
   # read in image
   image <- image %||% file.path(dir, "spatial",
                                 c("tissue_lowres_image.png",
@@ -28,7 +49,7 @@ readVisium <- function(dir,
     scaleFactors = scale_factors,
     sample_id=sample_id,
     load=FALSE)
-  
+
   # read in coords
   coord <- coord %||% file.path(dir,"spatial","tissue_positions.csv")
   if (grepl(".csv$",coord)) {
@@ -37,13 +58,15 @@ readVisium <- function(dir,
     spatial <- as.data.frame(arrow::read_parquet(coord))
     rownames(spatial) = spatial$barcode
   }
-  matches <- intersect(colnames(sce),rownames(spatial))
-  # sce <- sce[,matches] # Don't think this is ever needed
-  spatial <- spatial[matches,]
-  
+  matches <- intersect(colnames(sce), rownames(spatial))
+  spatial <- spatial[matches, ]
+  # Attach QC metrics, matching on barcode to guard against row reordering.
+  spatial$n_counts <- as.integer(n_counts[rownames(spatial)])
+  spatial$n_genes  <- as.integer(n_genes[rownames(spatial)])
+
   spe <- SpatialExperiment(
-    assays = list(counts = SummarizedExperiment::assay(sce)),
-    rowData = SummarizedExperiment::rowData(sce),
+    assays = list(counts = counts_mat),
+    rowData = rd,
     colData = S4Vectors::DataFrame(spatial),
     spatialCoordsNames = c("pxl_col_in_fullres","pxl_row_in_fullres"),
     imgData=img,
@@ -76,10 +99,12 @@ readVisiumHD <- function(dir,
 #' @param count Name of the h5 file with the count assay.
 #' @param coord Name of the parquet file with the tissue coordinates
 #' @param image Names of the ome.tif image files.
-#' @param image_reso resolution of the image to use. From 1-8 (lower = better resolution). 
+#' @param image_reso resolution of the image to use. From 1-8 (lower = better resolution).
 #' See https://kb.10xgenomics.com/hc/articles/11636252598925. Default to 6
-#' @param image_layer Which layer of the tiff image to use. Default is the 
+#' @param image_layer Which layer of the tiff image to use. Default is the
 #' middle-most layer
+#' @param feature_type Feature type to retain. Defaults to "Gene Expression" to
+#' exclude control codewords. Set to NULL to keep all features.
 #' @export
 readXenium <- function(dir,
                        sample_id="sample01",
@@ -87,12 +112,35 @@ readXenium <- function(dir,
                        coord = file.path(dir,"cells.parquet"),
                        image = file.path(dir,"morphology.ome.tif"),
                        image_reso = 6,
-                       image_layer = NULL) {
+                       image_layer = NULL,
+                       feature_type = "Gene Expression") {
   ## read in count
   sce <- DropletUtils::read10xCounts(count, col.names = TRUE)
-  
+
+  ## Filter to desired feature type and set Symbol as rownames
+  rd <- SummarizedExperiment::rowData(sce)
+  if (!is.null(feature_type)) {
+    keep <- rd$Type %in% feature_type
+    sce <- sce[keep, ]
+    rd <- rd[keep, ]
+  }
+
+  # Materialise into an in-memory sparse matrix so the SPE is self-contained
+  # and can be saved/loaded without the original .h5 file being present.
+  counts_mat <- methods::as(SummarizedExperiment::assay(sce), "dgCMatrix")
+  rownames(counts_mat) <- rd$Symbol
+  rownames(rd)         <- rd$Symbol
+
+  # Per-cell QC metrics computed directly from the count matrix.
+  n_counts <- Matrix::colSums(counts_mat)
+  n_genes  <- setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
+
   ## read in coords.
   spatial <- as.data.frame(arrow::read_parquet(coord))
+  rownames(spatial) <- spatial$cell_id
+  spatial <- spatial[colnames(counts_mat), ]
+  spatial$n_counts <- as.integer(n_counts)
+  spatial$n_genes  <- as.integer(n_genes)
   
   ## read in image
   imgData <- tryCatch({
@@ -125,8 +173,8 @@ readXenium <- function(dir,
   
   
   spe <- SpatialExperiment(
-    assays = list(counts = SummarizedExperiment::assay(sce)),
-    rowData = SummarizedExperiment::rowData(sce),
+    assays = list(counts = counts_mat),
+    rowData = rd,
     colData = S4Vectors::DataFrame(spatial),
     spatialCoordsNames = c("x_centroid","y_centroid"),
     imgData=imgData,
@@ -176,15 +224,22 @@ readProseg <- function(dir,
            else colnames(count) <- gene$gene
            },
          stop("count need to be either a 'csv.gz' or a 'mtx.gz' file"))
-  
+
+  # Build genes x cells sparse matrix and compute per-cell QC metrics.
+  counts_mat <- methods::as(Matrix::t(count), "dgCMatrix")
+  n_counts <- as.integer(Matrix::colSums(counts_mat))
+  n_genes  <- as.integer(diff(counts_mat@p))
+
   # read in coords
   coord <- S4Vectors::DataFrame(read.csv(gzfile(coord)))
   if (!(is.null(coord$cluster) || "cluster"%in% coordNames)) {
     coord$cluster <- as.factor(coord$cluster)
   }
-  
+  coord$n_counts <- n_counts
+  coord$n_genes  <- n_genes
+
   spe <- SpatialExperiment(
-    assays = list(counts = Matrix::t(count)),
+    assays = list(counts = counts_mat),
     colData = coord,
     rowData = gene,
     spatialCoordsNames = coordNames,
