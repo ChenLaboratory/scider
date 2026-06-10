@@ -11,7 +11,8 @@ readXenium(
   coord = file.path(dir, "cells.parquet"),
   image = file.path(dir, "morphology.ome.tif"),
   image_reso = 6,
-  image_layer = NULL
+  image_layer = NULL,
+  feature_type = "Gene Expression"
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ See https://kb.10xgenomics.com/hc/articles/11636252598925. Default to 6}
 
 \item{image_layer}{Which layer of the tiff image to use. Default is the
 middle-most layer}
+
+\item{feature_type}{Feature type to retain. Defaults to "Gene Expression" to
+exclude control codewords. Set to NULL to keep all features.}
 }
 \description{
 Read Xenium output into spe

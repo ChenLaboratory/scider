@@ -10,7 +10,8 @@ readVisium(
   count = NULL,
   coord = NULL,
   image = NULL,
-  scale_factors = NULL
+  scale_factors = NULL,
+  feature_type = "Gene Expression"
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ readVisium(
 \item{image}{Names of the image files.}
 
 \item{scale_factors}{Names of the scale factors file}
+
+\item{feature_type}{Feature type to retain. Defaults to "Gene Expression" to
+exclude non-gene features. Set to NULL to keep all features.}
 }
 \description{
 Read Visium output into spe
