@@ -48,7 +48,8 @@
 <span>  count <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  coord <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  image <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scale_factors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  scale_factors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  feature_type <span class="op">=</span> <span class="st">"Gene Expression"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,6 +79,11 @@
 
 <dt id="arg-scale-factors">scale_factors<a class="anchor" aria-label="anchor" href="#arg-scale-factors"></a></dt>
 <dd><p>Names of the scale factors file</p></dd>
+
+
+<dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
+<dd><p>Feature type to retain. Defaults to "Gene Expression" to
+exclude non-gene features. Set to NULL to keep all features.</p></dd>
 
 </dl></div>
 

@@ -11,7 +11,8 @@ readVisium(
   count = NULL,
   coord = NULL,
   image = NULL,
-  scale_factors = NULL
+  scale_factors = NULL,
+  feature_type = "Gene Expression"
 )
 ```
 
@@ -40,3 +41,8 @@ readVisium(
 - scale_factors:
 
   Names of the scale factors file
+
+- feature_type:
+
+  Feature type to retain. Defaults to "Gene Expression" to exclude
+  non-gene features. Set to NULL to keep all features.

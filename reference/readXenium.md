@@ -12,7 +12,8 @@ readXenium(
   coord = file.path(dir, "cells.parquet"),
   image = file.path(dir, "morphology.ome.tif"),
   image_reso = 6,
-  image_layer = NULL
+  image_layer = NULL,
+  feature_type = "Gene Expression"
 )
 ```
 
@@ -47,3 +48,8 @@ readXenium(
 - image_layer:
 
   Which layer of the tiff image to use. Default is the middle-most layer
+
+- feature_type:
+
+  Feature type to retain. Defaults to "Gene Expression" to exclude
+  control codewords. Set to NULL to keep all features.

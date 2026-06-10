@@ -11,6 +11,7 @@ runPCA(
   assay = "logcounts",
   centre = TRUE,
   scale = TRUE,
+  clip = NULL,
   name = "PCA",
   genes = "hvg",
   ...
@@ -38,6 +39,13 @@ runPCA(
 - scale:
 
   Logical. Whether to scale the variance to 1 before PCA.
+
+- clip:
+
+  Maximum absolute z-score after scaling. Values beyond this are
+  clipped. Prevents rare-marker genes (near-zero SD) from creating
+  extreme outliers that fragment the UMAP. Defaults to
+  `sqrt(ncol(spe))`. Set to `Inf` to disable.
 
 - name:
 

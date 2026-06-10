@@ -48,6 +48,7 @@
 <span>  assay <span class="op">=</span> <span class="st">"logcounts"</span>,</span>
 <span>  centre <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  clip <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"PCA"</span>,</span>
 <span>  genes <span class="op">=</span> <span class="st">"hvg"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -76,6 +77,13 @@
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
 <dd><p>Logical. Whether to scale the variance to 1 before PCA.</p></dd>
+
+
+<dt id="arg-clip">clip<a class="anchor" aria-label="anchor" href="#arg-clip"></a></dt>
+<dd><p>Maximum absolute z-score after scaling. Values beyond this are
+clipped. Prevents rare-marker genes (near-zero SD) from creating extreme
+outliers that fragment the UMAP. Defaults to <code>sqrt(ncol(spe))</code>. Set to
+<code>Inf</code> to disable.</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>

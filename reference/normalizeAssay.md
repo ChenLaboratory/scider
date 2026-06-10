@@ -8,7 +8,7 @@ Perform log normalization for counts
 normalizeAssay(
   spe,
   transformation = c("log"),
-  scale.factor = 10000,
+  scale.factor = 100,
   assay = "counts",
   name = "logcounts"
 )
