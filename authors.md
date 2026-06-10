@@ -18,13 +18,13 @@ Source:
 [`DESCRIPTION`](https://github.com/ChenLaboratory/scider/blob/devel/DESCRIPTION)
 
 Li M, Liu N, Nguyen Q, Chen Y (2026). *scider: Spatial cell-type
-inter-correlation by density in R*. R package version 1.9.1,
+inter-correlation by density in R*. R package version 1.9.2,
 <https://github.com/ChenLaboratory/scider>.
 
     @Manual{,
       title = {scider: Spatial cell-type inter-correlation by density in R},
       author = {Mengbo Li and Ning Liu and Quoc Hoang Nguyen and Yunshun Chen},
       year = {2026},
-      note = {R package version 1.9.1},
+      note = {R package version 1.9.2},
       url = {https://github.com/ChenLaboratory/scider},
     }
