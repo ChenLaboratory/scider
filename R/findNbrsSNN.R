@@ -9,8 +9,12 @@
 #' the reduced dim (e.g. all PCs produced by runPCA).
 #' @param k Integer scalar for number of nearest neighbors to find.
 #' @param BNPARAM \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest neighbor algorithm. Default is Annoy.
-#' @param type Type of weighting scheme for shared neighbors. Options are rank, number, and jaccard.
-#' type="rank" is defined in Xu and Su (2015).
+#' @param type Type of weighting scheme for shared neighbors. Options are jaccard
+#' (default), rank, and number. type="rank" is defined in Xu and Su (2015).
+#' @param prune Edges with SNN weight at or below this value are removed before
+#' clustering. Defaults to NULL, which applies a jaccard cutoff of 0.1 for "jaccard",
+#' and converted to the equivalent shared-neighbour count (2k*0.1/1.1) for "number".
+#' type="rank" is not pruned by default. Set to 0 to disable.
 #' @param nbrs_name Name of the neighbour list to be stored in spe. Default to be 
 #' assay/dimred + "_snn".
 #' @param cpu_threads Number of cpu threads for parallel computation.
@@ -33,7 +37,8 @@ findNbrsSNN <- function(spe,
                         n_dimred = NULL,
                         k = 20,
                         BNPARAM = BiocNeighbors::AnnoyParam(),
-                        type = c("rank", "number", "jaccard"),
+                        type = c("jaccard", "rank", "number"),
+                        prune = NULL,
                         nbrs_name = NULL,
                         cpu_threads = 6) {
   # Getting default data  
@@ -83,6 +88,19 @@ findNbrsSNN <- function(spe,
   type <- match.arg(type)
   snn <- .Call("C_findSNN",t(knn$index-1),k,nrow(mat),type,cpu_threads)
   snn$index <- lapply(snn$index,"+",1L)
+
+  # Prune weak SNN edges. "rank" is not pruned by default.
+  if (is.null(prune)) {
+    prune <- switch(type,
+                    jaccard = 0.1,
+                    number  = 2 * k * 0.1 / (1 + 0.1),
+                    rank    = 0)
+  }
+  if (prune > 0) {
+    keep <- lapply(snn$weight, function(w) w > prune)
+    snn$index  <- Map(function(idx, k) idx[k], snn$index,  keep)
+    snn$weight <- Map(function(w,   k) w[k],   snn$weight, keep)
+  }
 
   if (is.null(nbrs_name)) {
     if(is.null(dimred)) nbrs_name <- paste0(assay,"_snn")
