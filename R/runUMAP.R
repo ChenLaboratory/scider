@@ -47,6 +47,11 @@ runUMAP <- function(spe,
         mat <- SingleCellExperiment::reducedDim(spe,dimred)
         if (!is.null(n_dimred)) {
             if(length(n_dimred)==1L) {
+                if (n_dimred > ncol(mat)) {
+                    message("n_dimred (", n_dimred, ") exceeds available dimensions (",
+                            ncol(mat), "). Using all ", ncol(mat), ".")
+                    n_dimred <- ncol(mat)
+                }
                 n_dimred <- seq_len(n_dimred)
             }
             mat <- mat[,n_dimred,drop=FALSE]

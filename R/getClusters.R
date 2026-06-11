@@ -48,8 +48,12 @@ getClusters <- function(spe,
   method.args <- list(...)
   method.args$resolution = resolution
   method.args$graph <- g
-  if (method=="leiden" && is.null(method.args$objective_function)) {
-    method.args$objective_function <- "modularity"
+  if (method=="leiden") {
+    if (is.null(method.args$objective_function))
+      method.args$objective_function <- "modularity"
+    # Run Leiden to convergence rather than igraph's default of 2 iterations
+    if (is.null(method.args$n_iterations))
+      method.args$n_iterations <- -1
   }
   
   cluster <- do.call(switch(method,

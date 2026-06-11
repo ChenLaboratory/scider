@@ -4,7 +4,9 @@
 #' @param assay Name of assay for clustering. Incompatible with dimred.
 #' @param dimred Name of the dimensionality reduction (e.g. PCA) for clustering.
 #' Incompatible with assay
-#' @param n_dimred Integer scalar or vector specifying the dimensions to use if dimred is specified.
+#' @param n_dimred Integer scalar or vector specifying the dimensions to use if
+#' dimred is specified. Defaults to NULL, which uses all available dimensions of
+#' the reduced dim (e.g. all PCs produced by runPCA).
 #' @param k Integer scalar for number of nearest neighbors to find.
 #' @param BNPARAM \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest neighbor algorithm. Default is Annoy.
 #' @param type Type of weighting scheme for shared neighbors. Options are rank, number, and jaccard.
@@ -28,7 +30,7 @@
 findNbrsSNN <- function(spe,
                         assay = NULL,
                         dimred = "PCA",
-                        n_dimred = 10,
+                        n_dimred = NULL,
                         k = 20,
                         BNPARAM = BiocNeighbors::AnnoyParam(),
                         type = c("rank", "number", "jaccard"),
@@ -48,12 +50,16 @@ findNbrsSNN <- function(spe,
 
   if (!is.null(dimred)) {
     mat <- SingleCellExperiment::reducedDim(spe,dimred)
-    if (!is.null(n_dimred)) {
-      if(length(n_dimred)==1L) {
-        n_dimred <- seq_len(n_dimred)
+    if (is.null(n_dimred)) n_dimred <- ncol(mat)
+    if (length(n_dimred)==1L) {
+      if (n_dimred > ncol(mat)) {
+        message("n_dimred (", n_dimred, ") exceeds available dimensions (",
+                ncol(mat), "). Using all ", ncol(mat), ".")
+        n_dimred <- ncol(mat)
       }
-      mat <- mat[,n_dimred,drop=FALSE]
+      n_dimred <- seq_len(n_dimred)
     }
+    mat <- mat[,n_dimred,drop=FALSE]
   } else {
     mat <- Matrix::t(SummarizedExperiment::assay(spe,assay))
   }
