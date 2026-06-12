@@ -79,4 +79,5 @@ spe <- findNbrsSNN(spe,dimred="PCA")
 #> [1] "Getting K-nearest neighbour"
 #> [1] "Getting shared nearest neighbour"
 spe <- getClusters(spe, resolution=0.5)
+#> 1 cells in clusters with <= 1 cells labelled 'unassigned'.
 ```
