@@ -50,6 +50,119 @@ selectColor <- function(n) {
     }
 }
 
+# Build a colour palette for plotting points by group.
+# For discrete groups, the special level "unassigned" is coloured black and
+# excluded from the palette, so the real clusters keep contiguous palette
+# colours. Returns an unnamed vector for continuous groups and a named vector
+# (keyed by level) for discrete groups.
+.buildColP <- function(group, cols, isContinuous,
+                       special = "unassigned", special_col = "black") {
+  if (isContinuous) {
+    n <- length(unique(group))
+    if (is.null(cols)) return(col.spec)
+    if (is.function(cols)) return(cols(n))
+    return(cols)
+  }
+  lv <- levels(as.factor(group))
+  has_special <- special %in% lv
+  main_lv <- if (has_special) setdiff(lv, special) else lv
+
+  if (!is.null(cols) && !is.function(cols) && !is.null(names(cols))) {
+    # Named colour vector: map colours to levels by name. Levels not named fall
+    # back to the default palette (or black for 'unassigned').
+    col.p <- rep(NA_character_, length(lv))
+    names(col.p) <- lv
+    matched <- intersect(lv, names(cols))
+    col.p[matched] <- cols[matched]
+    unmatched <- main_lv[!main_lv %in% matched]
+    if (length(unmatched)) col.p[unmatched] <- selectColor(length(unmatched))
+  } else {
+    # Unnamed vector, function, or NULL: assign palette to the retained levels
+    # in level order.
+    col.p <- if (is.null(cols)) selectColor(length(main_lv))
+             else if (is.function(cols)) cols(length(main_lv))
+             else rep_len(cols, length(main_lv))
+    names(col.p) <- main_lv
+  }
+  # 'unassigned' is black by default unless the user supplied a colour for it.
+  if (has_special && is.na(col.p[special])) col.p[special] <- special_col
+  col.p
+}
+
+# Prepare colour, size and draw-order for highlighting a subset of cells.
+# `highlight` is either (a) a vector of group.by levels (characters or cluster
+# numbers) to emphasise, or (b) a logical vector of length ncells selecting cells
+# directly (e.g. counts(spe)["Sox9", ] >= 3). Non-highlighted cells are drawn
+# first in light grey at `pt.size`; highlighted cells are drawn last (shuffled
+# among themselves, so no level sits systematically on top) at
+# `pt.size.highlight`. Highlight colours come from `cols.highlight` (a single
+# colour for all, a vector of one colour per 'highlight' entry, or NULL to keep
+# the usual group.by colours). Returns the re-levelled grouping factor, the
+# matching palette, a per-cell size vector (all in the original cell order) and
+# the row draw order.
+.prepHighlight <- function(group, highlight, cols, cols.highlight = NULL,
+                           pt.size, pt.size.highlight, grey = "grey80") {
+  if (!is.null(group)) group <- as.factor(group)
+
+  if (is.logical(highlight)) {
+    # Logical mask: select cells directly. A single highlight category.
+    if (!is.null(group) && length(highlight) != length(group))
+      stop("Logical 'highlight' must have length equal to the number of cells (",
+           length(group), ").")
+    is_hl   <- highlight & !is.na(highlight)
+    hcat    <- "highlight"
+    hl_cats <- "highlight"
+    hl_req  <- "highlight"
+    # A mask has no group level, so there is no "usual" palette colour for it.
+    if (is.null(cols.highlight)) cols.highlight <- "red"
+  } else {
+    if (is.null(group))
+      stop("'highlight' given as levels requires 'group.by' to be set.")
+    hl_req  <- unique(as.character(highlight))   # user-supplied order
+    is_hl   <- as.character(group) %in% hl_req
+    hcat    <- as.character(group)
+    hl_cats <- hl_req[hl_req %in% levels(group)]  # valid levels, user order
+  }
+  if (!any(is_hl)) warning("'highlight' matched no cells.")
+
+  # Highlight colours, from cols.highlight:
+  #  - NULL          -> the usual group.by palette colours
+  #  - single colour -> all highlighted cells that colour (default "red")
+  #  - vector        -> one colour per 'highlight' entry (matched by position)
+  if (is.null(cols.highlight)) {
+    base_p <- .buildColP(group, cols, isContinuous = FALSE)
+    hl_col <- base_p[hl_cats]
+  } else if (length(cols.highlight) == 1) {
+    hl_col <- rep(cols.highlight, length(hl_cats))
+  } else {
+    if (length(cols.highlight) != length(hl_req))
+      stop("'cols.highlight' must be length 1 or match the number of 'highlight' ",
+           "entries (", length(hl_req), ").")
+    cmap <- cols.highlight
+    names(cmap) <- hl_req
+    hl_col <- cmap[hl_cats]
+  }
+
+  other_lab <- "other"
+  while (other_lab %in% c(hl_cats, levels(group))) other_lab <- paste0(other_lab, ".")
+
+  new_chr <- ifelse(is_hl, hcat, other_lab)
+  group2  <- factor(new_chr, levels = c(hl_cats, other_lab))
+
+  col.p <- character(0)
+  col.p[hl_cats]   <- hl_col
+  col.p[other_lab] <- grey
+
+  size <- ifelse(is_hl, pt.size.highlight, pt.size)
+
+  # Draw non-highlighted first, then highlighted last (shuffled among themselves).
+  hl_idx <- which(is_hl)
+  if (length(hl_idx) > 1) hl_idx <- sample(hl_idx)
+  ord <- c(which(!is_hl), hl_idx)
+
+  list(group = group2, col.p = col.p, size = size, order = ord)
+}
+
 col.lisa <- c("#eeeeee", "#FF0000", "#0000FF", "#a7adf9",
               "#f4ada8", "#464646", "#999999")
 col.pval <- c("#3644E5", "#FFFFBF", "#FF5D53")
