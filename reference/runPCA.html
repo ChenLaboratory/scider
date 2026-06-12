@@ -81,9 +81,8 @@
 
 <dt id="arg-clip">clip<a class="anchor" aria-label="anchor" href="#arg-clip"></a></dt>
 <dd><p>Maximum absolute z-score after scaling. Values beyond this are
-clipped. Prevents rare-marker genes (near-zero SD) from creating extreme
-outliers that fragment the UMAP. Defaults to <code>sqrt(ncol(spe))</code>. Set to
-<code>Inf</code> to disable.</p></dd>
+clipped. Prevents rare-marker genes (near-zero SD) from creating extreme outliers
+that fragment the UMAP. Defaults to <code>10</code>. Set to <code>Inf</code> to disable.</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>

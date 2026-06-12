@@ -11,6 +11,9 @@ getClusters(
   method = c("leiden", "louvain"),
   resolution = 1,
   cluster_name = "cluster",
+  unassigned = c("merge", "label", "discard"),
+  min_size = NULL,
+  start_from = 1,
   seed = 1,
   ...
 )
@@ -24,8 +27,10 @@ getClusters(
 
 - nbrs_name:
 
-  Name of neighbour list for clustering. If NULL, will use the newest
-  one in spe@metadata\$nbrs\$cell or create one if none are available.
+  Name of neighbour list for clustering. If NULL, uses the newest one in
+  spe@metadata\$nbrs\$cell.
+  [findNbrsSNN](https://chenlaboratory.github.io/scider/reference/findNbrsSNN.md)
+  must have been run first; otherwise getClusters errors.
 
 - method:
 
@@ -42,6 +47,26 @@ getClusters(
 
   Name to store the clusters in spe's
   [colData](https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html)
+
+- unassigned:
+
+  How to handle cells in clusters with at most `min_size` cells
+  (singletons and tiny fragments, often left isolated by SNN pruning).
+  One of: "merge" (default) graph-merges each cell into its
+  most-connected retained cluster; "label" leaves all such cells
+  "unassigned"; "discard" removes them from the spe (changing
+  ncol(spe)).
+
+- min_size:
+
+  Maximum size for a cluster to be treated as too small (see
+  unassigned). Defaults to NULL, which uses either 5 or 0.01\\ whichever
+  is smaller.
+
+- start_from:
+
+  Integer at which cluster numbering starts. 1 (default) numbers
+  clusters 1..K.
 
 - seed:
 
@@ -63,9 +88,10 @@ A SpatialExperiment object
 
 ## Details
 
-Cluster cells with igraph using SNN calculated by
-[findNbrsSNN](https://chenlaboratory.github.io/scider/reference/findNbrsSNN.md).
-Any neighbour list in spe@metadata\$nbrs\$cell can also be used
+Cluster cells with igraph using an SNN neighbour list built by
+[findNbrsSNN](https://chenlaboratory.github.io/scider/reference/findNbrsSNN.md),
+which must be run before getClusters. Any neighbour list in
+spe@metadata\$nbrs\$cell can be selected via nbrs_name.
 
 ## Examples
 

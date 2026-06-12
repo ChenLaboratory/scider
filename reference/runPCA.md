@@ -44,8 +44,8 @@ runPCA(
 
   Maximum absolute z-score after scaling. Values beyond this are
   clipped. Prevents rare-marker genes (near-zero SD) from creating
-  extreme outliers that fragment the UMAP. Defaults to
-  `sqrt(ncol(spe))`. Set to `Inf` to disable.
+  extreme outliers that fragment the UMAP. Defaults to `10`. Set to
+  `Inf` to disable.
 
 - name:
 

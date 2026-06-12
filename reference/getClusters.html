@@ -48,6 +48,9 @@
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"leiden"</span>, <span class="st">"louvain"</span><span class="op">)</span>,</span>
 <span>  resolution <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  cluster_name <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>  unassigned <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"merge"</span>, <span class="st">"label"</span>, <span class="st">"discard"</span><span class="op">)</span>,</span>
+<span>  min_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  start_from <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -62,8 +65,9 @@
 
 
 <dt id="arg-nbrs-name">nbrs_name<a class="anchor" aria-label="anchor" href="#arg-nbrs-name"></a></dt>
-<dd><p>Name of neighbour list for clustering. If NULL, will use
-the newest one in spe@metadata$nbrs$cell or create one if none are available.</p></dd>
+<dd><p>Name of neighbour list for clustering. If NULL, uses the
+newest one in spe@metadata$nbrs$cell. <a href="findNbrsSNN.html">findNbrsSNN</a> must have been
+run first; otherwise getClusters errors.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -78,6 +82,25 @@ clusters. See <a href="https://r.igraph.org/reference/cluster_leiden.html" class
 <dt id="arg-cluster-name">cluster_name<a class="anchor" aria-label="anchor" href="#arg-cluster-name"></a></dt>
 <dd><p>Name to store the clusters in spe's
 <a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></p></dd>
+
+
+<dt id="arg-unassigned">unassigned<a class="anchor" aria-label="anchor" href="#arg-unassigned"></a></dt>
+<dd><p>How to handle cells in clusters with at most <code>min_size</code>
+cells (singletons and tiny fragments, often left isolated by SNN pruning). One
+of: "merge" (default) graph-merges each cell into its most-connected retained
+cluster; "label" leaves all such cells "unassigned"; "discard" removes them
+from the spe (changing ncol(spe)).</p></dd>
+
+
+<dt id="arg-min-size">min_size<a class="anchor" aria-label="anchor" href="#arg-min-size"></a></dt>
+<dd><p>Maximum size for a cluster to be treated as too small (see
+unassigned). Defaults to NULL, which uses either 5 or 0.01\<!-- % of the cells, -->
+whichever is smaller.</p></dd>
+
+
+<dt id="arg-start-from">start_from<a class="anchor" aria-label="anchor" href="#arg-start-from"></a></dt>
+<dd><p>Integer at which cluster numbering starts. 1 (default)
+numbers clusters 1..K.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -96,8 +119,9 @@ clusters. See <a href="https://r.igraph.org/reference/cluster_leiden.html" class
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Cluster cells with igraph using SNN calculated by <a href="findNbrsSNN.html">findNbrsSNN</a>.
-Any neighbour list in spe@metadata$nbrs$cell can also be used</p>
+    <p>Cluster cells with igraph using an SNN neighbour list built by
+<a href="findNbrsSNN.html">findNbrsSNN</a>, which must be run before getClusters. Any
+neighbour list in spe@metadata$nbrs$cell can be selected via nbrs_name.</p>
     </div>
 
     <div class="section level2">

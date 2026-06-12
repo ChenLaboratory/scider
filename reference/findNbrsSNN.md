@@ -9,10 +9,11 @@ findNbrsSNN(
   spe,
   assay = NULL,
   dimred = "PCA",
-  n_dimred = 10,
+  n_dimred = NULL,
   k = 20,
   BNPARAM = BiocNeighbors::AnnoyParam(),
-  type = c("rank", "number", "jaccard"),
+  type = c("jaccard", "rank", "number"),
+  prune = NULL,
   nbrs_name = NULL,
   cpu_threads = 6
 )
@@ -36,11 +37,12 @@ findNbrsSNN(
 - n_dimred:
 
   Integer scalar or vector specifying the dimensions to use if dimred is
-  specified.
+  specified. Defaults to NULL, which uses all available dimensions of
+  the reduced dim (e.g. all PCs produced by runPCA).
 
 - k:
 
-  Integer scalar for number of nearest neighbors to find.
+  Integer scalar for number of nearest neighbors to find. Default to 20.
 
 - BNPARAM:
 
@@ -49,8 +51,17 @@ findNbrsSNN(
 
 - type:
 
-  Type of weighting scheme for shared neighbors. Options are rank,
-  number, and jaccard. type="rank" is defined in Xu and Su (2015).
+  Type of weighting scheme for shared neighbors. Options are jaccard
+  (default), rank, and number. type="rank" is defined in Xu and Su
+  (2015).
+
+- prune:
+
+  Edges with SNN weight at or below this value are removed before
+  clustering. Defaults to NULL, which applies a jaccard cutoff of 0.1
+  for "jaccard", converted to the equivalent shared-neighbour count
+  (2(k+1)\*0.1/1.1) for "number". type="rank" is not pruned by default.
+  Set to 0 to disable.
 
 - nbrs_name:
 

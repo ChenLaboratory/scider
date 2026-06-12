@@ -46,10 +46,11 @@
 <span>  <span class="va">spe</span>,</span>
 <span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dimred <span class="op">=</span> <span class="st">"PCA"</span>,</span>
-<span>  n_dimred <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  n_dimred <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  BNPARAM <span class="op">=</span> <span class="fu">BiocNeighbors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocNeighbors/man/AnnoyParam.html" class="external-link">AnnoyParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rank"</span>, <span class="st">"number"</span>, <span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jaccard"</span>, <span class="st">"rank"</span>, <span class="st">"number"</span><span class="op">)</span>,</span>
+<span>  prune <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nbrs_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cpu_threads <span class="op">=</span> <span class="fl">6</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -73,11 +74,13 @@ Incompatible with assay</p></dd>
 
 
 <dt id="arg-n-dimred">n_dimred<a class="anchor" aria-label="anchor" href="#arg-n-dimred"></a></dt>
-<dd><p>Integer scalar or vector specifying the dimensions to use if dimred is specified.</p></dd>
+<dd><p>Integer scalar or vector specifying the dimensions to use if
+dimred is specified. Defaults to NULL, which uses all available dimensions of
+the reduced dim (e.g. all PCs produced by runPCA).</p></dd>
 
 
 <dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>Integer scalar for number of nearest neighbors to find.</p></dd>
+<dd><p>Integer scalar for number of nearest neighbors to find. Default to 20.</p></dd>
 
 
 <dt id="arg-bnparam">BNPARAM<a class="anchor" aria-label="anchor" href="#arg-bnparam"></a></dt>
@@ -85,8 +88,15 @@ Incompatible with assay</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>Type of weighting scheme for shared neighbors. Options are rank, number, and jaccard.
-type="rank" is defined in Xu and Su (2015).</p></dd>
+<dd><p>Type of weighting scheme for shared neighbors. Options are jaccard
+(default), rank, and number. type="rank" is defined in Xu and Su (2015).</p></dd>
+
+
+<dt id="arg-prune">prune<a class="anchor" aria-label="anchor" href="#arg-prune"></a></dt>
+<dd><p>Edges with SNN weight at or below this value are removed before
+clustering. Defaults to NULL, which applies a jaccard cutoff of 0.1 for "jaccard",
+converted to the equivalent shared-neighbour count (2(k+1)*0.1/1.1) for "number".
+type="rank" is not pruned by default. Set to 0 to disable.</p></dd>
 
 
 <dt id="arg-nbrs-name">nbrs_name<a class="anchor" aria-label="anchor" href="#arg-nbrs-name"></a></dt>

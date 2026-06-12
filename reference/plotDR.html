@@ -53,8 +53,11 @@ wrapper functions for convenience.</p>
 <span>  feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
 <span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols.highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.shape <span class="op">=</span> <span class="fl">16</span>,</span>
-<span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  pt.size <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  pt.size.highlight <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  pt.alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -101,12 +104,30 @@ If NULL, will try with 'cols' if available.</p></dd>
 that accepts an integer n and return n colours.</p></dd>
 
 
+<dt id="arg-highlight">highlight<a class="anchor" aria-label="anchor" href="#arg-highlight"></a></dt>
+<dd><p>Optional cells to emphasise, given as either a vector of
+group.by levels (characters or cluster numbers), or a logical vector of length
+ncol(spe) selecting cells directly. Highlighted cells are drawn last (on top)
+at pt.size.highlight; all other cells are light grey at pt.size.</p></dd>
+
+
+<dt id="arg-cols-highlight">cols.highlight<a class="anchor" aria-label="anchor" href="#arg-cols-highlight"></a></dt>
+<dd><p>Colour(s) for the highlighted cells. Defaults to NULL,
+which keeps each level's usual group.by palette colour. A single colour (e.g. "red")
+colours all highlighted cells the same; a vector matching the number of 'highlight'
+entries gives one colour per level (matched by position).</p></dd>
+
+
 <dt id="arg-pt-shape">pt.shape<a class="anchor" aria-label="anchor" href="#arg-pt-shape"></a></dt>
 <dd><p>shape of points.</p></dd>
 
 
 <dt id="arg-pt-size">pt.size<a class="anchor" aria-label="anchor" href="#arg-pt-size"></a></dt>
 <dd><p>size of points.</p></dd>
+
+
+<dt id="arg-pt-size-highlight">pt.size.highlight<a class="anchor" aria-label="anchor" href="#arg-pt-size-highlight"></a></dt>
+<dd><p>size of highlighted points (see highlight).</p></dd>
 
 
 <dt id="arg-pt-alpha">pt.alpha<a class="anchor" aria-label="anchor" href="#arg-pt-alpha"></a></dt>

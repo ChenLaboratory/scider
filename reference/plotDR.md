@@ -14,8 +14,11 @@ plotDR(
   feature = NULL,
   assay = "counts",
   cols = NULL,
+  highlight = NULL,
+  cols.highlight = NULL,
   pt.shape = 16,
-  pt.size = 1,
+  pt.size = 0.7,
+  pt.size.highlight = 1,
   pt.alpha = 0.6,
   label = NULL,
   xlab = NULL,
@@ -62,6 +65,22 @@ plotPCA(spe, dimred = "PCA", ...)
   Colour palette. Can be a vector of colours or a function that accepts
   an integer n and return n colours.
 
+- highlight:
+
+  Optional cells to emphasise, given as either a vector of group.by
+  levels (characters or cluster numbers), or a logical vector of length
+  ncol(spe) selecting cells directly. Highlighted cells are drawn last
+  (on top) at pt.size.highlight; all other cells are light grey at
+  pt.size.
+
+- cols.highlight:
+
+  Colour(s) for the highlighted cells. Defaults to NULL, which keeps
+  each level's usual group.by palette colour. A single colour (e.g.
+  "red") colours all highlighted cells the same; a vector matching the
+  number of 'highlight' entries gives one colour per level (matched by
+  position).
+
 - pt.shape:
 
   shape of points.
@@ -69,6 +88,10 @@ plotPCA(spe, dimred = "PCA", ...)
 - pt.size:
 
   size of points.
+
+- pt.size.highlight:
+
+  size of highlighted points (see highlight).
 
 - pt.alpha:
 
