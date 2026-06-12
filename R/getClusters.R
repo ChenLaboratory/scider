@@ -9,13 +9,13 @@
 #' clusters. See \link[igraph]{cluster_leiden} and \link[igraph]{cluster_louvain} 
 #' @param cluster_name Name to store the clusters in spe's
 #' \link[SummarizedExperiment]{colData}
-#' @param merge_unassigned Logical. Clusters with at most \code{min_size} cells
-#' (singletons and tiny fragments, often cells left isolated by SNN pruning) are
-#' set aside. If FALSE (default), their cells are labelled "unassigned". If TRUE,
-#' each is merged into the retained cluster it connects to most strongly in the
-#' graph, and a message reports how many cells were merged.
+#' @param unassigned How to handle cells in clusters with at most \code{min_size}
+#' cells (singletons and tiny fragments, often left isolated by SNN pruning). One
+#' of: "merge" (default) graph-merges each cell into its most-connected retained
+#' cluster; "label" leaves all such cells "unassigned"; "discard" removes them 
+#' from the spe (changing ncol(spe)).
 #' @param min_size Maximum size for a cluster to be treated as too small (see
-#' merge_unassigned). Defaults to NULL, which uses either 5 or 0.01\% of the cells,
+#' unassigned). Defaults to NULL, which uses either 5 or 0.01\% of the cells,
 #' whichever is smaller.
 #' @param seed seed for clustering
 #' @param ... Other clustering arguments for \link[igraph]{cluster_leiden} or 
@@ -40,20 +40,21 @@ getClusters <- function(spe,
                         method = c("leiden", "louvain"),
                         resolution = 1,
                         cluster_name = "cluster",
-                        merge_unassigned = FALSE,
+                        unassigned = c("merge", "label", "discard"),
                         min_size = NULL,
                         seed = 1,
                         ...) {
   set.seed(seed)
+  unassigned <- match.arg(unassigned)
   if (is.null(spe@metadata$nbrs$cell[[1]])) {
     stop("No neighbour list found. Run findNbrsSNN(spe) before getClusters().")
   }
   if (is.null(nbrs_name)){
-    g <- spe@metadata$nbrs$cell[[length(spe@metadata$nbrs$cell)]]
+    nbrs <- spe@metadata$nbrs$cell[[length(spe@metadata$nbrs$cell)]]
   } else {
-    g <- spe@metadata$nbrs$cell[[nbrs_name]]
+    nbrs <- spe@metadata$nbrs$cell[[nbrs_name]]
   }
-  g <- .nbrs2igraph(g)
+  g <- .nbrs2igraph(nbrs)
   
   method <- match.arg(method)
   method.args <- list(...)
@@ -89,18 +90,41 @@ getClusters <- function(spe,
   new_label <- relabel[membership]
   new_label[small_cells] <- NA_integer_
 
-  if (n_small > 0 && merge_unassigned) {
-    cells <- which(small_cells)
-    new_label[cells] <- .assignNearestCluster(g, cells, new_label)
-    n_merged <- n_small - sum(is.na(new_label))
-    n_iso <- n_small - n_merged
-    message("Merged ", n_merged, " cells from clusters with <= ", min_size,
-            " cells into the nearest cluster.",
-            if (n_iso > 0) paste0(" ", n_iso, " cells had no connection to a ",
-                                  "retained cluster and remain 'unassigned'.") else "")
-  } else if (n_small > 0) {
-    message(n_small, " cells in clusters with <= ", min_size,
-            " cells labelled 'unassigned'.")
+  if (n_small > 0) {
+    switch(unassigned,
+      merge = {
+        cells <- which(small_cells)
+        new_label[cells] <- .assignNearestCluster(g, cells, new_label)
+        n_graph <- n_small - sum(is.na(new_label))
+        leftover <- which(is.na(new_label))
+        if (length(leftover)) {
+          coords <- .nbrsSpace(spe, nbrs)
+          new_label[leftover] <-
+            .assignNearestCentroid(coords, new_label, leftover)
+        }
+        message("Reassigned all ", n_small, " cells from clusters with <= ",
+                min_size, " cells (", n_graph, " by graph, ", length(leftover),
+                " by distance).")
+      },
+      label = {
+        message(n_small, " cells in clusters with <= ", min_size,
+                " cells labelled 'unassigned'.")
+      },
+      discard = {
+        message("Discarded ", n_small, " cells in clusters with <= ", min_size,
+                " cells. Neighbour list cleared; re-run findNbrsSNN() to ",
+                "re-cluster the remaining cells.")
+      })
+  }
+
+  if (unassigned == "discard" && n_small > 0) {
+    keep_cells <- !small_cells
+    spe <- spe[, keep_cells]
+    new_label <- new_label[keep_cells]
+    # The stored cell neighbour lists no longer match the subset cells; drop them
+    # so a later getClusters errors (forcing a fresh findNbrsSNN) instead of
+    # silently using a stale graph.
+    spe@metadata$nbrs$cell <- NULL
   }
 
   labels <- ifelse(is.na(new_label), "unassigned", as.character(new_label))
@@ -132,6 +156,39 @@ getClusters <- function(spe,
     out[i] <- as.integer(names(agg)[which.max(agg)])
   }
   out
+}
+
+# Assign each cell in `cells` to the nearest retained-cluster centroid in the
+# coordinate space `coords` (cells x dims). `label` is a per-cell integer vector
+# of retained-cluster labels (NA for cells not yet assigned). Centroids are the
+# column means of the currently-assigned cells in each cluster.
+.assignNearestCentroid <- function(coords, label, cells) {
+  assigned <- !is.na(label)
+  cl <- sort(unique(label[assigned]))
+  cent <- vapply(cl, function(k)
+    colMeans(coords[assigned & label == k, , drop = FALSE]),
+    numeric(ncol(coords)))            # dims x n_clusters
+  out <- integer(length(cells))
+  for (i in seq_along(cells)) {
+    d2 <- colSums((cent - coords[cells[i], ])^2)
+    out[i] <- cl[which.min(d2)]
+  }
+  out
+}
+
+# Retrieve the coordinate matrix (cells x dims) that built the neighbour graph,
+# using the dimred/assay recorded by findNbrsSNN.
+.nbrsSpace <- function(spe, nbrs) {
+  if (!is.null(nbrs$dimred)) {
+    m <- as.matrix(SingleCellExperiment::reducedDim(spe, nbrs$dimred))
+    if (!is.null(nbrs$dims)) m <- m[, nbrs$dims, drop = FALSE]
+    m
+  } else if (!is.null(nbrs$assay)) {
+    as.matrix(Matrix::t(SummarizedExperiment::assay(spe, nbrs$assay)))
+  } else {
+    stop("The coordinate space for the neighbour graph was not recorded; ",
+         "re-run findNbrsSNN() so unassigned=\"force\" can use it.")
+  }
 }
 
 # Convert nbrs (in spe@metadata$nbrs) into igraph's graph

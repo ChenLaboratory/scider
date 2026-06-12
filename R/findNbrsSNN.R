@@ -104,6 +104,12 @@ findNbrsSNN <- function(spe,
     snn$weight <- Map(function(w,   sel) w[sel],   snn$weight, keep)
   }
 
+  # Record the coordinate space used, so downstream steps (e.g. the distance
+  # fallback in getClusters(unassigned="force")) can reconstruct it.
+  snn$dimred <- dimred
+  snn$assay  <- if (is.null(dimred)) assay else NULL
+  snn$dims   <- if (!is.null(dimred)) n_dimred else NULL
+
   if (is.null(nbrs_name)) {
     if(is.null(dimred)) nbrs_name <- paste0(assay,"_snn")
     else nbrs_name <- paste0(dimred,"_snn")
