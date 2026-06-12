@@ -163,6 +163,18 @@ selectColor <- function(n) {
   list(group = group2, col.p = col.p, size = size, order = ord)
 }
 
+# Order cluster factor levels: numeric labels first (numerically), then any
+# non-numeric labels (e.g. merged "2&5&7") alphabetically, with `special`
+# ("unassigned") always last.
+.orderClusterLevels <- function(labels, special = "unassigned") {
+  u <- setdiff(unique(labels), special)
+  num <- suppressWarnings(as.numeric(u))
+  is_num <- !is.na(num)
+  c(u[is_num][order(num[is_num])],
+    sort(u[!is_num]),
+    if (special %in% labels) special)
+}
+
 col.lisa <- c("#eeeeee", "#FF0000", "#0000FF", "#a7adf9",
               "#f4ada8", "#464646", "#999999")
 col.pval <- c("#3644E5", "#FFFFBF", "#FF5D53")
