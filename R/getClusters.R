@@ -1,8 +1,9 @@
 #' Cluster cells in spe using graph methods.
 #'
 #' @param spe A SpatialExperiment object.
-#' @param nbrs_name Name of neighbour list for clustering. If NULL, will use 
-#' the newest one in spe@metadata$nbrs$cell or create one if none are available.
+#' @param nbrs_name Name of neighbour list for clustering. If NULL, uses the
+#' newest one in spe@metadata$nbrs$cell. \link[scider]{findNbrsSNN} must have been
+#' run first; otherwise getClusters errors.
 #' @param method Clustering methods. Options are leiden and louvain.
 #' @param resolution Higher resolution for more clusters and lower for fewer 
 #' clusters. See \link[igraph]{cluster_leiden} and \link[igraph]{cluster_louvain} 
@@ -21,8 +22,9 @@
 #' \link[igraph]{cluster_louvain} 
 #' @return A spe with the clusters stored in \link[SingleCellExperiment]{reducedDims}.
 #' @details
-#' Cluster cells with igraph using SNN calculated by \link[scider]{findNbrsSNN}.
-#' Any neighbour list in spe@metadata$nbrs$cell can also be used
+#' Cluster cells with igraph using an SNN neighbour list built by
+#' \link[scider]{findNbrsSNN}, which must be run before getClusters. Any
+#' neighbour list in spe@metadata$nbrs$cell can be selected via nbrs_name.
 #' @return A SpatialExperiment object
 #' @export
 #' @examples
@@ -43,11 +45,10 @@ getClusters <- function(spe,
                         seed = 1,
                         ...) {
   set.seed(seed)
+  if (is.null(spe@metadata$nbrs$cell[[1]])) {
+    stop("No neighbour list found. Run findNbrsSNN(spe) before getClusters().")
+  }
   if (is.null(nbrs_name)){
-    if (is.null(spe@metadata$nbrs$cell[[1]])) {
-      message("No neighbour list found. Calculating snn.")
-      spe <- findNbrsSNN(spe)
-    }
     g <- spe@metadata$nbrs$cell[[length(spe@metadata$nbrs$cell)]]
   } else {
     g <- spe@metadata$nbrs$cell[[nbrs_name]]
