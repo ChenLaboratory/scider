@@ -431,7 +431,7 @@ sessionInfo()
     ##  [7] Seqinfo_1.2.0               IRanges_2.46.0             
     ##  [9] S4Vectors_0.50.1            BiocGenerics_0.58.1        
     ## [11] generics_0.1.4              MatrixGenerics_1.24.0      
-    ## [13] matrixStats_1.5.0           scider_1.9.4               
+    ## [13] matrixStats_1.5.0           scider_1.9.5               
     ## [15] ggplot2_4.0.3              
     ## 
     ## loaded via a namespace (and not attached):
