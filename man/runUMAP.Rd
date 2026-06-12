@@ -10,6 +10,7 @@ runUMAP(
   n_components = 2,
   metric = "cosine",
   min_dist = 0.3,
+  spread = 1,
   assay = NULL,
   dimred = "PCA",
   n_dimred = NULL,
@@ -20,7 +21,7 @@ runUMAP(
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
-\item{n_neighbors, n_components, metric, min_dist}{See \link[uwot]{umap}}
+\item{n_neighbors, n_components, metric, min_dist, spread}{See \link[uwot]{umap}}
 
 \item{assay}{Name of assay for UMAP. Incompatible with dimred.}
 

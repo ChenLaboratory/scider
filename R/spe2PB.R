@@ -136,7 +136,9 @@ spe2PB <- function(spe,
                if (!is.null(rois)) "rois", 
                if (!is.null(clvl)) "clvl")
     eval( parse(text=paste0('group <- paste(', paste(combo, collapse=","), ',sep ="_")') ))
-    group <- factor(group)
+    # Order levels naturally (numeric labels ascending, e.g. 1,2,..,10 not
+    # 1,10,2) so the pseudo-bulk columns come out in a sensible order.
+    group <- factor(group, levels = .orderClusterLevels(group))
     # group_mat <- Matrix::sparse.model.matrix(~ 0 + group)
     group_mat <- stats::model.matrix(~ 0 + group)
     colnames(group_mat) <- gsub("^group", "", colnames(group_mat))

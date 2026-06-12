@@ -11,8 +11,11 @@ plotSpatial(
   assay = "counts",
   type = c("raw", "log", "cpm", "logcpm"),
   cols = NULL,
+  highlight = NULL,
+  cols.highlight = NULL,
   pt.shape = 16,
   pt.size = 0.3,
+  pt.size.highlight = 1,
   pt.alpha = 0.5,
   label = NULL,
   cols.scale = NULL,
@@ -37,9 +40,22 @@ the same length.}
 \item{cols}{Colour palette. Can be a vector of colours or a function
 that accepts an integer n and return n colours.}
 
+\item{highlight}{Optional cells to emphasise, given as either a vector of
+group.by levels (characters or cluster numbers), or a logical vector of length
+ncol(spe) selecting cells directly.
+Highlighted cells are drawn last (on top) at pt.size.highlight; all other cells
+are light grey at pt.size.}
+
+\item{cols.highlight}{Colour(s) for the highlighted cells. Defaults to NULL,
+which keeps each level's usual group.by palette colour. A single colour (e.g. "red")
+colours all highlighted cells the same; a vector matching the number of 'highlight'
+entries gives one colour per level (matched by position).}
+
 \item{pt.shape}{shape of points.}
 
 \item{pt.size}{size of points.}
+
+\item{pt.size.highlight}{size of highlighted points (see highlight).}
 
 \item{pt.alpha}{alpha of points between 0 and 1.}
 

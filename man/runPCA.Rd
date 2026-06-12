@@ -28,9 +28,8 @@ runPCA(
 \item{scale}{Logical. Whether to scale the variance to 1 before PCA.}
 
 \item{clip}{Maximum absolute z-score after scaling. Values beyond this are
-clipped. Prevents rare-marker genes (near-zero SD) from creating extreme
-outliers that fragment the UMAP. Defaults to \code{sqrt(ncol(spe))}. Set to
-\code{Inf} to disable.}
+clipped. Prevents rare-marker genes (near-zero SD) from creating extreme outliers
+that fragment the UMAP. Defaults to \code{10}. Set to \code{Inf} to disable.}
 
 \item{name}{Name to store the PCA in the spe's \link[SingleCellExperiment]{reducedDims}}
 
