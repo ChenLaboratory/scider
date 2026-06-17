@@ -59,6 +59,8 @@ Install development version from GitHub
   : Get top highly variable genes.
 - [`getNiche()`](https://chenlaboratory.github.io/scider/reference/getNiche.md)
   : Build a niche assay based on the profile of neighbouring cells
+- [`getSubClusters()`](https://chenlaboratory.github.io/scider/reference/getSubClusters.md)
+  : Sub-cluster a single cluster.
 - [`globalMoran()`](https://chenlaboratory.github.io/scider/reference/globalMoran.md)
   : Calculate global Moran for 1 to 2 variables.
 - [`grid2df()`](https://chenlaboratory.github.io/scider/reference/grid2df.md)
@@ -72,6 +74,8 @@ Install development version from GitHub
   : Summarize a SpatialExperiment object at grid-level
 - [`localMoran()`](https://chenlaboratory.github.io/scider/reference/localMoran.md)
   : Calculate local Moran for 1 to 2 variables.
+- [`mergeClusters()`](https://chenlaboratory.github.io/scider/reference/mergeClusters.md)
+  : Manually merge clusters.
 - [`mergeROI()`](https://chenlaboratory.github.io/scider/reference/mergeROI.md)
   : Manually merge ROIs
 - [`normalizeAssay()`](https://chenlaboratory.github.io/scider/reference/normalizeAssay.md)

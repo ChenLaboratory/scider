@@ -21,6 +21,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/getContourRegions.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getHVG.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getNiche.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/getSubClusters.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/globalMoran.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/grid2df.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/grid2sf.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/gridSPE.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/index.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/localMoran.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/mergeClusters.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/mergeROI.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/normalizeAssay.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotCellCompo.html</loc></url>
