@@ -31,8 +31,13 @@
   : Get contour from density
 - [`getContourRegions()`](https://chenlaboratory.github.io/scider/reference/getContourRegions.md)
   : Calculate areas between every two density levels
+- [`getDE()`](https://chenlaboratory.github.io/scider/reference/getDE.md)
+  : Differential expression between two clusters or two groups of
+  clusters.
 - [`getHVG()`](https://chenlaboratory.github.io/scider/reference/getHVG.md)
   : Get top highly variable genes.
+- [`getMarkers()`](https://chenlaboratory.github.io/scider/reference/getMarkers.md)
+  : Find up-regulated marker genes for all clusters (quasi-NB GLM).
 - [`getNiche()`](https://chenlaboratory.github.io/scider/reference/getNiche.md)
   : Build a niche assay based on the profile of neighbouring cells
 - [`getSubClusters()`](https://chenlaboratory.github.io/scider/reference/getSubClusters.md)
@@ -87,6 +92,8 @@
   : Plot ROIs on spatial.
 - [`plotSpatial()`](https://chenlaboratory.github.io/scider/reference/plotSpatial.md)
   : Plot cells based on spatial coordinates.
+- [`plotTopMarkers()`](https://chenlaboratory.github.io/scider/reference/plotTopMarkers.md)
+  : Dot plot or heatmap of the top marker genes per cluster.
 - [`plotViolin()`](https://chenlaboratory.github.io/scider/reference/plotViolin.md)
   : Violin plot using genes or cell data
 - [`postSelRegion()`](https://chenlaboratory.github.io/scider/reference/postSelRegion.md)
@@ -115,5 +122,7 @@
   using the colData information and return a DGEList object
 - [`` `[`( ``*`<SpatialExperiment>`*`,`*`<ANY>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://chenlaboratory.github.io/scider/reference/sub-SpatialExperiment-ANY-ANY-ANY-method.md)
   : Subset for grid level analysis
+- [`topMarkers()`](https://chenlaboratory.github.io/scider/reference/topMarkers.md)
+  : Combine the top markers of each cluster into one data frame.
 - [`update_bound()`](https://chenlaboratory.github.io/scider/reference/update_bound.md)
   : Update the x,y limits of a plot

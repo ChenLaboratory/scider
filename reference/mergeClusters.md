@@ -87,6 +87,7 @@ spe <- findNbrsSNN(spe, dimred = "PCA")
 #> [1] "Getting K-nearest neighbour"
 #> [1] "Getting shared nearest neighbour"
 spe <- getClusters(spe, resolution = 0.5)
+#> Reassigned all 1 cells from clusters with <= 1 cells (0 by graph, 1 by distance).
 # Merge clusters 2, 5 and 7 into one labelled "2&5&7"
 spe <- mergeClusters(spe, merge = c(2, 5, 7))
 # Merge and then renumber everything 1..K by size

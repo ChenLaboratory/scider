@@ -19,7 +19,9 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/getClusters.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getContour.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getContourRegions.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/getDE.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getHVG.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/getMarkers.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getNiche.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/getSubClusters.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/globalMoran.html</loc></url>
@@ -46,6 +48,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotLISAscatter.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotROI.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotSpatial.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/plotTopMarkers.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotViolin.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/postSelRegion.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/readProseg.html</loc></url>
@@ -60,6 +63,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/selectRegion.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/spe2PB.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/sub-SpatialExperiment-ANY-ANY-ANY-method.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/topMarkers.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/update_bound.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/xenium_bc_spe.html</loc></url>
 </urlset>
