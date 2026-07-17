@@ -17,6 +17,7 @@ getSubClusters(
   start_from = NULL,
   sep = "_",
   seed = 1,
+  verbose = FALSE,
   ...
 )
 }
@@ -55,6 +56,9 @@ suffixes and the relabel renumbering. Defaults to NULL, which infers the base
 \item{sep}{Separator between a cluster and its sub-cluster number. Default "_".}
 
 \item{seed}{Seed for clustering.}
+
+\item{verbose}{Logical. Whether to report how the cluster was split (number of
+sub-clusters and any small ones merged in). Defaults to FALSE.}
 
 \item{...}{Other clustering arguments for \link[igraph]{cluster_leiden} or
 \link[igraph]{cluster_louvain}.}

@@ -10,7 +10,7 @@ plotDots(
   assay = "counts",
   group.by = "cell_type",
   detection.limit = 0,
-  expression.limit = c(-Inf, Inf),
+  range = c(-Inf, Inf),
   scale = TRUE,
   cols = NULL,
   dot.scale = 6,
@@ -29,14 +29,15 @@ plotDots(
 \item{detection.limit}{threshold for minimum expression value for percentage
 expression calculation (dot size)}
 
-\item{expression.limit}{Upper and lower bound for average expression. Values
+\item{range}{Upper and lower bound for average expression. Values
 beyond this range are snapped to this limit. If only one value is provided,
-it it taken as the upper bound.}
+it is taken as the upper bound.}
 
 \item{scale}{Whether to scale the average expression data of each feature
 using \link[base]{scale}.}
 
-\item{cols}{Custom color palette.}
+\item{cols}{Custom colour palette (a vector of colours defining the fill
+gradient). Default NULL uses a light-grey (low) to dark-red (high) gradient.}
 
 \item{dot.scale}{scale the radius of the plot. See \link[ggplot2]{scale_radius}}
 
