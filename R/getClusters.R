@@ -20,6 +20,8 @@
 #' @param start_from Integer at which cluster numbering starts. 1 (default)
 #' numbers clusters 1..K.
 #' @param seed seed for clustering
+#' @param verbose Logical. Whether to report how cells in tiny clusters were
+#' reassigned/labelled/discarded (see unassigned). Defaults to FALSE.
 #' @param ... Other clustering arguments for \link[igraph]{cluster_leiden} or 
 #' \link[igraph]{cluster_louvain} 
 #' @return A spe with the clusters stored in \link[SingleCellExperiment]{reducedDims}.
@@ -46,6 +48,7 @@ getClusters <- function(spe,
                         min_size = NULL,
                         start_from = 1,
                         seed = 1,
+                        verbose = FALSE,
                         ...) {
   set.seed(seed)
   unassigned <- match.arg(unassigned)
@@ -107,16 +110,19 @@ getClusters <- function(spe,
           new_label[leftover] <-
             .assignNearestCentroid(coords, new_label, leftover)
         }
-        message("Reassigned all ", n_small, " cells from clusters with <= ",
+        if (verbose)
+          message("Reassigned all ", n_small, " cells from clusters with <= ",
                 min_size, " cells (", n_graph, " by graph, ", length(leftover),
                 " by distance).")
       },
       label = {
-        message(n_small, " cells in clusters with <= ", min_size,
+        if (verbose)
+          message(n_small, " cells in clusters with <= ", min_size,
                 " cells labelled 'unassigned'.")
       },
       discard = {
-        message("Discarded ", n_small, " cells in clusters with <= ", min_size,
+        if (verbose)
+          message("Discarded ", n_small, " cells in clusters with <= ", min_size,
                 " cells. Neighbour list cleared; re-run findNbrsSNN() to ",
                 "re-cluster the remaining cells.")
       })

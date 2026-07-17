@@ -75,6 +75,13 @@ void pseudoP(int start,int end,uint64_t seed_start,
   delete[] potential_nbrs;
 }
 
+// Local Moran calculation based on libgeoda's code
+// See https://github.com/GeoDaCenter/libgeoda
+// Some notable changes include:
+// + Added spatial weights.
+// + Output is reproducible even with different cpu_threads.
+// + Fix various permutation bugs.
+// + Fix rng & use better rng (pcg-rng instead of thomaswang)
 extern "C" {
   SEXP C_localMoran(SEXP nbrs,
                     SEXP n_nbrs,
@@ -111,7 +118,7 @@ extern "C" {
     bool hhonly = Rf_asLogical(hhonly_);
     
     // Shuffle so sequential seeds are different. Not strictly needed.
-    // Numbers taken from r-source/src/main/RNG.c
+    // Based on r-source/src/main/RNG.c
     for(int i = 0; i < 50; i++) p_seed = (69069 * p_seed + 1);
     
     // Standardize data

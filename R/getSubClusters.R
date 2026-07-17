@@ -28,6 +28,8 @@
 #' (0- or 1-based) from the existing labels.
 #' @param sep Separator between a cluster and its sub-cluster number. Default "_".
 #' @param seed Seed for clustering.
+#' @param verbose Logical. Whether to report how the cluster was split (number of
+#' sub-clusters and any small ones merged in). Defaults to FALSE.
 #' @param ... Other clustering arguments for \link[igraph]{cluster_leiden} or
 #' \link[igraph]{cluster_louvain}.
 #' @return A SpatialExperiment with the sub-clusters stored in colData.
@@ -58,6 +60,7 @@ getSubClusters <- function(spe,
                            start_from = NULL,
                            sep = "_",
                            seed = 1,
+                           verbose = FALSE,
                            ...) {
   set.seed(seed)
   method <- match.arg(method)
@@ -74,10 +77,7 @@ getSubClusters <- function(spe,
     stop("Cluster '", target, "' has fewer than 2 cells to sub-cluster.")
 
   # Numbering base for sub-cluster suffixes and relabel; infer if not given.
-  if (is.null(start_from)) {
-    orig_num <- suppressWarnings(as.numeric(setdiff(unique(cl_chr), "unassigned")))
-    start_from <- if (any(!is.na(orig_num))) min(orig_num, na.rm = TRUE) else 1
-  }
+  if (is.null(start_from)) start_from <- .inferStartFrom(cl_chr)
 
   # Induce and cluster the sub-graph of the target cluster's cells.
   if (is.null(nbrs_name)) {
@@ -135,19 +135,15 @@ getSubClusters <- function(spe,
   new_chr <- cl_chr
   new_chr[cells] <- paste(target, sub_id, sep = sep)
 
-  message("Split cluster '", target, "' into ", length(sub_ord), " sub-clusters",
+  if (verbose)
+    message("Split cluster '", target, "' into ", length(sub_ord), " sub-clusters",
           if (n_small > 0) paste0(" (", n_small, " cells from sub-clusters <= ",
                                   min_size, " merged)") else "", ".")
 
   if (relabel) {
-    # Renumber all clusters by size, preserving the numbering base.
-    keep <- new_chr != "unassigned"
-    ord  <- names(sort(table(new_chr[keep]), decreasing = TRUE))
-    ids  <- seq_along(ord) - 1L + start_from
-    map  <- ids
-    names(map) <- ord
-    new_chr[keep] <- as.character(map[new_chr[keep]])
-    lvls <- c(as.character(ids), if (any(!keep)) "unassigned")
+    rl <- .relabelBySize(new_chr, start_from)
+    new_chr <- rl$labels
+    lvls <- rl$levels
   } else {
     # Keep the existing level order, replacing the target cluster with its
     # sub-cluster labels (in sub-id order).

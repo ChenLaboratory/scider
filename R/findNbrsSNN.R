@@ -74,7 +74,6 @@ findNbrsSNN <- function(spe,
     message(paste("k is larger than number of points. Setting k to",ncol(spe)-1))
     k = ncol(spe)-1
   }
-  print("Getting K-nearest neighbour")
   knn.args <- list(X=mat,
                      k=k,
                      num.threads=cpu_threads,
@@ -84,7 +83,6 @@ findNbrsSNN <- function(spe,
   knn <- do.call(BiocNeighbors::findKNN,knn.args)
   
   # SNN
-  print("Getting shared nearest neighbour")
   type <- match.arg(type)
   snn <- .Call("C_findSNN",t(knn$index-1),k,nrow(mat),type,cpu_threads)
   snn$index <- lapply(snn$index,"+",1L)

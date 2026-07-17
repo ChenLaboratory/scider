@@ -59,18 +59,18 @@ bool LargerOrAlmostEqual(double A, double B,
   //// A is clearly larger than B.
   if (A > B) return true;
   
-  //// A is almost equal to B.
+  //// A is slightly smaller but almost equal to B.
   // Absolute difference. Needed when A,B are close to 0. 
-  double diff = fabs(A - B);
+  double diff = B - A;
   if (diff <= maxDiff)
     return true;
   
   // Relative difference. When A,B are far away from 0. 
   // Should rarely hit here since we z-standardize data before Moran's I.
-  A = fabs(A);
-  B = fabs(B);
-  double largest = (B > A) ? B : A;
-  if (diff <= largest * maxRelDiff)
+  // A = fabs(A);
+  // B = fabs(B);
+  // double largest = (B > A) ? B : A;
+  if (diff <= B * maxRelDiff)
     return true;
   return false;
 }

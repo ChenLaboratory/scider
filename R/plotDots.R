@@ -81,7 +81,8 @@ plotDots <- function(spe,
     geom_point(aes(.data[[group.by]],feature,size=.data[["percentage"]],fill=.data[["average"]]),
                shape=21, colour="black", stroke=0.3) +
     theme_minimal() +
-    theme(axis.text.x=element_text(angle=-45,hjust=0)) +
+    theme(axis.line=element_line(colour="black"),
+          axis.text.x=element_text(angle=45,hjust=1)) +
     scale_radius(range=c(0,dot.scale))
   if (is.null(cols)) {
     p <- p + scale_fill_gradient(low="lightgrey", high="darkred")

@@ -53,10 +53,7 @@ mergeClusters <- function(spe,
 
   # Numbering base for relabel. If not given, infer it (e.g. 0 like Seurat, or 1)
   # from the existing numeric labels so relabel preserves what getClusters made.
-  if (is.null(start_from)) {
-    orig_num <- suppressWarnings(as.numeric(setdiff(unique(cl_chr), "unassigned")))
-    start_from <- if (any(!is.na(orig_num))) min(orig_num, na.rm = TRUE) else 1
-  }
+  if (is.null(start_from)) start_from <- .inferStartFrom(cl_chr)
 
   # Accept a single vector or a list of vectors.
   if (!is.list(merge)) merge <- list(merge)
@@ -75,19 +72,78 @@ mergeClusters <- function(spe,
   }
 
   if (relabel) {
-    # Renumber retained clusters by size (largest first), preserving the original
-    # numbering base (start_from); 'unassigned' kept last.
-    keep <- cl_chr != "unassigned"
-    ord  <- names(sort(table(cl_chr[keep]), decreasing = TRUE))
-    ids  <- seq_along(ord) - 1L + start_from
-    map  <- ids
-    names(map) <- ord
-    cl_chr[keep] <- as.character(map[cl_chr[keep]])
-    lvls <- c(as.character(ids), if (any(!keep)) "unassigned")
+    rl <- .relabelBySize(cl_chr, start_from)
+    cl_chr <- rl$labels
+    lvls <- rl$levels
   } else {
     lvls <- .orderClusterLevels(cl_chr)
   }
 
   spe[[new_name]] <- factor(cl_chr, levels = lvls)
   return(spe)
+}
+
+
+#' Renumber all clusters by size.
+#'
+#' Renumbers the clusters in a colData column \code{1..K} by size (largest
+#' first), with "unassigned" kept as the last level. Useful for tidying up the
+#' compound labels left by \code{getSubClusters(relabel = FALSE)} /
+#' \code{mergeClusters(relabel = FALSE)} after a multi-step workflow.
+#'
+#' Renumbering is size-based, so run it \strong{before} cell-type annotation -
+#' relabelling after a cluster-to-cell-type mapping would scramble that mapping.
+#'
+#' @param spe A SpatialExperiment object.
+#' @param cluster_name Name of the cluster column in
+#' \link[SummarizedExperiment]{colData} to renumber.
+#' @param new_name Name of the column to store the result. Defaults to
+#' overwriting cluster_name.
+#' @param start_from Integer at which numbering starts. Defaults to NULL, which
+#' infers the base (0- or 1-based) from the existing labels.
+#' @return A SpatialExperiment with the renumbered clusters in colData.
+#' @export
+#' @examples
+#'
+#' data("xenium_bc_spe")
+#' spe <- normalizeAssay(spe)
+#' spe <- runPCA(spe)
+#' spe <- findNbrsSNN(spe, dimred = "PCA")
+#' spe <- getClusters(spe, resolution = 0.5)
+#' spe <- getSubClusters(spe, cluster = 2, resolution = 0.5)
+#' # Tidy the 2_1/2_2/... labels into plain 1..K numbers by size
+#' spe <- relabelClusters(spe)
+relabelClusters <- function(spe,
+                            cluster_name = "cluster",
+                            new_name = cluster_name,
+                            start_from = NULL) {
+  if (!cluster_name %in% colnames(SummarizedExperiment::colData(spe)))
+    stop("'", cluster_name, "' not found in colData(spe).")
+  cl_chr <- as.character(spe[[cluster_name]])
+  if (is.null(start_from)) start_from <- .inferStartFrom(cl_chr)
+
+  rl <- .relabelBySize(cl_chr, start_from)
+  spe[[new_name]] <- factor(rl$labels, levels = rl$levels)
+  return(spe)
+}
+
+
+# Infer the numbering base (e.g. 0 like Seurat, or 1) from existing numeric
+# cluster labels, so relabelling preserves what getClusters produced.
+.inferStartFrom <- function(cl_chr) {
+  orig_num <- suppressWarnings(as.numeric(setdiff(unique(cl_chr), "unassigned")))
+  if (any(!is.na(orig_num))) min(orig_num, na.rm = TRUE) else 1
+}
+
+# Renumber cluster labels by size (largest first), starting at start_from, with
+# "unassigned" kept as the last level. Returns the relabelled character vector
+# and the corresponding factor levels.
+.relabelBySize <- function(cl_chr, start_from) {
+  keep <- cl_chr != "unassigned"
+  ord  <- names(sort(table(cl_chr[keep]), decreasing = TRUE))
+  ids  <- seq_along(ord) - 1L + start_from
+  map  <- stats::setNames(ids, ord)
+  cl_chr[keep] <- as.character(map[cl_chr[keep]])
+  lvls <- c(as.character(ids), if (any(!keep)) "unassigned")
+  list(labels = cl_chr, levels = lvls)
 }

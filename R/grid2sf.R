@@ -10,8 +10,9 @@
 #' 
 #' @details
 #' Default is to generate sf polygons for all grid.
-#' For plotting with geom_sf, use sf::st_as_sfc(grid2sf(spe)) to convert list 
+#' For plotting with geom_sf, use sf::st_as_sfc(grid2sf(spe)) to convert list
 #' into Geometry Set.
+#' @export
 grid2sf <- function(spe,
                     x=spe@metadata$grid_density$node_x,
                     y=spe@metadata$grid_density$node_y,
@@ -85,8 +86,9 @@ grid2sf <- function(spe,
 #' @details
 #' Basically grid2sf() but returns a data.frame for plotting with geom_polygon(),
 #' which allows for scale_*_transform(), unlike geom_sf().
-#' 
+#'
 #' Column names are kept similar to sf::st_coordinates
+#' @export
 grid2df <- function(spe,
                     x=spe@metadata$grid_density$node_x,
                     y=spe@metadata$grid_density$node_y,

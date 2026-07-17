@@ -43,12 +43,16 @@ readVisium <- function(dir,
                                   "tissue_hires_image.png"))
   scale_factors <- scale_factors %||% file.path(dir,"spatial","scalefactors_json.json")
   file.path("spatial","scalefactors_json.json")
+  # load=TRUE embeds the image pixels in the SPE object so the RDS is
+  # self-contained and portable (load=FALSE only stores the file path, which
+  # breaks when the RDS is moved to a machine without access to the original
+  # directory).
   img <- SpatialExperiment::readImgData(
     path=dir,
     imageSources = image,
     scaleFactors = scale_factors,
     sample_id=sample_id,
-    load=FALSE)
+    load=TRUE)
 
   # read in coords
   coord <- coord %||% file.path(dir,"spatial","tissue_positions.csv")

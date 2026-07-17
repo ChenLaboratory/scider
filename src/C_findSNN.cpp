@@ -1,6 +1,9 @@
 #include <vector>
 #include <string>
 #include "utils.h"
+// Contruct Shared Nearest-Neighbor graph with possible weights being rank, 
+// jaccard, and number.
+// Based on Aaron Lun's code. See https://github.com/libscran/scran_graph_cluster
 extern "C" {
   SEXP C_findSNN(SEXP knn,
                  SEXP k_,

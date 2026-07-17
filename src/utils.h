@@ -13,7 +13,7 @@
 
 double* standardizeData(double* data, R_xlen_t n);
 void parallel(int n_cpu,int n_task, std::function<void(int, int)> f);
-bool LargerOrAlmostEqual(double A, double B, double maxDiff = DBL_EPSILON, 
-                         double maxRelDiff = DBL_EPSILON);
+bool LargerOrAlmostEqual(double A, double B, double maxDiff = std::sqrt(DBL_EPSILON), 
+                         double maxRelDiff = std::sqrt(DBL_EPSILON));
 
 #endif
