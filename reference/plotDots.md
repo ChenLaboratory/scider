@@ -12,7 +12,7 @@ plotDots(
   assay = "counts",
   group.by = "cell_type",
   detection.limit = 0,
-  expression.limit = c(-Inf, Inf),
+  range = c(-Inf, Inf),
   scale = TRUE,
   cols = NULL,
   dot.scale = 6,
@@ -43,10 +43,10 @@ plotDots(
   threshold for minimum expression value for percentage expression
   calculation (dot size)
 
-- expression.limit:
+- range:
 
   Upper and lower bound for average expression. Values beyond this range
-  are snapped to this limit. If only one value is provided, it it taken
+  are snapped to this limit. If only one value is provided, it is taken
   as the upper bound.
 
 - scale:
@@ -56,7 +56,9 @@ plotDots(
 
 - cols:
 
-  Custom color palette.
+  Custom colour palette (a vector of colours defining the fill
+  gradient). Default NULL uses a light-grey (low) to dark-red (high)
+  gradient.
 
 - dot.scale:
 

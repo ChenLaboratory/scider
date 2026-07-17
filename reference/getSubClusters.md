@@ -21,6 +21,7 @@ getSubClusters(
   start_from = NULL,
   sep = "_",
   seed = 1,
+  verbose = FALSE,
   ...
 )
 ```
@@ -92,6 +93,11 @@ getSubClusters(
 - seed:
 
   Seed for clustering.
+
+- verbose:
+
+  Logical. Whether to report how the cluster was split (number of
+  sub-clusters and any small ones merged in). Defaults to FALSE.
 
 - ...:
 

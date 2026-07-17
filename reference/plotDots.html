@@ -51,7 +51,7 @@ certain gene(s). Similar to Seurat's DotPlot.</p>
 <span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
 <span>  group.by <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
 <span>  detection.limit <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  expression.limit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dot.scale <span class="op">=</span> <span class="fl">6</span>,</span>
@@ -84,10 +84,10 @@ certain gene(s). Similar to Seurat's DotPlot.</p>
 expression calculation (dot size)</p></dd>
 
 
-<dt id="arg-expression-limit">expression.limit<a class="anchor" aria-label="anchor" href="#arg-expression-limit"></a></dt>
+<dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
 <dd><p>Upper and lower bound for average expression. Values
 beyond this range are snapped to this limit. If only one value is provided,
-it it taken as the upper bound.</p></dd>
+it is taken as the upper bound.</p></dd>
 
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
@@ -96,7 +96,8 @@ using <a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a
 
 
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
-<dd><p>Custom color palette.</p></dd>
+<dd><p>Custom colour palette (a vector of colours defining the fill
+gradient). Default NULL uses a light-grey (low) to dark-red (high) gradient.</p></dd>
 
 
 <dt id="arg-dot-scale">dot.scale<a class="anchor" aria-label="anchor" href="#arg-dot-scale"></a></dt>

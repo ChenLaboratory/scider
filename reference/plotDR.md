@@ -13,6 +13,7 @@ plotDR(
   group.by = NULL,
   feature = NULL,
   assay = "counts",
+  type = c("log", "raw", "cpm", "logcpm"),
   cols = NULL,
   highlight = NULL,
   cols.highlight = NULL,
@@ -23,7 +24,11 @@ plotDR(
   label = NULL,
   xlab = NULL,
   ylab = NULL,
-  cols.scale = NULL
+  cols.scale = NULL,
+  ncol = NULL,
+  per.scale = TRUE,
+  range = NULL,
+  transform = "identity"
 )
 
 plotUMAP(spe, dimred = "UMAP", ...)
@@ -54,11 +59,22 @@ plotPCA(spe, dimred = "PCA", ...)
 
 - feature:
 
-  Feature to group points by. Must be in rownames(spe).
+  Feature(s) to colour points by; must be in rownames(spe). If a vector
+  of more than one feature is supplied, one reduced-dimension panel is
+  drawn per feature, faceted (see `ncol`), with a shared colour scale.
 
 - assay:
 
-  Name of assay to use for plotting feature.
+  Name of assay to use for plotting feature. Default "counts".
+
+- type:
+
+  Transformation applied to feature expression: "log" (default,
+  log2(1+x)), "raw" (no transform), "cpm", or "logcpm" (log2 CPM). For
+  multiple features the legend title defaults to the matching unit
+  ("log2 Cts", "Counts", "CPM", "log2-CPM"); for a single feature the
+  unit is the legend title and the gene name becomes the plot title.
+  Override the legend with `label`.
 
 - cols:
 
@@ -115,6 +131,41 @@ plotPCA(spe, dimred = "PCA", ...)
   positioned. See
   [scale_color_gradientn](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
   Only applicable for continuous values.
+
+- ncol:
+
+  Number of columns when plotting multiple features. Passed to
+  [facet_wrap](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
+  (shared scale) or
+  [wrap_plots](https://patchwork.data-imaginist.com/reference/wrap_plots.html)
+  (per-panel scales). Default NULL lets the layout be chosen
+  automatically.
+
+- per.scale:
+
+  Logical. For multiple features, whether each panel gets its own colour
+  scale (TRUE, default; like `Seurat::FeaturePlot`, via the 'patchwork'
+  package) or a single shared colour scale across panels (FALSE).
+
+- range:
+
+  Numeric length-2 (lower, upper) cap for continuous colour values
+
+  - a single feature, or multiple features with a shared scale; values
+    outside are clamped. A single value is taken as the upper bound.
+    Default NULL (no capping). Ignored when `per.scale = TRUE` (each
+    panel auto-scales).
+
+- transform:
+
+  Name of a transformation for the continuous colour scale (e.g.
+  "log10", "log1p", "pseudo_log", "sqrt"), passed to
+  [scale_color_gradientn](https://ggplot2.tidyverse.org/reference/scale_gradient.html);
+  the colour spectrum is spaced by the transform while the legend stays
+  in original units. Default "identity" (no transformation). Use "log10"
+  for nicely log-spaced legend breaks (needs positive values);
+  "log1p"/"pseudo_log" tolerate zeros but keep linear breaks. Only
+  affects continuous (feature or numeric group.by) colouring.
 
 - ...:
 

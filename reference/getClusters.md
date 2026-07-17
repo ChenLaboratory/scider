@@ -15,6 +15,7 @@ getClusters(
   min_size = NULL,
   start_from = 1,
   seed = 1,
+  verbose = FALSE,
   ...
 )
 ```
@@ -71,6 +72,11 @@ getClusters(
 - seed:
 
   seed for clustering
+
+- verbose:
+
+  Logical. Whether to report how cells in tiny clusters were
+  reassigned/labelled/discarded (see unassigned). Defaults to FALSE.
 
 - ...:
 

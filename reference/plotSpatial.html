@@ -47,17 +47,22 @@
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"log"</span>, <span class="st">"cpm"</span>, <span class="st">"logcpm"</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"log"</span>, <span class="st">"raw"</span>, <span class="st">"cpm"</span>, <span class="st">"logcpm"</span><span class="op">)</span>,</span>
 <span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cols.highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.shape <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  pt.size.highlight <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  pt.alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  pt.alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cols.scale <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reverseY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  image <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  per.scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  range <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transform <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -76,7 +81,9 @@ If NULL, will try with 'cols' if available.</p></dd>
 
 
 <dt id="arg-feature">feature<a class="anchor" aria-label="anchor" href="#arg-feature"></a></dt>
-<dd><p>Feature to group polygons by. Must be in rownames(spe).</p></dd>
+<dd><p>Feature(s) to colour points by; must be in rownames(spe). If a
+vector of more than one feature is supplied, one panel is drawn per feature
+(see <code>per.scale</code>, <code>ncol</code>), as in <code>Seurat::FeaturePlot</code>.</p></dd>
 
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
@@ -86,7 +93,9 @@ If NULL, will try with 'cols' if available.</p></dd>
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Transformation to apply for the group/feature. Options are "raw"
 , "log", "cpm", "logcpm", or a function that accepts and returns a vector of
-the same length.</p></dd>
+the same length. For feature plots the legend title defaults to the matching
+unit ("Counts", "log2 Cts", "CPM", "log2-CPM"); for a single feature the gene
+name becomes the plot title. Override the legend with <code>label</code>.</p></dd>
 
 
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
@@ -137,6 +146,42 @@ evenly positioned. See <a href="https://ggplot2.tidyverse.org/reference/scale_gr
 <dt id="arg-reversey">reverseY<a class="anchor" aria-label="anchor" href="#arg-reversey"></a></dt>
 <dd><p>Logical. Whether to reverse Y coordinates. Default is TRUE
 if the spe contains an image (even if not plotted) and FALSE if otherwise.</p></dd>
+
+
+<dt id="arg-image">image<a class="anchor" aria-label="anchor" href="#arg-image"></a></dt>
+<dd><p>Logical. Whether to draw the background tissue image (forwarded
+to <a href="plotImage.html">plotImage</a>). Default FALSE.</p></dd>
+
+
+<dt id="arg-ncol">ncol<a class="anchor" aria-label="anchor" href="#arg-ncol"></a></dt>
+<dd><p>Number of columns when plotting multiple features. Passed to
+<a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a> (shared scale) or <a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a>
+(per-panel scales). Default NULL lets the layout be chosen automatically.</p></dd>
+
+
+<dt id="arg-per-scale">per.scale<a class="anchor" aria-label="anchor" href="#arg-per-scale"></a></dt>
+<dd><p>Logical. For multiple features, whether each panel gets its
+own colour scale (TRUE, default; like <code>Seurat::FeaturePlot</code>, via the
+'patchwork' package; the image is drawn in every panel) or a single shared
+colour scale across panels (FALSE).</p></dd>
+
+
+<dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
+<dd><p>Numeric length-2 (lower, upper) cap for continuous colour values</p><ul><li><p>a single feature, or multiple features with a shared scale; values outside
+are clamped. A single value is taken as the upper bound. Default NULL (no
+capping). Ignored when <code>per.scale = TRUE</code> (each panel auto-scales).</p></li>
+</ul></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>Name of a transformation for the continuous colour scale
+(e.g. "log10", "log1p", "pseudo_log", "sqrt"), passed to
+<a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_color_gradientn</a>; the colour spectrum is spaced by the
+transform while the legend stays in original units. Default "identity" (no
+transformation). Use "log10" for nicely log-spaced legend breaks (needs
+positive values); "log1p"/"pseudo_log" tolerate zeros but keep linear breaks.
+Only affects continuous (feature or numeric group.by) colouring. Use "log10" for log-spaced legend breaks (requires positive
+values); "log1p"/"pseudo_log" tolerate zeros but keep linear breaks.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -10,17 +10,22 @@ plotSpatial(
   group.by = NULL,
   feature = NULL,
   assay = "counts",
-  type = c("raw", "log", "cpm", "logcpm"),
+  type = c("log", "raw", "cpm", "logcpm"),
   cols = NULL,
   highlight = NULL,
   cols.highlight = NULL,
   pt.shape = 16,
   pt.size = 0.3,
   pt.size.highlight = 1,
-  pt.alpha = 0.5,
+  pt.alpha = 1,
   label = NULL,
   cols.scale = NULL,
   reverseY = NULL,
+  image = FALSE,
+  ncol = NULL,
+  per.scale = TRUE,
+  range = NULL,
+  transform = "identity",
   ...
 )
 ```
@@ -38,7 +43,9 @@ plotSpatial(
 
 - feature:
 
-  Feature to group polygons by. Must be in rownames(spe).
+  Feature(s) to colour points by; must be in rownames(spe). If a vector
+  of more than one feature is supplied, one panel is drawn per feature
+  (see `per.scale`, `ncol`), as in `Seurat::FeaturePlot`.
 
 - assay:
 
@@ -48,7 +55,10 @@ plotSpatial(
 
   Transformation to apply for the group/feature. Options are "raw" ,
   "log", "cpm", "logcpm", or a function that accepts and returns a
-  vector of the same length.
+  vector of the same length. For feature plots the legend title defaults
+  to the matching unit ("Counts", "log2 Cts", "CPM", "log2-CPM"); for a
+  single feature the gene name becomes the plot title. Override the
+  legend with `label`.
 
 - cols:
 
@@ -102,6 +112,50 @@ plotSpatial(
 
   Logical. Whether to reverse Y coordinates. Default is TRUE if the spe
   contains an image (even if not plotted) and FALSE if otherwise.
+
+- image:
+
+  Logical. Whether to draw the background tissue image (forwarded to
+  [plotImage](https://chenlaboratory.github.io/scider/reference/plotImage.md)).
+  Default FALSE.
+
+- ncol:
+
+  Number of columns when plotting multiple features. Passed to
+  [facet_wrap](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
+  (shared scale) or
+  [wrap_plots](https://patchwork.data-imaginist.com/reference/wrap_plots.html)
+  (per-panel scales). Default NULL lets the layout be chosen
+  automatically.
+
+- per.scale:
+
+  Logical. For multiple features, whether each panel gets its own colour
+  scale (TRUE, default; like `Seurat::FeaturePlot`, via the 'patchwork'
+  package; the image is drawn in every panel) or a single shared colour
+  scale across panels (FALSE).
+
+- range:
+
+  Numeric length-2 (lower, upper) cap for continuous colour values
+
+  - a single feature, or multiple features with a shared scale; values
+    outside are clamped. A single value is taken as the upper bound.
+    Default NULL (no capping). Ignored when `per.scale = TRUE` (each
+    panel auto-scales).
+
+- transform:
+
+  Name of a transformation for the continuous colour scale (e.g.
+  "log10", "log1p", "pseudo_log", "sqrt"), passed to
+  [scale_color_gradientn](https://ggplot2.tidyverse.org/reference/scale_gradient.html);
+  the colour spectrum is spaced by the transform while the legend stays
+  in original units. Default "identity" (no transformation). Use "log10"
+  for nicely log-spaced legend breaks (needs positive values);
+  "log1p"/"pseudo_log" tolerate zeros but keep linear breaks. Only
+  affects continuous (feature or numeric group.by) colouring. Use
+  "log10" for log-spaced legend breaks (requires positive values);
+  "log1p"/"pseudo_log" tolerate zeros but keep linear breaks.
 
 - ...:
 
