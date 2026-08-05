@@ -56,8 +56,8 @@ bool LargerOrAlmostEqual(double A, double B,
                          double maxDiff,
                          double maxRelDiff)
 {
-  //// A is clearly larger than B.
-  if (A > B) return true;
+  //// A is clearly larger or equal than B.
+  if (A >= B) return true;
   
   //// A is slightly smaller but almost equal to B.
   // Absolute difference. Needed when A,B are close to 0. 
