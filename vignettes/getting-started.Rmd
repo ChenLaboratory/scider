@@ -1,12 +1,12 @@
 ---
-title: "Analysing spatial cell-type density with scider"
+title: "Region based spatial transcriptomics analysis with scider"
 author: "Mengbo Li, Ning Liu, Quoc Hoang Nguyen and Yunshun Chen"
 output:
   rmarkdown::html_vignette:
     self_contained: true
     pandoc_args: ["--embed-resources", "--standalone"]
 vignette: >
-  %\VignetteIndexEntry{Analysing spatial cell-type density with scider}
+  %\VignetteIndexEntry{Region based spatial transcriptomics analysis with scider}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
