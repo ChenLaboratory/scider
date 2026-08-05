@@ -2,5 +2,5 @@
 
 ### All vignettes
 
-- [Analysing spatial cell-type density with
+- [Region based spatial transcriptomics analysis with
   scider](https://chenlaboratory.github.io/scider/articles/getting-started.md):

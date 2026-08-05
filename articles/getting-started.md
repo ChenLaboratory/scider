@@ -1,4 +1,4 @@
-# Analysing spatial cell-type density with scider
+# Region based spatial transcriptomics analysis with scider
 
 ## Introduction
 
