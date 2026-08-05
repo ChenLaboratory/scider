@@ -53,7 +53,7 @@ readVisium <- function(dir,
 
   # Per-cell QC metrics computed directly from the count matrix.
   n_counts <- Matrix::colSums(counts_mat)
-  n_genes  <- setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
+  n_genes  <- stats::setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
 
   # read in image
   image <- image %||% file.path(dir, "spatial",
@@ -171,7 +171,7 @@ readXenium <- function(dir,
 
   # Per-cell QC metrics computed directly from the count matrix.
   n_counts <- Matrix::colSums(counts_mat)
-  n_genes  <- setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
+  n_genes  <- stats::setNames(as.integer(diff(counts_mat@p)), colnames(counts_mat))
 
   ## read in coords.
   spatial <- as.data.frame(arrow::read_parquet(coord))
