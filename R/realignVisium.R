@@ -69,6 +69,8 @@ realignVisiumHD <- function(spe,
   dimnames(spatialCoords(spe)) <- dim_names
   
   imgData(spe)$scaleFactor = imgData(spe)$scaleFactor*scale_factor
+  # Coordinates are now in microns (rescaled to the known spot spacing).
+  spe@metadata$coord_unit <- "micron"
   return(spe)
 }
 

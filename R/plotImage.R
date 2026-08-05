@@ -28,8 +28,9 @@ plotImage <- function(spe,
   
   # Scaling image
   scale <- SpatialExperiment::scaleFactors(spe,sample_id,image_id)
-  xlim <- c(0,ncol(img)/scale)
-  ylim <- c(0,nrow(img)/scale)
+  um_per_pixel <- spe@metadata$um_per_pixel %||% 1
+  xlim <- c(0, ncol(img)/scale * um_per_pixel)
+  ylim <- c(0, nrow(img)/scale * um_per_pixel)
   p <- ggplot2::ggplot() 
   # Image alpha
   if (image.alpha!=1) {

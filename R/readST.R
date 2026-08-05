@@ -1,3 +1,15 @@
+# Parse a 10x scalefactors_json.json file without a JSON dependency.
+# The file is a flat, single-level object of numeric key:value pairs, so a
+# small regex-based parser is sufficient. Returns a named list of numerics.
+.readScaleFactors <- function(path) {
+  txt <- paste(readLines(path, warn = FALSE), collapse = "")
+  txt <- gsub("[{}\"[:space:]]", "", txt)
+  pairs <- strsplit(strsplit(txt, ",")[[1]], ":")
+  vals <- as.numeric(vapply(pairs, `[`, "", 2))
+  names(vals) <- vapply(pairs, `[`, "", 1)
+  as.list(vals)
+}
+
 #' Read Visium output into spe
 #' @param dir directory containing the Visium files
 #' @param sample_id Name of the sample.
@@ -7,6 +19,11 @@
 #' @param scale_factors Names of the scale factors file
 #' @param feature_type Feature type to retain. Defaults to "Gene Expression" to
 #' exclude non-gene features. Set to NULL to keep all features.
+#' @param pixel_to_micron Logical. If TRUE (default), convert the spot
+#' coordinates from full-resolution pixels to microns using
+#' 'spot_diameter_fullres' from the scale factors file, and store the
+#' conversion factor in metadata(spe)$um_per_pixel. Set to FALSE to keep the
+#' coordinates in pixels (previous behaviour).
 #' @export
 readVisium <- function(dir,
                        sample_id="sample01",
@@ -14,7 +31,8 @@ readVisium <- function(dir,
                        coord = NULL,
                        image = NULL,
                        scale_factors = NULL,
-                       feature_type = "Gene Expression") {
+                       feature_type = "Gene Expression",
+                       pixel_to_micron = TRUE) {
   # read in counts
   count <- count %||% file.path(dir,"filtered_feature_bc_matrix.h5")
   sce <- DropletUtils::read10xCounts(count, col.names = TRUE)
@@ -42,7 +60,10 @@ readVisium <- function(dir,
                                 c("tissue_lowres_image.png",
                                   "tissue_hires_image.png"))
   scale_factors <- scale_factors %||% file.path(dir,"spatial","scalefactors_json.json")
-  file.path("spatial","scalefactors_json.json")
+  sf_json <- .readScaleFactors(scale_factors)
+  um_per_pixel <- if (pixel_to_micron && !is.null(sf_json$spot_diameter_fullres)) {
+    55 / sf_json$spot_diameter_fullres
+  } else NULL
   # load=TRUE embeds the image pixels in the SPE object so the RDS is
   # self-contained and portable (load=FALSE only stores the file path, which
   # breaks when the RDS is moved to a machine without access to the original
@@ -68,6 +89,11 @@ readVisium <- function(dir,
   spatial$n_counts <- as.integer(n_counts[rownames(spatial)])
   spatial$n_genes  <- as.integer(n_genes[rownames(spatial)])
 
+  if (!is.null(um_per_pixel)) {
+    spatial$pxl_col_in_fullres <- spatial$pxl_col_in_fullres * um_per_pixel
+    spatial$pxl_row_in_fullres <- spatial$pxl_row_in_fullres * um_per_pixel
+  }
+
   spe <- SpatialExperiment(
     assays = list(counts = counts_mat),
     rowData = rd,
@@ -76,6 +102,14 @@ readVisium <- function(dir,
     imgData=img,
     sample_id=sample_id
   )
+  # Always record the coordinate unit so downstream code never has to guess.
+  # um_per_pixel is only stored when a conversion was actually applied.
+  if (!is.null(um_per_pixel)) {
+    spe@metadata$um_per_pixel <- um_per_pixel
+    spe@metadata$coord_unit <- "micron"
+  } else {
+    spe@metadata$coord_unit <- "pixel"
+  }
   return(spe)
 }
 
