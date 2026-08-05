@@ -425,47 +425,47 @@ sessionInfo()
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] sf_1.1-1                    SpatialExperiment_1.22.0   
+    ##  [1] sf_1.1-2                    SpatialExperiment_1.22.0   
     ##  [3] SingleCellExperiment_1.34.0 SummarizedExperiment_1.42.0
     ##  [5] Biobase_2.72.0              GenomicRanges_1.64.0       
     ##  [7] Seqinfo_1.2.0               IRanges_2.46.0             
     ##  [9] S4Vectors_0.50.1            BiocGenerics_0.58.1        
     ## [11] generics_0.1.4              MatrixGenerics_1.24.0      
-    ## [13] matrixStats_1.5.0           scider_1.9.6               
+    ## [13] matrixStats_1.5.0           scider_1.9.7               
     ## [15] ggplot2_4.0.3              
     ## 
     ## loaded via a namespace (and not attached):
     ##   [1] DBI_1.3.0              deldir_2.0-4           rlang_1.3.0           
     ##   [4] magrittr_2.0.5         snakecase_0.11.1       otel_0.2.0            
-    ##   [7] e1071_1.7-17           compiler_4.6.1         spatstat.geom_3.8-1   
+    ##   [7] e1071_1.7-17           compiler_4.6.1         spatstat.geom_3.8-2   
     ##  [10] mgcv_1.9-4             systemfonts_1.3.2      fftwtools_0.9-11      
     ##  [13] vctrs_0.7.3            stringr_1.6.0          pkgconfig_2.0.3       
     ##  [16] fastmap_1.2.0          magick_2.9.1           XVector_0.52.0        
-    ##  [19] lwgeom_0.2-16          labeling_0.4.3         promises_1.5.0        
+    ##  [19] lwgeom_0.2-17          labeling_0.4.3         promises_1.5.0        
     ##  [22] rmarkdown_2.31         ragg_1.5.2             purrr_1.2.2           
     ##  [25] xfun_0.60              cachem_1.1.0           jsonlite_2.0.0        
     ##  [28] goftest_1.2-3          later_1.4.8            DelayedArray_0.38.2   
-    ##  [31] spatstat.utils_3.2-3   R6_2.6.1               bslib_0.11.0          
+    ##  [31] spatstat.utils_3.2-4   R6_2.6.1               bslib_0.12.0          
     ##  [34] stringi_1.8.7          RColorBrewer_1.1-3     spatstat.data_3.1-9   
     ##  [37] spatstat.univar_3.2-0  lubridate_1.9.5        jquerylib_0.1.4       
     ##  [40] Rcpp_1.1.2             knitr_1.51             tensor_1.5.1          
     ##  [43] splines_4.6.1          httpuv_1.6.17          Matrix_1.7-5          
     ##  [46] igraph_2.3.3           timechange_0.4.0       tidyselect_1.2.1      
-    ##  [49] abind_1.4-8            yaml_2.3.12            spatstat.random_3.5-0 
-    ##  [52] spatstat.explore_3.8-1 lattice_0.22-9         tibble_3.3.1          
+    ##  [49] abind_1.4-8            yaml_2.3.12            spatstat.random_3.5-1 
+    ##  [52] spatstat.explore_3.8-2 lattice_0.22-9         tibble_3.3.1          
     ##  [55] shiny_1.14.0           withr_3.0.3            S7_0.2.2              
     ##  [58] evaluate_1.0.5         desc_1.4.3             units_1.0-1           
     ##  [61] proxy_0.4-29           polyclip_1.10-7        pillar_1.11.1         
-    ##  [64] KernSmooth_2.23-26     plotly_4.12.0          dbscan_1.2.5          
+    ##  [64] KernSmooth_2.23-26     plotly_4.12.1          dbscan_1.2.5          
     ##  [67] scales_1.4.0           xtable_1.8-8           class_7.3-23          
     ##  [70] glue_1.8.1             janitor_2.2.1          pheatmap_1.0.13       
-    ##  [73] lazyeval_0.2.3         tools_4.6.1            hexDensity_1.4.10     
-    ##  [76] hexbin_1.28.5          data.table_1.18.4      fs_2.1.0              
-    ##  [79] grid_4.6.1             tidyr_1.3.2            nlme_3.1-169          
-    ##  [82] fastmatrix_0.6-6       cli_3.6.6              spatstat.sparse_3.2-0 
-    ##  [85] textshaping_1.0.5      S4Arrays_1.12.0        viridisLite_0.4.3     
-    ##  [88] dplyr_1.2.1            gtable_0.3.6           SpatialPack_0.4-1     
-    ##  [91] sass_0.4.10            digest_0.6.39          classInt_0.4-11       
-    ##  [94] SparseArray_1.12.2     rjson_0.2.23           htmlwidgets_1.6.4     
-    ##  [97] farver_2.1.2           htmltools_0.5.9        pkgdown_2.2.1         
-    ## [100] lifecycle_1.0.5        httr_1.4.8             mime_0.13
+    ##  [73] tools_4.6.1            hexDensity_1.4.10      hexbin_1.28.6         
+    ##  [76] data.table_1.18.4      fs_2.1.0               grid_4.6.1            
+    ##  [79] tidyr_1.3.2            nlme_3.1-169           fastmatrix_0.6-6      
+    ##  [82] cli_3.6.6              spatstat.sparse_3.2-0  textshaping_1.0.5     
+    ##  [85] S4Arrays_1.12.0        viridisLite_0.4.3      dplyr_1.2.1           
+    ##  [88] gtable_0.3.6           SpatialPack_0.4-1      sass_0.4.10           
+    ##  [91] digest_0.6.39          classInt_0.4-11        SparseArray_1.12.2    
+    ##  [94] rjson_0.2.23           htmlwidgets_1.6.4      farver_2.1.2          
+    ##  [97] htmltools_0.5.9        pkgdown_2.2.1          lifecycle_1.0.5       
+    ## [100] httr_1.4.8             mime_0.13
