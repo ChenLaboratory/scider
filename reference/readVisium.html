@@ -49,7 +49,8 @@
 <span>  coord <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  image <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_factors <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  feature_type <span class="op">=</span> <span class="st">"Gene Expression"</span></span>
+<span>  feature_type <span class="op">=</span> <span class="st">"Gene Expression"</span>,</span>
+<span>  pixel_to_micron <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,6 +85,14 @@
 <dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
 <dd><p>Feature type to retain. Defaults to "Gene Expression" to
 exclude non-gene features. Set to NULL to keep all features.</p></dd>
+
+
+<dt id="arg-pixel-to-micron">pixel_to_micron<a class="anchor" aria-label="anchor" href="#arg-pixel-to-micron"></a></dt>
+<dd><p>Logical. If TRUE (default), convert the spot
+coordinates from full-resolution pixels to microns using
+'spot_diameter_fullres' from the scale factors file, and store the
+conversion factor in metadata(spe)$um_per_pixel. Set to FALSE to keep the
+coordinates in pixels (previous behaviour).</p></dd>
 
 </dl></div>
 

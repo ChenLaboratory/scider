@@ -12,7 +12,8 @@ readVisium(
   coord = NULL,
   image = NULL,
   scale_factors = NULL,
-  feature_type = "Gene Expression"
+  feature_type = "Gene Expression",
+  pixel_to_micron = TRUE
 )
 ```
 
@@ -46,3 +47,11 @@ readVisium(
 
   Feature type to retain. Defaults to "Gene Expression" to exclude
   non-gene features. Set to NULL to keep all features.
+
+- pixel_to_micron:
+
+  Logical. If TRUE (default), convert the spot coordinates from
+  full-resolution pixels to microns using 'spot_diameter_fullres' from
+  the scale factors file, and store the conversion factor in
+  metadata(spe)\$um_per_pixel. Set to FALSE to keep the coordinates in
+  pixels (previous behaviour).

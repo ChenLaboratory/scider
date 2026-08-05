@@ -135,6 +135,8 @@ Install development version from GitHub
   : Scale and straighten out Visium coordinates
 - [`realignVisiumHD()`](https://chenlaboratory.github.io/scider/reference/realignVisiumHD.md)
   : Scale and straighten out VisiumHD coordinates
+- [`relabelClusters()`](https://chenlaboratory.github.io/scider/reference/relabelClusters.md)
+  : Renumber all clusters by size.
 - [`runPCA()`](https://chenlaboratory.github.io/scider/reference/runPCA.md)
   : Fast PCA using irlba.
 - [`runUMAP()`](https://chenlaboratory.github.io/scider/reference/runUMAP.md)
