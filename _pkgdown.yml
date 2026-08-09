@@ -2,3 +2,14 @@ url: https://chenlaboratory.github.io/scider/
 template:
   bootstrap: 5
 
+navbar:
+  components:
+    articles:
+      text: Vignettes
+      href: articles/index.html
+
+articles:
+- title: Case studies
+  navbar: ~
+  contents:
+  - matches(".")
