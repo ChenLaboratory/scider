@@ -175,7 +175,7 @@ tab, or start here:
 - [`update_bound()`](https://chenlaboratory.github.io/scider/reference/update_bound.md)
   : Update the x,y limits of a plot
 
-# Articles
+# Vignettes
 
 ### Case studies
 
