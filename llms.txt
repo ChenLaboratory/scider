@@ -4,23 +4,45 @@
 [![Codecov test
 coverage](https://codecov.io/gh/ChenLaboratory/scider/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/ChenLaboratory/scider?branch=devel)
 
+## Overview
+
 *scider* implements functions to analyse spatial transcriptomics data
 with cell type annotations by performing cell type correlation via
 density estimation and cell type co-localization via real number
 distance. Functions include density estimation, statistical modelling
 and visualizations.
 
-Install released version form Bioconductor
+## Installation
 
-    if (!require("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
+Install the released version from Bioconductor:
 
-    BiocManager::install("scider")
+``` r
 
-Install development version from GitHub
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-    library(devtools)
-    devtools::install_github("ChenLaboratory/scider")
+BiocManager::install("scider")
+```
+
+Install the development version from GitHub:
+
+``` r
+
+library(devtools)
+devtools::install_github("ChenLaboratory/scider")
+```
+
+## Case studies
+
+Step-by-step case studies showing scider in action. Browse the full list
+under the
+[**Vignettes**](https://chenlaboratory.github.io/scider/articles/index.html)
+tab, or start here:
+
+- [Region based spatial transcriptomics analysis with
+  scider](https://chenlaboratory.github.io/scider/articles/getting-started.html)
+  — density estimation, region detection, and cell-type co-localization
+  on a spatial dataset.
 
 # Package index
 
@@ -155,7 +177,7 @@ Install development version from GitHub
 
 # Articles
 
-### All vignettes
+### Case studies
 
 - [Region based spatial transcriptomics analysis with
   scider](https://chenlaboratory.github.io/scider/articles/getting-started.md):

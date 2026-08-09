@@ -32,12 +32,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/getting-started.html">Region based spatial transcriptomics analysis with scider</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Vignettes</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -55,15 +50,34 @@
 <div class="page-header"><h1 id="scider-spatial-cell-type-inter-correlation-by-density-in-r-">scider: Spatial cell-type inter-correlation by density in R. <img src="reference/figures/scider_sticker.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#scider-spatial-cell-type-inter-correlation-by-density-in-r-"></a>
 </h1></div>
 <p><a href="https://github.com/ChenLaboratory/scider/actions" class="external-link"><img src="https://github.com/ChenLaboratory/scider/workflows/R-CMD-check-bioc/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/ChenLaboratory/scider?branch=devel" class="external-link"><img src="https://codecov.io/gh/ChenLaboratory/scider/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p><em>scider</em> implements functions to analyse spatial transcriptomics data with cell type annotations by performing cell type correlation via density estimation and cell type co-localization via real number distance. Functions include density estimation, statistical modelling and visualizations.</p>
-<p>Install released version form Bioconductor</p>
-<pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install the released version from Bioconductor:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"scider"</span><span class="op">)</span></span></code></pre>
-<p>Install development version from GitHub</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ChenLaboratory/scider"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"scider"</span><span class="op">)</span></span></code></pre></div>
+<p>Install the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ChenLaboratory/scider"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="case-studies">Case studies<a class="anchor" aria-label="anchor" href="#case-studies"></a>
+</h2>
+<p>Step-by-step case studies showing scider in action. Browse the full list under the <a href="https://chenlaboratory.github.io/scider/articles/index.html"><strong>Vignettes</strong></a> tab, or start here:</p>
+<ul>
+<li>
+<a href="https://chenlaboratory.github.io/scider/articles/getting-started.html">Region based spatial transcriptomics analysis with scider</a>  density estimation, region detection, and cell-type co-localization on a spatial dataset.</li>
+</ul>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
