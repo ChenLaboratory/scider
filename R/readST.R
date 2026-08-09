@@ -14,7 +14,9 @@
 #' @param dir directory containing the Visium files
 #' @param sample_id Name of the sample.
 #' @param count Name of the h5 file with the count assay.
-#' @param coord Name of the csv file with the tissue coordinates
+#' @param coord Path to the tissue coordinates file (csv or parquet), or a
+#' data.frame of coordinates (rownames = barcodes) with columns
+#' 'pxl_col_in_fullres' and 'pxl_row_in_fullres'.
 #' @param image Names of the image files.
 #' @param scale_factors Names of the scale factors file
 #' @param feature_type Feature type to retain. Defaults to "Gene Expression" to
@@ -61,7 +63,13 @@ readVisium <- function(dir,
                                   "tissue_hires_image.png"))
   scale_factors <- scale_factors %||% file.path(dir,"spatial","scalefactors_json.json")
   sf_json <- .readScaleFactors(scale_factors)
-  um_per_pixel <- if (pixel_to_micron && !is.null(sf_json$spot_diameter_fullres)) {
+  # Prefer an explicit microns-per-pixel (present in VisiumHD scale factors);
+  # otherwise derive it from the 55 um spot diameter (standard Visium).
+  um_per_pixel <- if (!pixel_to_micron) {
+    NULL
+  } else if (!is.null(sf_json$microns_per_pixel)) {
+    sf_json$microns_per_pixel
+  } else if (!is.null(sf_json$spot_diameter_fullres)) {
     55 / sf_json$spot_diameter_fullres
   } else NULL
   # load=TRUE embeds the image pixels in the SPE object so the RDS is
@@ -75,9 +83,13 @@ readVisium <- function(dir,
     sample_id=sample_id,
     load=TRUE)
 
-  # read in coords
+  # read in coords. 'coord' may be a file path (csv/parquet) or a pre-built
+  # data.frame of coordinates (rownames = barcodes, with pxl_col_in_fullres /
+  # pxl_row_in_fullres columns), as used by the segmented VisiumHD path.
   coord <- coord %||% file.path(dir,"spatial","tissue_positions.csv")
-  if (grepl(".csv$",coord)) {
+  if (is.data.frame(coord)) {
+    spatial <- coord
+  } else if (grepl(".csv$",coord)) {
     spatial <- read.csv(coord,row.names=1)
   } else if (grepl(".parquet$",coord)) {
     spatial <- as.data.frame(arrow::read_parquet(coord))
@@ -85,6 +97,8 @@ readVisium <- function(dir,
   }
   matches <- intersect(colnames(sce), rownames(spatial))
   spatial <- spatial[matches, ]
+  # Keep the count matrix in step with the matched barcodes/cells.
+  counts_mat <- counts_mat[, matches, drop = FALSE]
   # Attach QC metrics, matching on barcode to guard against row reordering.
   spatial$n_counts <- as.integer(n_counts[rownames(spatial)])
   spatial$n_genes  <- as.integer(n_genes[rownames(spatial)])
@@ -113,22 +127,61 @@ readVisium <- function(dir,
   return(spe)
 }
 
+# Build a per-cell coordinate table from a VisiumHD cell-segmentation GeoJSON,
+# using each cell polygon's centroid as its full-resolution pixel coordinate.
+# Cell IDs are mapped to count-matrix barcodes as 'cellid_<zero-padded 9>-1',
+# matching Space Ranger's segmented output.
+.readSegmentedCoords <- function(geojson) {
+  gdf  <- sf::st_read(geojson, quiet = TRUE)
+  # The polygons are in planar full-resolution pixel coordinates, but GeoJSON is
+  # WGS84 by spec, so sf tags them EPSG:4326 and routes centroids through the
+  # spherical s2 engine, which mis-reads pixels as lon/lat and rejects valid
+  # cells ("Loop is not valid"). Drop the CRS so planar (GEOS) geometry is used.
+  geom <- sf::st_set_crs(sf::st_geometry(gdf), NA)
+  cent <- sf::st_coordinates(suppressWarnings(sf::st_centroid(geom)))
+  barcode <- sprintf("cellid_%09d-1", as.integer(gdf$cell_id))
+  data.frame(
+    pxl_col_in_fullres = cent[, 1],
+    pxl_row_in_fullres = cent[, 2],
+    row.names          = barcode
+  )
+}
+
 #' Read VisiumHD output into spe
 #' @param dir directory containing the VisiumHD files
-#' @param bin Which bin size to use. Options of "016um","008um", and "002um"
+#' @param bin Which output to read. Bin sizes "016um", "008um", "002um" read the
+#' corresponding 'binned_outputs/square_*' folder. "segmented" reads the
+#' cell-segmentation results in 'segmented_outputs': the count matrix
+#' 'filtered_feature_cell_matrix.h5', with per-cell coordinates taken from the
+#' centroids of 'cell_segmentations.geojson'.
 #' @param ... Parameters for readVisium
+#' @details For "segmented", cells have no array_row/array_col grid, so the
+#' result is cell-level (like Xenium) and is not compatible with the Visium
+#' spot-grid options of gridDensity() / trimEdge().
 #' @export
 readVisiumHD <- function(dir,
-                         bin=c("016um","008um","002um"),
+                         bin = c("016um", "008um", "002um", "segmented"),
                          ...) {
-  bin = match.arg(bin)
-  bin_dir <- file.path(dir,"binned_outputs",paste0("square_",bin))
-  args = list(...)
-  args$dir = bin_dir
-  args$coord <- args$coord %||% file.path(bin_dir,"spatial","tissue_positions.parquet")
-  
-  return(do.call(readVisium,
-                 args))
+  bin <- match.arg(bin)
+  args <- list(...)
+
+  if (bin == "segmented") {
+    seg_dir    <- file.path(dir, "segmented_outputs")
+    args$dir   <- seg_dir
+    args$count <- args$count %||%
+      file.path(seg_dir, "filtered_feature_cell_matrix.h5")
+    if (is.null(args$coord)) {
+      args$coord <- .readSegmentedCoords(
+        file.path(seg_dir, "cell_segmentations.geojson"))
+    }
+  } else {
+    bin_dir    <- file.path(dir, "binned_outputs", paste0("square_", bin))
+    args$dir   <- bin_dir
+    args$coord <- args$coord %||%
+      file.path(bin_dir, "spatial", "tissue_positions.parquet")
+  }
+
+  return(do.call(readVisium, args))
 }
 
 #' Read Xenium output into spe

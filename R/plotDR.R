@@ -93,6 +93,9 @@ plotDR <- function(spe, dimred = NULL,
 
   toplot <- SingleCellExperiment::reducedDim(spe,dimred)[,dims]
   colnames(toplot) <- c("x", "y")
+  # Use a data.frame so `toplot$x`/`toplot$y` work (reducedDim returns a matrix,
+  # on which `$` errors); matrix-style indexing below still works on a df.
+  toplot <- as.data.frame(toplot)
   cdata <- SummarizedExperiment::colData(spe)
 
   # Multiple features: one panel per feature (a la Seurat::FeaturePlot).
