@@ -19,7 +19,9 @@ proportion (\code{min.prop}) of all cells are excluded from HVG selection.}
 }
 \value{
 A SpatialExperiment object with HVG information stored in
-\code{rowData(spe)$hvg} as a logical vector.
+\code{rowData(spe)$hvg} as a logical vector. When a mean-dispersion trend is
+fitted (i.e. more eligible genes than requested HVGs), the per-gene trend is
+also stored in \code{metadata(spe)$hvg_trend} for use with \code{plotHVG}.
 }
 \description{
 Get top highly variable genes.
