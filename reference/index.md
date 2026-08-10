@@ -82,6 +82,8 @@
   : Dot plot of gene expression by groups
 - [`plotGrid()`](https://chenlaboratory.github.io/scider/reference/plotGrid.md)
   : Plot grid from metadata.
+- [`plotHVG()`](https://chenlaboratory.github.io/scider/reference/plotHVG.md)
+  : Plot the mean-dispersion trend from getHVG().
 - [`plotImage()`](https://chenlaboratory.github.io/scider/reference/plotImage.md)
   : Plot background image of spe
 - [`plotLISA()`](https://chenlaboratory.github.io/scider/reference/plotLISA.md)
@@ -126,5 +128,7 @@
   : Subset for grid level analysis
 - [`topMarkers()`](https://chenlaboratory.github.io/scider/reference/topMarkers.md)
   : Combine the top markers of each cluster into one data frame.
+- [`trimEdge()`](https://chenlaboratory.github.io/scider/reference/trimEdge.md)
+  : Trim spots/bins from the edges of a Visium (or VisiumHD) slide
 - [`update_bound()`](https://chenlaboratory.github.io/scider/reference/update_bound.md)
   : Update the x,y limits of a plot

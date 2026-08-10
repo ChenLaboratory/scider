@@ -43,6 +43,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotDensity.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotDots.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotGrid.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/plotHVG.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotImage.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotLISA.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/plotLISAscatter.html</loc></url>
@@ -65,6 +66,7 @@
 <url><loc>https://chenlaboratory.github.io/scider/reference/spe2PB.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/sub-SpatialExperiment-ANY-ANY-ANY-method.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/topMarkers.html</loc></url>
+<url><loc>https://chenlaboratory.github.io/scider/reference/trimEdge.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/update_bound.html</loc></url>
 <url><loc>https://chenlaboratory.github.io/scider/reference/xenium_bc_spe.html</loc></url>
 </urlset>

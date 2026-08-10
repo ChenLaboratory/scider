@@ -33,7 +33,9 @@ readVisium(
 
 - coord:
 
-  Name of the csv file with the tissue coordinates
+  Path to the tissue coordinates file (csv or parquet), or a data.frame
+  of coordinates (rownames = barcodes) with columns 'pxl_col_in_fullres'
+  and 'pxl_row_in_fullres'.
 
 - image:
 

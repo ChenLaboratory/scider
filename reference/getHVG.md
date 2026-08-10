@@ -31,7 +31,10 @@ getHVG(spe, n = 1000, min.total.count = 100, min.prop = 0.01)
 ## Value
 
 A SpatialExperiment object with HVG information stored in
-`rowData(spe)$hvg` as a logical vector.
+`rowData(spe)$hvg` as a logical vector. When a mean-dispersion trend is
+fitted (i.e. more eligible genes than requested HVGs), the per-gene
+trend is also stored in `metadata(spe)$hvg_trend` for use with
+`plotHVG`.
 
 ## Details
 
