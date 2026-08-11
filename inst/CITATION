@@ -1,0 +1,21 @@
+citHeader("To cite scider in publications, please use:")
+
+bibentry(
+  bibtype = "Article",
+  title   = "Preserving tissue structure through density-based spatial analysis with scider",
+  author  = c(
+    person("Mengbo", "Li"),
+    person("Ning", "Liu"),
+    person("Quoc Hoang", "Nguyen"),
+    person("Yunshun", "Chen")
+  ),
+  journal = "bioRxiv",
+  year    = "2025",
+  doi     = "10.1101/2025.09.11.675745",
+  url     = "https://doi.org/10.1101/2025.09.11.675745",
+  textVersion = paste(
+    "Li M, Liu N, Nguyen QH, Chen Y (2025).",
+    "Preserving tissue structure through density-based spatial analysis with scider.",
+    "bioRxiv. doi:10.1101/2025.09.11.675745"
+  )
+)
