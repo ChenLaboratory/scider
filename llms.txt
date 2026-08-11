@@ -40,9 +40,17 @@ under the
 tab, or start here:
 
 - [Region based spatial transcriptomics analysis with
-  scider](https://chenlaboratory.github.io/scider/articles/getting-started.html)
-  — density estimation, region detection, and cell-type co-localization
-  on a spatial dataset.
+  scider](https://chenlaboratory.github.io/scider/articles/getting-started.html):
+  density estimation, region detection, and cell-type co-localization on
+  a spatial dataset.
+
+## Citation
+
+If you use scider in your work, please cite:
+
+> Li M, Liu N, Nguyen QH, Chen Y (2025). Preserving tissue structure
+> through density-based spatial analysis with scider. bioRxiv.
+> <https://doi.org/10.1101/2025.09.11.675745>
 
 # Package index
 

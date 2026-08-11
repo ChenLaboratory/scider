@@ -15,16 +15,17 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/ChenLaboratory/scider/blob/devel/DESCRIPTION)
+[`inst/CITATION`](https://github.com/ChenLaboratory/scider/blob/devel/inst/CITATION)
 
-Li M, Liu N, Nguyen Q, Chen Y (2026). *scider: Spatial cell-type
-inter-correlation by density in R*. R package version 1.9.7,
-<https://github.com/ChenLaboratory/scider>.
+Li M, Liu N, Nguyen QH, Chen Y (2025). Preserving tissue structure
+through density-based spatial analysis with scider. bioRxiv.
+doi:10.1101/2025.09.11.675745
 
-    @Manual{,
-      title = {scider: Spatial cell-type inter-correlation by density in R},
+    @Article{,
+      title = {Preserving tissue structure through density-based spatial analysis with scider},
       author = {Mengbo Li and Ning Liu and Quoc Hoang Nguyen and Yunshun Chen},
-      year = {2026},
-      note = {R package version 1.9.7},
-      url = {https://github.com/ChenLaboratory/scider},
+      journal = {bioRxiv},
+      year = {2025},
+      doi = {10.1101/2025.09.11.675745},
+      url = {https://doi.org/10.1101/2025.09.11.675745},
     }
