@@ -13,7 +13,7 @@ getClusters(
   cluster_name = "cluster",
   unassigned = c("merge", "label", "discard"),
   min_size = NULL,
-  start_from = 1,
+  start_from = 0,
   seed = 1,
   verbose = FALSE,
   ...
@@ -66,8 +66,8 @@ getClusters(
 
 - start_from:
 
-  Integer at which cluster numbering starts. 1 (default) numbers
-  clusters 1..K.
+  Integer at which cluster numbering starts. 0 (default) numbers
+  clusters 0..K-1; set to 1 for 1..K.
 
 - seed:
 

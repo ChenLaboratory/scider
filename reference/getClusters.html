@@ -47,7 +47,7 @@
 <span>  cluster_name <span class="op">=</span> <span class="st">"cluster"</span>,</span>
 <span>  unassigned <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"merge"</span>, <span class="st">"label"</span>, <span class="st">"discard"</span><span class="op">)</span>,</span>
 <span>  min_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  start_from <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  start_from <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -97,8 +97,8 @@ whichever is smaller.</p></dd>
 
 
 <dt id="arg-start-from">start_from<a class="anchor" aria-label="anchor" href="#arg-start-from"></a></dt>
-<dd><p>Integer at which cluster numbering starts. 1 (default)
-numbers clusters 1..K.</p></dd>
+<dd><p>Integer at which cluster numbering starts. 0 (default)
+numbers clusters 0..K-1; set to 1 for 1..K.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
