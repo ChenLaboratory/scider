@@ -17,8 +17,8 @@
 #' @param min_size Maximum size for a cluster to be treated as too small (see
 #' unassigned). Defaults to NULL, which uses either 5 or 0.01\% of the cells,
 #' whichever is smaller.
-#' @param start_from Integer at which cluster numbering starts. 1 (default)
-#' numbers clusters 1..K.
+#' @param start_from Integer at which cluster numbering starts. 0 (default)
+#' numbers clusters 0..K-1; set to 1 for 1..K.
 #' @param seed seed for clustering
 #' @param verbose Logical. Whether to report how cells in tiny clusters were
 #' reassigned/labelled/discarded (see unassigned). Defaults to FALSE.
@@ -46,7 +46,7 @@ getClusters <- function(spe,
                         cluster_name = "cluster",
                         unassigned = c("merge", "label", "discard"),
                         min_size = NULL,
-                        start_from = 1,
+                        start_from = 0,
                         seed = 1,
                         verbose = FALSE,
                         ...) {
@@ -89,7 +89,7 @@ getClusters <- function(spe,
   n_small <- sum(small_cells)
 
   # Renumber the retained (big) clusters by size, high to low. Numbering starts
-  # at start_from (1 by default).
+  # at start_from (0 by default).
   big_ids <- which(!is_small)
   ord <- big_ids[order(count[big_ids], decreasing = TRUE)]
   cluster_ids <- seq_along(ord) - 1L + start_from
