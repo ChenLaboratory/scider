@@ -1,14 +1,22 @@
 #' Plot model statistics using heatmap.
 #'
-#' @param model.result A dataFrame object.
-#' @param stats Character value. Choose either coefficient or t.
-#' Coefficient by default.
+#' @param model.result The output of corDensity(), a list with components
+#' 'ROI' and 'overall', or one of these DataFrames.
+#' @param stats Character value. The statistic to plot, one of "cor.coef"
+#' (default), "cor.expected", "shift", "t", "p.Pos" or "p.Neg".
+#' "cor.expected" and "shift" are only reported by
+#' corDensity(method = "permutation") and "t" only by
+#' corDensity(method = "modified.ttest").
 #' @param roi Character value. By default is all. The specific
 #' ROIs to be plotted.
 #' @param cell.type Character value. By default is all. The cell types
 #' to be plotted.
 #' @param silent Do not draw the plot
 #' (useful when using the gtable output). 
+#' @param level Character value, either "overall" or "ROI". Which component
+#' to plot when 'model.result' is the list returned by corDensity(). Defaults
+#' to "overall", or to "ROI" when specific ROIs are selected with 'roi'.
+#' Ignored when 'model.result' is a DataFrame.
 #' @return A pheatmap object.
 #' @export
 #'
@@ -22,15 +30,27 @@
 #'
 #' spe <- findROI(spe, coi = coi)
 #'
-#' model_result <- corDensity(spe, roi = coi)
+#' model_result <- corDensity(spe, roi = coi, nperm = 199)
 #'
-#' plotCorHeatmap(model_result$ROI)
+#' plotCorHeatmap(model_result)
+#'
+#' plotCorHeatmap(model_result, level = "ROI", stats = "shift")
 #'
 plotCorHeatmap <- function(model.result,
-                           stats = c("cor.coef", "t", "p.Pos", "p.Neg"),
+                           stats = c("cor.coef", "cor.expected", "shift",
+                                     "t", "p.Pos", "p.Neg"),
                            roi = "all",
                            cell.type = "all", 
-                           silent = FALSE) {
+                           silent = FALSE,
+                           level = c("overall", "ROI")) {
+    if (is.list(model.result) && !is.data.frame(model.result)) {
+        if (!all(c("ROI", "overall") %in% names(model.result))) {
+            stop("Please run corDensity before using this function.")
+        }
+        if (missing(level) && any(roi != "all")) level <- "ROI"
+        level <- match.arg(level)
+        model.result <- model.result[[level]]
+    }
     if (!all(c("cor.coef", "p.Pos", "p.Neg") %in%
         colnames(model.result))) {
         stop("Please run corDensity before using this function.")
@@ -39,6 +59,12 @@ plotCorHeatmap <- function(model.result,
     fit_dat <- model.result
 
     stats <- match.arg(stats)
+    if (!(stats %in% colnames(fit_dat))) {
+        stop("'", stats, "' is not a column of model.result. ",
+             "'t' is only reported by corDensity(method = \"modified.ttest\") ",
+             "and 'cor.expected' and 'shift' only by ",
+             "corDensity(method = \"permutation\").")
+    }
     # if (length(stats) != 1) {
     #     stats <- "cor.coef"
     # } else if (!(stats %in% c("cor.coef", "t", "p.Pos", "p.Neg"))) {
@@ -61,8 +87,12 @@ plotCorHeatmap <- function(model.result,
             (fit_dat$celltype2 %in% cell.type), ]
     }
 
-    if (!("ROI" %in% colnames(fit_dat))) {
-        fit_dat <- fit_dat
+    if (any(roi != "all") && !("ROI" %in% colnames(fit_dat))) {
+        stop("'roi' can only be used with ROI level results.")
+    }
+    if (!("ROI" %in% colnames(fit_dat)) ||
+        (all(roi == "all") && length(unique(fit_dat[["ROI"]])) == 1L)) {
+        # overall results, or a single ROI (e.g. corDensity with roi = NULL)
         title <- paste0("Statistics (", stats, ")")
         filled_data <- plot_type1_transformation(fit_dat, stats)
     } else {
@@ -98,7 +128,8 @@ plotCorHeatmap <- function(model.result,
         "#011936FF"
     ))(paletteLength))
     
-    max_val <- max(abs(filled_data))
+    max_val <- max(abs(as.matrix(filled_data)), na.rm = TRUE)
+    if (!is.finite(max_val) || max_val == 0) max_val <- 1
     
     myBreaks <- seq(-max_val, 
                     max_val, 

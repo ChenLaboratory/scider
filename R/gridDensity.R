@@ -177,6 +177,7 @@ gridDensity <- function(spe,
   spe@metadata$grid_density <- res$grid_density
   spe@metadata$grid_info <- res$grid_info
   spe@metadata$grid_info$isVisium <- isVisium
+  spe@metadata$grid_info$kernel <- kernel
   # Add densities
   for (ii in seq_len(ncol(weights))) {
     spe@metadata$grid_density <- cbind(
