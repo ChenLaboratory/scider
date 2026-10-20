@@ -23,7 +23,6 @@ of Bioconductor packages.
 Useful links:
 \itemize{
   \item \url{https://github.com/ChenLaboratory/scider}
-  \item \url{https://chenlaboratory.github.io/scider/}
   \item Report bugs at \url{https://github.com/ChenLaboratory/scider/issues}
 }
 

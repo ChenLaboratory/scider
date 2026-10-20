@@ -17,6 +17,7 @@
 #' to plot when 'model.result' is the list returned by corDensity(). Defaults
 #' to "overall", or to "ROI" when specific ROIs are selected with 'roi'.
 #' Ignored when 'model.result' is a DataFrame.
+#' @param ... Other parameters passed to pheatmap().
 #' @return A pheatmap object.
 #' @export
 #'
@@ -42,7 +43,7 @@ plotCorHeatmap <- function(model.result,
                            roi = "all",
                            cell.type = "all", 
                            silent = FALSE,
-                           level = c("overall", "ROI")) {
+                           level = c("overall", "ROI"), ...) {
     if (is.list(model.result) && !is.data.frame(model.result)) {
         if (!all(c("ROI", "overall") %in% names(model.result))) {
             stop("Please run corDensity before using this function.")
@@ -140,14 +141,14 @@ plotCorHeatmap <- function(model.result,
             angle_col = 45, border_color = "white",
             color = hmColor, breaks = myBreaks,
             main = title, cluster_rows = FALSE, 
-            silent = silent
+            silent = silent, ...
         )
     } else {
         pheatmap::pheatmap(filled_data,
             angle_col = 45, border_color = "white",
             color = hmColor, breaks = myBreaks,
             silent = silent, 
-            main = title
+            main = title, ...
         )
     }
 }
