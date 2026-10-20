@@ -212,10 +212,11 @@ getClusters <- function(spe,
   # from max(edge id), which drops trailing cells that pruning left fully
   # isolated, making membership shorter than ncol(spe).
   g <- igraph::make_graph(interleaves, n = length(nbrs$index),
-                          directed = directed) #TODO: check direction
+                          directed = directed)
   igraph::E(g)$weight = unlist(nbrs$weight)
 
-  g <- igraph::simplify(g,edge.attr.comb = "first")
+  # TODO: Pretty sure it might already be simple
+  if(!igraph::is_simple(g)) g <- igraph::simplify(g,edge.attr.comb = "first")
   return(g)
 }
 
