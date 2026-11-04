@@ -5,7 +5,19 @@ Test for density correlation between two cell types.
 ## Usage
 
 ``` r
-corDensity(spe, coi = NULL, roi = NULL, probs = 0.85, trace = FALSE)
+corDensity(
+  spe,
+  coi = NULL,
+  roi = NULL,
+  probs = 0.85,
+  min.density = NULL,
+  trace = FALSE,
+  method = c("permutation", "modified.ttest"),
+  id = "cell_type",
+  nperm = 999,
+  permute.within = NULL,
+  cpu_threads = 1
+)
 ```
 
 ## Arguments
@@ -32,13 +44,99 @@ corDensity(spe, coi = NULL, roi = NULL, probs = 0.85, trace = FALSE)
   Ignored if 'roi' is present in the 'metadata' component of spe.
   Default to 0.85.
 
+- min.density:
+
+  A numeric value. The cut-off on the same density score as 'probs':
+  grids with a score of at least 'min.density' are kept. Ignored if
+  'roi' is given. Default is NULL and overwrites probs.
+
 - trace:
 
   Logical. If TRUE, print the process of testing. Default to FALSE.
 
+- method:
+
+  Character. The testing method, either "permutation" (default) or
+  "modified.ttest". See Details.
+
+- id:
+
+  Character. The column of colData(spe) holding the cell type labels
+  that were used in gridDensity(). Only used by method "permutation".
+  Default to "cell_type".
+
+- nperm:
+
+  Integer. The number of random relabellings used by method
+  "permutation". Default to 999.
+
+- permute.within:
+
+  Character or NULL. The column of colData(spe) that splits cells into
+  groups (e.g. tissue compartments) for method "permutation". Cell type
+  labels are then shuffled only among cells of the same group. Default
+  to NULL, which shuffles labels across all cells. See Details.
+
+- cpu_threads:
+
+  Integer. The number of threads used by method "permutation". The
+  results do not depend on it. Default to 1.
+
 ## Value
 
-A DataFrame containing the testing results.
+A list of two DataFrames, 'ROI' (results per ROI) and 'overall' (results
+combined across ROIs). When 'roi' is NULL the selected grids form a
+single ROI, labelled "1", and the overall results equal the ROI level
+results. For method "permutation" the columns are celltype1, celltype2,
+ROI, ngrid, cor.coef (observed Spearman correlation), cor.expected (mean
+under random labelling), shift, p.Pos and p.Neg; the overall DataFrame
+has n.roi, n.above, n.below, n.sig.Pos and n.sig.Neg (see Details) in
+place of ROI and ngrid. For method "modified.ttest" the columns are
+celltype1, celltype2, ROI, ngrid, cor.coef, t, df, p.Pos and p.Neg.
+
+## Details
+
+Method "permutation" tests each pair of cell types against random
+labelling. Every cell keeps its location and the cell type labels are
+shuffled across all cells of the sample, after which the cell type
+densities are recomputed with the same kernel and bandwidth as in
+gridDensity(). The statistic is the Spearman correlation between the two
+densities across grids: within each ROI for the ROI level results, and
+pooled over all ROIs after centering the ranks at the ROI level for the
+overall results. The column 'cor.expected' gives the mean of the
+statistic under random labelling, which is the correlation expected from
+the shared dependence of both densities on local cellularity alone.
+'p.Pos' and 'p.Neg' are one sided Monte Carlo p-values, (1 + b) / (1 +
+nperm), for the observed correlation being larger or smaller than
+expected under random labelling. The 'shift' (cor.coef - cor.expected)
+measures the strength of co-localization (positive) or segregation
+(negative) beyond random labelling. The overall results also give a per
+pair summary of the ROI level results: 'n.roi' ROIs with a defined
+correlation, 'n.above' and 'n.below' ROIs with the observed correlation
+above or below its expected value, and 'n.sig.Pos' and 'n.sig.Neg' ROIs
+with p.Pos or p.Neg below 0.05. With many grids, small shifts reach
+significance, so rank pairs by the shift and check the ROI summary for
+consistency. Use set.seed() for reproducible p-values; the results do
+not depend on 'cpu_threads'.
+
+With 'permute.within', the null hypothesis is random labelling within
+groups: each group keeps its cell locations and cell type counts, and
+only the labels inside a group are shuffled. Structure already encoded
+by the groups, such as the split between tumour and stroma compartments,
+then becomes part of the expected value, and the test asks whether cell
+types are organized beyond it. For two cell types in the same group a
+positive shift means they share neighbourhoods more than two random
+cells of that group would; for cell types in different groups it means
+they sit closer to each other than random cells of their groups would.
+Groups should be coarse: a cell type that is the only type in every
+group it occupies is never moved, so pairs involving it are only tested
+through the other cell type.
+
+Method "modified.ttest" is the original approach: a Pearson correlation
+within each ROI tested by the modified t-test of Dutilleul (1993) from
+SpatialPack, with the ROI level p-values combined by Fisher's method.
+Its effective degrees of freedom are estimated from the spatial
+correlogram within each ROI.
 
 ## Examples
 
@@ -52,5 +150,6 @@ spe <- gridDensity(spe, coi = coi)
 
 spe <- findROI(spe, coi = coi, method = "walktrap")
 
-result <- corDensity(spe, roi = coi)
+set.seed(1)
+result <- corDensity(spe, roi = coi, nperm = 199)
 ```

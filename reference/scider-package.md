@@ -27,8 +27,6 @@ Useful links:
 
 - <https://github.com/ChenLaboratory/scider>
 
-- <https://chenlaboratory.github.io/scider/>
-
 - Report bugs at <https://github.com/ChenLaboratory/scider/issues>
 
 ## Author
