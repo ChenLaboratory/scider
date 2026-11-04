@@ -17,7 +17,7 @@ getContourRegions <- function(spe, contour_name) {
                                            contours first!")
   dens_cols <- S4Vectors::metadata(contour_data)$densities
   dens <- as.data.frame(spe@metadata$grid_density)
-  dens$density_coi_average <- rowMeans(dens[, which(colnames(dens) %in%
+  dens$density_coi_average <- rowSums(dens[, which(colnames(dens) %in%
                                                       dens_cols),
                                             drop = FALSE
   ])

@@ -23,7 +23,6 @@ plotDots(
 \item{feature}{vector of feature names.}
 
 \item{assay}{Name of assay to use for plotting feature.}
-
 \item{group.by}{values to group plot by. Must be in colData of spe.}
 
 \item{detection.limit}{threshold for minimum expression value for percentage

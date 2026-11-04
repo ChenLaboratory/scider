@@ -114,8 +114,10 @@ plotTopMarkers <- function(markers,
             SummarizedExperiment::assay(spe, assay)[features, , drop = FALSE])
         group <- factor(spe[[cluster_name]])
         clusters <- names(markers)[names(markers) %in% levels(group)]
+        avg <- if (identical(assay, "logcounts"))
+            function(m) log1p(rowMeans(expm1(m))) else rowMeans
         mat <- vapply(clusters, function(g)
-            log1p(rowMeans(expm1(exprs[, group == g, drop = FALSE]))),
+            avg(exprs[, group == g, drop = FALSE]),
             numeric(length(features)))
         rownames(mat) <- features
         if (scale) { mat <- t(scale(t(mat))); mat[is.na(mat)] <- 0 }

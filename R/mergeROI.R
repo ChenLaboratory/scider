@@ -86,27 +86,24 @@ mergeROI <- function(spe,
 
   # keep a copy of the original ROI list
   if (id == "component") {
-    ROI_merged <-
-      spe@metadata[[roi_clean]][["component_before_merge"]] <-
-      spe@metadata[[roi_clean]]$component
+    ROI_merged <- spe@metadata[[roi_clean]]$component
+    if (is.null(spe@metadata[[roi_clean]][["component_before_merge"]])) {
+      spe@metadata[[roi_clean]][["component_before_merge"]] <- ROI_merged
+    }
   } else {
     ROI_merged <- spe@metadata[[roi_clean]][[id]]
   }
   
   # merge ROIs
+  prev_levels <- levels(factor(ROI_merged))
   ROI_merged <- as.character(ROI_merged)
   for (mm in names(merge.list)) {
     ROI_merged[ROI_merged %in% as.character(merge.list[[mm]])] <- mm
   }
   if (!rename) {
-    # re-order by merged ROI then individual ROIs
-    roi_levels <- unique(ROI_merged)
-    roi_levels <- c(
-      sort(names(merge.list)),
-      as.character(sort(
-        as.numeric(roi_levels[!(roi_levels %in% names(merge.list))])
-      ))
-    )
+    # newly merged ROIs first, then the remaining ROIs in their existing order
+    roi_levels <- union(sort(names(merge.list)),
+                        prev_levels[prev_levels %in% ROI_merged])
     ROI_merged <- factor(ROI_merged, levels = roi_levels)
   } else {
     ROI_merged <- factor(rank(ROI_merged),

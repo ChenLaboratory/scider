@@ -1,3 +1,8 @@
+# scider 1.12.0 (2026-11-20)
+* Fixed a bug in allocateCells() for contours of multiple cell types.
+* Fixed a bug in mergeROI() where calling it a second time set the ROIs merged by the earlier call to NA.
+* Fixed a bug in plotLISA() where specifying 'overlay' always gave an error.
+
 # scider 1.10.0 (2026-04-25)
 * Update help pages
 * New function getHVG() to find top HVGs

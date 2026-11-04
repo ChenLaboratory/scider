@@ -44,7 +44,7 @@ plotLISA <- function(spe, lisa,
       overlay <- "grid"
       message("Length of lisa not equal to number of cells Switching
               overlay to 'grid'")
-    } else {
+    } else if (length(lisa$lisa) != switch(overlay, grid = n_grid, point = n_point)) {
       stop("Length of lisa must be equal to either number of cells or grid points")
     }
   }

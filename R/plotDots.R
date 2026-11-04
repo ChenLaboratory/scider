@@ -49,10 +49,11 @@ plotDots <- function(spe,
   group <- as.factor(group)
   
   # Calculate mean & percentage expression of each group.
+  avg <- if (identical(assay, "logcounts")) function(x) log1p(mean(expm1(x))) else mean
   dat <- stats::aggregate.data.frame(as.matrix(Matrix::t(exprs)), list(group),
                                      FUN=function(x){
                                        n=length(x)
-                                       mean = log1p(mean(expm1(x)))
+                                       mean = avg(x)
                                        percentage = sum(x>detection.limit)/n
                                        matrix(c(mean, percentage),
                                               ncol=2)})
