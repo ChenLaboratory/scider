@@ -1,5 +1,4 @@
 #include "rand.h"
-#include "iostream"
 
 //// PCG-PRNG by 2014 M.E. O'Neill / pcg-random.org
 // This is the minimal pcg32 one-stream rng (64-bits states to 32-bits output) 
