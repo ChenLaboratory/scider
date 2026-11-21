@@ -1,7 +1,7 @@
 Package: scider
 Type: Package
 Title: Spatial cell-type inter-correlation by density in R
-Version: 1.11.0
+Version: 1.11.1
 Authors@R: 
     c(person(given = "Mengbo",family = "Li", 
              role = c("aut"),
@@ -72,11 +72,12 @@ Imports:
     arrow,
     RBioFormats,
     Matrix,
-    patchwork
+    patchwork,
+    withr
 Suggests:
     edgeR,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    R (>= 4.3)
+    R (>= 4.4.0)
 VignetteBuilder: knitr

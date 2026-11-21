@@ -35,6 +35,10 @@ middle-most layer}
 \item{feature_type}{Feature type to retain. Defaults to "Gene Expression" to
 exclude control codewords. Set to NULL to keep all features.}
 }
+\value{
+A SpatialExperiment object containing the counts, cell metadata and cell
+centroid coordinates.
+}
 \description{
 Read Xenium output into spe
 }

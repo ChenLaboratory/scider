@@ -19,7 +19,7 @@ grid2sf <- function(spe,
                     reverseY = FALSE) {
   if (is.null(spe@metadata$grid_info)) stop("Missing grid. Compute Density first")
   if (is.null(x) || is.null(y)) stop("Missing x or y")
-  if (length(x) != length(x)) stop("x, y must be of equal length")
+  if (length(x) != length(y)) stop("x, y must be of equal length")
   
   x <- as.numeric(x)
   y <- as.numeric(y)
@@ -96,7 +96,7 @@ grid2df <- function(spe,
                     ...) {
   if (is.null(spe@metadata$grid_info)) stop("Missing grid. Compute Density first")
   if (is.null(x) || is.null(y)) stop("Missing x or y")
-  if (length(x) != length(x)) stop("x, y must be of equal length")
+  if (length(x) != length(y)) stop("x, y must be of equal length")
   
   x <- as.numeric(x)
   y <- as.numeric(y)

@@ -9,8 +9,8 @@
 #' @param cluster The cluster label to sub-cluster (e.g. 2 or "2").
 #' @param resolution Resolution for the sub-clustering. Higher gives more
 #' sub-clusters. See \link[igraph]{cluster_leiden} and \link[igraph]{cluster_louvain}.
-#' @param nbrs_name Name of neighbour list to use. If NULL, uses the newest one in
-#' spe@metadata$nbrs$cell. \link[scider]{findNbrsSNN} must have been run first.
+#' @param nbrs_name Name of neighbour list to use. If NULL, uses the most recent
+#' SNN list from \link[scider]{findNbrsSNN}, which must have been run first.
 #' @param method Clustering method. Options are leiden and louvain.
 #' @param cluster_name Name of the cluster column in
 #' \link[SummarizedExperiment]{colData} to sub-cluster.
@@ -27,7 +27,10 @@
 #' suffixes and the relabel renumbering. Defaults to NULL, which infers the base
 #' (0- or 1-based) from the existing labels.
 #' @param sep Separator between a cluster and its sub-cluster number. Default "_".
-#' @param seed Seed for clustering.
+#' @param seed Integer or NULL. If NULL (default), the clustering uses the
+#' current random number stream, so call \code{set.seed()} beforehand for
+#' reproducible sub-clusters. Otherwise the clustering uses this seed and the
+#' caller's random number stream is left unchanged.
 #' @param verbose Logical. Whether to report how the cluster was split (number of
 #' sub-clusters and any small ones merged in). Defaults to FALSE.
 #' @param ... Other clustering arguments for \link[igraph]{cluster_leiden} or
@@ -45,6 +48,7 @@
 #' spe <- normalizeAssay(spe)
 #' spe <- runPCA(spe)
 #' spe <- findNbrsSNN(spe, dimred = "PCA")
+#' set.seed(1)
 #' spe <- getClusters(spe, resolution = 0.5)
 #' # Split cluster 2 into 2_1, 2_2, ...
 #' spe <- getSubClusters(spe, cluster = 2, resolution = 0.5)
@@ -59,15 +63,14 @@ getSubClusters <- function(spe,
                            min_size = NULL,
                            start_from = NULL,
                            sep = "_",
-                           seed = 1,
+                           seed = NULL,
                            verbose = FALSE,
                            ...) {
-  set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
   method <- match.arg(method)
   if (!cluster_name %in% colnames(SummarizedExperiment::colData(spe)))
     stop("'", cluster_name, "' not found in colData(spe).")
-  if (is.null(spe@metadata$nbrs$cell[[1]]))
-    stop("No neighbour list found. Run findNbrsSNN(spe) before getSubClusters().")
+  nbrs <- .getNbrs(spe, "cell", nbrs_name, type = "snn")
 
   cl <- spe[[cluster_name]]
   cl_chr <- as.character(cl)
@@ -80,11 +83,6 @@ getSubClusters <- function(spe,
   if (is.null(start_from)) start_from <- .inferStartFrom(cl_chr)
 
   # Induce and cluster the sub-graph of the target cluster's cells.
-  if (is.null(nbrs_name)) {
-    nbrs <- spe@metadata$nbrs$cell[[length(spe@metadata$nbrs$cell)]]
-  } else {
-    nbrs <- spe@metadata$nbrs$cell[[nbrs_name]]
-  }
   sub_g <- igraph::induced_subgraph(.nbrs2igraph(nbrs), cells)
 
   method.args <- list(...)

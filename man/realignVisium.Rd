@@ -11,6 +11,10 @@ realignVisium(spe, distPoint = 100)
 
 \item{distPoint}{Numeric. Desired point to point distance.}
 }
+\value{
+A SpatialExperiment object with spatial coordinates rescaled to microns and
+aligned to the spot array.
+}
 \description{
 Scale and straighten out Visium coordinates
 }

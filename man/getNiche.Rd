@@ -17,7 +17,10 @@ getNiche(
 
 \item{at}{Option of cell or grid neighbourhood}
 
-\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$grid[[at]]}}
+\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$nbrs[[at]]}.
+If NULL, uses the most recent spatial list from \link[scider]{findNbrsSpatial}
+at cell level, or the most recent grid list from \link[scider]{findNbrsGrid}
+at grid level.}
 
 \item{group.by}{Character vector to group neighbours cell by. Should be in
 either colData(spe) or spe@metadata$grid_density, depending

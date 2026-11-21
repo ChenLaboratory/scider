@@ -27,8 +27,10 @@ or cells, depending on 'at'.}
 
 \item{at}{Option of grid or cell for where to look for neighbour list}
 
-\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$grid[[at]]}
-for Moran's I. If NULL, will use the newest neighbour list.}
+\item{nbrs_name}{Name of the neighbour list in \code{spe@metadata$nbrs[[at]]}
+for Moran's I. If NULL, uses the most recent spatial list from
+\link[scider]{findNbrsSpatial} at cell level, or the most recent grid list
+from \link[scider]{findNbrsGrid} at grid level.}
 
 \item{hhonly}{Only high-high clusters, which is more interpretable. Other
 clusters (e.g. "Low-Low","High-Low",...) will be assigned as undefined.}
@@ -42,7 +44,10 @@ clusters (e.g. "Low-Low","High-Low",...) will be assigned as undefined.}
 \item{cpu_threads}{The number of cpu threads used for parallel computation.}
 }
 \value{
-List of lisa_value, clusters, and pseudo p-value.
+List with the local Moran values (lisa), clusters (cluster), pseudo
+p-values (p.value), spatial lags (spatiallag) and the sum of all neighbour
+weights (W). \code{sum(lisa)/W} is the global Moran's I, as returned by
+\link[scider]{globalMoran}.
 }
 \description{
 Calculate local Moran for 1 to 2 variables.

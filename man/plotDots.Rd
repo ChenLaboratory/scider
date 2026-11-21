@@ -23,6 +23,7 @@ plotDots(
 \item{feature}{vector of feature names.}
 
 \item{assay}{Name of assay to use for plotting feature.}
+
 \item{group.by}{values to group plot by. Must be in colData of spe.}
 
 \item{detection.limit}{threshold for minimum expression value for percentage
@@ -41,6 +42,9 @@ gradient). Default NULL uses a light-grey (low) to dark-red (high) gradient.}
 \item{dot.scale}{scale the radius of the plot. See \link[ggplot2]{scale_radius}}
 
 \item{flip.axes}{Whether to flip the axes.}
+}
+\value{
+A ggplot object.
 }
 \description{
 Visualizing average expression and percentage of cell that expression a

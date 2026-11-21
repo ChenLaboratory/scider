@@ -112,7 +112,7 @@ findNbrsSNN <- function(spe,
     if(is.null(dimred)) nbrs_name <- paste0(assay,"_snn")
     else nbrs_name <- paste0(dimred,"_snn")
   }
-  spe@metadata$nbrs$cell[[nbrs_name]] <- snn
+  spe <- .storeNbrs(spe, snn, at = "cell", name = nbrs_name, type = "snn")
   return(spe)
 }
 

@@ -17,6 +17,7 @@
 #' gradient). Default NULL uses a light-grey (low) to dark-red (high) gradient.
 #' @param dot.scale scale the radius of the plot. See \link[ggplot2]{scale_radius}
 #' @param flip.axes Whether to flip the axes.
+#' @return A ggplot object.
 #' @export
 #' @examples
 #'

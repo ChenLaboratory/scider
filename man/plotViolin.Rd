@@ -52,6 +52,9 @@ function that accepts an integer n and return n colours.}
 
 \item{xlab}{Label for the x-axis}
 }
+\value{
+A ggplot object.
+}
 \description{
 Violin plot using genes or cell data
 }

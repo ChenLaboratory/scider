@@ -9,6 +9,9 @@ coord_hash(a, b)
 \arguments{
 \item{a, b}{Integer vectors of same lengths. Can be negative.}
 }
+\value{
+An integer vector with one hash per (a, b) pair.
+}
 \description{
 Hash two 15-bytes signed integers into one 32-bytes integer.
 }

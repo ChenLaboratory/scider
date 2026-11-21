@@ -125,7 +125,7 @@ findNbrsGrid <- function(spe,
   names(nbrs$weight) <- NULL
   
   nbrs_name <- nbrs_name %||% "grid"
-  spe@metadata$nbrs$grid[[nbrs_name]] <- nbrs
+  spe <- .storeNbrs(spe, nbrs, at = "grid", name = nbrs_name, type = "grid")
   return(spe)
 }
 
@@ -136,6 +136,7 @@ findNbrsGrid <- function(spe,
 #' purpose. 
 #' 
 #' Integer in R is 32-bytes but reserve 1 byte for NA
+#' @return An integer vector with one hash per (a, b) pair.
 coord_hash <- function(a,b) {
   return(bitwOr(bitwShiftL(a+16384,16),b+16384))
 }

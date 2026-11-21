@@ -1,7 +1,12 @@
 # scider 1.12.0 (2026-11-20)
+* Now requires R >= 4.4.0, for the base R operator %||%.
 * Fixed a bug in allocateCells() for contours of multiple cell types.
 * Fixed a bug in mergeROI() where calling it a second time set the ROIs merged by the earlier call to NA.
 * Fixed a bug in plotLISA() where specifying 'overlay' always gave an error.
+* getClusters(), getSubClusters(), localMoran(), globalMoran() and getNiche() now default to the most recent neighbour list of the type they need. Previously they used whichever list was stored last.
+* getClusters() and getSubClusters() no longer reset the user's random number stream. Their 'seed' argument now defaults to NULL, which uses the current stream. withr is a new dependency.
+* plotLISAscatter() now shows the global Moran's I in its title, as returned by globalMoran().
+* localMoran() now also returns the sum of the weights (W).
 
 # scider 1.10.0 (2026-04-25)
 * Update help pages

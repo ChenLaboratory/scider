@@ -17,6 +17,10 @@ centroids of 'cell_segmentations.geojson'.}
 
 \item{...}{Parameters for readVisium}
 }
+\value{
+A SpatialExperiment object containing the counts and the coordinates of the
+bins or segmented cells.
+}
 \description{
 Read VisiumHD output into spe
 }

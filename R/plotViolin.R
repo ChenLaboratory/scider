@@ -17,6 +17,7 @@
 #' @param pt.shape Shape of points.
 #' @param ylab Label for the y-axis.
 #' @param xlab Label for the x-axis
+#' @return A ggplot object.
 #' @export
 #' @examples
 #'

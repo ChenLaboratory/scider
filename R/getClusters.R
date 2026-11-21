@@ -2,7 +2,7 @@
 #'
 #' @param spe A SpatialExperiment object.
 #' @param nbrs_name Name of neighbour list for clustering. If NULL, uses the
-#' newest one in spe@metadata$nbrs$cell. \link[scider]{findNbrsSNN} must have been
+#' most recent SNN list from \link[scider]{findNbrsSNN}, which must have been
 #' run first; otherwise getClusters errors.
 #' @param method Clustering methods. Options are leiden and louvain.
 #' @param resolution Higher resolution for more clusters and lower for fewer 
@@ -19,7 +19,10 @@
 #' whichever is smaller.
 #' @param start_from Integer at which cluster numbering starts. 0 (default)
 #' numbers clusters 0..K-1; set to 1 for 1..K.
-#' @param seed seed for clustering
+#' @param seed Integer or NULL. If NULL (default), the clustering uses the
+#' current random number stream, so call \code{set.seed()} beforehand for
+#' reproducible clusters. Otherwise the clustering uses this seed and the
+#' caller's random number stream is left unchanged.
 #' @param verbose Logical. Whether to report how cells in tiny clusters were
 #' reassigned/labelled/discarded (see unassigned). Defaults to FALSE.
 #' @param ... Other clustering arguments for \link[igraph]{cluster_leiden} or 
@@ -37,6 +40,7 @@
 #' spe <- normalizeAssay(spe)
 #' spe <- runPCA(spe)
 #' spe <- findNbrsSNN(spe,dimred="PCA")
+#' set.seed(1)
 #' spe <- getClusters(spe, resolution=0.5)
 
 getClusters <- function(spe,
@@ -47,19 +51,12 @@ getClusters <- function(spe,
                         unassigned = c("merge", "label", "discard"),
                         min_size = NULL,
                         start_from = 0,
-                        seed = 1,
+                        seed = NULL,
                         verbose = FALSE,
                         ...) {
-  set.seed(seed)
+  if (!is.null(seed)) withr::local_seed(seed)
   unassigned <- match.arg(unassigned)
-  if (is.null(spe@metadata$nbrs$cell[[1]])) {
-    stop("No neighbour list found. Run findNbrsSNN(spe) before getClusters().")
-  }
-  if (is.null(nbrs_name)){
-    nbrs <- spe@metadata$nbrs$cell[[length(spe@metadata$nbrs$cell)]]
-  } else {
-    nbrs <- spe@metadata$nbrs$cell[[nbrs_name]]
-  }
+  nbrs <- .getNbrs(spe, "cell", nbrs_name, type = "snn")
   g <- .nbrs2igraph(nbrs)
   
   method <- match.arg(method)

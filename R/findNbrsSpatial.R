@@ -86,6 +86,6 @@ findNbrsSpatial <- function(spe,
   if (is.null(nbrs_name)) {
     nbrs_name <- "spatial"
   }
-  spe@metadata$nbrs$cell[[nbrs_name]] <- nbrs
+  spe <- .storeNbrs(spe, nbrs, at = "cell", name = nbrs_name, type = "spatial")
   return(spe)
 }

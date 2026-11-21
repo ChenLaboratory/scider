@@ -44,12 +44,10 @@ uint64_t pcg_advance_lcg_64(uint64_t state, uint64_t delta)
 }
 
 
-//// n choose k without replacement.
-// This is a weird implementation that is highly specific to the task.
-// Guarantees sampling k values within k picks (Important for stable 
-// multi-threading since seed will be predictable).
+//// Lemire's multiply-shift (Fast Random Integer Generation in an Interval)
+// Guarantees sampling k values within k picks (Important for multi-threading)
 // Samples are stored in the range x[n-k]...x[n-1] inclusive.
-// x will be (partially) permuted after each run.
+// x is (partially) permuted after each run.
 void sample_without_replacement(int* x,
                                 int n,
                                 int k,
@@ -57,15 +55,12 @@ void sample_without_replacement(int* x,
 {
   int tempSwap;
   int j;
-  double rng_val;
+  uint64_t rng_val;
   for (int i=0;i<k;i++) {
-    // Get a random 32-bits unsigned int then convert to range [0...1)
     // Conversion is slightly bias but fast & good enough when n << 2^32
-    rng_val = (0x1.0p-32) * pcg32_random_r(rng); // [0...1)
-    
-    // Pick from n
-    rng_val *= (--n); // [0...n-1)
-    j = (int) rng_val;
+    rng_val = (uint64_t) n * (uint64_t) pcg32_random_r(rng);
+    j = (int) (rng_val >> 32);
+    n--;
     
     // Swap to put value in the correct place without removing stuffs from x 
     tempSwap = x[j];

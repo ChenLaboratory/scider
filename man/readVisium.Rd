@@ -39,6 +39,10 @@ coordinates from full-resolution pixels to microns using
 conversion factor in metadata(spe)$um_per_pixel. Set to FALSE to keep the
 coordinates in pixels (previous behaviour).}
 }
+\value{
+A SpatialExperiment object containing the counts, spot metadata and spatial
+coordinates.
+}
 \description{
 Read Visium output into spe
 }

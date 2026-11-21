@@ -19,13 +19,14 @@ void pseudoP(int start,int end,uint64_t seed_start,
   // Figure out no. of valid nbrs (points w/ at least 1 nbrs).
   int n_sample = 0; 
   int *potential_nbrs = new int[n];
-  int seed_offset = 0;
+  uint64_t seed_offset = 0;
   for (int i=0;i<n;i++) {
-    if (p_n_nbrs[i]>0) {
+    if (cluster_vec[i]!=6) {
       potential_nbrs[n_sample]=i;
       n_sample++;
     }
-    seed_offset += (i<start)*p_n_nbrs[i];
+    // Skip if hhonly
+    seed_offset += (cluster_vec[i]!=5)*(i<start)*p_n_nbrs[i];
   }
   n_sample--; // Point cant be its own nbrs
   

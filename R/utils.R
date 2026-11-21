@@ -196,3 +196,42 @@ cleanName <- function(names) {
   names <- sort(names)
   return(names)
 }
+
+# Store a neighbour list in spe@metadata$nbrs[[at]], tagged with its type
+# ("snn", "spatial" or "grid"). A list re-created under an existing name moves
+# to the end, so the last list of a type is always the most recent one.
+.storeNbrs <- function(spe, nbrs, at, name, type) {
+  nbrs$type <- type
+  lists <- spe@metadata$nbrs[[at]]
+  lists[[name]] <- NULL
+  lists[[name]] <- nbrs
+  spe@metadata$nbrs[[at]] <- lists
+  spe
+}
+
+# Get the neighbour list named nbrs_name or, if NULL, the most recent list of
+# the given type ("snn" or "spatial") at cell level, or the most recent list at
+# grid level.
+.getNbrs <- function(spe, at, nbrs_name, type) {
+  lists <- spe@metadata$nbrs[[at]]
+  if (!is.null(nbrs_name)) {
+    if (is.null(lists[[nbrs_name]]))
+      stop("Neighbour list '", nbrs_name, "' not found in spe@metadata$nbrs$", at, ".")
+    return(lists[[nbrs_name]])
+  }
+  if (at == "grid") type <- "grid"
+  types <- vapply(names(lists), function(nm) {
+    l <- lists[[nm]]
+    l$type %||% if (at == "grid") "grid"
+                else if (!is.null(l$dimred) || !is.null(l$assay) || grepl("_snn$", nm)) "snn"
+                else "spatial"
+  }, character(1))
+  hit <- which(types == type)
+  if (length(hit) == 0) {
+    stop("No ", c(snn = "SNN", spatial = "spatial", grid = "grid")[[type]],
+         " neighbour list found. Run ",
+         c(snn = "findNbrsSNN", spatial = "findNbrsSpatial", grid = "findNbrsGrid")[[type]],
+         "() first.")
+  }
+  lists[[hit[length(hit)]]]
+}

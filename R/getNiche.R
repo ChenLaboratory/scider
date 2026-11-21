@@ -2,7 +2,10 @@
 #'
 #' @param spe A SpatialExperiment object
 #' @param at Option of cell or grid neighbourhood
-#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$grid[[at]]}
+#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$nbrs[[at]]}.
+#' If NULL, uses the most recent spatial list from \link[scider]{findNbrsSpatial}
+#' at cell level, or the most recent grid list from \link[scider]{findNbrsGrid}
+#' at grid level.
 #' @param group.by Character vector to group neighbours cell by. Should be in 
 #' either colData(spe) or spe@metadata$grid_density, depending 
 #' on "at". Multiple groups can be used. See details
@@ -48,7 +51,7 @@ getNiche <- function(spe,
     }
   }
   
-  nbrs <- spe@metadata$nbrs[[at]][[nbrs_name%||%length(spe@metadata$nbrs[[at]])]]
+  nbrs <- .getNbrs(spe, at, nbrs_name, type = "spatial")
   # Aggregate each group for cells based on their nbrs
   for (g in 1:ncol(groups_matrix)) {
     group = groups_matrix[,g]

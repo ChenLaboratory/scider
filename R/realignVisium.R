@@ -4,6 +4,8 @@
 #' @details This function rescale the distance between points to 100um (or other
 #' value) to matchthe real distance. In addition, Visium spots have a slight 
 #' tilt to them which this function will also fix
+#' @return A SpatialExperiment object with spatial coordinates rescaled to microns and
+#' aligned to the spot array.
 #' @export
 realignVisium <- function(spe,
                           distPoint = 100) {
@@ -30,6 +32,8 @@ realignVisium <- function(spe,
 #' @details This function rescale the distance between points to 8um (or other
 #' value) to matchthe real distance. In addition, Visium spots have a slight 
 #' tilt to them which this function will also fix
+#' @return A SpatialExperiment object with spatial coordinates rescaled to microns and
+#' aligned to the bin grid.
 #' @export
 realignVisiumHD <- function(spe,
                             distPoint = NULL) {
@@ -40,8 +44,8 @@ realignVisiumHD <- function(spe,
   if (is.null(distPoint)) {
     ## Figuring out binsize (2, 8, or 16um).
     distPoint <- .guessVisiumHDBin(spe)
-    if (is.null(distPoint)) {
-      stop("Couldn't determine distPoint. Please provide one.")
+    if (!length(distPoint)) {
+      stop("Couldn't determine distPoint for visiumHD. Please provide one.")
     }
     message(paste0("Using distPoint = ",distPoint))
   }

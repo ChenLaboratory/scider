@@ -13,7 +13,7 @@ getClusters(
   unassigned = c("merge", "label", "discard"),
   min_size = NULL,
   start_from = 0,
-  seed = 1,
+  seed = NULL,
   verbose = FALSE,
   ...
 )
@@ -22,7 +22,7 @@ getClusters(
 \item{spe}{A SpatialExperiment object.}
 
 \item{nbrs_name}{Name of neighbour list for clustering. If NULL, uses the
-newest one in spe@metadata$nbrs$cell. \link[scider]{findNbrsSNN} must have been
+most recent SNN list from \link[scider]{findNbrsSNN}, which must have been
 run first; otherwise getClusters errors.}
 
 \item{method}{Clustering methods. Options are leiden and louvain.}
@@ -46,7 +46,10 @@ whichever is smaller.}
 \item{start_from}{Integer at which cluster numbering starts. 0 (default)
 numbers clusters 0..K-1; set to 1 for 1..K.}
 
-\item{seed}{seed for clustering}
+\item{seed}{Integer or NULL. If NULL (default), the clustering uses the
+current random number stream, so call \code{set.seed()} beforehand for
+reproducible clusters. Otherwise the clustering uses this seed and the
+caller's random number stream is left unchanged.}
 
 \item{verbose}{Logical. Whether to report how cells in tiny clusters were
 reassigned/labelled/discarded (see unassigned). Defaults to FALSE.}
@@ -73,5 +76,6 @@ data("xenium_bc_spe")
 spe <- normalizeAssay(spe)
 spe <- runPCA(spe)
 spe <- findNbrsSNN(spe,dimred="PCA")
+set.seed(1)
 spe <- getClusters(spe, resolution=0.5)
 }

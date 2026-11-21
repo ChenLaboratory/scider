@@ -26,6 +26,8 @@
 #' 'spot_diameter_fullres' from the scale factors file, and store the
 #' conversion factor in metadata(spe)$um_per_pixel. Set to FALSE to keep the
 #' coordinates in pixels (previous behaviour).
+#' @return A SpatialExperiment object containing the counts, spot metadata and spatial
+#' coordinates.
 #' @export
 readVisium <- function(dir,
                        sample_id="sample01",
@@ -158,6 +160,8 @@ readVisium <- function(dir,
 #' @details For "segmented", cells have no array_row/array_col grid, so the
 #' result is cell-level (like Xenium) and is not compatible with the Visium
 #' spot-grid options of gridDensity() / trimEdge().
+#' @return A SpatialExperiment object containing the counts and the coordinates of the
+#' bins or segmented cells.
 #' @export
 readVisiumHD <- function(dir,
                          bin = c("016um", "008um", "002um", "segmented"),
@@ -196,6 +200,8 @@ readVisiumHD <- function(dir,
 #' middle-most layer
 #' @param feature_type Feature type to retain. Defaults to "Gene Expression" to
 #' exclude control codewords. Set to NULL to keep all features.
+#' @return A SpatialExperiment object containing the counts, cell metadata and cell
+#' centroid coordinates.
 #' @export
 readXenium <- function(dir,
                        sample_id="sample01",
@@ -281,6 +287,8 @@ readXenium <- function(dir,
 #' @param coord Name of the file with the tissue coordinates
 #' @param coordNames Name of the coordinates for the spe
 #' @param gene Name of the file with the gene metadata. This 
+#' @return A SpatialExperiment object containing the expected counts, cell metadata and
+#' cell coordinates.
 #' @export
 #' @details This does not work on zarr file output of proseg V3
 readProseg <- function(dir,
@@ -293,7 +301,7 @@ readProseg <- function(dir,
   coord <- file.path(dir,coord)
   if (!file.exists(coord)) stop(paste0("Couldn't find ",coord))
   count <- list.files(path=dir,pattern=count,full.names = TRUE)[1]
-  if (length(count)==0) stop("Couldn't find a suitable expected-counts file.")
+  if (is.na(count)) stop("Couldn't find a suitable expected-counts file.")
   
   # Read in gene metadata. Do this before count 
   gene_file <- file.path(dir,gene)
@@ -307,7 +315,7 @@ readProseg <- function(dir,
   # read in counts
   switch(sub(".*\\.(csv\\.gz|mtx\\.gz)$", "\\1",count),
          "csv.gz" = {
-           count <- read.csv(gzfile(count))
+           count <- read.csv(gzfile(count), check.names = FALSE)
            },
          "mtx.gz" = {
            count <- Matrix::readMM(gzfile(count))

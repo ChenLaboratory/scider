@@ -125,9 +125,11 @@ gridDensity <- function(spe,
   coord <- spatialCoords(spe)
   xlim <- range(coord[,"x_centroid"])
   ylim <- range(coord[,"y_centroid"])
-  if (isVisium=="visium" && min(spe$array_col)%%2) {
-    # Move xlim in case first columns is odd instead of even
-    xlim[0] = xlim[0]-50
+  if (isVisium=="visium" &&
+      (min(spe$array_col) - spe$array_col[which.min(spe$array_row)]) %% 2 == 1) {
+    # The bottom row of the hexagonal grid starts at xlim[1]. Move xlim by half
+    # a spot spacing when the leftmost column is not a column of the bottom row
+    xlim[1] = xlim[1]-50
   } else if (isVisium=="visiumHD") {
     # Expand lims so that cells fall in the middle instead of the corner of bins
     xlim = xlim + visium_bin_size/2*c(-1,1)

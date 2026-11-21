@@ -16,7 +16,7 @@ getSubClusters(
   min_size = NULL,
   start_from = NULL,
   sep = "_",
-  seed = 1,
+  seed = NULL,
   verbose = FALSE,
   ...
 )
@@ -29,8 +29,8 @@ getSubClusters(
 \item{resolution}{Resolution for the sub-clustering. Higher gives more
 sub-clusters. See \link[igraph]{cluster_leiden} and \link[igraph]{cluster_louvain}.}
 
-\item{nbrs_name}{Name of neighbour list to use. If NULL, uses the newest one in
-spe@metadata$nbrs$cell. \link[scider]{findNbrsSNN} must have been run first.}
+\item{nbrs_name}{Name of neighbour list to use. If NULL, uses the most recent
+SNN list from \link[scider]{findNbrsSNN}, which must have been run first.}
 
 \item{method}{Clustering method. Options are leiden and louvain.}
 
@@ -55,7 +55,10 @@ suffixes and the relabel renumbering. Defaults to NULL, which infers the base
 
 \item{sep}{Separator between a cluster and its sub-cluster number. Default "_".}
 
-\item{seed}{Seed for clustering.}
+\item{seed}{Integer or NULL. If NULL (default), the clustering uses the
+current random number stream, so call \code{set.seed()} beforehand for
+reproducible sub-clusters. Otherwise the clustering uses this seed and the
+caller's random number stream is left unchanged.}
 
 \item{verbose}{Logical. Whether to report how the cluster was split (number of
 sub-clusters and any small ones merged in). Defaults to FALSE.}
@@ -84,6 +87,7 @@ data("xenium_bc_spe")
 spe <- normalizeAssay(spe)
 spe <- runPCA(spe)
 spe <- findNbrsSNN(spe, dimred = "PCA")
+set.seed(1)
 spe <- getClusters(spe, resolution = 0.5)
 # Split cluster 2 into 2_1, 2_2, ...
 spe <- getSubClusters(spe, cluster = 2, resolution = 0.5)

@@ -5,8 +5,10 @@
 #' or cells, depending on 'at'.
 #' @param data2 Numeric vector 2 for bivariate local Moran. Must be same length as data1.
 #' @param at Option of grid or cell for where to look for neighbour list
-#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$grid[[at]]}
-#' for Moran's I. If NULL, will use the newest neighbour list.
+#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$nbrs[[at]]}
+#' for Moran's I. If NULL, uses the most recent spatial list from
+#' \link[scider]{findNbrsSpatial} at cell level, or the most recent grid list
+#' from \link[scider]{findNbrsGrid} at grid level.
 #' @param hhonly Only high-high clusters, which is more interpretable. Other 
 #' clusters (e.g. "Low-Low","High-Low",...) will be assigned as undefined.
 #' @param significance_cutoff Cutoff for p-value to filter non-significant clusters
@@ -14,7 +16,10 @@
 #' @param seed Integer. For random permutations.
 #' @param cpu_threads The number of cpu threads used for parallel computation.
 #' 
-#' @return List of lisa_value, clusters, and pseudo p-value.
+#' @return List with the local Moran values (lisa), clusters (cluster), pseudo
+#' p-values (p.value), spatial lags (spatiallag) and the sum of all neighbour
+#' weights (W). \code{sum(lisa)/W} is the global Moran's I, as returned by
+#' \link[scider]{globalMoran}.
 #' @examples
 #' data("xenium_bc_spe")
 #'
@@ -42,12 +47,12 @@ localMoran <- function(spe, data1, data2=data1[],
             is.numeric(data1),
             is.numeric(data2))
   at <- match.arg(at)
-  nbrs <- spe@metadata$nbrs[[at]][[nbrs_name %||% length(spe@metadata$nbrs[[at]])]]
-  
+  nbrs <- .getNbrs(spe, at, nbrs_name, type = "spatial")
+
   if (length(data1) != length(nbrs$index)) {
     stop(paste0("length of data must be same as no. of ",at,"s"))
   }
-  
+
   r <- .Call("C_localMoran",
              nbrs$index,
              lengths(nbrs$index),
@@ -60,11 +65,13 @@ localMoran <- function(spe, data1, data2=data1[],
              cpu_threads,
              hhonly)
 
-  # Turn cluster from int to factor 
+  # Turn cluster from int to factor
   r$cluster <- factor(r$cluster,
                       levels = 0:6,
                       labels = c("Not significant","High-High","Low-Low","Low-High",
                                  "High-Low","Undefined","Neighborless"))
+  # Sum of weights, so that sum(lisa)/W is the global Moran's I
+  r$W <- sum(unlist(nbrs$weight))
   return(r)
 }
 
@@ -75,8 +82,10 @@ localMoran <- function(spe, data1, data2=data1[],
 #' nrow(spe@metadata$grid_density) or spatialCoords(spe), depending on 'at'.
 #' @param data2 Numeric vector 2 for bivariate local Moran. Must be same length as data1.
 #' @param at Option of grid or cell for where to look for neighbour list
-#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$grid[[at]]}
-#' for Moran's I
+#' @param nbrs_name Name of the neighbour list in \code{spe@metadata$nbrs[[at]]}
+#' for Moran's I. If NULL, uses the most recent spatial list from
+#' \link[scider]{findNbrsSpatial} at cell level, or the most recent grid list
+#' from \link[scider]{findNbrsGrid} at grid level.
 #' @param permutations Number of permutations for p-value.
 #' @param seed Integer. For random permutations.
 #' @param cpu_threads (optional) The number of cpu threads used for parallel
@@ -109,12 +118,12 @@ globalMoran <- function(spe, data1, data2=data1[],
             is.numeric(data1),
             is.numeric(data2))
   at <- match.arg(at)
-  nbrs <- spe@metadata$nbrs[[at]][[nbrs_name %||% length(spe@metadata$nbrs[[at]])]]
-  
+  nbrs <- .getNbrs(spe, at, nbrs_name, type = "spatial")
+
   if (length(data1) != length(nbrs$index)) {
     stop(paste0("length of data must be same as no. of ",at,"s"))
   }
-  
+
   r <- .Call("C_globalMoran",
              nbrs$index,
              lengths(nbrs$index),

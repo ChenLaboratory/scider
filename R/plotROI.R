@@ -87,7 +87,7 @@ plotROI <- function(spe,
         alpha = 0.6,
         subgroup = L1
       ),color=NA,
-      inherit.aes = F) +
+      inherit.aes = FALSE) +
     scale_fill_manual(values = col.p) +
     ggtitle(paste0("ROI (", paste(roi_clean, collapse=", "), ")"))
   p <- update_bound(p, y=sf$Y)

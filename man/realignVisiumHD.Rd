@@ -12,6 +12,10 @@ realignVisiumHD(spe, distPoint = NULL)
 \item{distPoint}{Numeric. Desired point to point distance. If NULL, will try
 to determine the bin level of spe and use that.}
 }
+\value{
+A SpatialExperiment object with spatial coordinates rescaled to microns and
+aligned to the bin grid.
+}
 \description{
 Scale and straighten out VisiumHD coordinates
 }

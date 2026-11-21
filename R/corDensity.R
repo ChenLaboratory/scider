@@ -392,8 +392,8 @@ corDensity <- function(spe, coi = NULL, roi = NULL, probs = 0.85,
   # a horizontal and a vertical pass
   ra <- floor(4 * bw / lat$sa + 1e-9)
   rr <- floor(4 * bw / lat$sr + 1e-9)
-  gx <- exp(-((-ra:ra) * lat$sa)^2 / (2 * bw^2))
-  gy <- exp(-((-rr:rr) * lat$sr)^2 / (2 * bw^2))
+  gx <- exp(-(seq(-ra, ra) * lat$sa)^2 / (2 * bw^2))
+  gy <- exp(-(seq(-rr, rr) * lat$sr)^2 / (2 * bw^2))
 
   # problem for the C++ kernel, with 0 based indices; within each group the
   # cells of the cell types of interest come first, ordered by cell type

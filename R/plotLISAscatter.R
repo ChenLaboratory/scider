@@ -7,7 +7,13 @@
 #' @param text.size Numeric for text size of quadrant.count
 #' @param xlab label for the x-axis
 #' @param ylab label for the y-axis
-#' 
+#' @details
+#' Each point is a cell or grid point, with its standardised value on the x-axis
+#' and its spatial lag on the y-axis. The title gives the global Moran's I, as
+#' returned by \link[scider]{globalMoran}. The line is the least-squares fit of
+#' the spatial lag on the value; its slope equals Moran's I only when the
+#' weights are row-standardised.
+#'
 #' @return A ggplot object.
 #' @export
 #'
@@ -32,16 +38,19 @@ plotLISAscatter <- function(lisa,
   lag <- lisa$spatiallag[keep]
   Cluster <- lisa$cluster[keep]
   cols <- col.lisa[sort(unique(Cluster))]
-  globalMoran <- mean(lisa$lisa)
-  
-  p <- ggplot2::ggplot() + 
-    geom_point(aes(x=dat,y=lag,color = Cluster)) + 
+  if (is.null(lisa$W)) {
+    stop("Missing W (sum of weights). Re-run localMoran() with this version of scider.")
+  }
+  moran_I <- sum(lisa$lisa) / lisa$W
+  slope <- mean(lisa$lisa)
+
+  p <- ggplot2::ggplot() +
+    geom_point(aes(x=dat,y=lag,color = Cluster)) +
     scale_color_manual(values = cols) +
-    geom_abline(intercept=0,slope=globalMoran) +
+    geom_abline(intercept=0,slope=slope) +
     geom_hline(yintercept=0,linetype="dotted") +
     geom_vline(xintercept=0,linetype="dotted") +
-    ggtitle(sprintf("Moran's I: %0.3f",globalMoran))+
-      # paste("Moran's I:",globalMoran)) +
+    ggtitle(sprintf("Moran's I: %0.3f",moran_I))+
     labs(x = xlab, y = ylab) +
     theme_classic()
   

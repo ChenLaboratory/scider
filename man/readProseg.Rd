@@ -26,6 +26,10 @@ readProseg(
 
 \item{coordNames}{Name of the coordinates for the spe}
 }
+\value{
+A SpatialExperiment object containing the expected counts, cell metadata and
+cell coordinates.
+}
 \description{
 Read Proseg V2 output into spe
 }
