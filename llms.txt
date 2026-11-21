@@ -1,8 +1,6 @@
 # scider: Spatial cell-type inter-correlation by density in R. ![](reference/figures/scider_sticker.png)
 
 [![R-CMD-check](https://github.com/ChenLaboratory/scider/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/ChenLaboratory/scider/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/ChenLaboratory/scider/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/ChenLaboratory/scider?branch=devel)
 
 ## Overview
 
