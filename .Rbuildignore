@@ -3,7 +3,11 @@
 ^doc$
 ^Meta$
 ^\.github$
-^codecov\.yml$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^vignettes/getting-started\.Rmd\.orig$
+^vignettes/figure$
+^vignettes/cache$
+# Mac system file
+.DS_Store
