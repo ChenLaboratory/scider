@@ -26,7 +26,12 @@ getNiche(
 
 - nbrs_name:
 
-  Name of the neighbour list in `spe@metadata$grid[[at]]`
+  Name of the neighbour list in `spe@metadata$nbrs[[at]]`. If NULL, uses
+  the most recent spatial list from
+  [findNbrsSpatial](https://chenlaboratory.github.io/scider/reference/findNbrsSpatial.md)
+  at cell level, or the most recent grid list from
+  [findNbrsGrid](https://chenlaboratory.github.io/scider/reference/findNbrsGrid.md)
+  at grid level.
 
 - group.by:
 

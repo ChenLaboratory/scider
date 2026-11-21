@@ -14,7 +14,7 @@ getClusters(
   unassigned = c("merge", "label", "discard"),
   min_size = NULL,
   start_from = 0,
-  seed = 1,
+  seed = NULL,
   verbose = FALSE,
   ...
 )
@@ -28,10 +28,10 @@ getClusters(
 
 - nbrs_name:
 
-  Name of neighbour list for clustering. If NULL, uses the newest one in
-  spe@metadata\$nbrs\$cell.
-  [findNbrsSNN](https://chenlaboratory.github.io/scider/reference/findNbrsSNN.md)
-  must have been run first; otherwise getClusters errors.
+  Name of neighbour list for clustering. If NULL, uses the most recent
+  SNN list from
+  [findNbrsSNN](https://chenlaboratory.github.io/scider/reference/findNbrsSNN.md),
+  which must have been run first; otherwise getClusters errors.
 
 - method:
 
@@ -71,7 +71,11 @@ getClusters(
 
 - seed:
 
-  seed for clustering
+  Integer or NULL. If NULL (default), the clustering uses the current
+  random number stream, so call
+  [`set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
+  reproducible clusters. Otherwise the clustering uses this seed and the
+  caller's random number stream is left unchanged.
 
 - verbose:
 
@@ -108,5 +112,6 @@ spe <- normalizeAssay(spe)
 spe <- runPCA(spe)
 #> Genes with 0 variance are excluded: ENSG00000135218 NegControlProbe_00002 NegControlCodeword_0504 NegControlCodeword_0509 NegControlCodeword_0510 NegControlCodeword_0511 NegControlCodeword_0512 NegControlCodeword_0516 NegControlCodeword_0517 NegControlCodeword_0518 NegControlCodeword_0519 NegControlCodeword_0520 NegControlCodeword_0522 NegControlCodeword_0526 NegControlCodeword_0527 NegControlCodeword_0530 NegControlCodeword_0536 NegControlCodeword_0537 BLANK_0030 BLANK_0163 BLANK_0165 BLANK_0212 BLANK_0221 BLANK_0230 BLANK_0237 BLANK_0311 BLANK_0361 BLANK_0365 BLANK_0382 BLANK_0384 BLANK_0387 BLANK_0388 BLANK_0391 BLANK_0393 BLANK_0397 BLANK_0399 BLANK_0404 BLANK_0406 BLANK_0410 BLANK_0411 BLANK_0418 BLANK_0425 BLANK_0432 BLANK_0447
 spe <- findNbrsSNN(spe,dimred="PCA")
+set.seed(1)
 spe <- getClusters(spe, resolution=0.5)
 ```

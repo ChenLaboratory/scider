@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,8 +73,10 @@ nrow(spe@metadata$grid_density) or spatialCoords(spe), depending on 'at'.</p></d
 
 
 <dt id="arg-nbrs-name">nbrs_name<a class="anchor" aria-label="anchor" href="#arg-nbrs-name"></a></dt>
-<dd><p>Name of the neighbour list in <code>spe@metadata$grid[[at]]</code>
-for Moran's I</p></dd>
+<dd><p>Name of the neighbour list in <code>spe@metadata$nbrs[[at]]</code>
+for Moran's I. If NULL, uses the most recent spatial list from
+<a href="findNbrsSpatial.html">findNbrsSpatial</a> at cell level, or the most recent grid list
+from <a href="findNbrsGrid.html">findNbrsGrid</a> at grid level.</p></dd>
 
 
 <dt id="arg-permutations">permutations<a class="anchor" aria-label="anchor" href="#arg-permutations"></a></dt>

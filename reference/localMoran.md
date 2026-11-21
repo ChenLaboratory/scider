@@ -41,8 +41,12 @@ localMoran(
 
 - nbrs_name:
 
-  Name of the neighbour list in `spe@metadata$grid[[at]]` for Moran's I.
-  If NULL, will use the newest neighbour list.
+  Name of the neighbour list in `spe@metadata$nbrs[[at]]` for Moran's I.
+  If NULL, uses the most recent spatial list from
+  [findNbrsSpatial](https://chenlaboratory.github.io/scider/reference/findNbrsSpatial.md)
+  at cell level, or the most recent grid list from
+  [findNbrsGrid](https://chenlaboratory.github.io/scider/reference/findNbrsGrid.md)
+  at grid level.
 
 - hhonly:
 
@@ -67,7 +71,11 @@ localMoran(
 
 ## Value
 
-List of lisa_value, clusters, and pseudo p-value.
+List with the local Moran values (lisa), clusters (cluster), pseudo
+p-values (p.value), spatial lags (spatiallag) and the sum of all
+neighbour weights (W). `sum(lisa)/W` is the global Moran's I, as
+returned by
+[globalMoran](https://chenlaboratory.github.io/scider/reference/globalMoran.md).
 
 ## Examples
 

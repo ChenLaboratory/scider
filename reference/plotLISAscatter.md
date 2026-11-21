@@ -42,6 +42,15 @@ plotLISAscatter(
 
 A ggplot object.
 
+## Details
+
+Each point is a cell or grid point, with its standardised value on the
+x-axis and its spatial lag on the y-axis. The title gives the global
+Moran's I, as returned by
+[globalMoran](https://chenlaboratory.github.io/scider/reference/globalMoran.md).
+The line is the least-squares fit of the spatial lag on the value; its
+slope equals Moran's I only when the weights are row-standardised.
+
 ## Examples
 
 ``` r

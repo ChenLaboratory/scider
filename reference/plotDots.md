@@ -69,6 +69,10 @@ plotDots(
 
   Whether to flip the axes.
 
+## Value
+
+A ggplot object.
+
 ## Examples
 
 ``` r

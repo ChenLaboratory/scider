@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scider</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,8 +75,10 @@ or cells, depending on 'at'.</p></dd>
 
 
 <dt id="arg-nbrs-name">nbrs_name<a class="anchor" aria-label="anchor" href="#arg-nbrs-name"></a></dt>
-<dd><p>Name of the neighbour list in <code>spe@metadata$grid[[at]]</code>
-for Moran's I. If NULL, will use the newest neighbour list.</p></dd>
+<dd><p>Name of the neighbour list in <code>spe@metadata$nbrs[[at]]</code>
+for Moran's I. If NULL, uses the most recent spatial list from
+<a href="findNbrsSpatial.html">findNbrsSpatial</a> at cell level, or the most recent grid list
+from <a href="findNbrsGrid.html">findNbrsGrid</a> at grid level.</p></dd>
 
 
 <dt id="arg-hhonly">hhonly<a class="anchor" aria-label="anchor" href="#arg-hhonly"></a></dt>
@@ -102,7 +104,10 @@ clusters (e.g. "Low-Low","High-Low",...) will be assigned as undefined.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>List of lisa_value, clusters, and pseudo p-value.</p>
+    <p>List with the local Moran values (lisa), clusters (cluster), pseudo
+p-values (p.value), spatial lags (spatiallag) and the sum of all neighbour
+weights (W). <code>sum(lisa)/W</code> is the global Moran's I, as returned by
+<a href="globalMoran.html">globalMoran</a>.</p>
     </div>
 
     <div class="section level2">

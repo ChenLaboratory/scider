@@ -53,3 +53,8 @@ readXenium(
 
   Feature type to retain. Defaults to "Gene Expression" to exclude
   control codewords. Set to NULL to keep all features.
+
+## Value
+
+A SpatialExperiment object containing the counts, cell metadata and cell
+centroid coordinates.

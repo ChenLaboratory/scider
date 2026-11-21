@@ -19,6 +19,11 @@ realignVisiumHD(spe, distPoint = NULL)
   Numeric. Desired point to point distance. If NULL, will try to
   determine the bin level of spe and use that.
 
+## Value
+
+A SpatialExperiment object with spatial coordinates rescaled to microns
+and aligned to the bin grid.
+
 ## Details
 
 This function rescale the distance between points to 8um (or other

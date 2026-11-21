@@ -41,6 +41,11 @@ readProseg(
 
   Name of the coordinates for the spe
 
+## Value
+
+A SpatialExperiment object containing the expected counts, cell metadata
+and cell coordinates.
+
 ## Details
 
 This does not work on zarr file output of proseg V3

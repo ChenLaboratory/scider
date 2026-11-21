@@ -26,6 +26,11 @@ readVisiumHD(dir, bin = c("016um", "008um", "002um", "segmented"), ...)
 
   Parameters for readVisium
 
+## Value
+
+A SpatialExperiment object containing the counts and the coordinates of
+the bins or segmented cells.
+
 ## Details
 
 For "segmented", cells have no array_row/array_col grid, so the result

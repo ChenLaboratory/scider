@@ -57,3 +57,8 @@ readVisium(
   the scale factors file, and store the conversion factor in
   metadata(spe)\$um_per_pixel. Set to FALSE to keep the coordinates in
   pixels (previous behaviour).
+
+## Value
+
+A SpatialExperiment object containing the counts, spot metadata and
+spatial coordinates.

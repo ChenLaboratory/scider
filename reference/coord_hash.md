@@ -14,6 +14,10 @@ coord_hash(a, b)
 
   Integer vectors of same lengths. Can be negative.
 
+## Value
+
+An integer vector with one hash per (a, b) pair.
+
 ## Details
 
 Should work for a,b in range (-2^14, 2^14-1) which is good enough for

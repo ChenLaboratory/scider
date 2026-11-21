@@ -18,6 +18,11 @@ realignVisium(spe, distPoint = 100)
 
   Numeric. Desired point to point distance.
 
+## Value
+
+A SpatialExperiment object with spatial coordinates rescaled to microns
+and aligned to the spot array.
+
 ## Details
 
 This function rescale the distance between points to 100um (or other

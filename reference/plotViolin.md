@@ -81,6 +81,10 @@ plotViolin(
 
   Label for the x-axis
 
+## Value
+
+A ggplot object.
+
 ## Examples
 
 ``` r
