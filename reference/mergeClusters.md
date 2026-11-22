@@ -1,9 +1,7 @@
 # Manually merge clusters.
 
-Combine specified clusters into a single cluster, optionally relabelling
-all clusters afterwards. This is a manual alternative to the
-modularity-based mergeCommunities: the user chooses exactly which
-clusters to combine.
+Combine user-specified clusters into a single cluster, optionally
+relabelling all clusters afterwards.
 
 ## Usage
 

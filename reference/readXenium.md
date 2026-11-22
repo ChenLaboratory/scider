@@ -37,7 +37,8 @@ readXenium(
 
 - image:
 
-  Names of the ome.tif image files.
+  Names of the ome.tif image files. Reading the image requires the
+  suggested package RBioFormats; without it, the image is skipped.
 
 - image_reso:
 
