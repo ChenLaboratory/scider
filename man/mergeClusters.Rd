@@ -44,10 +44,8 @@ labels, matching what getClusters produced. Ignored when relabel=FALSE.}
 A SpatialExperiment with the merged clusters stored in colData.
 }
 \description{
-Combine specified clusters into a single cluster, optionally relabelling all
-clusters afterwards. This is a manual alternative to the modularity-based
-\link[bluster]{mergeCommunities}: the user chooses exactly which clusters to
-combine.
+Combine user-specified clusters into a single cluster, optionally relabelling
+all clusters afterwards.
 }
 \details{
 Clusters listed in \code{merge} that are not present in cluster_name are

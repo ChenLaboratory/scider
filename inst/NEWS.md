@@ -1,5 +1,6 @@
 # scider 1.12.0 (2026-11-20)
 * Now requires R >= 4.4.0, for the base R operator %||%.
+* RBioFormats is now suggested rather than imported, so installing scider no longer requires Java. readXenium() reads the morphology image only when RBioFormats is installed.
 * Fixed a bug in allocateCells() for contours of multiple cell types.
 * Fixed a bug in mergeROI() where calling it a second time set the ROIs merged by the earlier call to NA.
 * Fixed a bug in plotLISA() where specifying 'overlay' always gave an error.

@@ -70,12 +70,12 @@ Imports:
     irlba,
     DropletUtils,
     arrow,
-    RBioFormats,
     Matrix,
     patchwork,
     withr
 Suggests:
     edgeR,
+    RBioFormats,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 

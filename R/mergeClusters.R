@@ -1,9 +1,7 @@
 #' Manually merge clusters.
 #'
-#' Combine specified clusters into a single cluster, optionally relabelling all
-#' clusters afterwards. This is a manual alternative to the modularity-based
-#' \link[bluster]{mergeCommunities}: the user chooses exactly which clusters to
-#' combine.
+#' Combine user-specified clusters into a single cluster, optionally relabelling
+#' all clusters afterwards.
 #'
 #' @param spe A SpatialExperiment object.
 #' @param merge A vector of cluster labels to merge into one (e.g. c(2, 5, 7)),

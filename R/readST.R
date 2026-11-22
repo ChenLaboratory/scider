@@ -193,7 +193,8 @@ readVisiumHD <- function(dir,
 #' @param sample_id Name of the sample.
 #' @param count Name of the h5 file with the count assay.
 #' @param coord Name of the parquet file with the tissue coordinates
-#' @param image Names of the ome.tif image files.
+#' @param image Names of the ome.tif image files. Reading the image requires the
+#' suggested package RBioFormats; without it, the image is skipped.
 #' @param image_reso resolution of the image to use. From 1-8 (lower = better resolution).
 #' See https://kb.10xgenomics.com/hc/articles/11636252598925. Default to 6
 #' @param image_layer Which layer of the tiff image to use. Default is the
@@ -239,8 +240,12 @@ readXenium <- function(dir,
   spatial$n_counts <- as.integer(n_counts)
   spatial$n_genes  <- as.integer(n_genes)
   
-  ## read in image
-  imgData <- tryCatch({
+  ## read in image (needs the suggested package RBioFormats)
+  imgData <- NULL
+  if (length(image) && all(file.exists(image)) &&
+      !requireNamespace("RBioFormats", quietly = TRUE)) {
+    message("Skipping the image: install the RBioFormats package to read it.")
+  } else imgData <- tryCatch({
     image_reso <- min(image_reso,length(RBioFormats::read.metadata(image)))
     img <- RBioFormats::read.image(image,resolution=image_reso,
                                    read.metadata = FALSE,
@@ -260,9 +265,9 @@ readXenium <- function(dir,
                                 scaleFactor=scaling[image_reso])
   }, error = function(e) {
     if (grepl("java.lang",e$message,fixed=TRUE)) {
-      cat("Skipping image due to Java out of memory error. Try increasing", 
-          "maximum heap size before importing scider. (e.g.: ",
-          "options(java.parameters = '-Xmx4g') to increase heap size to 4gb)")
+      message("Skipping image due to Java out of memory error. Try increasing ",
+              "the maximum heap size before RBioFormats is loaded (e.g. ",
+              "options(java.parameters = '-Xmx4g') for 4 GB).")
     }
     return(NULL)
   }

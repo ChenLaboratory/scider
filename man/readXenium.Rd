@@ -24,7 +24,8 @@ readXenium(
 
 \item{coord}{Name of the parquet file with the tissue coordinates}
 
-\item{image}{Names of the ome.tif image files.}
+\item{image}{Names of the ome.tif image files. Reading the image requires the
+suggested package RBioFormats; without it, the image is skipped.}
 
 \item{image_reso}{resolution of the image to use. From 1-8 (lower = better resolution).
 See https://kb.10xgenomics.com/hc/articles/11636252598925. Default to 6}
